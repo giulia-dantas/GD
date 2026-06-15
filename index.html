@@ -7,6 +7,12 @@
 <meta property="og:title" content="Giulia Dantas — Consultoria de Imagem">
 <meta name="description" content="Giulia Dantas — Consultoria de Imagem">
 <meta property="og:description" content="Giulia Dantas — Consultoria de Imagem">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F7F4EF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Giulia Dantas">
+<link rel="apple-touch-icon" href="https://giulia-dantas.github.io/GD/logo-gd-circle.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -231,6 +237,31 @@
     flex:1;
     display:flex;
     justify-content:center;
+  }
+
+  .logout-btn{
+    position:absolute;
+    right:16px;
+    top:50%;
+    transform:translateY(-50%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    color:var(--graphite-soft);
+    cursor:pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background .2s ease, color .2s ease;
+  }
+  .logout-btn:active{
+    background:var(--champagne-light);
+    color:var(--vinho);
+  }
+  .logout-btn svg{
+    width:19px;
+    height:19px;
   }
 
   .brand-signature.brand-signature-lg{
@@ -1414,6 +1445,9 @@
         <div class="brand brand-centered">
           <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
+        <div class="logout-btn" data-action="logout" title="Sair">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4.5h2.5A2 2 0 0119.5 6.5v11A2 2 0 0117.5 19.5H15"/><path d="M10.5 8L15 12l-4.5 4"/><path d="M15 12H4.5"/></svg>
+        </div>
       </div>
       <div class="content">
         <div class="welcome-card">
@@ -1615,50 +1649,31 @@
         </div>
       </div>
       <div class="content">
-        <div class="eyebrow" id="dossies-cliente-nome">Selecione uma cliente</div>
-        <div class="page-title">Meus Dossiês</div>
-        <div class="page-sub">Documentos personalizados da cliente</div>
+        <div class="eyebrow" id="dossies-cliente-nome">Dossiês</div>
+        <div class="page-title">Dossiês em PDF</div>
+        <div class="page-sub">Documentos personalizados para suas clientes</div>
 
-        <div class="stat-card" style="margin-top:8px; margin-bottom:0; text-align:center;">
-          <p style="font-family:'Cormorant Garamond', serif; font-size:14px; font-style:italic; color:var(--graphite-soft); padding:4px 0;">
-            Geração de dossiês em PDF: em breve.
+        <div class="stat-card" style="text-align:center; padding:32px 20px;">
+          <div class="seal" style="font-size:22px; margin-bottom:12px;">✦</div>
+          <p style="font-family:'Cormorant Garamond', serif; font-size:18px; font-weight:500; color:var(--graphite); line-height:1.6; margin-bottom:8px;">
+            Em breve
           </p>
-        </div>
-
-        <div class="grid-3">
-          <div class="dossie-card uva">
-            <div class="seal">✦</div>
-            <div class="dossie-eyebrow">Documento</div>
-            <div class="dossie-title">Coloração Pessoal</div>
-          </div>
-          <div class="dossie-card marinho">
-            <div class="seal">✦</div>
-            <div class="dossie-eyebrow">Documento</div>
-            <div class="dossie-title">Biotipo &amp; Proporções</div>
-          </div>
-          <div class="dossie-card olive">
-            <div class="seal">✦</div>
-            <div class="dossie-eyebrow">Documento</div>
-            <div class="dossie-title">Estilo Pessoal</div>
-          </div>
-          <div class="dossie-card terracota">
-            <div class="seal">✦</div>
-            <div class="dossie-eyebrow">Documento</div>
-            <div class="dossie-title">Lookbook &amp; Álbum</div>
-          </div>
-          <div class="dossie-card add">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
-            Novo Dossiê
-          </div>
+          <p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); line-height:1.6;">
+            Aqui você poderá gerar e baixar dossiês em PDF com a análise completa de cada cliente — estilo, cores, biotipo e recomendações personalizadas.
+          </p>
         </div>
 
         <div class="hairline"></div>
 
         <div class="stat-card">
-          <div class="stat-label" style="margin-bottom:0; text-align:center;">Sobre os dossiês</div>
-          <p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-weight:500; font-style:normal; color:var(--graphite); line-height:1.6; padding-top:8px; text-align:center;">
-            Cada dossiê reúne a análise completa, recomendações e referências visuais — pronto para exportar em PDF.
-          </p>
+          <div class="stat-label" style="margin-bottom:0;">Onde encontrar os dados da cliente agora</div>
+          <div class="mini-row" data-goto="clientes" style="border-bottom:none; padding-top:6px;">
+            <div>
+              <div class="mini-row-title">Minhas Clientes</div>
+              <div class="mini-row-sub">Anamnese, fotos e progresso de cada cliente</div>
+            </div>
+            <div class="arrow">→</div>
+          </div>
         </div>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -1725,6 +1740,9 @@
       <div class="topbar">
         <div class="brand brand-centered">
           <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+        <div class="logout-btn" data-action="logout" title="Sair">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4.5h2.5A2 2 0 0119.5 6.5v11A2 2 0 0117.5 19.5H15"/><path d="M10.5 8L15 12l-4.5 4"/><path d="M15 12H4.5"/></svg>
         </div>
       </div>
       <div class="content">
@@ -2372,7 +2390,7 @@
           <div class="submission-photos" id="materiais-fotos-grid"></div>
         </div>
 
-        <button class="download-btn">⬇ Baixar Dossiê Completo em PDF</button>
+        <button class="download-btn" disabled style="opacity:0.5; cursor:default;" title="Em breve">⬇ Exportação em PDF — em breve</button>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
@@ -2401,7 +2419,7 @@
 
         <div id="anamnese-completa-content"></div>
 
-        <button class="download-btn">⬇ Baixar Dossiê Completo em PDF</button>
+        <button class="download-btn" disabled style="opacity:0.5; cursor:default;" title="Em breve">⬇ Exportação em PDF — em breve</button>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
@@ -2536,12 +2554,24 @@
 
   if(DEFAULT_SCREEN === 'brand'){
     setTimeout(function(){
-      goTo('login', 'fwd');
+      var brandScreen = document.getElementById('screen-brand');
+      if(brandScreen && brandScreen.classList.contains('active')){
+        goTo('login', 'fwd');
+      }
     }, 3300);
   }
 
   // Expose goTo for the Firebase module script
   window.__gdGoTo = goTo;
+
+  // Register service worker for PWA installability
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('./sw.js').catch(function(err){
+        console.error('GD: erro ao registrar service worker', err);
+      });
+    });
+  }
 })();
 </script>
 
@@ -2551,6 +2581,7 @@
     getAuth,
     onAuthStateChanged,
     signInWithEmailAndPassword,
+    signOut,
     sendPasswordResetEmail
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
   import {
@@ -2664,14 +2695,8 @@
 
       const role = profile.role || 'cliente';
       const nome = profile.nome || (role === 'consultora' ? 'Giulia Dantas' : 'Cliente');
-      const target = role === 'consultora' ? 'painel' : 'cliente-inicio';
+      goToHomeForRole(role, nome);
 
-      // Update welcome screen + home screen names
-      if(welcomeNameEl) welcomeNameEl.textContent = 'Olá, ' + firstName(nome);
-      if(role === 'consultora' && painelNameEl) painelNameEl.textContent = 'Olá, ' + firstName(nome);
-      if(role === 'cliente' && clienteNameEl) clienteNameEl.textContent = 'Olá, ' + firstName(nome);
-
-      loginBtn.setAttribute('data-welcome-target', target);
       loginBtn.classList.remove('is-loading');
       loginBtn.textContent = 'Entrar';
 
@@ -2719,12 +2744,82 @@
 
   let currentUser = null;
   const TOTAL_STEPS = 8;
+  let authResolved = false;
 
-  onAuthStateChanged(auth, function(user){
+  // ---- Load a user's profile (role + nome) from Firestore ----
+
+  async function loadUserProfile(user){
+    const userRef = doc(db, 'users', user.uid);
+    const snap = await getDoc(userRef);
+    if(snap.exists()) return snap.data();
+    return null;
+  }
+
+  // ---- Navigate to the correct home screen for a role, updating names ----
+
+  function goToHomeForRole(role, nome){
+    if(welcomeNameEl) welcomeNameEl.textContent = 'Olá, ' + firstName(nome);
+    if(role === 'consultora' && painelNameEl) painelNameEl.textContent = 'Olá, ' + firstName(nome);
+    if(role === 'cliente' && clienteNameEl) clienteNameEl.textContent = 'Olá, ' + firstName(nome);
+
+    const target = role === 'consultora' ? 'painel' : 'cliente-inicio';
+    if(loginBtn) loginBtn.setAttribute('data-welcome-target', target);
+    return target;
+  }
+
+  // ---- On initial load: if a session already exists, skip splash/login ----
+
+  onAuthStateChanged(auth, async function(user){
     currentUser = user;
+
+    if(!authResolved){
+      authResolved = true;
+
+      if(user){
+        try{
+          const profile = await loadUserProfile(user);
+          if(profile){
+            const role = profile.role || 'cliente';
+            const nome = profile.nome || (role === 'consultora' ? 'Giulia Dantas' : 'Cliente');
+            const target = goToHomeForRole(role, nome);
+
+            // Skip splash and welcome animation; go straight to the app
+            if(window.__gdGoTo){
+              window.__gdGoTo(target, 'fwd');
+            }
+          }
+        } catch(err){
+          console.error('GD: erro ao restaurar sessão', err);
+        }
+      }
+      // If no user, the normal brand splash -> login flow proceeds as-is.
+    }
+
     if(user){
       refreshClienteProgress();
     }
+  });
+
+  // ---- Logout ----
+
+  const logoutBtns = document.querySelectorAll('[data-action="logout"]');
+  logoutBtns.forEach(function(btn){
+    btn.addEventListener('click', async function(){
+      try{
+        await signOut(auth);
+      } catch(err){
+        console.error('GD: erro ao sair', err);
+      }
+      // Reset UI state
+      currentUser = null;
+      selectedClienteUid = null;
+      selectedClienteNome = null;
+      cachedClientes = null;
+      if(emailInput) emailInput.value = '';
+      if(passwordInput) passwordInput.value = '';
+      clearError();
+      if(window.__gdGoTo) window.__gdGoTo('login', 'back');
+    });
   });
 
   // ---- Field getters/setters ----
