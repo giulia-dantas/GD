@@ -1202,6 +1202,22 @@
     aspect-ratio:1/1;
     background:var(--champagne-light);
     border-radius:10px;
+    overflow:hidden;
+  }
+
+  .submission-photos .ph img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .submission-photos{
+    flex-wrap:wrap;
+  }
+  .submission-photos .ph{
+    flex:1 1 22%;
+    min-width:60px;
   }
 
   .download-btn{
@@ -1405,7 +1421,7 @@
           <div class="welcome-deco2"></div>
           <div class="eyebrow">Bem-vinda de volta</div>
           <h2 id="painel-welcome-name">Olá, Giulia</h2>
-          <p>Você tem 3 atendimentos agendados para hoje</p>
+          <p id="painel-resumo">Acompanhe suas clientes e materiais recebidos</p>
         </div>
 
         <div class="grid-2">
@@ -1432,11 +1448,11 @@
         </div>
 
         <div class="stat-card">
-          <div class="stat-label">Próximo atendimento</div>
-          <div class="mini-row" style="border-bottom:none; padding-top:6px;" data-goto="agenda">
+          <div class="stat-label">Clientes</div>
+          <div class="mini-row" style="border-bottom:none; padding-top:6px;" data-goto="clientes">
             <div>
-              <div class="mini-row-title">Consultoria de Cores — Marina Telles</div>
-              <div class="mini-row-sub">Hoje · 16h00 às 17h30 · Presencial</div>
+              <div class="mini-row-title" id="painel-clientes-resumo">Carregando...</div>
+              <div class="mini-row-sub">Ver lista completa</div>
             </div>
             <div class="arrow">→</div>
           </div>
@@ -1465,51 +1481,34 @@
       <div class="content">
         <div class="eyebrow">Desempenho</div>
         <div class="page-title">Visão Geral</div>
-        <div class="page-sub">Acompanhe sua receita e seus atendimentos</div>
-
-        <div class="stat-card">
-          <div class="stat-label">Receita do período</div>
-          <div class="stat-value"><sup>R$</sup>4.280</div>
-          <div class="pill-row">
-            <div class="pill active">Hoje</div>
-            <div class="pill">30 dias</div>
-            <div class="pill">Período</div>
-          </div>
-        </div>
+        <div class="page-sub">Acompanhe suas clientes e materiais recebidos</div>
 
         <div class="grid-2">
           <div class="stat-card" style="margin-bottom:0;">
-            <div class="stat-label">A receber</div>
-            <div class="stat-value" style="font-size:28px;"><sup>R$</sup>1.150</div>
+            <div class="stat-label">Clientes cadastradas</div>
+            <div class="stat-value" style="font-size:28px;" id="dashboard-total-clientes">0</div>
           </div>
           <div class="stat-card" style="margin-bottom:0;">
-            <div class="stat-label">Atendimentos</div>
-            <div class="stat-value" style="font-size:28px;">12</div>
+            <div class="stat-label">Anamneses concluídas</div>
+            <div class="stat-value" style="font-size:28px;" id="dashboard-anamneses-completas">0</div>
           </div>
         </div>
 
         <div class="hairline"></div>
 
         <div class="stat-card">
-          <div class="stat-label" style="margin-bottom:0;">Resumo do mês</div>
-          <div class="mini-row">
+          <div class="stat-label" style="margin-bottom:0;">Resumo</div>
+          <div class="mini-row" data-goto="clientes">
             <div>
-              <div class="mini-row-title">Consultorias realizadas</div>
-              <div class="mini-row-sub">18 atendimentos</div>
+              <div class="mini-row-title">Fotos enviadas</div>
+              <div class="mini-row-sub" id="dashboard-fotos-enviadas">0 clientes enviaram fotos</div>
             </div>
             <div class="arrow">→</div>
           </div>
-          <div class="mini-row">
+          <div class="mini-row" data-goto="clientes">
             <div>
-              <div class="mini-row-title">Novas clientes</div>
-              <div class="mini-row-sub">5 cadastros</div>
-            </div>
-            <div class="arrow">→</div>
-          </div>
-          <div class="mini-row">
-            <div>
-              <div class="mini-row-title">Dossiês entregues</div>
-              <div class="mini-row-sub">9 documentos</div>
+              <div class="mini-row-title">Anamnese em andamento</div>
+              <div class="mini-row-sub" id="dashboard-anamneses-andamento">0 clientes</div>
             </div>
             <div class="arrow">→</div>
           </div>
@@ -1536,66 +1535,16 @@
         </div>
       </div>
       <div class="content">
-        <div class="eyebrow">Julho 2026</div>
+        <div class="eyebrow">Agenda</div>
         <div class="page-title">Meus Agendamentos</div>
         <div class="page-sub">Organize seus atendimentos da semana</div>
 
         <button class="btn-primary">+ Novo Agendamento</button>
 
-        <div class="day-group">
-          <div class="day-label">
-            <span class="dow">Seg</span>
-            <span class="dnum">10</span>
-          </div>
-          <div class="appt">
-            <div>
-              <div class="appt-title">Consultoria de Cores</div>
-              <div class="appt-sub">Marina Telles · 15h00–16h30</div>
-            </div>
-            <span class="tag">Presencial</span>
-          </div>
-          <div class="appt terracota">
-            <div>
-              <div class="appt-title">Personal Shopper</div>
-              <div class="appt-sub">Ana Beatriz · 17h00–18h30</div>
-            </div>
-            <span class="tag">Online</span>
-          </div>
-        </div>
-
-        <div class="day-group">
-          <div class="day-label">
-            <span class="dow">Qua</span>
-            <span class="dnum">12</span>
-          </div>
-          <div class="appt olive">
-            <div>
-              <div class="appt-title">Análise de Biotipo</div>
-              <div class="appt-sub">Renata Souza · 10h00–11h00</div>
-            </div>
-            <span class="tag">Presencial</span>
-          </div>
-          <div class="appt uva">
-            <div>
-              <div class="appt-title">Curadoria de Guarda-Roupa</div>
-              <div class="appt-sub">Letícia Prado · 14h00–16h00</div>
-            </div>
-            <span class="tag">Híbrido</span>
-          </div>
-        </div>
-
-        <div class="day-group">
-          <div class="day-label">
-            <span class="dow">Sex</span>
-            <span class="dnum">14</span>
-          </div>
-          <div class="appt marinho">
-            <div>
-              <div class="appt-title">Sessão de Fotos — Lookbook</div>
-              <div class="appt-sub">Camila Reis · 09h00–12h00</div>
-            </div>
-            <span class="tag">Presencial</span>
-          </div>
+        <div class="stat-card" style="text-align:center;">
+          <p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">
+            Nenhum agendamento cadastrado ainda.
+          </p>
         </div>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -1625,54 +1574,23 @@
 
         <div class="stat-trio">
           <div class="stat-small">
-            <div class="num">68</div>
-            <div class="lab">Clientes ativas</div>
+            <div class="num" id="clientes-stat-total">0</div>
+            <div class="lab">Clientes cadastradas</div>
           </div>
           <div class="stat-small">
-            <div class="num">5</div>
-            <div class="lab">Novas este mês</div>
+            <div class="num" id="clientes-stat-anamnese">0</div>
+            <div class="lab">Anamnese concluída</div>
           </div>
           <div class="stat-small">
-            <div class="num">18</div>
-            <div class="lab">Atendimentos 30 dias</div>
+            <div class="num" id="clientes-stat-fotos">0</div>
+            <div class="lab">Fotos enviadas</div>
           </div>
         </div>
 
-        <button class="btn-primary">+ Cadastrar Nova Cliente</button>
-
         <div class="stat-card">
           <div class="stat-label" style="margin-bottom:0;">Lista de Clientes</div>
-          <div class="client-row" data-goto="dossies">
-            <div class="client-avatar">M</div>
-            <div>
-              <div class="client-name">Marina Telles</div>
-              <div class="client-meta">Última consultoria · 3 dias</div>
-            </div>
-            <div class="badge-dot"></div>
-          </div>
-          <div class="client-row" data-goto="dossies">
-            <div class="client-avatar">A</div>
-            <div>
-              <div class="client-name">Ana Beatriz Lima</div>
-              <div class="client-meta">Última consultoria · 12 dias</div>
-            </div>
-            <div class="badge-dot"></div>
-          </div>
-          <div class="client-row" data-goto="dossies">
-            <div class="client-avatar">R</div>
-            <div>
-              <div class="client-name">Renata Souza</div>
-              <div class="client-meta">Sem contato · 64 dias</div>
-            </div>
-            <div class="badge-dot warn"></div>
-          </div>
-          <div class="client-row" data-goto="dossies">
-            <div class="client-avatar">L</div>
-            <div>
-              <div class="client-name">Letícia Prado</div>
-              <div class="client-meta">Última consultoria · 1 dia</div>
-            </div>
-            <div class="badge-dot"></div>
+          <div id="clientes-list">
+            <p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Carregando...</p>
           </div>
         </div>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
@@ -1697,9 +1615,15 @@
         </div>
       </div>
       <div class="content">
-        <div class="eyebrow">Marina Telles</div>
+        <div class="eyebrow" id="dossies-cliente-nome">Selecione uma cliente</div>
         <div class="page-title">Meus Dossiês</div>
         <div class="page-sub">Documentos personalizados da cliente</div>
+
+        <div class="stat-card" style="margin-top:8px; margin-bottom:0; text-align:center;">
+          <p style="font-family:'Cormorant Garamond', serif; font-size:14px; font-style:italic; color:var(--graphite-soft); padding:4px 0;">
+            Geração de dossiês em PDF: em breve.
+          </p>
+        </div>
 
         <div class="grid-3">
           <div class="dossie-card uva">
@@ -2411,46 +2335,41 @@
       </div>
       <div class="content">
         <div class="eyebrow">Cliente selecionada</div>
-        <div class="page-title">Marina Telles</div>
+        <div class="page-title" id="materiais-cliente-nome">Selecione uma cliente</div>
         <div class="page-sub">Anamnese e fotos enviadas pela cliente</div>
 
         <div class="submission-card">
           <div class="submission-head">
-            <div class="status-icon done">✓</div>
+            <div class="status-icon" id="materiais-anamnese-icon">○</div>
             <div>
               <div class="status-text-title">Anamnese de Estilo</div>
-              <div class="status-text-sub">Enviada em 10/07 às 14h22</div>
+              <div class="status-text-sub" id="materiais-anamnese-status">Carregando...</div>
             </div>
           </div>
-          <div class="mini-row" style="padding-top:0;">
+          <div class="mini-row" style="padding-top:0;" id="materiais-anamnese-rotina" hidden>
             <div>
               <div class="mini-row-title">Rotina principal</div>
-              <div class="mini-row-sub">Trabalho híbrido</div>
+              <div class="mini-row-sub" id="materiais-anamnese-rotina-valor">—</div>
             </div>
           </div>
-          <div class="mini-row">
+          <div class="mini-row" id="materiais-anamnese-objetivos" hidden>
             <div>
               <div class="mini-row-title">Objetivos</div>
-              <div class="mini-row-sub">Descobrir meu estilo, organizar guarda-roupa</div>
+              <div class="mini-row-sub" id="materiais-anamnese-objetivos-valor">—</div>
             </div>
           </div>
-          <button class="btn-secondary" style="margin-top:14px; margin-bottom:0;" data-goto="anamnese-completa">Ver Anamnese Completa</button>
+          <button class="btn-secondary" style="margin-top:14px; margin-bottom:0;" data-goto="anamnese-completa" id="materiais-ver-anamnese-btn" hidden>Ver Anamnese Completa</button>
         </div>
 
         <div class="submission-card">
           <div class="submission-head">
-            <div class="status-icon done">✓</div>
+            <div class="status-icon" id="materiais-fotos-icon">○</div>
             <div>
               <div class="status-text-title">Fotos Enviadas</div>
-              <div class="status-text-sub">6 imagens · 12/07</div>
+              <div class="status-text-sub" id="materiais-fotos-status">Carregando...</div>
             </div>
           </div>
-          <div class="submission-photos">
-            <div class="ph"></div>
-            <div class="ph"></div>
-            <div class="ph"></div>
-            <div class="ph"></div>
-          </div>
+          <div class="submission-photos" id="materiais-fotos-grid"></div>
         </div>
 
         <button class="download-btn">⬇ Baixar Dossiê Completo em PDF</button>
@@ -2476,165 +2395,11 @@
         </div>
       </div>
       <div class="content">
-        <div class="eyebrow">Marina Telles</div>
+        <div class="eyebrow" id="anamnese-completa-cliente-nome">Cliente</div>
         <div class="page-title">Anamnese Completa</div>
-        <div class="page-sub">Respostas enviadas em 10/07 às 14h22</div>
+        <div class="page-sub" id="anamnese-completa-status">Carregando...</div>
 
-        <div class="anamnese-section">
-          <div class="anamnese-section-title">Dados Pessoais</div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Nome completo</div>
-            <div class="anamnese-field-value">Marina Telles</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Idade</div>
-            <div class="anamnese-field-value">34</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Cidade / Estado</div>
-            <div class="anamnese-field-value">São Paulo / SP</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Profissão</div>
-            <div class="anamnese-field-value">Gerente de Marketing</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Telefone</div>
-            <div class="anamnese-field-value">(11) 98765-4321</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Instagram</div>
-            <div class="anamnese-field-value">@marinatelles</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">E-mail</div>
-            <div class="anamnese-field-value">marina.telles@email.com</div>
-          </div>
-        </div>
-
-        <div class="anamnese-section">
-          <div class="anamnese-section-title">Objetivo da Consultoria</div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Motivação</div>
-            <div class="anamnese-field-value">Sinto que meu guarda-roupa não reflete quem eu sou hoje. Mudei de cargo recentemente e quero uma imagem mais alinhada com minha nova posição, mas sem perder minha essência.</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">O que deseja melhorar</div>
-            <div class="anamnese-tag-row"><div class="anamnese-tag">Descobrir meu estilo</div><div class="anamnese-tag">Organizar meu guarda-roupa</div><div class="anamnese-tag">Passar mais credibilidade profissional</div></div>
-          </div>
-        </div>
-
-        <div class="anamnese-section">
-          <div class="anamnese-section-title">Rotina</div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Rotina atual</div>
-            <div class="anamnese-tag-row"><div class="anamnese-tag">Trabalho híbrido</div></div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Ambientes frequentados</div>
-            <div class="anamnese-tag-row"><div class="anamnese-tag">Trabalho</div><div class="anamnese-tag">Reuniões profissionais</div><div class="anamnese-tag">Eventos sociais</div></div>
-          </div>
-        </div>
-
-        <div class="anamnese-section">
-          <div class="anamnese-section-title">Estilo Pessoal</div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Estilo atual</div>
-            <div class="anamnese-tag-row"><div class="anamnese-tag">Clássico</div></div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Como gostaria de ser percebida</div>
-            <div class="anamnese-tag-row"><div class="anamnese-tag">Confiante</div><div class="anamnese-tag">Sofisticada</div></div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Pessoa cujo estilo admira</div>
-            <div class="anamnese-field-value">Admiro muito o estilo da Olivia Palermo, sempre elegante e atemporal, mas com toques modernos.</div>
-          </div>
-        </div>
-
-        <div class="anamnese-section">
-          <div class="anamnese-section-title">Guarda-Roupa</div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Representa quem você é hoje?</div>
-            <div class="anamnese-field-value">Parcialmente</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Peças mais utilizadas</div>
-            <div class="anamnese-field-value">Calças de alfaiataria pretas, camisas brancas, blazers básicos e tênis branco.</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Peças que evita usar</div>
-            <div class="anamnese-field-value">Vestidos estampados, cores muito vibrantes e saias curtas.</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Dificuldades</div>
-            <div class="anamnese-tag-row"><div class="anamnese-tag">Montar looks</div></div>
-          </div>
-        </div>
-
-        <div class="anamnese-section">
-          <div class="anamnese-section-title">Cores</div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Cores que ama usar</div>
-            <div class="anamnese-field-value">Vinho, azul marinho, off-white</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Cores que evita usar</div>
-            <div class="anamnese-field-value">Amarelo, laranja, rosa choque</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Já fez análise de coloração?</div>
-            <div class="anamnese-field-value">Não</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Cartela (se aplicável)</div>
-            <div class="anamnese-field-value">—</div>
-          </div>
-        </div>
-
-        <div class="anamnese-section">
-          <div class="anamnese-section-title">Biotipo & Corpo</div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Como se sente com o corpo hoje</div>
-            <div class="anamnese-field-value">Estou em um momento de aceitação, mas ainda tenho dificuldade em encontrar roupas que se ajustem bem ao meu tipo de corpo.</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Regiões que gosta de valorizar</div>
-            <div class="anamnese-field-value">Cintura e colo</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Regiões que prefere não destacar</div>
-            <div class="anamnese-field-value">Braços</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Dificuldade específica</div>
-            <div class="anamnese-field-value">Calças costumam ficar largas na cintura e justas no quadril.</div>
-          </div>
-        </div>
-
-        <div class="anamnese-section">
-          <div class="anamnese-section-title">Compras & Expectativas</div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Frequência de compras</div>
-            <div class="anamnese-field-value">A cada 3 meses</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Faixa de investimento</div>
-            <div class="anamnese-field-value">Entre R$ 500 e R$ 1.000</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Preferência de compra</div>
-            <div class="anamnese-field-value">Ambos</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Resultado excelente esperado</div>
-            <div class="anamnese-field-value">Ter um guarda-roupa funcional, com peças que combinem entre si e me façam sentir confiante no trabalho e na vida social.</div>
-          </div>
-          <div class="anamnese-field">
-            <div class="anamnese-field-label">Informação adicional</div>
-            <div class="anamnese-field-value">Tenho uma viagem de trabalho em 2 meses e gostaria de já adaptar algumas peças para essa ocasião.</div>
-          </div>
-        </div>
+        <div id="anamnese-completa-content"></div>
 
         <button class="download-btn">⬇ Baixar Dossiê Completo em PDF</button>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
@@ -2792,7 +2557,11 @@
     getFirestore,
     doc,
     getDoc,
-    setDoc
+    setDoc,
+    collection,
+    getDocs,
+    query,
+    where
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
   import {
     getStorage,
@@ -3322,6 +3091,468 @@
       console.error('GD: erro ao carregar fotos existentes', err);
     }
   }
+
+  // ===================================================================
+  // CONSULTANT PANEL — real client list, dossier viewer, dashboard
+  // ===================================================================
+
+  const GIULIA_UID = 'MW8S5upoCcO7w9DLZN54Bgi5CeJ3';
+  let selectedClienteUid = null;
+  let selectedClienteNome = null;
+  let cachedClientes = null; // [{uid, nome, anamneseDone, anamneseFinished, fotosCount}]
+
+  // ---- Anamnese field label map (section -> [ {field, label, type} ]) ----
+
+  const ANAMNESE_SECTIONS = [
+    {
+      title: 'Dados Pessoais', step: 1,
+      fields: [
+        { field: 'nomeCompleto', label: 'Nome completo' },
+        { field: 'idade', label: 'Idade' },
+        { field: 'cidadeEstado', label: 'Cidade / Estado' },
+        { field: 'profissao', label: 'Profissão' },
+        { field: 'telefone', label: 'Telefone' },
+        { field: 'instagram', label: 'Instagram' },
+        { field: 'email', label: 'E-mail' }
+      ]
+    },
+    {
+      title: 'Objetivo da Consultoria', step: 2,
+      fields: [
+        { field: 'motivacao', label: 'Motivação' },
+        { field: 'melhorias', label: 'O que deseja melhorar', type: 'tags' }
+      ]
+    },
+    {
+      title: 'Rotina', step: 3,
+      fields: [
+        { field: 'rotina', label: 'Rotina atual', type: 'tags' },
+        { field: 'ambientes', label: 'Ambientes frequentados', type: 'tags' }
+      ]
+    },
+    {
+      title: 'Estilo Pessoal', step: 4,
+      fields: [
+        { field: 'estiloAtual', label: 'Estilo atual', type: 'tags' },
+        { field: 'percepcaoDesejada', label: 'Como gostaria de ser percebida', type: 'tags' },
+        { field: 'pessoaAdmirada', label: 'Pessoa cujo estilo admira' }
+      ]
+    },
+    {
+      title: 'Guarda-Roupa', step: 5,
+      fields: [
+        { field: 'guardaRoupaRepresenta', label: 'Representa quem você é hoje?' },
+        { field: 'pecasMaisUtilizadas', label: 'Peças mais utilizadas' },
+        { field: 'pecasEvitadas', label: 'Peças que evita usar' },
+        { field: 'dificuldades', label: 'Dificuldades', type: 'tags' }
+      ]
+    },
+    {
+      title: 'Cores', step: 6,
+      fields: [
+        { field: 'coresQueAma', label: 'Cores que ama usar' },
+        { field: 'coresQueEvita', label: 'Cores que evita usar' },
+        { field: 'analiseColoracao', label: 'Já fez análise de coloração?' },
+        { field: 'cartelaColoracao', label: 'Cartela (se aplicável)' }
+      ]
+    },
+    {
+      title: 'Biotipo & Corpo', step: 7,
+      fields: [
+        { field: 'sentimentoCorpo', label: 'Como se sente com o corpo hoje' },
+        { field: 'regioesValorizar', label: 'Regiões que gosta de valorizar' },
+        { field: 'regioesNaoDestacar', label: 'Regiões que prefere não destacar' },
+        { field: 'dificuldadeEspecifica', label: 'Dificuldade específica' }
+      ]
+    },
+    {
+      title: 'Compras & Expectativas', step: 8,
+      fields: [
+        { field: 'frequenciaCompras', label: 'Frequência de compras' },
+        { field: 'faixaInvestimento', label: 'Faixa de investimento' },
+        { field: 'preferenciaCompra', label: 'Preferência de compra' },
+        { field: 'resultadoExcelente', label: 'Resultado excelente esperado' },
+        { field: 'informacaoAdicional', label: 'Informação adicional' }
+      ]
+    }
+  ];
+
+  function escapeHtml(str){
+    if(str === undefined || str === null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function firstNameOf(nome){
+    if(!nome) return 'Cliente';
+    return nome.trim().split(' ')[0];
+  }
+
+  // ---- Fetch all clients (role === 'cliente') with progress info ----
+
+  async function fetchAllClientes(){
+    if(cachedClientes) return cachedClientes;
+
+    const result = [];
+    try{
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('role', '==', 'cliente'));
+      const snap = await getDocs(q);
+
+      for(const userDoc of snap.docs){
+        const uid = userDoc.id;
+        const data = userDoc.data();
+        const nome = data.nome || 'Cliente';
+
+        let anamneseDone = 0;
+        let anamneseFinished = false;
+        let fotosCount = 0;
+
+        try{
+          const progressRef = doc(db, 'clientes', uid, 'anamnese', '_progress');
+          const progressSnap = await getDoc(progressRef);
+          if(progressSnap.exists()){
+            const pd = progressSnap.data();
+            anamneseDone = Array.isArray(pd.completedSteps) ? pd.completedSteps.length : 0;
+            anamneseFinished = !!pd.finished;
+          }
+        } catch(err){ /* ignore */ }
+
+        try{
+          const photosRef = doc(db, 'clientes', uid, 'fotos', '_meta');
+          const photosSnap = await getDoc(photosRef);
+          if(photosSnap.exists()){
+            fotosCount = photosSnap.data().count || 0;
+          }
+        } catch(err){ /* ignore */ }
+
+        result.push({ uid, nome, anamneseDone, anamneseFinished, fotosCount });
+      }
+    } catch(err){
+      console.error('GD: erro ao buscar clientes', err);
+    }
+
+    cachedClientes = result;
+    return result;
+  }
+
+  // ---- Render the "Minhas Clientes" list ----
+
+  async function renderClientesList(){
+    const listEl = document.getElementById('clientes-list');
+    if(!listEl) return;
+
+    cachedClientes = null; // force refresh
+    const clientes = await fetchAllClientes();
+
+    const totalEl = document.getElementById('clientes-stat-total');
+    const anamneseEl = document.getElementById('clientes-stat-anamnese');
+    const fotosEl = document.getElementById('clientes-stat-fotos');
+
+    if(totalEl) totalEl.textContent = clientes.length;
+    if(anamneseEl) anamneseEl.textContent = clientes.filter(function(c){ return c.anamneseFinished; }).length;
+    if(fotosEl) fotosEl.textContent = clientes.filter(function(c){ return c.fotosCount > 0; }).length;
+
+    if(clientes.length === 0){
+      listEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Nenhuma cliente cadastrada ainda.</p>`;
+      return;
+    }
+
+    listEl.innerHTML = '';
+    clientes.forEach(function(cliente){
+      const row = document.createElement('div');
+      row.className = 'client-row';
+      row.setAttribute('data-cliente-uid', cliente.uid);
+      row.setAttribute('data-cliente-nome', cliente.nome);
+
+      let meta;
+      if(cliente.anamneseFinished){
+        meta = 'Anamnese concluída';
+      } else if(cliente.anamneseDone > 0){
+        meta = 'Anamnese: ' + cliente.anamneseDone + ' de 8 etapas';
+      } else {
+        meta = 'Anamnese não iniciada';
+      }
+
+      const initial = (cliente.nome || 'C').trim().charAt(0).toUpperCase();
+      const badgeClass = cliente.anamneseFinished ? '' : 'warn';
+
+      row.innerHTML =
+        '<div class="client-avatar">' + escapeHtml(initial) + '</div>' +
+        '<div>' +
+          '<div class="client-name">' + escapeHtml(cliente.nome) + '</div>' +
+          '<div class="client-meta">' + escapeHtml(meta) + '</div>' +
+        '</div>' +
+        '<div class="badge-dot ' + badgeClass + '"></div>';
+
+      listEl.appendChild(row);
+    });
+  }
+
+  // ---- Click on a client row -> select and navigate to materiais ----
+
+  document.addEventListener('click', function(e){
+    const row = e.target.closest('#clientes-list .client-row');
+    if(!row) return;
+
+    selectedClienteUid = row.getAttribute('data-cliente-uid');
+    selectedClienteNome = row.getAttribute('data-cliente-nome');
+
+    if(window.__gdGoTo) window.__gdGoTo('materiais', 'fwd');
+  });
+
+  // ---- Render "Materiais Recebidos" for the selected client ----
+
+  async function renderMateriaisScreen(){
+    const nomeEl = document.getElementById('materiais-cliente-nome');
+    const anamneseIcon = document.getElementById('materiais-anamnese-icon');
+    const anamneseStatus = document.getElementById('materiais-anamnese-status');
+    const rotinaRow = document.getElementById('materiais-anamnese-rotina');
+    const rotinaValor = document.getElementById('materiais-anamnese-rotina-valor');
+    const objetivosRow = document.getElementById('materiais-anamnese-objetivos');
+    const objetivosValor = document.getElementById('materiais-anamnese-objetivos-valor');
+    const verAnamneseBtn = document.getElementById('materiais-ver-anamnese-btn');
+    const fotosIcon = document.getElementById('materiais-fotos-icon');
+    const fotosStatus = document.getElementById('materiais-fotos-status');
+    const fotosGrid = document.getElementById('materiais-fotos-grid');
+
+    if(!selectedClienteUid){
+      if(nomeEl) nomeEl.textContent = 'Selecione uma cliente';
+      return;
+    }
+
+    if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
+
+    // Anamnese progress
+    let anamneseDone = 0, anamneseFinished = false;
+    try{
+      const progressRef = doc(db, 'clientes', selectedClienteUid, 'anamnese', '_progress');
+      const progressSnap = await getDoc(progressRef);
+      if(progressSnap.exists()){
+        const pd = progressSnap.data();
+        anamneseDone = Array.isArray(pd.completedSteps) ? pd.completedSteps.length : 0;
+        anamneseFinished = !!pd.finished;
+      }
+    } catch(err){ console.error(err); }
+
+    if(anamneseFinished){
+      if(anamneseIcon){ anamneseIcon.textContent = '✓'; anamneseIcon.classList.add('done'); }
+      if(anamneseStatus) anamneseStatus.textContent = 'Concluída';
+      if(verAnamneseBtn) verAnamneseBtn.hidden = false;
+    } else if(anamneseDone > 0){
+      if(anamneseIcon){ anamneseIcon.textContent = '○'; anamneseIcon.classList.remove('done'); }
+      if(anamneseStatus) anamneseStatus.textContent = anamneseDone + ' de 8 etapas preenchidas';
+      if(verAnamneseBtn) verAnamneseBtn.hidden = false;
+    } else {
+      if(anamneseIcon){ anamneseIcon.textContent = '○'; anamneseIcon.classList.remove('done'); }
+      if(anamneseStatus) anamneseStatus.textContent = 'Ainda não iniciada';
+      if(verAnamneseBtn) verAnamneseBtn.hidden = true;
+    }
+
+    // Quick preview: rotina (step 3) and objetivos (step 2)
+    try{
+      const step3Ref = doc(db, 'clientes', selectedClienteUid, 'anamnese', 'step3');
+      const step3Snap = await getDoc(step3Ref);
+      if(step3Snap.exists()){
+        const rotina = step3Snap.data().rotina;
+        if(Array.isArray(rotina) && rotina.length){
+          if(rotinaRow) rotinaRow.hidden = false;
+          if(rotinaValor) rotinaValor.textContent = rotina.join(', ');
+        }
+      }
+    } catch(err){ console.error(err); }
+
+    try{
+      const step2Ref = doc(db, 'clientes', selectedClienteUid, 'anamnese', 'step2');
+      const step2Snap = await getDoc(step2Ref);
+      if(step2Snap.exists()){
+        const melhorias = step2Snap.data().melhorias;
+        if(Array.isArray(melhorias) && melhorias.length){
+          if(objetivosRow) objetivosRow.hidden = false;
+          if(objetivosValor) objetivosValor.textContent = melhorias.join(', ');
+        }
+      }
+    } catch(err){ console.error(err); }
+
+    // Fotos
+    let fotosUrls = {};
+    try{
+      const photosRef = doc(db, 'clientes', selectedClienteUid, 'fotos', '_meta');
+      const photosSnap = await getDoc(photosRef);
+      if(photosSnap.exists()){
+        fotosUrls = photosSnap.data().urls || {};
+      }
+    } catch(err){ console.error(err); }
+
+    const fotoEntries = Object.values(fotosUrls);
+    if(fotoEntries.length > 0){
+      if(fotosIcon){ fotosIcon.textContent = '✓'; fotosIcon.classList.add('done'); }
+      if(fotosStatus) fotosStatus.textContent = fotoEntries.length + (fotoEntries.length === 1 ? ' imagem' : ' imagens');
+      if(fotosGrid){
+        fotosGrid.innerHTML = '';
+        fotoEntries.forEach(function(entry){
+          const ph = document.createElement('div');
+          ph.className = 'ph';
+          const img = document.createElement('img');
+          img.src = entry.url || entry;
+          ph.appendChild(img);
+          fotosGrid.appendChild(ph);
+        });
+      }
+    } else {
+      if(fotosIcon){ fotosIcon.textContent = '○'; fotosIcon.classList.remove('done'); }
+      if(fotosStatus) fotosStatus.textContent = 'Nenhuma foto enviada';
+      if(fotosGrid) fotosGrid.innerHTML = '';
+    }
+  }
+
+  // ---- Render the full "Anamnese Completa" for the selected client ----
+
+  async function renderAnamneseCompleta(){
+    const nomeEl = document.getElementById('anamnese-completa-cliente-nome');
+    const statusEl = document.getElementById('anamnese-completa-status');
+    const contentEl = document.getElementById('anamnese-completa-content');
+
+    if(!contentEl) return;
+
+    if(!selectedClienteUid){
+      if(nomeEl) nomeEl.textContent = 'Cliente';
+      if(statusEl) statusEl.textContent = 'Selecione uma cliente em "Minhas Clientes"';
+      contentEl.innerHTML = '';
+      return;
+    }
+
+    if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
+    if(statusEl) statusEl.textContent = 'Carregando respostas...';
+
+    // Fetch all step documents
+    const stepsData = {};
+    for(let i = 1; i <= TOTAL_STEPS; i++){
+      try{
+        const stepRef = doc(db, 'clientes', selectedClienteUid, 'anamnese', 'step' + i);
+        const snap = await getDoc(stepRef);
+        if(snap.exists()) stepsData[i] = snap.data();
+      } catch(err){ console.error(err); }
+    }
+
+    let anamneseFinished = false;
+    try{
+      const progressRef = doc(db, 'clientes', selectedClienteUid, 'anamnese', '_progress');
+      const progressSnap = await getDoc(progressRef);
+      if(progressSnap.exists()) anamneseFinished = !!progressSnap.data().finished;
+    } catch(err){ console.error(err); }
+
+    if(statusEl) statusEl.textContent = anamneseFinished ? 'Respostas concluídas pela cliente' : 'Respostas parciais (em andamento)';
+
+    if(Object.keys(stepsData).length === 0){
+      contentEl.innerHTML = `<div class="stat-card" style="text-align:center;"><p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">Esta cliente ainda não preencheu a anamnese.</p></div>`;
+      return;
+    }
+
+    let html = '';
+    ANAMNESE_SECTIONS.forEach(function(section){
+      const data = stepsData[section.step];
+      if(!data) return;
+
+      let sectionHtml = '<div class="anamnese-section"><div class="anamnese-section-title">' + escapeHtml(section.title) + '</div>';
+      let hasContent = false;
+
+      section.fields.forEach(function(f){
+        const value = data[f.field];
+        if(value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) return;
+
+        hasContent = true;
+        if(f.type === 'tags' && Array.isArray(value)){
+          sectionHtml += '<div class="anamnese-field"><div class="anamnese-field-label">' + escapeHtml(f.label) + '</div>' +
+            '<div class="anamnese-tag-row">' + value.map(function(v){ return '<div class="anamnese-tag">' + escapeHtml(v) + '</div>'; }).join('') + '</div></div>';
+        } else {
+          sectionHtml += '<div class="anamnese-field"><div class="anamnese-field-label">' + escapeHtml(f.label) + '</div>' +
+            '<div class="anamnese-field-value">' + escapeHtml(value) + '</div></div>';
+        }
+      });
+
+      sectionHtml += '</div>';
+      if(hasContent) html += sectionHtml;
+    });
+
+    contentEl.innerHTML = html || `<div class="stat-card" style="text-align:center;"><p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">Nenhuma resposta preenchida ainda.</p></div>`;
+  }
+
+  // ---- Update painel/dashboard summary stats ----
+
+  async function refreshConsultantStats(){
+    const clientes = await fetchAllClientes();
+
+    const painelResumo = document.getElementById('painel-clientes-resumo');
+    const dashTotal = document.getElementById('dashboard-total-clientes');
+    const dashAnamneseCompletas = document.getElementById('dashboard-anamneses-completas');
+    const dashFotos = document.getElementById('dashboard-fotos-enviadas');
+    const dashAndamento = document.getElementById('dashboard-anamneses-andamento');
+
+    const total = clientes.length;
+    const completas = clientes.filter(function(c){ return c.anamneseFinished; }).length;
+    const comFotos = clientes.filter(function(c){ return c.fotosCount > 0; }).length;
+    const andamento = clientes.filter(function(c){ return !c.anamneseFinished && c.anamneseDone > 0; }).length;
+
+    if(painelResumo) painelResumo.textContent = total + (total === 1 ? ' cliente cadastrada' : ' clientes cadastradas');
+    if(dashTotal) dashTotal.textContent = total;
+    if(dashAnamneseCompletas) dashAnamneseCompletas.textContent = completas;
+    if(dashFotos) dashFotos.textContent = comFotos + (comFotos === 1 ? ' cliente enviou fotos' : ' clientes enviaram fotos');
+    if(dashAndamento) dashAndamento.textContent = andamento + (andamento === 1 ? ' cliente' : ' clientes');
+  }
+
+  // ---- Hook into navigation ----
+
+  const previousGoTo2 = window.__gdGoTo;
+  if(previousGoTo2){
+    window.__gdGoTo = function(screenId, direction){
+      previousGoTo2(screenId, direction);
+      if(screenId === 'clientes'){
+        renderClientesList();
+      }
+      if(screenId === 'materiais'){
+        renderMateriaisScreen();
+      }
+      if(screenId === 'anamnese-completa'){
+        renderAnamneseCompleta();
+      }
+      if(screenId === 'painel' || screenId === 'dashboard'){
+        refreshConsultantStats();
+      }
+    };
+  }
+
+  document.addEventListener('click', function(e){
+    const el = e.target.closest('[data-goto]');
+    if(!el) return;
+    const target = el.getAttribute('data-goto');
+    if(target === 'clientes'){
+      setTimeout(renderClientesList, 50);
+    }
+    if(target === 'materiais'){
+      setTimeout(renderMateriaisScreen, 50);
+    }
+    if(target === 'anamnese-completa'){
+      setTimeout(renderAnamneseCompleta, 50);
+    }
+    if(target === 'painel' || target === 'dashboard'){
+      setTimeout(refreshConsultantStats, 50);
+    }
+  });
+
+  // Refresh stats right after a consultora logs in (welcome -> painel)
+  onAuthStateChanged(auth, function(user){
+    if(user){
+      getDoc(doc(db, 'users', user.uid)).then(function(snap){
+        if(snap.exists() && snap.data().role === 'consultora'){
+          cachedClientes = null;
+          refreshConsultantStats();
+        }
+      }).catch(function(){});
+    }
+  });
 </script>
 
 </body>
