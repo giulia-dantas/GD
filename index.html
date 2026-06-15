@@ -1117,6 +1117,37 @@
     color:var(--chocolate);
   }
 
+  .upload-box{
+    position:relative;
+    overflow:hidden;
+  }
+
+  .upload-box .preview-img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+  .upload-box.has-image .label,
+  .upload-box.has-image svg{
+    position:relative;
+    z-index:1;
+  }
+
+  .upload-box.has-image .label{
+    background:rgba(0,0,0,0.35);
+    color:#fff;
+    padding:2px 6px;
+    border-radius:4px;
+  }
+
+  .upload-box.has-image svg{
+    color:#fff;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4));
+  }
+
   /* ===== Submission card (Giulia's view) ===== */
   .submission-card{
     background:var(--card);
@@ -1756,33 +1787,33 @@
 
         <div class="progress-card">
           <div class="stat-label" style="margin-bottom:0;">Progresso do seu dossiê</div>
-          <div class="progress-bar"><div class="progress-bar-fill" style="width:66%;"></div></div>
-          <div class="mini-row-sub" style="margin-top:4px;">2 de 3 etapas concluídas</div>
+          <div class="progress-bar"><div class="progress-bar-fill" id="cliente-progress-fill" style="width:0%;"></div></div>
+          <div class="mini-row-sub" style="margin-top:4px;" id="cliente-progress-label">0 de 3 etapas concluídas</div>
         </div>
 
         <div class="progress-card">
           <div class="status-list">
             <div class="status-item" data-goto="anamnese-1">
-              <div class="status-icon done">✓</div>
+              <div class="status-icon" id="status-icon-anamnese">○</div>
               <div>
                 <div class="status-text-title">Anamnese de Estilo</div>
-                <div class="status-text-sub">Concluído</div>
+                <div class="status-text-sub" id="status-sub-anamnese">Não iniciado</div>
               </div>
-              <div class="status-action">Ver</div>
+              <div class="status-action" id="status-action-anamnese">Iniciar</div>
             </div>
             <div class="status-item" data-goto="fotos">
-              <div class="status-icon done">✓</div>
+              <div class="status-icon" id="status-icon-fotos">○</div>
               <div>
                 <div class="status-text-title">Envio de Fotos</div>
-                <div class="status-text-sub">6 fotos enviadas</div>
+                <div class="status-text-sub" id="status-sub-fotos">Nenhuma foto enviada</div>
               </div>
-              <div class="status-action">Ver</div>
+              <div class="status-action" id="status-action-fotos">Iniciar</div>
             </div>
             <div class="status-item">
-              <div class="status-icon">○</div>
+              <div class="status-icon" id="status-icon-dossie">○</div>
               <div>
                 <div class="status-text-title">Dossiê Final</div>
-                <div class="status-text-sub">Em análise pela consultora</div>
+                <div class="status-text-sub" id="status-sub-dossie">Aguardando etapas anteriores</div>
               </div>
               <div class="status-action">—</div>
             </div>
@@ -1814,25 +1845,25 @@
         <div class="page-title">Vamos começar</div>
         <div class="page-sub">Conte um pouco sobre você</div>
 
-        <div class="form-section">
+        <div class="form-section" id="anamnese-1-form">
           <label class="form-label">Nome completo</label>
-          <input class="input-field" type="text" placeholder="Seu nome completo">
+          <input class="input-field" type="text" data-field="nomeCompleto" placeholder="Seu nome completo">
           <label class="form-label">Idade</label>
-          <input class="input-field" type="text" placeholder="Ex: 32">
+          <input class="input-field" type="text" data-field="idade" placeholder="Ex: 32">
           <label class="form-label">Cidade / Estado</label>
-          <input class="input-field" type="text" placeholder="Ex: São Paulo / SP">
+          <input class="input-field" type="text" data-field="cidadeEstado" placeholder="Ex: São Paulo / SP">
           <label class="form-label">Profissão</label>
-          <input class="input-field" type="text" placeholder="Sua profissão">
+          <input class="input-field" type="text" data-field="profissao" placeholder="Sua profissão">
           <label class="form-label">Telefone</label>
-          <input class="input-field" type="text" placeholder="(00) 00000-0000">
+          <input class="input-field" type="text" data-field="telefone" placeholder="(00) 00000-0000">
           <label class="form-label">Instagram</label>
-          <input class="input-field" type="text" placeholder="@seuperfil">
+          <input class="input-field" type="text" data-field="instagram" placeholder="@seuperfil">
           <label class="form-label">E-mail</label>
-          <input class="input-field" type="text" placeholder="seu@email.com">
+          <input class="input-field" type="text" data-field="email" placeholder="seu@email.com">
         </div>
 
 
-        <button class="btn-primary" data-goto="anamnese-2">Continuar</button>
+        <button class="btn-primary" data-goto="anamnese-2" data-save-step="1">Continuar</button>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
@@ -1859,17 +1890,17 @@
         <div class="page-title">Seu objetivo</div>
         <div class="page-sub">O que você busca com essa consultoria</div>
 
-        <div class="form-section">
+        <div class="form-section" id="anamnese-2-form">
           <label class="form-label">O que te motivou a procurar uma consultoria de imagem?</label>
-          <textarea class="input-field textarea" placeholder="Escreva livremente..."></textarea>
+          <textarea class="input-field textarea" data-field="motivacao" placeholder="Escreva livremente..."></textarea>
 
           <label class="form-label">O que você deseja melhorar?</label>
-          <div class="chip-row">
+          <div class="chip-row" data-field="melhorias">
             <div class="chip">Vestir-se melhor</div>
-            <div class="chip sel">Descobrir meu estilo</div>
+            <div class="chip">Descobrir meu estilo</div>
             <div class="chip">Melhorar minha autoestima</div>
             <div class="chip">Passar mais credibilidade profissional</div>
-            <div class="chip sel">Organizar meu guarda-roupa</div>
+            <div class="chip">Organizar meu guarda-roupa</div>
             <div class="chip">Descobrir minhas melhores cores</div>
             <div class="chip">Aprender a comprar melhor</div>
             <div class="chip">Melhorar minha imagem pessoal</div>
@@ -1880,7 +1911,7 @@
 
         <div class="step-nav">
             <button class="btn-secondary" data-goto="anamnese-1">Voltar</button>
-            <button class="btn-primary" data-goto="anamnese-3">Continuar</button>
+            <button class="btn-primary" data-goto="anamnese-3" data-save-step="2">Continuar</button>
           </div>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -1908,11 +1939,11 @@
         <div class="page-title">Sua rotina</div>
         <div class="page-sub">Os ambientes que você frequenta moldam seu guarda-roupa</div>
 
-        <div class="form-section">
+        <div class="form-section" id="anamnese-3-form">
           <label class="form-label">Como é sua rotina atualmente?</label>
-          <div class="chip-row">
+          <div class="chip-row" data-field="rotina">
             <div class="chip">Trabalho presencial</div>
-            <div class="chip sel">Trabalho híbrido</div>
+            <div class="chip">Trabalho híbrido</div>
             <div class="chip">Trabalho remoto</div>
             <div class="chip">Empresária</div>
             <div class="chip">Estudante</div>
@@ -1922,9 +1953,9 @@
           </div>
 
           <label class="form-label">Quais ambientes você frequenta com mais frequência?</label>
-          <div class="chip-row">
-            <div class="chip sel">Trabalho</div>
-            <div class="chip sel">Reuniões profissionais</div>
+          <div class="chip-row" data-field="ambientes">
+            <div class="chip">Trabalho</div>
+            <div class="chip">Reuniões profissionais</div>
             <div class="chip">Eventos sociais</div>
             <div class="chip">Academia</div>
             <div class="chip">Igreja</div>
@@ -1938,7 +1969,7 @@
 
         <div class="step-nav">
             <button class="btn-secondary" data-goto="anamnese-2">Voltar</button>
-            <button class="btn-primary" data-goto="anamnese-4">Continuar</button>
+            <button class="btn-primary" data-goto="anamnese-4" data-save-step="3">Continuar</button>
           </div>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -1966,15 +1997,15 @@
         <div class="page-title">Seu estilo</div>
         <div class="page-sub">Como você se vê e como deseja ser vista</div>
 
-        <div class="form-section">
+        <div class="form-section" id="anamnese-4-form">
           <label class="form-label">Como você define seu estilo atualmente?</label>
-          <div class="chip-row">
+          <div class="chip-row" data-field="estiloAtual">
             <div class="chip">Não sei definir</div>
             <div class="chip">Natural</div>
             <div class="chip">Básico</div>
             <div class="chip">Casual</div>
             <div class="chip">Elegante</div>
-            <div class="chip sel">Clássico</div>
+            <div class="chip">Clássico</div>
             <div class="chip">Contemporâneo</div>
             <div class="chip">Moderno</div>
             <div class="chip">Romântico</div>
@@ -1985,15 +2016,15 @@
           </div>
 
           <label class="form-label">Como você gostaria de ser percebida pelas pessoas?</label>
-          <div class="chip-row">
+          <div class="chip-row" data-field="percepcaoDesejada">
             <div class="chip">Elegante</div>
             <div class="chip">Feminina</div>
-            <div class="chip sel">Sofisticada</div>
+            <div class="chip">Sofisticada</div>
             <div class="chip">Moderna</div>
             <div class="chip">Profissional</div>
             <div class="chip">Autoritária</div>
             <div class="chip">Delicada</div>
-            <div class="chip sel">Confiante</div>
+            <div class="chip">Confiante</div>
             <div class="chip">Acessível</div>
             <div class="chip">Autêntica</div>
             <div class="chip">Criativa</div>
@@ -2002,13 +2033,13 @@
           </div>
 
           <label class="form-label">Existe alguma pessoa cuja imagem ou estilo você admira?</label>
-          <textarea class="input-field textarea" placeholder="Escreva livremente..."></textarea>
+          <textarea class="input-field textarea" data-field="pessoaAdmirada" placeholder="Escreva livremente..."></textarea>
         </div>
 
 
         <div class="step-nav">
             <button class="btn-secondary" data-goto="anamnese-3">Voltar</button>
-            <button class="btn-primary" data-goto="anamnese-5">Continuar</button>
+            <button class="btn-primary" data-goto="anamnese-5" data-save-step="4">Continuar</button>
           </div>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -2036,23 +2067,23 @@
         <div class="page-title">Seu guarda-roupa</div>
         <div class="page-sub">Vamos entender o que você já tem</div>
 
-        <div class="form-section">
+        <div class="form-section" id="anamnese-5-form">
           <label class="form-label">Seu guarda-roupa representa quem você é hoje?</label>
-          <div class="radio-row">
+          <div class="radio-row" data-field="guardaRoupaRepresenta">
             <div class="radio-opt"><div class="dot-circle"></div>Sim</div>
-            <div class="radio-opt sel"><div class="dot-circle"></div>Parcialmente</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Parcialmente</div>
             <div class="radio-opt"><div class="dot-circle"></div>Não</div>
           </div>
 
           <label class="form-label">Quais peças você mais utiliza?</label>
-          <textarea class="input-field textarea" placeholder="Escreva livremente..."></textarea>
+          <textarea class="input-field textarea" data-field="pecasMaisUtilizadas" placeholder="Escreva livremente..."></textarea>
 
           <label class="form-label">Quais peças você evita usar?</label>
-          <textarea class="input-field textarea" placeholder="Escreva livremente..."></textarea>
+          <textarea class="input-field textarea" data-field="pecasEvitadas" placeholder="Escreva livremente..."></textarea>
 
           <label class="form-label">Você costuma ter dificuldade para:</label>
-          <div class="chip-row">
-            <div class="chip sel">Montar looks</div>
+          <div class="chip-row" data-field="dificuldades">
+            <div class="chip">Montar looks</div>
             <div class="chip">Combinar cores</div>
             <div class="chip">Comprar roupas</div>
             <div class="chip">Escolher acessórios</div>
@@ -2065,7 +2096,7 @@
 
         <div class="step-nav">
             <button class="btn-secondary" data-goto="anamnese-4">Voltar</button>
-            <button class="btn-primary" data-goto="anamnese-6">Continuar</button>
+            <button class="btn-primary" data-goto="anamnese-6" data-save-step="5">Continuar</button>
           </div>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -2093,27 +2124,27 @@
         <div class="page-title">Suas cores</div>
         <div class="page-sub">Preferências e histórico de coloração pessoal</div>
 
-        <div class="form-section">
+        <div class="form-section" id="anamnese-6-form">
           <label class="form-label">Existem cores que você ama usar?</label>
-          <input class="input-field" type="text" placeholder="Ex: Vinho, azul marinho...">
+          <input class="input-field" type="text" data-field="coresQueAma" placeholder="Ex: Vinho, azul marinho...">
 
           <label class="form-label">Existem cores que você evita usar?</label>
-          <input class="input-field" type="text" placeholder="Ex: Amarelo, laranja...">
+          <input class="input-field" type="text" data-field="coresQueEvita" placeholder="Ex: Amarelo, laranja...">
 
           <label class="form-label">Você já realizou uma análise de coloração pessoal?</label>
-          <div class="radio-row">
+          <div class="radio-row" data-field="analiseColoracao">
             <div class="radio-opt"><div class="dot-circle"></div>Sim</div>
-            <div class="radio-opt sel"><div class="dot-circle"></div>Não</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Não</div>
           </div>
 
           <label class="form-label">Se sim, qual foi sua cartela?</label>
-          <input class="input-field" type="text" placeholder="Ex: Outono Quente">
+          <input class="input-field" type="text" data-field="cartelaColoracao" placeholder="Ex: Outono Quente">
         </div>
 
 
         <div class="step-nav">
             <button class="btn-secondary" data-goto="anamnese-5">Voltar</button>
-            <button class="btn-primary" data-goto="anamnese-7">Continuar</button>
+            <button class="btn-primary" data-goto="anamnese-7" data-save-step="6">Continuar</button>
           </div>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -2141,24 +2172,24 @@
         <div class="page-title">Biotipo & corpo</div>
         <div class="page-sub">Para valorizarmos o que você ama em você</div>
 
-        <div class="form-section">
+        <div class="form-section" id="anamnese-7-form">
           <label class="form-label">Como você se sente em relação ao seu corpo atualmente?</label>
-          <textarea class="input-field textarea" placeholder="Escreva livremente..."></textarea>
+          <textarea class="input-field textarea" data-field="sentimentoCorpo" placeholder="Escreva livremente..."></textarea>
 
           <label class="form-label">Quais regiões do seu corpo você mais gosta de valorizar?</label>
-          <input class="input-field" type="text" placeholder="Ex: Cintura, colo...">
+          <input class="input-field" type="text" data-field="regioesValorizar" placeholder="Ex: Cintura, colo...">
 
           <label class="form-label">Existe alguma região que você prefere não destacar?</label>
-          <input class="input-field" type="text" placeholder="Ex: Braços, abdômen...">
+          <input class="input-field" type="text" data-field="regioesNaoDestacar" placeholder="Ex: Braços, abdômen...">
 
           <label class="form-label">Existe alguma dificuldade específica ao escolher roupas?</label>
-          <textarea class="input-field textarea" placeholder="Escreva livremente..."></textarea>
+          <textarea class="input-field textarea" data-field="dificuldadeEspecifica" placeholder="Escreva livremente..."></textarea>
         </div>
 
 
         <div class="step-nav">
             <button class="btn-secondary" data-goto="anamnese-6">Voltar</button>
-            <button class="btn-primary" data-goto="anamnese-8">Continuar</button>
+            <button class="btn-primary" data-goto="anamnese-8" data-save-step="7">Continuar</button>
           </div>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -2186,44 +2217,44 @@
         <div class="page-title">Últimos detalhes</div>
         <div class="page-sub">Suas expectativas para o resultado final</div>
 
-        <div class="form-section">
+        <div class="form-section" id="anamnese-8-form-a">
           <label class="form-label">Com que frequência você compra roupas?</label>
-          <div class="radio-row">
+          <div class="radio-row" data-field="frequenciaCompras">
             <div class="radio-opt"><div class="dot-circle"></div>Mensalmente</div>
-            <div class="radio-opt sel"><div class="dot-circle"></div>A cada 3 meses</div>
+            <div class="radio-opt"><div class="dot-circle"></div>A cada 3 meses</div>
             <div class="radio-opt"><div class="dot-circle"></div>A cada 6 meses</div>
             <div class="radio-opt"><div class="dot-circle"></div>Apenas quando necessário</div>
             <div class="radio-opt"><div class="dot-circle"></div>Raramente</div>
           </div>
 
           <label class="form-label">Qual faixa de investimento você costuma destinar para roupas e acessórios?</label>
-          <div class="radio-row">
+          <div class="radio-row" data-field="faixaInvestimento">
             <div class="radio-opt"><div class="dot-circle"></div>Até R$ 200</div>
             <div class="radio-opt"><div class="dot-circle"></div>Entre R$ 200 e R$ 500</div>
-            <div class="radio-opt sel"><div class="dot-circle"></div>Entre R$ 500 e R$ 1.000</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Entre R$ 500 e R$ 1.000</div>
             <div class="radio-opt"><div class="dot-circle"></div>Acima de R$ 1.000</div>
           </div>
 
           <label class="form-label">Você prefere comprar:</label>
-          <div class="radio-row">
+          <div class="radio-row" data-field="preferenciaCompra">
             <div class="radio-opt"><div class="dot-circle"></div>Presencialmente</div>
             <div class="radio-opt"><div class="dot-circle"></div>Online</div>
-            <div class="radio-opt sel"><div class="dot-circle"></div>Ambos</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Ambos</div>
           </div>
         </div>
 
-        <div class="form-section">
+        <div class="form-section" id="anamnese-8-form-b">
           <label class="form-label">O que seria um resultado excelente para você ao final desta consultoria?</label>
-          <textarea class="input-field textarea" placeholder="Escreva livremente..."></textarea>
+          <textarea class="input-field textarea" data-field="resultadoExcelente" placeholder="Escreva livremente..."></textarea>
 
           <label class="form-label">Existe alguma informação que considera importante compartilhar antes da análise?</label>
-          <textarea class="input-field textarea" placeholder="Escreva livremente..."></textarea>
+          <textarea class="input-field textarea" data-field="informacaoAdicional" placeholder="Escreva livremente..."></textarea>
         </div>
 
 
         <div class="step-nav">
             <button class="btn-secondary" data-goto="anamnese-7">Voltar</button>
-            <button class="btn-primary" data-goto="cliente-inicio">Concluir Anamnese</button>
+            <button class="btn-primary" data-goto="cliente-inicio" data-save-step="8" data-finish-anamnese="true">Concluir Anamnese</button>
           </div>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -2255,19 +2286,23 @@
           <div class="form-section-title"><span class="num">1</span>Fotos do corpo</div>
           <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Frente, perfil, costas e rosto, com roupas justas e luz natural</p>
           <div class="upload-grid">
-            <div class="upload-box filled">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg>
+<div class="upload-box" data-photo-slot="corpo-frente">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="corpo-frente" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Frente</div>
             </div>
-            <div class="upload-box filled">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg>
+<div class="upload-box" data-photo-slot="corpo-perfil">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="corpo-perfil" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Perfil</div>
             </div>
-            <div class="upload-box">
+<div class="upload-box" data-photo-slot="corpo-costas">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="corpo-costas" hidden>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Costas</div>
             </div>
-            <div class="upload-box">
+<div class="upload-box" data-photo-slot="corpo-rosto">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="corpo-rosto" hidden>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Rosto (sem maquiagem)</div>
             </div>
@@ -2278,11 +2313,13 @@
           <div class="form-section-title"><span class="num">2</span>Looks que você usa</div>
           <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Fotos dos looks do seu dia a dia</p>
           <div class="upload-grid">
-            <div class="upload-box filled">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg>
+<div class="upload-box" data-photo-slot="look-atual-1">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="look-atual-1" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Look 1</div>
             </div>
-            <div class="upload-box">
+<div class="upload-box" data-photo-slot="look-atual-add">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="look-atual-add" hidden>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Adicionar</div>
             </div>
@@ -2293,11 +2330,13 @@
           <div class="form-section-title"><span class="num">3</span>Looks que você gostaria de usar</div>
           <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Referências e inspirações de estilo</p>
           <div class="upload-grid">
-            <div class="upload-box filled">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg>
+<div class="upload-box" data-photo-slot="referencia-1">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="referencia-1" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Referência 1</div>
             </div>
-            <div class="upload-box">
+<div class="upload-box" data-photo-slot="referencia-add">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="referencia-add" hidden>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Adicionar</div>
             </div>
@@ -2307,24 +2346,22 @@
         <div class="form-section">
           <div class="form-section-title"><span class="num">4</span>Guarda-roupa (opcional)</div>
           <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Fotografe as peças que você mais usa no dia a dia. Adicione quantas quiser</p>
-          <div class="upload-grid">
-            <div class="upload-box filled">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg>
+          <div class="upload-grid" id="guarda-roupa-grid">
+<div class="upload-box" data-photo-slot="guarda-roupa-1">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="guarda-roupa-1" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Peça 1</div>
             </div>
-            <div class="upload-box filled">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg>
-              <div class="label">Peça 2</div>
-            </div>
-            <div class="upload-box">
+<div class="upload-box" data-photo-slot="guarda-roupa-add">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="guarda-roupa-add" hidden>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Adicionar</div>
             </div>
           </div>
-          <button class="btn-secondary" style="margin-top:12px;">+ Adicionar mais fotos do guarda-roupa</button>
+          <button class="btn-secondary" style="margin-top:12px;" id="add-guarda-roupa-btn">+ Adicionar mais fotos do guarda-roupa</button>
         </div>
 
-        <button class="btn-primary" data-goto="cliente-inicio">Enviar Fotos</button>
+        <button class="btn-primary" data-goto="cliente-inicio" id="enviar-fotos-btn">Enviar Fotos</button>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
@@ -2696,8 +2733,54 @@
     }
 
     var upload = e.target.closest('.upload-box');
-    if(upload){ upload.classList.toggle('filled'); return; }
+    if(upload){
+      var input = upload.querySelector('.upload-input');
+      if(input) input.click();
+      return;
+    }
   });
+
+  // Handle photo selection -> show local preview
+  document.addEventListener('change', function(e){
+    var input = e.target.closest('.upload-input');
+    if(!input || !input.files || !input.files[0]) return;
+
+    var box = input.closest('.upload-box');
+    var file = input.files[0];
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      var existingImg = box.querySelector('.preview-img');
+      if(existingImg) existingImg.remove();
+      var img = document.createElement('img');
+      img.className = 'preview-img';
+      img.src = ev.target.result;
+      box.insertBefore(img, box.firstChild);
+      box.classList.add('filled','has-image');
+
+      // If this was an "Adicionar" slot, spawn a fresh "Adicionar" box after it
+      var slotId = input.getAttribute('data-photo-slot') || '';
+      if(slotId.endsWith('-add')){
+        var grid = box.parentElement;
+        var newLabel = box.querySelector('.label');
+        if(newLabel) newLabel.textContent = slotId.replace('-add','').replace(/-/g,' ');
+        box.removeAttribute('data-photo-slot');
+        input.removeAttribute('data-photo-slot');
+
+        var addBox = box.cloneNode(true);
+        addBox.classList.remove('filled','has-image');
+        addBox.setAttribute('data-photo-slot', slotId);
+        var addImg = addBox.querySelector('.preview-img');
+        if(addImg) addImg.remove();
+        var addInput = addBox.querySelector('.upload-input');
+        if(addInput){ addInput.setAttribute('data-photo-slot', slotId); addInput.value = ''; }
+        var addLabel = addBox.querySelector('.label');
+        if(addLabel) addLabel.textContent = 'Adicionar';
+        grid.appendChild(addBox);
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+
 
   goTo(DEFAULT_SCREEN);
 
@@ -2716,6 +2799,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
   import {
     getAuth,
+    onAuthStateChanged,
     signInWithEmailAndPassword,
     sendPasswordResetEmail
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
@@ -2777,7 +2861,7 @@
       case 'auth/missing-password':
         return 'Digite sua senha.';
       default:
-        return 'Não foi possível entrar. Tente novamente.';
+        return 'Não foi possível entrar. (' + (code || 'erro desconhecido') + ')';
     }
   }
 
@@ -2845,6 +2929,8 @@
       e.preventDefault();
       handleLogin();
     });
+  } else {
+    console.error('GD: login-btn not found in DOM');
   }
 
   if(forgotLink){
@@ -2865,6 +2951,283 @@
       }
     });
   }
+
+  // ===================================================================
+  // ANAMNESE — read/write per-step data to Firestore
+  // ===================================================================
+
+  let currentUser = null;
+  const TOTAL_STEPS = 8;
+
+  onAuthStateChanged(auth, function(user){
+    currentUser = user;
+    if(user){
+      refreshClienteProgress();
+    }
+  });
+
+  // ---- Field getters/setters ----
+
+  function getFieldValue(container, field){
+    const el = container.querySelector('[data-field="' + field + '"]');
+    if(!el) return null;
+
+    if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'){
+      return el.value || '';
+    }
+    if(el.classList.contains('chip-row')){
+      const selected = [];
+      el.querySelectorAll('.chip.sel').forEach(function(c){ selected.push(c.textContent.trim()); });
+      return selected;
+    }
+    if(el.classList.contains('radio-row')){
+      const sel = el.querySelector('.radio-opt.sel');
+      return sel ? sel.textContent.trim() : '';
+    }
+    return null;
+  }
+
+  function setFieldValue(container, field, value){
+    const el = container.querySelector('[data-field="' + field + '"]');
+    if(!el || value === undefined || value === null) return;
+
+    if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'){
+      el.value = value;
+      return;
+    }
+    if(el.classList.contains('chip-row')){
+      const values = Array.isArray(value) ? value : [];
+      el.querySelectorAll('.chip').forEach(function(c){
+        if(values.indexOf(c.textContent.trim()) !== -1){
+          c.classList.add('sel');
+        } else {
+          c.classList.remove('sel');
+        }
+      });
+      return;
+    }
+    if(el.classList.contains('radio-row')){
+      el.querySelectorAll('.radio-opt').forEach(function(r){
+        if(r.textContent.trim() === value){
+          r.classList.add('sel');
+        } else {
+          r.classList.remove('sel');
+        }
+      });
+      return;
+    }
+  }
+
+  // ---- Save a step's data to Firestore ----
+
+  async function saveAnamneseStep(stepNum){
+    if(!currentUser) return false;
+
+    const forms = document.querySelectorAll('#anamnese-' + stepNum + '-form, #anamnese-' + stepNum + '-form-a, #anamnese-' + stepNum + '-form-b');
+    if(!forms.length) return true;
+
+    const data = {};
+    forms.forEach(function(form){
+      form.querySelectorAll('[data-field]').forEach(function(el){
+        const field = el.getAttribute('data-field');
+        data[field] = getFieldValue(form, field);
+      });
+    });
+
+    try{
+      const stepRef = doc(db, 'clientes', currentUser.uid, 'anamnese', 'step' + stepNum);
+      await setDoc(stepRef, data, { merge: true });
+
+      // Mark step as completed in the parent progress doc
+      const progressRef = doc(db, 'clientes', currentUser.uid, 'anamnese', '_progress');
+      const progressSnap = await getDoc(progressRef);
+      const completed = (progressSnap.exists() && Array.isArray(progressSnap.data().completedSteps))
+        ? progressSnap.data().completedSteps
+        : [];
+      if(completed.indexOf(stepNum) === -1) completed.push(stepNum);
+      await setDoc(progressRef, { completedSteps: completed }, { merge: true });
+
+      return true;
+    } catch(err){
+      console.error('GD: erro ao salvar etapa ' + stepNum, err);
+      return false;
+    }
+  }
+
+  // ---- Load a step's data from Firestore into the form ----
+
+  async function loadAnamneseStep(stepNum){
+    if(!currentUser) return;
+
+    const forms = document.querySelectorAll('#anamnese-' + stepNum + '-form, #anamnese-' + stepNum + '-form-a, #anamnese-' + stepNum + '-form-b');
+    if(!forms.length) return;
+
+    try{
+      const stepRef = doc(db, 'clientes', currentUser.uid, 'anamnese', 'step' + stepNum);
+      const snap = await getDoc(stepRef);
+      if(!snap.exists()) return;
+      const data = snap.data();
+
+      forms.forEach(function(form){
+        form.querySelectorAll('[data-field]').forEach(function(el){
+          const field = el.getAttribute('data-field');
+          if(field in data){
+            setFieldValue(form, field, data[field]);
+          }
+        });
+      });
+    } catch(err){
+      console.error('GD: erro ao carregar etapa ' + stepNum, err);
+    }
+  }
+
+  // ---- Update the "Início" screen progress card ----
+
+  async function refreshClienteProgress(){
+    if(!currentUser) return;
+
+    const fillEl = document.getElementById('cliente-progress-fill');
+    const labelEl = document.getElementById('cliente-progress-label');
+    const iconAnamnese = document.getElementById('status-icon-anamnese');
+    const subAnamnese = document.getElementById('status-sub-anamnese');
+    const actionAnamnese = document.getElementById('status-action-anamnese');
+    const iconFotos = document.getElementById('status-icon-fotos');
+    const subFotos = document.getElementById('status-sub-fotos');
+    const actionFotos = document.getElementById('status-action-fotos');
+    const iconDossie = document.getElementById('status-icon-dossie');
+    const subDossie = document.getElementById('status-sub-dossie');
+
+    let anamneseDone = 0;
+    let anamneseFinished = false;
+    let fotosCount = 0;
+
+    try{
+      const progressRef = doc(db, 'clientes', currentUser.uid, 'anamnese', '_progress');
+      const progressSnap = await getDoc(progressRef);
+      if(progressSnap.exists()){
+        const data = progressSnap.data();
+        const completed = Array.isArray(data.completedSteps) ? data.completedSteps : [];
+        anamneseDone = completed.length;
+        anamneseFinished = !!data.finished;
+      }
+    } catch(err){
+      console.error('GD: erro ao carregar progresso', err);
+    }
+
+    try{
+      const photosRef = doc(db, 'clientes', currentUser.uid, 'fotos', '_meta');
+      const photosSnap = await getDoc(photosRef);
+      if(photosSnap.exists()){
+        fotosCount = photosSnap.data().count || 0;
+      }
+    } catch(err){
+      console.error('GD: erro ao carregar fotos', err);
+    }
+
+    // Anamnese status
+    if(anamneseFinished){
+      if(iconAnamnese){ iconAnamnese.textContent = '✓'; iconAnamnese.classList.add('done'); }
+      if(subAnamnese) subAnamnese.textContent = 'Concluído';
+      if(actionAnamnese) actionAnamnese.textContent = 'Ver';
+    } else if(anamneseDone > 0){
+      if(iconAnamnese){ iconAnamnese.textContent = '○'; iconAnamnese.classList.remove('done'); }
+      if(subAnamnese) subAnamnese.textContent = anamneseDone + ' de ' + TOTAL_STEPS + ' etapas';
+      if(actionAnamnese) actionAnamnese.textContent = 'Continuar';
+    } else {
+      if(iconAnamnese){ iconAnamnese.textContent = '○'; iconAnamnese.classList.remove('done'); }
+      if(subAnamnese) subAnamnese.textContent = 'Não iniciado';
+      if(actionAnamnese) actionAnamnese.textContent = 'Iniciar';
+    }
+
+    // Fotos status
+    if(fotosCount > 0){
+      if(iconFotos){ iconFotos.textContent = '✓'; iconFotos.classList.add('done'); }
+      if(subFotos) subFotos.textContent = fotosCount + (fotosCount === 1 ? ' foto enviada' : ' fotos enviadas');
+      if(actionFotos) actionFotos.textContent = 'Ver';
+    } else {
+      if(iconFotos){ iconFotos.textContent = '○'; iconFotos.classList.remove('done'); }
+      if(subFotos) subFotos.textContent = 'Nenhuma foto enviada';
+      if(actionFotos) actionFotos.textContent = 'Iniciar';
+    }
+
+    // Dossie status
+    const stepsTotal = 3; // anamnese, fotos, dossie final
+    let stepsDone = 0;
+    if(anamneseFinished) stepsDone++;
+    if(fotosCount > 0) stepsDone++;
+
+    if(stepsDone >= 2){
+      if(subDossie) subDossie.textContent = 'Em análise pela consultora';
+    } else {
+      if(subDossie) subDossie.textContent = 'Aguardando etapas anteriores';
+    }
+
+    const pct = Math.round((stepsDone / stepsTotal) * 100);
+    if(fillEl) fillEl.style.width = pct + '%';
+    if(labelEl) labelEl.textContent = stepsDone + ' de ' + stepsTotal + ' etapas concluídas';
+  }
+
+  // ---- "Enviar Fotos" button: save count to Firestore (Etapa 3 will upload to Storage) ----
+
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('#enviar-fotos-btn');
+    if(!btn || !currentUser) return;
+
+    const filledBoxes = document.querySelectorAll('#screen-fotos .upload-box.has-image');
+    const count = filledBoxes.length;
+
+    const photosRef = doc(db, 'clientes', currentUser.uid, 'fotos', '_meta');
+    setDoc(photosRef, { count: count, updatedAt: new Date().toISOString() }, { merge: true })
+      .then(refreshClienteProgress)
+      .catch(function(err){ console.error('GD: erro ao salvar fotos', err); });
+  });
+
+
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('[data-save-step]');
+    if(!btn) return;
+
+    const stepNum = parseInt(btn.getAttribute('data-save-step'), 10);
+    if(!stepNum) return;
+
+    saveAnamneseStep(stepNum).then(function(ok){
+      if(btn.getAttribute('data-finish-anamnese') === 'true' && ok && currentUser){
+        const progressRef = doc(db, 'clientes', currentUser.uid, 'anamnese', '_progress');
+        setDoc(progressRef, { finished: true }, { merge: true })
+          .then(refreshClienteProgress)
+          .catch(function(err){ console.error('GD: erro ao concluir anamnese', err); });
+      }
+    });
+  });
+
+  // ---- Load step data when navigating into an anamnese screen ----
+
+  const originalGoTo = window.__gdGoTo;
+  if(originalGoTo){
+    window.__gdGoTo = function(screenId, direction){
+      originalGoTo(screenId, direction);
+      const m = /^anamnese-(\d)$/.exec(screenId);
+      if(m){
+        loadAnamneseStep(parseInt(m[1], 10));
+      }
+      if(screenId === 'cliente-inicio'){
+        refreshClienteProgress();
+      }
+    };
+  }
+
+  // Also wrap clicks on data-goto to use the patched goTo (in case captured before patch)
+  document.addEventListener('click', function(e){
+    const el = e.target.closest('[data-goto]');
+    if(!el) return;
+    const m = /^anamnese-(\d)$/.exec(el.getAttribute('data-goto'));
+    if(m){
+      setTimeout(function(){ loadAnamneseStep(parseInt(m[1], 10)); }, 50);
+    }
+    if(el.getAttribute('data-goto') === 'cliente-inicio'){
+      setTimeout(refreshClienteProgress, 50);
+    }
+  });
 </script>
 
 </body>
