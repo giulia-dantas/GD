@@ -922,6 +922,29 @@
     font-family:'Cormorant Garamond', serif;
   }
 
+  .login-error{
+    font-size:12px;
+    color:var(--vinho);
+    text-align:center;
+    margin-top:-8px;
+    margin-bottom:12px;
+    min-height:16px;
+    font-family:'Manrope', sans-serif;
+  }
+
+  .login-error.success{
+    color:var(--olive);
+  }
+
+  .login-error:empty{
+    display:none;
+  }
+
+  #login-btn.is-loading{
+    opacity:0.7;
+    pointer-events:none;
+  }
+
   /* ===== Client area ===== */
   .progress-card{
     background:var(--card);
@@ -1323,7 +1346,7 @@
           <div class="welcome-deco"></div>
           <div class="welcome-deco2"></div>
           <div class="eyebrow">Bem-vinda de volta</div>
-          <h2>Olá, Beatriz</h2>
+          <h2 id="painel-welcome-name">Olá, Giulia</h2>
           <p>Você tem 3 atendimentos agendados para hoje</p>
         </div>
 
@@ -1691,10 +1714,11 @@
           <div data-toggle="consultant">Sou Consultora</div>
         </div>
 
-        <input class="input-field" type="text" placeholder="E-mail">
-        <input class="input-field" type="password" placeholder="Senha">
-        <div class="forgot">Esqueci minha senha</div>
-        <button class="btn-primary" id="login-btn" style="margin-bottom:0;" data-goto="welcome" data-welcome-target="cliente-inicio">Entrar</button>
+        <input class="input-field" type="email" id="login-email" placeholder="E-mail" autocomplete="email">
+        <input class="input-field" type="password" id="login-password" placeholder="Senha" autocomplete="current-password">
+        <div class="login-error" id="login-error"></div>
+        <div class="forgot" id="forgot-password">Esqueci minha senha</div>
+        <button class="btn-primary" id="login-btn" style="margin-bottom:0;">Entrar</button>
       </div>
     </div>
   </div>
@@ -1726,7 +1750,7 @@
           <div class="welcome-deco"></div>
           <div class="welcome-deco2"></div>
           <div class="eyebrow">Bem-vinda</div>
-          <h2>Olá, Marina</h2>
+          <h2 id="cliente-welcome-name">Olá, Marina</h2>
           <p>Vamos preparar seu dossiê de estilo personalizado</p>
         </div>
 
@@ -2650,17 +2674,6 @@
       var group = toggle.parentElement;
       group.querySelectorAll('div').forEach(function(d){ d.classList.remove('active'); });
       toggle.classList.add('active');
-      var loginBtn = document.getElementById('login-btn');
-      var welcomeName = document.getElementById('welcome-name');
-      if(loginBtn){
-        if(toggle.getAttribute('data-toggle') === 'consultant'){
-          loginBtn.setAttribute('data-welcome-target','painel');
-          if(welcomeName) welcomeName.textContent = 'Olá, Beatriz';
-        } else {
-          loginBtn.setAttribute('data-welcome-target','cliente-inicio');
-          if(welcomeName) welcomeName.textContent = 'Olá, Marina';
-        }
-      }
       return;
     }
 
@@ -2693,7 +2706,165 @@
       goTo('login', 'fwd');
     }, 3300);
   }
+
+  // Expose goTo for the Firebase module script
+  window.__gdGoTo = goTo;
 })();
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    sendPasswordResetEmail
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBBH4zsdmS0I7a4IsXuJ444kqwPIelGIxw",
+    authDomain: "gd-consultoria-cdaf4.firebaseapp.com",
+    projectId: "gd-consultoria-cdaf4",
+    storageBucket: "gd-consultoria-cdaf4.firebasestorage.app",
+    messagingSenderId: "242208354270",
+    appId: "1:242208354270:web:b978a79e9c451f7b34374f"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const loginBtn = document.getElementById('login-btn');
+  const emailInput = document.getElementById('login-email');
+  const passwordInput = document.getElementById('login-password');
+  const errorBox = document.getElementById('login-error');
+  const forgotLink = document.getElementById('forgot-password');
+  const welcomeNameEl = document.getElementById('welcome-name');
+  const painelNameEl = document.getElementById('painel-welcome-name');
+  const clienteNameEl = document.getElementById('cliente-welcome-name');
+
+  function showError(msg){
+    if(errorBox) errorBox.textContent = msg;
+  }
+
+  function clearError(){
+    if(errorBox){
+      errorBox.textContent = '';
+      errorBox.classList.remove('success');
+    }
+  }
+
+  function firstName(fullName){
+    if(!fullName) return '';
+    return fullName.trim().split(' ')[0];
+  }
+
+  function friendlyAuthError(code){
+    switch(code){
+      case 'auth/invalid-email':
+        return 'E-mail inválido.';
+      case 'auth/user-not-found':
+      case 'auth/wrong-password':
+      case 'auth/invalid-credential':
+        return 'E-mail ou senha incorretos.';
+      case 'auth/too-many-requests':
+        return 'Muitas tentativas. Aguarde um momento e tente novamente.';
+      case 'auth/missing-password':
+        return 'Digite sua senha.';
+      default:
+        return 'Não foi possível entrar. Tente novamente.';
+    }
+  }
+
+  async function handleLogin(){
+    clearError();
+    const email = (emailInput.value || '').trim();
+    const password = passwordInput.value || '';
+
+    if(!email || !password){
+      showError('Preencha e-mail e senha.');
+      return;
+    }
+
+    loginBtn.classList.add('is-loading');
+    loginBtn.textContent = 'Entrando…';
+
+    try{
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      const user = cred.user;
+
+      // Fetch or create the user's profile document
+      const userRef = doc(db, 'users', user.uid);
+      let userSnap = await getDoc(userRef);
+      let profile;
+
+      if(userSnap.exists()){
+        profile = userSnap.data();
+      } else {
+        // First login: create profile based on toggle selection
+        const toggleEl = document.querySelector('.login-toggle .active');
+        const isConsultant = toggleEl && toggleEl.getAttribute('data-toggle') === 'consultant';
+        profile = {
+          email: user.email,
+          role: isConsultant ? 'consultora' : 'cliente',
+          nome: isConsultant ? 'Giulia Dantas' : 'Cliente'
+        };
+        await setDoc(userRef, profile);
+      }
+
+      const role = profile.role || 'cliente';
+      const nome = profile.nome || (role === 'consultora' ? 'Giulia Dantas' : 'Cliente');
+      const target = role === 'consultora' ? 'painel' : 'cliente-inicio';
+
+      // Update welcome screen + home screen names
+      if(welcomeNameEl) welcomeNameEl.textContent = 'Olá, ' + firstName(nome);
+      if(role === 'consultora' && painelNameEl) painelNameEl.textContent = 'Olá, ' + firstName(nome);
+      if(role === 'cliente' && clienteNameEl) clienteNameEl.textContent = 'Olá, ' + firstName(nome);
+
+      loginBtn.setAttribute('data-welcome-target', target);
+      loginBtn.classList.remove('is-loading');
+      loginBtn.textContent = 'Entrar';
+
+      window.__gdGoTo('welcome', 'fwd');
+
+    } catch(err){
+      console.error(err);
+      loginBtn.classList.remove('is-loading');
+      loginBtn.textContent = 'Entrar';
+      showError(friendlyAuthError(err.code));
+    }
+  }
+
+  if(loginBtn){
+    loginBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      handleLogin();
+    });
+  }
+
+  if(forgotLink){
+    forgotLink.addEventListener('click', async function(){
+      clearError();
+      const email = (emailInput.value || '').trim();
+      if(!email){
+        showError('Digite seu e-mail para redefinir a senha.');
+        return;
+      }
+      try{
+        await sendPasswordResetEmail(auth, email);
+        errorBox.classList.add('success');
+        showError('Enviamos um link de redefinição para o seu e-mail.');
+      } catch(err){
+        errorBox.classList.remove('success');
+        showError(friendlyAuthError(err.code));
+      }
+    });
+  }
 </script>
 
 </body>
