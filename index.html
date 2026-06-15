@@ -41,13 +41,52 @@
     color:var(--graphite);
   }
 
-  /* ===== App shell / phone frame for preview ===== */
+  /* ===== App shell / phone frame ===== */
+  html, body{
+    height:100%;
+  }
+
+  body{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+  }
+
   .app-gallery{
     display:flex;
     flex-wrap:wrap;
     gap:32px;
     justify-content:center;
-    padding:48px 24px 80px;
+    padding:24px 16px;
+    width:100%;
+    max-width:420px;
+  }
+
+  /* In app mode: hide labels, hide all screens except active, fill viewport */
+  .app-gallery.app-mode{
+    padding:0;
+    max-width:430px;
+  }
+
+  .app-gallery.app-mode .screen-wrap{
+    display:none;
+    width:100%;
+  }
+
+  .app-gallery.app-mode .screen-wrap.active{
+    display:block;
+  }
+
+  .app-gallery.app-mode .screen-label{
+    display:none;
+  }
+
+  .app-gallery.app-mode .phone{
+    width:100%;
+    min-height:100vh;
+    border-radius:0;
+    border:none;
+    box-shadow:none;
   }
 
   .phone{
@@ -60,6 +99,19 @@
     min-height:780px;
     display:flex;
     flex-direction:column;
+  }
+
+  /* Clickable elements */
+  .tile, .navitem, .mini-row, .client-row, .dossie-card, .status-item, .btn-primary, .btn-secondary, .download-btn, .login-toggle > div, .step-action{
+    cursor:pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select:none;
+  }
+  .tile:active, .navitem:active, .mini-row:active, .client-row:active, .dossie-card:active, .status-item:active, .btn-primary:active, .btn-secondary:active{
+    opacity:0.7;
+  }
+  .navitem{
+    transition: color .15s ease;
   }
 
   .screen-label{
@@ -1058,15 +1110,15 @@
 </head>
 <body>
 
-<div class="app-gallery">
+<div class="app-gallery app-mode" id="app-root">
 
   <!-- ================= PAINEL ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-painel">
     <div class="screen-label">Painel da Consultora</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1079,22 +1131,22 @@
         </div>
 
         <div class="grid-2">
-          <div class="tile">
+          <div class="tile" data-goto="dashboard">
             <div class="tile-icon">◐</div>
             <div class="tile-title">Dashboard</div>
             <div class="tile-sub">Receita e desempenho</div>
           </div>
-          <div class="tile">
+          <div class="tile" data-goto="agenda">
             <div class="tile-icon">◈</div>
             <div class="tile-title">Agenda</div>
             <div class="tile-sub">Próximos atendimentos</div>
           </div>
-          <div class="tile">
+          <div class="tile" data-goto="clientes">
             <div class="tile-icon">◑</div>
             <div class="tile-title">Clientes</div>
             <div class="tile-sub">Base e relacionamento</div>
           </div>
-          <div class="tile">
+          <div class="tile" data-goto="dossies">
             <div class="tile-icon">◇</div>
             <div class="tile-title">Dossiês</div>
             <div class="tile-sub">Estilo, cor e biotipo</div>
@@ -1103,7 +1155,7 @@
 
         <div class="stat-card">
           <div class="stat-label">Próximo atendimento</div>
-          <div class="mini-row" style="border-bottom:none; padding-top:6px;">
+          <div class="mini-row" style="border-bottom:none; padding-top:6px;" data-goto="agenda">
             <div>
               <div class="mini-row-title">Consultoria de Cores — Marina Telles</div>
               <div class="mini-row-sub">Hoje · 16h00 às 17h30 · Presencial</div>
@@ -1111,25 +1163,25 @@
             <div class="arrow">→</div>
           </div>
         </div>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem active" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
+        <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
+        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
 
   <!-- ================= DASHBOARD ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-dashboard">
     <div class="screen-label">Dashboard</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1184,25 +1236,25 @@
             <div class="arrow">→</div>
           </div>
         </div>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
+        <div class="navitem active" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
+        <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
+        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
 
   <!-- ================= AGENDA ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-agenda">
     <div class="screen-label">Agenda</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1267,25 +1319,25 @@
             <span class="tag">Presencial</span>
           </div>
         </div>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
+        <div class="navitem active" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
+        <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
+        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
 
   <!-- ================= CLIENTES ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-clientes">
     <div class="screen-label">Minhas Clientes</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1312,7 +1364,7 @@
 
         <div class="stat-card">
           <div class="stat-label" style="margin-bottom:0;">Lista de Clientes</div>
-          <div class="client-row">
+          <div class="client-row" data-goto="dossies">
             <div class="client-avatar">M</div>
             <div>
               <div class="client-name">Marina Telles</div>
@@ -1320,7 +1372,7 @@
             </div>
             <div class="badge-dot"></div>
           </div>
-          <div class="client-row">
+          <div class="client-row" data-goto="dossies">
             <div class="client-avatar">A</div>
             <div>
               <div class="client-name">Ana Beatriz Lima</div>
@@ -1328,7 +1380,7 @@
             </div>
             <div class="badge-dot"></div>
           </div>
-          <div class="client-row">
+          <div class="client-row" data-goto="dossies">
             <div class="client-avatar">R</div>
             <div>
               <div class="client-name">Renata Souza</div>
@@ -1336,7 +1388,7 @@
             </div>
             <div class="badge-dot warn"></div>
           </div>
-          <div class="client-row">
+          <div class="client-row" data-goto="dossies">
             <div class="client-avatar">L</div>
             <div>
               <div class="client-name">Letícia Prado</div>
@@ -1345,25 +1397,25 @@
             <div class="badge-dot"></div>
           </div>
         </div>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
+        <div class="navitem active" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
+        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
 
   <!-- ================= DOSSIÊS ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-dossies">
     <div class="screen-label">Dossiês</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1406,47 +1458,47 @@
             Cada dossiê reúne a análise completa, recomendações e referências visuais — pronto para exportar em PDF com a identidade do seu atelier.
           </p>
         </div>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
+        <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
+        <div class="navitem active" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
 
 
   <!-- ================= LOGIN / SPLASH ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-login">
     <div class="screen-label">Acesso</div>
     <div class="phone">
       <div class="splash-content">
-        <img class="splash-logo" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+        <img class="splash-logo" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         <div class="splash-tag">Consultoria de Imagem &amp; Estilo</div>
 
         <div class="login-toggle">
-          <div class="active">Sou Cliente</div>
-          <div>Sou Consultora</div>
+          <div class="active" data-toggle="client">Sou Cliente</div>
+          <div data-toggle="consultant">Sou Consultora</div>
         </div>
 
         <input class="input-field" type="text" placeholder="E-mail">
         <input class="input-field" type="password" placeholder="Senha">
         <div class="forgot">Esqueci minha senha</div>
-        <button class="btn-primary" style="margin-bottom:0;">Entrar</button>
+        <button class="btn-primary" id="login-btn" style="margin-bottom:0;" data-goto="cliente-inicio">Entrar</button>
       </div>
     </div>
   </div>
 
   <!-- ================= ÁREA DO CLIENTE - INÍCIO ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-cliente-inicio">
     <div class="screen-label">Área da Cliente — Início</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1466,7 +1518,7 @@
 
         <div class="progress-card">
           <div class="status-list">
-            <div class="status-item">
+            <div class="status-item" data-goto="anamnese-1">
               <div class="status-icon done">✓</div>
               <div>
                 <div class="status-text-title">Anamnese de Estilo</div>
@@ -1474,7 +1526,7 @@
               </div>
               <div class="status-action">Ver</div>
             </div>
-            <div class="status-item">
+            <div class="status-item" data-goto="fotos">
               <div class="status-icon done">✓</div>
               <div>
                 <div class="status-text-title">Envio de Fotos</div>
@@ -1492,24 +1544,24 @@
             </div>
           </div>
         </div>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem active" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
+        <div class="navitem" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
 
   <!-- ================= ANAMNESE - DADOS PESSOAIS ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-anamnese-1">
     <div class="screen-label">Anamnese — Dados Pessoais</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1536,25 +1588,25 @@
         </div>
 
 
-        <button class="btn-primary">Continuar</button>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <button class="btn-primary" data-goto="anamnese-2">Continuar</button>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
 
   <!-- ================= ANAMNESE - OBJETIVO DA CONSULTORIA ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-anamnese-2">
     <div class="screen-label">Anamnese — Objetivo da Consultoria</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1583,27 +1635,27 @@
 
 
         <div class="step-nav">
-            <button class="btn-secondary">Voltar</button>
-            <button class="btn-primary">Continuar</button>
+            <button class="btn-secondary" data-goto="anamnese-1">Voltar</button>
+            <button class="btn-primary" data-goto="anamnese-3">Continuar</button>
           </div>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
 
   <!-- ================= ANAMNESE - ROTINA ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-anamnese-3">
     <div class="screen-label">Anamnese — Rotina</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1641,27 +1693,27 @@
 
 
         <div class="step-nav">
-            <button class="btn-secondary">Voltar</button>
-            <button class="btn-primary">Continuar</button>
+            <button class="btn-secondary" data-goto="anamnese-2">Voltar</button>
+            <button class="btn-primary" data-goto="anamnese-4">Continuar</button>
           </div>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
 
   <!-- ================= ANAMNESE - ESTILO PESSOAL ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-anamnese-4">
     <div class="screen-label">Anamnese — Estilo Pessoal</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1711,27 +1763,27 @@
 
 
         <div class="step-nav">
-            <button class="btn-secondary">Voltar</button>
-            <button class="btn-primary">Continuar</button>
+            <button class="btn-secondary" data-goto="anamnese-3">Voltar</button>
+            <button class="btn-primary" data-goto="anamnese-5">Continuar</button>
           </div>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
 
   <!-- ================= ANAMNESE - GUARDA-ROUPA ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-anamnese-5">
     <div class="screen-label">Anamnese — Guarda-Roupa</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1768,27 +1820,27 @@
 
 
         <div class="step-nav">
-            <button class="btn-secondary">Voltar</button>
-            <button class="btn-primary">Continuar</button>
+            <button class="btn-secondary" data-goto="anamnese-4">Voltar</button>
+            <button class="btn-primary" data-goto="anamnese-6">Continuar</button>
           </div>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
 
   <!-- ================= ANAMNESE - CORES ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-anamnese-6">
     <div class="screen-label">Anamnese — Cores</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1816,27 +1868,27 @@
 
 
         <div class="step-nav">
-            <button class="btn-secondary">Voltar</button>
-            <button class="btn-primary">Continuar</button>
+            <button class="btn-secondary" data-goto="anamnese-5">Voltar</button>
+            <button class="btn-primary" data-goto="anamnese-7">Continuar</button>
           </div>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
 
   <!-- ================= ANAMNESE - BIOTIPO & CORPO ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-anamnese-7">
     <div class="screen-label">Anamnese — Biotipo & Corpo</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1861,27 +1913,27 @@
 
 
         <div class="step-nav">
-            <button class="btn-secondary">Voltar</button>
-            <button class="btn-primary">Continuar</button>
+            <button class="btn-secondary" data-goto="anamnese-6">Voltar</button>
+            <button class="btn-primary" data-goto="anamnese-8">Continuar</button>
           </div>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
 
   <!-- ================= ANAMNESE - COMPRAS & EXPECTATIVAS ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-anamnese-8">
     <div class="screen-label">Anamnese — Compras & Expectativas</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -1926,28 +1978,28 @@
 
 
         <div class="step-nav">
-            <button class="btn-secondary">Voltar</button>
-            <button class="btn-primary">Concluir Anamnese</button>
+            <button class="btn-secondary" data-goto="anamnese-7">Voltar</button>
+            <button class="btn-primary" data-goto="cliente-inicio">Concluir Anamnese</button>
           </div>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
 
 
   <!-- ================= ENVIO DE FOTOS ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-fotos">
     <div class="screen-label">Envio de Fotos</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -2028,25 +2080,25 @@
           <button class="btn-secondary" style="margin-top:12px;">+ Adicionar mais fotos do guarda-roupa</button>
         </div>
 
-        <button class="btn-primary">Enviar Fotos</button>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <button class="btn-primary" data-goto="cliente-inicio">Enviar Fotos</button>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
+        <div class="navitem" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
+        <div class="navitem active" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
 
   <!-- ================= PAINEL DA CONSULTORA - MATERIAIS RECEBIDOS ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-materiais">
     <div class="screen-label">Painel — Materiais Recebidos</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -2074,7 +2126,7 @@
               <div class="mini-row-sub">Descobrir meu estilo, organizar guarda-roupa</div>
             </div>
           </div>
-          <button class="btn-secondary" style="margin-top:14px; margin-bottom:0;">Ver Anamnese Completa</button>
+          <button class="btn-secondary" style="margin-top:14px; margin-bottom:0;" data-goto="anamnese-completa">Ver Anamnese Completa</button>
         </div>
 
         <div class="submission-card">
@@ -2094,25 +2146,25 @@
         </div>
 
         <button class="download-btn">⬇ Baixar Dossiê Completo em PDF</button>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
+        <div class="navitem active" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
+        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
 
   <!-- ================= PAINEL DA CONSULTORA - ANAMNESE COMPLETA ================= -->
-  <div>
+  <div class="screen-wrap" id="screen-anamnese-completa">
     <div class="screen-label">Painel — Anamnese Completa</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/assets/logo-gd.png" alt="Giulia Dantas">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
       </div>
       <div class="content">
@@ -2277,19 +2329,97 @@
         </div>
 
         <button class="download-btn">⬇ Baixar Dossiê Completo em PDF</button>
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/assets/logo-gd-circle.png" alt="GD"></div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
+        <div class="navitem active" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
+        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
 
 </div>
+
+<script>
+(function(){
+  var root = document.getElementById('app-root');
+  var DEFAULT_SCREEN = 'login';
+
+  function goTo(screenId){
+    if(!document.getElementById('screen-' + screenId)) return;
+    document.querySelectorAll('.screen-wrap.active').forEach(function(el){
+      el.classList.remove('active');
+    });
+    var target = document.getElementById('screen-' + screenId);
+    target.classList.add('active');
+
+    // Update bottom nav active state for this screen
+    target.querySelectorAll('.navitem[data-goto]').forEach(function(nav){
+      if(nav.getAttribute('data-goto') === screenId){
+        nav.classList.add('active');
+      } else {
+        nav.classList.remove('active');
+      }
+    });
+
+    window.scrollTo(0,0);
+    var content = target.querySelector('.content');
+    if(content) content.scrollTop = 0;
+  }
+
+  // Click handling (delegated)
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('[data-goto]');
+    if(el){
+      e.preventDefault();
+      goTo(el.getAttribute('data-goto'));
+      return;
+    }
+
+    var toggle = e.target.closest('[data-toggle]');
+    if(toggle){
+      var group = toggle.parentElement;
+      group.querySelectorAll('div').forEach(function(d){ d.classList.remove('active'); });
+      toggle.classList.add('active');
+      var loginBtn = document.getElementById('login-btn');
+      if(loginBtn){
+        if(toggle.getAttribute('data-toggle') === 'consultant'){
+          loginBtn.setAttribute('data-goto','painel');
+        } else {
+          loginBtn.setAttribute('data-goto','cliente-inicio');
+        }
+      }
+      return;
+    }
+
+    // Chip / radio / pill selection toggles (visual only)
+    var chip = e.target.closest('.chip');
+    if(chip){ chip.classList.toggle('sel'); return; }
+
+    var radio = e.target.closest('.radio-opt');
+    if(radio){
+      radio.parentElement.querySelectorAll('.radio-opt').forEach(function(r){ r.classList.remove('sel'); });
+      radio.classList.add('sel');
+      return;
+    }
+
+    var pill = e.target.closest('.pill');
+    if(pill){
+      pill.parentElement.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('active'); });
+      pill.classList.add('active');
+      return;
+    }
+
+    var upload = e.target.closest('.upload-box');
+    if(upload){ upload.classList.toggle('filled'); return; }
+  });
+
+  goTo(DEFAULT_SCREEN);
+})();
+</script>
 
 </body>
 </html>
