@@ -65,10 +65,12 @@
     max-width:420px;
   }
 
-  /* In app mode: hide labels, hide all screens except active, fill viewport */
+  /* In app mode: hide labels, animate screens, fill viewport */
   .app-gallery.app-mode{
     padding:0;
     max-width:430px;
+    position:relative;
+    overflow-x:hidden;
   }
 
   .app-gallery.app-mode .screen-wrap{
@@ -78,6 +80,53 @@
 
   .app-gallery.app-mode .screen-wrap.active{
     display:block;
+  }
+
+  /* Transition animation states */
+  .app-gallery.app-mode .screen-wrap.enter-fwd{
+    display:block;
+    animation: gd-slide-in-fwd 0.42s cubic-bezier(.22,.85,.32,1) forwards;
+  }
+  .app-gallery.app-mode .screen-wrap.enter-back{
+    display:block;
+    animation: gd-slide-in-back 0.42s cubic-bezier(.22,.85,.32,1) forwards;
+  }
+  .app-gallery.app-mode .screen-wrap.leave-fwd{
+    display:block;
+    animation: gd-slide-out-fwd 0.42s cubic-bezier(.22,.85,.32,1) forwards;
+  }
+  .app-gallery.app-mode .screen-wrap.leave-back{
+    display:block;
+    animation: gd-slide-out-back 0.42s cubic-bezier(.22,.85,.32,1) forwards;
+  }
+
+  @keyframes gd-slide-in-fwd{
+    from{ opacity:0; transform:translateX(28px); }
+    to{ opacity:1; transform:translateX(0); }
+  }
+  @keyframes gd-slide-out-fwd{
+    from{ opacity:1; transform:translateX(0); }
+    to{ opacity:0; transform:translateX(-28px); }
+  }
+  @keyframes gd-slide-in-back{
+    from{ opacity:0; transform:translateX(-28px); }
+    to{ opacity:1; transform:translateX(0); }
+  }
+  @keyframes gd-slide-out-back{
+    from{ opacity:1; transform:translateX(0); }
+    to{ opacity:0; transform:translateX(28px); }
+  }
+
+  .app-gallery.app-mode .screen-wrap.leave-fwd,
+  .app-gallery.app-mode .screen-wrap.leave-back{
+    position:absolute;
+    top:0; left:0;
+    z-index:2;
+  }
+  .app-gallery.app-mode .screen-wrap.enter-fwd,
+  .app-gallery.app-mode .screen-wrap.enter-back{
+    position:relative;
+    z-index:1;
   }
 
   .app-gallery.app-mode .screen-label{
@@ -104,17 +153,57 @@
     flex-direction:column;
   }
 
-  /* Clickable elements */
+  /* Clickable elements - refined premium micro-interactions */
   .tile, .navitem, .mini-row, .client-row, .dossie-card, .status-item, .btn-primary, .btn-secondary, .download-btn, .login-toggle > div, .step-action{
     cursor:pointer;
     -webkit-tap-highlight-color: transparent;
     user-select:none;
+    transition: transform .22s cubic-bezier(.22,.85,.32,1), box-shadow .22s ease, opacity .18s ease, background .25s ease, color .25s ease, border-color .25s ease;
   }
-  .tile:active, .navitem:active, .mini-row:active, .client-row:active, .dossie-card:active, .status-item:active, .btn-primary:active, .btn-secondary:active{
-    opacity:0.7;
+
+  .tile:active, .mini-row:active, .client-row:active, .dossie-card:active, .status-item:active{
+    transform: scale(0.97);
+    opacity:0.85;
   }
+
+  .tile:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(200,164,106,0.22);
+  }
+
+  .btn-primary, .btn-secondary, .download-btn{
+    transition: transform .18s cubic-bezier(.22,.85,.32,1), box-shadow .25s ease, background .25s ease, opacity .18s ease;
+  }
+  .btn-primary:active, .btn-secondary:active, .download-btn:active{
+    transform: scale(0.97);
+  }
+  .btn-primary:hover{
+    box-shadow: 0 10px 24px rgba(200,164,106,0.32);
+    transform: translateY(-1px);
+  }
+  .btn-secondary:hover{
+    box-shadow: 0 6px 18px rgba(200,164,106,0.16);
+    transform: translateY(-1px);
+  }
+
   .navitem{
-    transition: color .15s ease;
+    transition: color .25s ease, transform .18s ease;
+  }
+  .navitem:active{
+    transform: scale(0.92);
+  }
+  .navitem svg{
+    transition: stroke .25s ease, transform .25s cubic-bezier(.22,.85,.32,1);
+  }
+  .navitem.active svg{
+    transform: translateY(-2px) scale(1.08);
+  }
+
+  .chip, .pill, .radio-opt, .upload-box{
+    transition: transform .18s ease, background .22s ease, border-color .22s ease, color .22s ease, box-shadow .22s ease;
+  }
+  .chip:active, .pill:active, .radio-opt:active, .upload-box:active{
+    transform: scale(0.96);
   }
 
   .screen-label{
@@ -266,6 +355,10 @@
     display:flex; align-items:center; justify-content:center;
     border:1px solid var(--champagne);
     color:var(--champagne);
+  }
+
+  .tile-icon svg{
+    width:18px; height:18px;
   }
 
   .tile-title{
@@ -1135,22 +1228,22 @@
 
         <div class="grid-2">
           <div class="tile" data-goto="dashboard">
-            <div class="tile-icon">◐</div>
+            <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0116 0"/><path d="M12 15.5l3.2-4.2"/><circle cx="12" cy="15.5" r="0.9"/><path d="M6 19.5h12"/></svg></div>
             <div class="tile-title">Dashboard</div>
             <div class="tile-sub">Receita e desempenho</div>
           </div>
           <div class="tile" data-goto="agenda">
-            <div class="tile-icon">◈</div>
+            <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg></div>
             <div class="tile-title">Agenda</div>
             <div class="tile-sub">Próximos atendimentos</div>
           </div>
           <div class="tile" data-goto="clientes">
-            <div class="tile-icon">◑</div>
+            <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg></div>
             <div class="tile-title">Clientes</div>
             <div class="tile-sub">Base e relacionamento</div>
           </div>
           <div class="tile" data-goto="dossies">
-            <div class="tile-icon">◇</div>
+            <div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg></div>
             <div class="tile-title">Dossiês</div>
             <div class="tile-sub">Estilo, cor e biotipo</div>
           </div>
@@ -1169,11 +1262,11 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem active" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem active" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0116 0"/><path d="M12 15.5l3.2-4.2"/><circle cx="12" cy="15.5" r="0.9"/><path d="M6 19.5h12"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
+        <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
+        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
@@ -1242,11 +1335,11 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem active" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Painel</div>
+        <div class="navitem active" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0116 0"/><path d="M12 15.5l3.2-4.2"/><circle cx="12" cy="15.5" r="0.9"/><path d="M6 19.5h12"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
+        <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
+        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
@@ -1325,11 +1418,11 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem active" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0116 0"/><path d="M12 15.5l3.2-4.2"/><circle cx="12" cy="15.5" r="0.9"/><path d="M6 19.5h12"/></svg>Dashboard</div>
+        <div class="navitem active" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
+        <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
+        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
@@ -1403,11 +1496,11 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem active" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0116 0"/><path d="M12 15.5l3.2-4.2"/><circle cx="12" cy="15.5" r="0.9"/><path d="M6 19.5h12"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
+        <div class="navitem active" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
+        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
@@ -1464,11 +1557,11 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem active" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0116 0"/><path d="M12 15.5l3.2-4.2"/><circle cx="12" cy="15.5" r="0.9"/><path d="M6 19.5h12"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
+        <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
+        <div class="navitem active" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
@@ -1550,10 +1643,10 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem active" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem active" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
+        <div class="navitem" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -1595,10 +1688,10 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -1644,10 +1737,10 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -1702,10 +1795,10 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -1772,10 +1865,10 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -1829,10 +1922,10 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -1877,10 +1970,10 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -1922,10 +2015,10 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -1987,10 +2080,10 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -2015,19 +2108,19 @@
           <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Frente, perfil, costas e rosto, com roupas justas e luz natural</p>
           <div class="upload-grid">
             <div class="upload-box filled">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg>
               <div class="label">Frente</div>
             </div>
             <div class="upload-box filled">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg>
               <div class="label">Perfil</div>
             </div>
             <div class="upload-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Costas</div>
             </div>
             <div class="upload-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Rosto (sem maquiagem)</div>
             </div>
           </div>
@@ -2038,11 +2131,11 @@
           <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Fotos dos looks do seu dia a dia</p>
           <div class="upload-grid">
             <div class="upload-box filled">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg>
               <div class="label">Look 1</div>
             </div>
             <div class="upload-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Adicionar</div>
             </div>
           </div>
@@ -2053,11 +2146,11 @@
           <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Referências e inspirações de estilo</p>
           <div class="upload-grid">
             <div class="upload-box filled">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg>
               <div class="label">Referência 1</div>
             </div>
             <div class="upload-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Adicionar</div>
             </div>
           </div>
@@ -2068,15 +2161,15 @@
           <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Fotografe as peças que você mais usa no dia a dia. Adicione quantas quiser</p>
           <div class="upload-grid">
             <div class="upload-box filled">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg>
               <div class="label">Peça 1</div>
             </div>
             <div class="upload-box filled">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.8-5"/></svg>
               <div class="label">Peça 2</div>
             </div>
             <div class="upload-box">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
               <div class="label">Adicionar</div>
             </div>
           </div>
@@ -2087,10 +2180,10 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Início</div>
-        <div class="navitem" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v15a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>Anamnese</div>
-        <div class="navitem active" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
+        <div class="navitem" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
+        <div class="navitem active" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -2152,11 +2245,11 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem active" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0116 0"/><path d="M12 15.5l3.2-4.2"/><circle cx="12" cy="15.5" r="0.9"/><path d="M6 19.5h12"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
+        <div class="navitem active" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
+        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
@@ -2335,11 +2428,11 @@
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
-        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11.5L12 4l9 7.5M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>Painel</div>
-        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Dashboard</div>
-        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Agenda</div>
-        <div class="navitem active" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>Clientes</div>
-        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h5v18H6a2 2 0 01-2-2V5zM20 5a2 2 0 00-2-2h-5v18h5a2 2 0 002-2V5z"/></svg>Dossiês</div>
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0116 0"/><path d="M12 15.5l3.2-4.2"/><circle cx="12" cy="15.5" r="0.9"/><path d="M6 19.5h12"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
+        <div class="navitem active" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
+        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
       </div>
     </div>
   </div>
@@ -2348,18 +2441,25 @@
 
 <script>
 (function(){
-  var root = document.getElementById('app-root');
   var DEFAULT_SCREEN = 'login';
+  var TRANSITION_MS = 420;
+  var transitioning = false;
 
-  function goTo(screenId){
-    if(!document.getElementById('screen-' + screenId)) return;
-    document.querySelectorAll('.screen-wrap.active').forEach(function(el){
-      el.classList.remove('active');
-    });
+  var ANIM_CLASSES = ['enter-fwd','enter-back','leave-fwd','leave-back'];
+
+  function clearAnim(el){
+    ANIM_CLASSES.forEach(function(c){ el.classList.remove(c); });
+  }
+
+  function goTo(screenId, direction){
+    if(transitioning) return;
     var target = document.getElementById('screen-' + screenId);
-    target.classList.add('active');
+    if(!target) return;
 
-    // Update bottom nav active state for this screen
+    var current = document.querySelector('.screen-wrap.active');
+    direction = direction || 'fwd';
+
+    // Update bottom nav active state on incoming screen
     target.querySelectorAll('.navitem[data-goto]').forEach(function(nav){
       if(nav.getAttribute('data-goto') === screenId){
         nav.classList.add('active');
@@ -2368,9 +2468,31 @@
       }
     });
 
+    if(!current || current === target){
+      document.querySelectorAll('.screen-wrap.active').forEach(function(el){ el.classList.remove('active'); });
+      clearAnim(target);
+      target.classList.add('active');
+      window.scrollTo(0,0);
+      return;
+    }
+
+    transitioning = true;
+    clearAnim(current);
+    clearAnim(target);
+
+    current.classList.add(direction === 'back' ? 'leave-back' : 'leave-fwd');
+    target.classList.add('active', direction === 'back' ? 'enter-back' : 'enter-fwd');
+
     window.scrollTo(0,0);
     var content = target.querySelector('.content');
     if(content) content.scrollTop = 0;
+
+    setTimeout(function(){
+      current.classList.remove('active','leave-fwd','leave-back');
+      clearAnim(current);
+      clearAnim(target);
+      transitioning = false;
+    }, TRANSITION_MS);
   }
 
   // Click handling (delegated)
@@ -2378,7 +2500,8 @@
     var el = e.target.closest('[data-goto]');
     if(el){
       e.preventDefault();
-      goTo(el.getAttribute('data-goto'));
+      var isBack = el.classList.contains('btn-secondary') || el.getAttribute('data-direction') === 'back';
+      goTo(el.getAttribute('data-goto'), isBack ? 'back' : 'fwd');
       return;
     }
 
