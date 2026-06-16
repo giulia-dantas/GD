@@ -1501,6 +1501,9 @@
         <div class="brand brand-centered">
           <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
+        <div class="logout-btn" data-goto="configuracoes" title="Configurações" style="right:56px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a7.6 7.6 0 000-2l2-1.5-2-3.4-2.4 1a7.7 7.7 0 00-1.7-1l-.4-2.5h-4l-.4 2.5a7.7 7.7 0 00-1.7 1l-2.4-1-2 3.4 2 1.5a7.6 7.6 0 000 2l-2 1.5 2 3.4 2.4-1a7.7 7.7 0 001.7 1l.4 2.5h4l.4-2.5a7.7 7.7 0 001.7-1l2.4 1 2-3.4z"/></svg>
+        </div>
         <div class="logout-btn" data-action="logout" title="Sair">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4.5h2.5A2 2 0 0119.5 6.5v11A2 2 0 0117.5 19.5H15"/><path d="M10.5 8L15 12l-4.5 4"/><path d="M15 12H4.5"/></svg>
         </div>
@@ -1555,6 +1558,60 @@
         <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
         <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
         <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CONFIGURAÇÕES ================= -->
+  <div class="screen-wrap" id="screen-configuracoes">
+    <div class="screen-label">Configurações</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+        <div class="logout-btn" data-goto="painel" title="Voltar" style="left:16px; right:auto;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
+        </div>
+      </div>
+      <div class="content">
+        <div class="eyebrow">Painel da Consultora</div>
+        <div class="page-title">Configurações</div>
+        <div class="page-sub">Dados do app, exportações e histórico</div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:0;">Dados da Consultora</div>
+          <div class="form-section" id="config-perfil-form" style="margin-top:8px;">
+            <label class="form-label">Nome de exibição</label>
+            <input class="input-field" type="text" id="config-nome-consultora" placeholder="Giulia Dantas">
+
+            <label class="form-label">WhatsApp de contato</label>
+            <input class="input-field" type="tel" id="config-whatsapp" placeholder="(11) 99999-9999">
+          </div>
+          <div class="login-error" id="config-perfil-error"></div>
+          <button class="btn-primary" id="config-perfil-salvar-btn" style="margin-bottom:0;">Salvar</button>
+        </div>
+
+        <div class="hairline"></div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:0;">Exportar Dados</div>
+          <p style="font-family:'Manrope', sans-serif; font-size:12px; color:var(--graphite-soft); padding:6px 0 12px;">
+            Baixe a lista de clientes cadastradas em formato CSV (compatível com Excel).
+          </p>
+          <button class="btn-secondary" id="config-exportar-btn" style="margin-bottom:0;">Exportar Lista de Clientes (CSV)</button>
+        </div>
+
+        <div class="hairline"></div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:0;">Histórico de Cadastros</div>
+          <div id="config-historico-list" style="margin-top:8px;">
+            <p style="font-family:'Cormorant Garamond', serif; font-size:14px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:12px 0;">Carregando...</p>
+          </div>
+        </div>
+
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
     </div>
   </div>
@@ -2545,6 +2602,7 @@
           <div class="submission-photos" id="materiais-fotos-grid"></div>
         </div>
 
+        <button class="btn-secondary" data-goto="editar-cliente">Editar Dados da Cliente</button>
         <button class="download-btn" disabled style="opacity:0.5; cursor:default;" title="Em breve">⬇ Exportação em PDF — em breve</button>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -2554,6 +2612,43 @@
         <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
         <div class="navitem active" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
         <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= EDITAR CLIENTE ================= -->
+  <div class="screen-wrap" id="screen-editar-cliente">
+    <div class="screen-label">Editar Cliente</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+      </div>
+      <div class="content">
+        <div class="eyebrow">Cliente</div>
+        <div class="page-title" id="editar-cliente-titulo">Editar Dados</div>
+        <div class="page-sub">Atualize as informações desta cliente</div>
+
+        <div class="form-section" id="editar-cliente-form">
+          <label class="form-label">Nome completo</label>
+          <input class="input-field" type="text" id="editar-cliente-nome">
+
+          <label class="form-label">E-mail (login)</label>
+          <input class="input-field" type="email" id="editar-cliente-email" disabled style="opacity:0.6;">
+          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-8px; margin-bottom:14px;">O e-mail de login não pode ser alterado aqui. Para isso, use "Reenviar Link de Senha" com o novo e-mail desejado, ou contate o suporte do Firebase.</p>
+
+          <label class="form-label">Telefone</label>
+          <input class="input-field" type="tel" id="editar-cliente-telefone" placeholder="(11) 99999-9999">
+        </div>
+
+        <div class="login-error" id="editar-cliente-error"></div>
+
+        <button class="btn-primary" id="editar-cliente-salvar-btn">Salvar Alterações</button>
+        <button class="btn-secondary" id="editar-cliente-reenviar-btn">Reenviar Link de Senha</button>
+        <button class="btn-secondary" data-goto="materiais">Cancelar</button>
+
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
     </div>
   </div>
@@ -4015,6 +4110,8 @@
     }
   });
 
+  let editingAgendamentoId = null;
+
   function resetNovoAgendamentoForm(){
     const titulo = document.getElementById('agendamento-titulo');
     const select = document.getElementById('agendamento-cliente-select');
@@ -4024,6 +4121,12 @@
     const horaFim = document.getElementById('agendamento-hora-fim');
     const localRow = document.getElementById('agendamento-local');
     const errorBox3 = document.getElementById('agendamento-error');
+    const tituloHeader = document.querySelector('#screen-novo-agendamento .page-title');
+    const saveBtn = document.getElementById('agendamento-salvar-btn');
+
+    editingAgendamentoId = null;
+    if(tituloHeader) tituloHeader.textContent = 'Novo Agendamento';
+    if(saveBtn) saveBtn.textContent = 'Salvar Agendamento';
 
     if(titulo) titulo.value = '';
     if(select) select.value = '';
@@ -4037,10 +4140,61 @@
     populateAgendamentoClienteSelect();
   }
 
+  async function loadAgendamentoForEdit(agendamentoId){
+    try{
+      const snap = await getDoc(doc(db, 'agendamentos', agendamentoId));
+      if(!snap.exists()) return;
+      const a = snap.data();
+
+      editingAgendamentoId = agendamentoId;
+
+      const tituloHeader = document.querySelector('#screen-novo-agendamento .page-title');
+      const saveBtn = document.getElementById('agendamento-salvar-btn');
+      if(tituloHeader) tituloHeader.textContent = 'Editar Agendamento';
+      if(saveBtn) saveBtn.textContent = 'Atualizar Agendamento';
+
+      document.getElementById('agendamento-titulo').value = a.titulo || '';
+      document.getElementById('agendamento-data').value = a.data || '';
+      document.getElementById('agendamento-hora-inicio').value = a.horaInicio || '';
+      document.getElementById('agendamento-hora-fim').value = a.horaFim || '';
+
+      const select = document.getElementById('agendamento-cliente-select');
+      const nomeLivreInput = document.getElementById('agendamento-cliente-nome-livre');
+      if(a.clienteUid){
+        select.value = a.clienteUid;
+      } else {
+        select.value = '__outro__';
+        if(nomeLivreInput){ nomeLivreInput.hidden = false; nomeLivreInput.value = a.clienteNome || ''; }
+      }
+
+      const localRow = document.getElementById('agendamento-local');
+      localRow.querySelectorAll('.radio-opt').forEach(function(r){
+        if(r.textContent.trim() === a.local){
+          r.classList.add('sel');
+        } else {
+          r.classList.remove('sel');
+        }
+      });
+    } catch(err){
+      console.error('GD: erro ao carregar agendamento para edição', err);
+    }
+  }
+
   document.addEventListener('click', function(e){
-    if(e.target.closest('[data-goto="novo-agendamento"]')){
+    const el = e.target.closest('[data-goto="novo-agendamento"]');
+    if(el && !el.hasAttribute('data-agendamento-edit')){
       setTimeout(resetNovoAgendamentoForm, 50);
     }
+  });
+
+  document.addEventListener('click', function(e){
+    const editTrigger = e.target.closest('[data-agendamento-edit]');
+    if(!editTrigger) return;
+    if(e.target.closest('[data-agendamento-delete]')) return;
+
+    const id = editTrigger.getAttribute('data-agendamento-edit');
+    if(window.__gdGoTo) window.__gdGoTo('novo-agendamento', 'fwd');
+    setTimeout(function(){ loadAgendamentoForEdit(id); }, 60);
   });
 
   document.addEventListener('click', async function(e){
@@ -4073,28 +4227,35 @@
     }
 
     btn.classList.add('is-loading');
-    btn.textContent = 'Salvando…';
+    btn.textContent = editingAgendamentoId ? 'Atualizando…' : 'Salvando…';
 
     try{
-      await addDoc(collection(db, 'agendamentos'), {
+      const payload = {
         titulo: titulo,
         clienteUid: clienteUid,
         clienteNome: clienteNome,
         data: data,
         horaInicio: horaInicio,
         horaFim: horaFim || '',
-        local: localSel ? localSel.textContent.trim() : '',
-        criadoEm: new Date().toISOString()
-      });
+        local: localSel ? localSel.textContent.trim() : ''
+      };
+
+      if(editingAgendamentoId){
+        await setDoc(doc(db, 'agendamentos', editingAgendamentoId), payload, { merge: true });
+      } else {
+        payload.criadoEm = new Date().toISOString();
+        await addDoc(collection(db, 'agendamentos'), payload);
+      }
 
       btn.classList.remove('is-loading');
-      btn.textContent = 'Salvar Agendamento';
+      btn.textContent = editingAgendamentoId ? 'Atualizar Agendamento' : 'Salvar Agendamento';
+      editingAgendamentoId = null;
 
       if(window.__gdGoTo) window.__gdGoTo('agenda', 'back');
     } catch(err){
       console.error('GD: erro ao salvar agendamento', err);
       btn.classList.remove('is-loading');
-      btn.textContent = 'Salvar Agendamento';
+      btn.textContent = editingAgendamentoId ? 'Atualizar Agendamento' : 'Salvar Agendamento';
       errorBox3.textContent = 'Erro ao salvar agendamento. (' + (err.code || 'erro') + ')';
     }
   });
@@ -4139,7 +4300,7 @@
 
         groups[dataKey].forEach(function(a){
           const horario = a.horaFim ? (a.horaInicio + '–' + a.horaFim) : a.horaInicio;
-          html += '<div class="appt" data-agendamento-id="' + a.id + '">' +
+          html += '<div class="appt" data-agendamento-id="' + a.id + '" data-agendamento-edit="' + a.id + '">' +
             '<div>' +
               '<div class="appt-title">' + escapeHtml(a.titulo) + '</div>' +
               '<div class="appt-sub">' + escapeHtml(a.clienteNome) + ' · ' + escapeHtml(horario) + '</div>' +
@@ -4230,6 +4391,315 @@
       alert(msg);
     }
   });
+
+  // ===================================================================
+  // EDITAR DADOS DA CLIENTE
+  // ===================================================================
+
+  const reenviarLinkSenhaFn = httpsCallable(functions, 'reenviarLinkSenha');
+
+  async function loadEditarClienteScreen(){
+    const titulo = document.getElementById('editar-cliente-titulo');
+    const nomeInput = document.getElementById('editar-cliente-nome');
+    const emailInput3 = document.getElementById('editar-cliente-email');
+    const telefoneInput2 = document.getElementById('editar-cliente-telefone');
+    const errorBox4 = document.getElementById('editar-cliente-error');
+
+    if(errorBox4){ errorBox4.textContent = ''; errorBox4.classList.remove('success'); }
+
+    if(!selectedClienteUid){
+      if(titulo) titulo.textContent = 'Nenhuma cliente selecionada';
+      return;
+    }
+
+    if(titulo) titulo.textContent = 'Editar ' + (selectedClienteNome || 'Cliente');
+
+    try{
+      const userSnap = await getDoc(doc(db, 'users', selectedClienteUid));
+      if(userSnap.exists()){
+        const data = userSnap.data();
+        if(nomeInput) nomeInput.value = data.nome || '';
+        if(emailInput3) emailInput3.value = data.email || '';
+        if(telefoneInput2) telefoneInput2.value = data.telefone || '';
+      }
+    } catch(err){
+      console.error('GD: erro ao carregar dados da cliente', err);
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    if(e.target.closest('[data-goto="editar-cliente"]')){
+      setTimeout(loadEditarClienteScreen, 50);
+    }
+  });
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#editar-cliente-salvar-btn');
+    if(!btn || !selectedClienteUid) return;
+
+    const nomeInput = document.getElementById('editar-cliente-nome');
+    const telefoneInput2 = document.getElementById('editar-cliente-telefone');
+    const errorBox4 = document.getElementById('editar-cliente-error');
+
+    const nome = (nomeInput.value || '').trim();
+    const telefone = (telefoneInput2.value || '').trim();
+
+    errorBox4.textContent = '';
+    errorBox4.classList.remove('success');
+
+    if(!nome){
+      errorBox4.textContent = 'O nome não pode ficar vazio.';
+      return;
+    }
+
+    btn.classList.add('is-loading');
+    btn.textContent = 'Salvando…';
+
+    try{
+      await setDoc(doc(db, 'users', selectedClienteUid), {
+        nome: nome,
+        telefone: telefone
+      }, { merge: true });
+
+      selectedClienteNome = nome;
+      cachedClientes = null;
+
+      btn.classList.remove('is-loading');
+      btn.textContent = 'Salvar Alterações';
+      errorBox4.classList.add('success');
+      errorBox4.textContent = 'Dados atualizados com sucesso.';
+    } catch(err){
+      console.error('GD: erro ao salvar dados da cliente', err);
+      btn.classList.remove('is-loading');
+      btn.textContent = 'Salvar Alterações';
+      errorBox4.textContent = 'Erro ao salvar. (' + (err.code || 'erro') + ')';
+    }
+  });
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#editar-cliente-reenviar-btn');
+    if(!btn || !selectedClienteUid) return;
+
+    const emailInput3 = document.getElementById('editar-cliente-email');
+    const errorBox4 = document.getElementById('editar-cliente-error');
+    const email = emailInput3.value;
+
+    if(!email){
+      errorBox4.textContent = 'E-mail não encontrado para esta cliente.';
+      return;
+    }
+
+    btn.classList.add('is-loading');
+    btn.textContent = 'Enviando…';
+
+    try{
+      const result = await reenviarLinkSenhaFn({ email: email });
+      const data = result.data || {};
+
+      btn.classList.remove('is-loading');
+      btn.textContent = 'Reenviar Link de Senha';
+
+      if(navigator.clipboard && data.resetLink){
+        navigator.clipboard.writeText(data.resetLink).catch(function(){});
+      }
+
+      errorBox4.classList.add('success');
+      errorBox4.textContent = 'Link gerado e copiado: ' + (data.resetLink || '');
+    } catch(err){
+      console.error('GD: erro ao reenviar link', err);
+      btn.classList.remove('is-loading');
+      btn.textContent = 'Reenviar Link de Senha';
+      errorBox4.classList.remove('success');
+
+      let msg = 'Erro ao gerar o link.';
+      if(err.code === 'functions/not-found'){
+        msg = 'Nenhuma conta encontrada com esse e-mail.';
+      } else if(err.code){
+        msg = 'Erro ao gerar o link. (' + err.code + ')';
+      }
+      errorBox4.textContent = msg;
+    }
+  });
+
+  // ===================================================================
+  // CONFIGURAÇÕES — perfil da consultora, exportação CSV, histórico
+  // ===================================================================
+
+  async function loadConfiguracoesScreen(){
+    const nomeInput = document.getElementById('config-nome-consultora');
+    const whatsappInput = document.getElementById('config-whatsapp');
+    const errorBox5 = document.getElementById('config-perfil-error');
+
+    if(errorBox5){ errorBox5.textContent = ''; errorBox5.classList.remove('success'); }
+
+    try{
+      const snap = await getDoc(doc(db, 'users', GIULIA_UID));
+      if(snap.exists()){
+        const data = snap.data();
+        if(nomeInput) nomeInput.value = data.nome || '';
+        if(whatsappInput) whatsappInput.value = data.whatsapp || '';
+      }
+    } catch(err){
+      console.error('GD: erro ao carregar configurações', err);
+    }
+
+    renderHistoricoCadastros();
+  }
+
+  document.addEventListener('click', function(e){
+    if(e.target.closest('[data-goto="configuracoes"]')){
+      setTimeout(loadConfiguracoesScreen, 50);
+    }
+  });
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#config-perfil-salvar-btn');
+    if(!btn) return;
+
+    const nomeInput = document.getElementById('config-nome-consultora');
+    const whatsappInput = document.getElementById('config-whatsapp');
+    const errorBox5 = document.getElementById('config-perfil-error');
+
+    const nome = (nomeInput.value || '').trim();
+    const whatsapp = (whatsappInput.value || '').trim();
+
+    errorBox5.textContent = '';
+    errorBox5.classList.remove('success');
+
+    if(!nome){
+      errorBox5.textContent = 'O nome não pode ficar vazio.';
+      return;
+    }
+
+    btn.classList.add('is-loading');
+    btn.textContent = 'Salvando…';
+
+    try{
+      await setDoc(doc(db, 'users', GIULIA_UID), {
+        nome: nome,
+        whatsapp: whatsapp
+      }, { merge: true });
+
+      btn.classList.remove('is-loading');
+      btn.textContent = 'Salvar';
+      errorBox5.classList.add('success');
+      errorBox5.textContent = 'Configurações salvas.';
+
+      const painelNameEl2 = document.getElementById('painel-welcome-name');
+      if(painelNameEl2) painelNameEl2.textContent = 'Olá, ' + firstName(nome);
+    } catch(err){
+      console.error('GD: erro ao salvar configurações', err);
+      btn.classList.remove('is-loading');
+      btn.textContent = 'Salvar';
+      errorBox5.textContent = 'Erro ao salvar. (' + (err.code || 'erro') + ')';
+    }
+  });
+
+  // ---- Export client list as CSV ----
+
+  function csvEscape(value){
+    if(value === undefined || value === null) return '';
+    const str = String(value);
+    if(str.includes(',') || str.includes('"') || str.includes('\n')){
+      return '"' + str.replace(/"/g, '""') + '"';
+    }
+    return str;
+  }
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#config-exportar-btn');
+    if(!btn) return;
+
+    btn.classList.add('is-loading');
+    btn.textContent = 'Exportando…';
+
+    try{
+      cachedClientes = null;
+      const clientes = await fetchAllClientes();
+
+      const header = ['Nome','Status Anamnese','Etapas Concluídas','Fotos Enviadas'];
+      const rows = [header.join(',')];
+
+      clientes.forEach(function(c){
+        rows.push([
+          csvEscape(c.nome),
+          csvEscape(c.anamneseFinished ? 'Concluída' : (c.anamneseDone > 0 ? 'Em andamento' : 'Não iniciada')),
+          csvEscape(c.anamneseDone + '/8'),
+          csvEscape(c.fotosCount)
+        ].join(','));
+      });
+
+      const csvContent = '\uFEFF' + rows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'clientes-giulia-dantas.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      btn.classList.remove('is-loading');
+      btn.textContent = 'Exportar Lista de Clientes (CSV)';
+    } catch(err){
+      console.error('GD: erro ao exportar CSV', err);
+      btn.classList.remove('is-loading');
+      btn.textContent = 'Exportar Lista de Clientes (CSV)';
+      alert('Erro ao exportar a lista.');
+    }
+  });
+
+  // ---- Histórico de cadastros (based on criadoEm / criadoPor saved at signup) ----
+
+  function formatDataHoraBR(isoString){
+    try{
+      const d = new Date(isoString);
+      return d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+    } catch(err){
+      return isoString;
+    }
+  }
+
+  async function renderHistoricoCadastros(){
+    const listEl = document.getElementById('config-historico-list');
+    if(!listEl) return;
+
+    try{
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('role', '==', 'cliente'));
+      const snap = await getDocs(q);
+
+      const entries = [];
+      snap.forEach(function(docSnap){
+        const data = docSnap.data();
+        if(data.criadoEm){
+          entries.push({ nome: data.nome || 'Cliente', criadoEm: data.criadoEm });
+        }
+      });
+
+      entries.sort(function(a, b){ return new Date(b.criadoEm) - new Date(a.criadoEm); });
+
+      if(entries.length === 0){
+        listEl.innerHTML = '<p style="font-family:\'Cormorant Garamond\', serif; font-size:14px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:12px 0;">Nenhum cadastro registrado ainda.</p>';
+        return;
+      }
+
+      let html = '';
+      entries.slice(0, 20).forEach(function(entry){
+        html += '<div class="mini-row">' +
+          '<div>' +
+            '<div class="mini-row-title">' + escapeHtml(entry.nome) + '</div>' +
+            '<div class="mini-row-sub">Cadastrada em ' + escapeHtml(formatDataHoraBR(entry.criadoEm)) + '</div>' +
+          '</div>' +
+        '</div>';
+      });
+      listEl.innerHTML = html;
+    } catch(err){
+      console.error('GD: erro ao carregar histórico', err);
+      listEl.innerHTML = '<p style="font-family:\'Cormorant Garamond\', serif; font-size:14px; font-style:italic; color:var(--vinho); text-align:center; padding:12px 0;">Erro ao carregar histórico.</p>';
+    }
+  }
 </script>
 
 </body>
