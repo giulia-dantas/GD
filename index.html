@@ -1240,6 +1240,28 @@
     color:var(--vinho);
   }
 
+  .photo-remove-btn{
+    position:absolute;
+    top:6px;
+    right:6px;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.55);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    z-index:2;
+    cursor:pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background .2s ease;
+  }
+  .photo-remove-btn:active{
+    background:var(--vinho);
+  }
+
   /* ===== Submission card (Giulia's view) ===== */
   .submission-card{
     background:var(--card);
@@ -2676,7 +2698,7 @@
     }
 
     var upload = e.target.closest('.upload-box');
-    if(upload){
+    if(upload && !e.target.closest('.photo-remove-btn')){
       var input = upload.querySelector('.upload-input');
       if(input) input.click();
       return;
@@ -2734,7 +2756,8 @@
     getStorage,
     ref,
     uploadBytes,
-    getDownloadURL
+    getDownloadURL,
+    deleteObject
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js";
   import {
     getFunctions,
@@ -3168,6 +3191,16 @@
 
   const uploadedPhotoUrls = {}; // slotId -> download URL (for current session)
 
+  function addPhotoRemoveButton(box, slotId){
+    if(box.querySelector('.photo-remove-btn')) return;
+    const btn = document.createElement('div');
+    btn.className = 'photo-remove-btn';
+    btn.setAttribute('data-remove-photo-slot', slotId);
+    btn.innerHTML = '✕';
+    btn.title = 'Excluir foto';
+    box.appendChild(btn);
+  }
+
   document.addEventListener('change', function(e){
     const input = e.target.closest('.upload-input');
     if(!input || !input.files || !input.files[0] || !currentUser) return;
@@ -3198,6 +3231,7 @@
       .then(function(url){
         uploadedPhotoUrls[slotId] = { url: url, path: storagePath };
         box.classList.remove('is-uploading');
+        addPhotoRemoveButton(box, slotId);
 
         // If this was an "Adicionar" slot, spawn a fresh "Adicionar" box after it
         if(slotId.endsWith('-add')){
@@ -3212,6 +3246,8 @@
           addBox.setAttribute('data-photo-slot', slotId);
           const addImg = addBox.querySelector('.preview-img');
           if(addImg) addImg.remove();
+          const addRemoveBtn = addBox.querySelector('.photo-remove-btn');
+          if(addRemoveBtn) addRemoveBtn.remove();
           const addInput = addBox.querySelector('.upload-input');
           if(addInput){ addInput.setAttribute('data-photo-slot', slotId); addInput.value = ''; }
           const addLabel = addBox.querySelector('.label');
@@ -3224,6 +3260,52 @@
         box.classList.remove('is-uploading');
         box.classList.add('upload-error');
       });
+  });
+
+  // ---- Remove an uploaded photo (Storage + local state + Firestore _meta) ----
+
+  document.addEventListener('click', async function(e){
+    const removeBtn = e.target.closest('.photo-remove-btn');
+    if(!removeBtn) return;
+    e.stopPropagation();
+
+    if(!confirm('Excluir esta foto?')) return;
+
+    const slotId = removeBtn.getAttribute('data-remove-photo-slot');
+    const box = removeBtn.closest('.upload-box');
+    const entry = uploadedPhotoUrls[slotId];
+
+    removeBtn.remove();
+    const img = box.querySelector('.preview-img');
+    if(img) img.remove();
+    box.classList.remove('filled','has-image');
+
+    delete uploadedPhotoUrls[slotId];
+
+    // Delete from Storage if we have the path
+    if(entry && entry.path){
+      try{
+        await deleteObject(ref(storage, entry.path));
+      } catch(err){
+        console.error('GD: erro ao excluir foto do storage', err);
+      }
+    }
+
+    // Update Firestore _meta to drop this slot and refresh count
+    if(currentUser){
+      try{
+        const filledBoxes = document.querySelectorAll('#screen-fotos .upload-box.has-image');
+        const photosRef = doc(db, 'clientes', currentUser.uid, 'fotos', '_meta');
+        await setDoc(photosRef, {
+          count: filledBoxes.length,
+          urls: uploadedPhotoUrls,
+          updatedAt: new Date().toISOString()
+        }, { merge: false });
+        refreshClienteProgress();
+      } catch(err){
+        console.error('GD: erro ao atualizar fotos após exclusão', err);
+      }
+    }
   });
 
   // ---- "Enviar Fotos" button: save photo URLs + count to Firestore ----
@@ -3319,8 +3401,8 @@
         img.src = entry.url || entry;
         box.insertBefore(img, box.firstChild);
         box.classList.add('filled','has-image');
+        addPhotoRemoveButton(box, slotId);
 
-        Object.assign(uploadedPhotoUrls, {});
         uploadedPhotoUrls[slotId] = entry;
       });
     } catch(err){
@@ -4115,6 +4197,8 @@
   // EXCLUIR CLIENTE
   // ===================================================================
 
+  const excluirClienteFn = httpsCallable(functions, 'excluirCliente');
+
   document.addEventListener('click', async function(e){
     const delBtn = e.target.closest('[data-cliente-delete]');
     if(!delBtn) return;
@@ -4123,24 +4207,27 @@
     const uid = delBtn.getAttribute('data-cliente-delete');
     const nome = delBtn.getAttribute('data-cliente-delete-nome') || 'esta cliente';
 
-    if(!confirm('Excluir ' + nome + '? Isso remove os dados de anamnese e fotos do sistema (a conta de login pode continuar existindo no Firebase Authentication, mas precisa ser removida manualmente lá se desejar).')) return;
+    if(!confirm('Excluir ' + nome + '? Isso remove a conta de login e todos os dados (anamnese e fotos) permanentemente. Esta ação não pode ser desfeita.')) return;
+
+    delBtn.style.opacity = '0.4';
+    delBtn.style.pointerEvents = 'none';
 
     try{
-      // Delete subcollection docs we know about
-      const stepsToDelete = ['step1','step2','step3','step4','step5','step6','step7','step8','_progress'];
-      for(const stepId of stepsToDelete){
-        try{ await deleteDoc(doc(db, 'clientes', uid, 'anamnese', stepId)); } catch(err){ /* ignore missing */ }
-      }
-      try{ await deleteDoc(doc(db, 'clientes', uid, 'fotos', '_meta')); } catch(err){ /* ignore missing */ }
-
-      // Delete the user profile doc
-      await deleteDoc(doc(db, 'users', uid));
-
+      await excluirClienteFn({ uid: uid });
       cachedClientes = null;
       renderClientesList();
     } catch(err){
       console.error('GD: erro ao excluir cliente', err);
-      alert('Erro ao excluir cliente. (' + (err.code || 'erro') + ')');
+      delBtn.style.opacity = '1';
+      delBtn.style.pointerEvents = 'auto';
+
+      let msg = 'Erro ao excluir cliente.';
+      if(err.code === 'functions/permission-denied'){
+        msg = 'Apenas a consultora pode excluir clientes.';
+      } else if(err.code){
+        msg = 'Erro ao excluir cliente. (' + err.code + ')';
+      }
+      alert(msg);
     }
   });
 </script>
