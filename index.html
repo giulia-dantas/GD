@@ -602,6 +602,31 @@
 
   .client-row:last-child{border-bottom:none;}
 
+  .cliente-delete,
+  .agendamento-delete{
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--graphite-soft);
+    font-size:12px;
+    flex-shrink:0;
+    cursor:pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background .2s ease, color .2s ease;
+  }
+  .cliente-delete:active,
+  .agendamento-delete:active{
+    background:var(--champagne-light);
+    color:var(--vinho);
+  }
+
+  .appt .agendamento-delete{
+    margin-left:8px;
+  }
+
   .client-avatar{
     width:42px; height:42px;
     border-radius:50%;
@@ -911,6 +936,15 @@
     background:var(--card);
     margin-bottom:14px;
     outline:none;
+  }
+
+  select.input-field{
+    appearance:none;
+    -webkit-appearance:none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23C8A46A' stroke-width='1.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 16px center;
+    background-size:16px;
   }
 
   .input-field::placeholder{ color:#b8b2a8; }
@@ -1573,12 +1607,14 @@
         <div class="page-title">Meus Agendamentos</div>
         <div class="page-sub">Organize seus atendimentos da semana</div>
 
-        <button class="btn-primary">+ Novo Agendamento</button>
+        <button class="btn-primary" data-goto="novo-agendamento">+ Novo Agendamento</button>
 
-        <div class="stat-card" style="text-align:center;">
-          <p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">
-            Nenhum agendamento cadastrado ainda.
-          </p>
+        <div id="agenda-list">
+          <div class="stat-card" style="text-align:center;">
+            <p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">
+              Carregando...
+            </p>
+          </div>
         </div>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -1588,6 +1624,57 @@
         <div class="navitem active" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
         <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
         <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= NOVO AGENDAMENTO ================= -->
+  <div class="screen-wrap" id="screen-novo-agendamento">
+    <div class="screen-label">Novo Agendamento</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+      </div>
+      <div class="content">
+        <div class="eyebrow">Agenda</div>
+        <div class="page-title">Novo Agendamento</div>
+        <div class="page-sub">Preencha os dados do atendimento</div>
+
+        <div class="form-section" id="novo-agendamento-form">
+          <label class="form-label">Título / Serviço</label>
+          <input class="input-field" type="text" id="agendamento-titulo" placeholder="Ex: Consultoria de Cores">
+
+          <label class="form-label">Cliente</label>
+          <select class="input-field" id="agendamento-cliente-select">
+            <option value="">Selecione uma cliente cadastrada...</option>
+            <option value="__outro__">Outra (digitar nome)</option>
+          </select>
+          <input class="input-field" type="text" id="agendamento-cliente-nome-livre" placeholder="Nome da cliente" hidden>
+
+          <label class="form-label">Data</label>
+          <input class="input-field" type="date" id="agendamento-data">
+
+          <label class="form-label">Horário de início</label>
+          <input class="input-field" type="time" id="agendamento-hora-inicio">
+
+          <label class="form-label">Horário de término</label>
+          <input class="input-field" type="time" id="agendamento-hora-fim">
+
+          <label class="form-label">Local</label>
+          <div class="radio-row" id="agendamento-local">
+            <div class="radio-opt"><div class="dot-circle"></div>Presencial</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Online</div>
+          </div>
+        </div>
+
+        <div class="login-error" id="agendamento-error"></div>
+
+        <button class="btn-primary" id="agendamento-salvar-btn">Salvar Agendamento</button>
+        <button class="btn-secondary" data-goto="agenda">Cancelar</button>
+
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
     </div>
   </div>
@@ -2635,10 +2722,13 @@
     doc,
     getDoc,
     setDoc,
+    deleteDoc,
+    addDoc,
     collection,
     getDocs,
     query,
-    where
+    where,
+    orderBy
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
   import {
     getStorage,
@@ -3324,13 +3414,13 @@
       btn.textContent = 'Cadastrar Cliente';
       console.error('GD: erro ao cadastrar cliente', err);
 
-      let msg = 'Não foi possível cadastrar a cliente.';
+      let msg = 'Não foi possível cadastrar a cliente. (' + (err.code || 'erro desconhecido') + ')';
       if(err.code === 'functions/already-exists'){
         msg = 'Já existe uma conta com esse e-mail.';
       } else if(err.code === 'functions/invalid-argument'){
         msg = 'Preencha nome e e-mail corretamente.';
       } else if(err.code === 'functions/permission-denied'){
-        msg = 'Apenas a consultora pode cadastrar clientes.';
+        msg = 'Apenas a consultora pode cadastrar clientes. (UID não corresponde)';
       }
       errorBox2.textContent = msg;
     }
@@ -3538,7 +3628,8 @@
           '<div class="client-name">' + escapeHtml(cliente.nome) + '</div>' +
           '<div class="client-meta">' + escapeHtml(meta) + '</div>' +
         '</div>' +
-        '<div class="badge-dot ' + badgeClass + '"></div>';
+        '<div class="badge-dot ' + badgeClass + '"></div>' +
+        '<div class="cliente-delete" data-cliente-delete="' + escapeHtml(cliente.uid) + '" data-cliente-delete-nome="' + escapeHtml(cliente.nome) + '" title="Excluir cliente">✕</div>';
 
       listEl.appendChild(row);
     });
@@ -3547,6 +3638,8 @@
   // ---- Click on a client row -> select and navigate to materiais ----
 
   document.addEventListener('click', function(e){
+    if(e.target.closest('[data-cliente-delete]')) return;
+
     const row = e.target.closest('#clientes-list .client-row');
     if(!row) return;
 
@@ -3804,6 +3897,250 @@
           refreshConsultantStats();
         }
       }).catch(function(){});
+    }
+  });
+
+  // ===================================================================
+  // AGENDA — real appointments stored in Firestore
+  // ===================================================================
+
+  function populateAgendamentoClienteSelect(){
+    const select = document.getElementById('agendamento-cliente-select');
+    if(!select) return;
+
+    fetchAllClientes().then(function(clientes){
+      // Remove previously-added client options (keep first 2: placeholder + "outra")
+      while(select.options.length > 2){
+        select.remove(2);
+      }
+      clientes.forEach(function(c){
+        const opt = document.createElement('option');
+        opt.value = c.uid;
+        opt.textContent = c.nome;
+        select.appendChild(opt);
+      });
+    });
+  }
+
+  document.addEventListener('change', function(e){
+    const select = e.target.closest('#agendamento-cliente-select');
+    if(!select) return;
+
+    const nomeLivreInput = document.getElementById('agendamento-cliente-nome-livre');
+    if(nomeLivreInput){
+      nomeLivreInput.hidden = select.value !== '__outro__';
+      if(select.value !== '__outro__') nomeLivreInput.value = '';
+    }
+  });
+
+  function resetNovoAgendamentoForm(){
+    const titulo = document.getElementById('agendamento-titulo');
+    const select = document.getElementById('agendamento-cliente-select');
+    const nomeLivre = document.getElementById('agendamento-cliente-nome-livre');
+    const data = document.getElementById('agendamento-data');
+    const horaInicio = document.getElementById('agendamento-hora-inicio');
+    const horaFim = document.getElementById('agendamento-hora-fim');
+    const localRow = document.getElementById('agendamento-local');
+    const errorBox3 = document.getElementById('agendamento-error');
+
+    if(titulo) titulo.value = '';
+    if(select) select.value = '';
+    if(nomeLivre){ nomeLivre.value = ''; nomeLivre.hidden = true; }
+    if(data) data.value = '';
+    if(horaInicio) horaInicio.value = '';
+    if(horaFim) horaFim.value = '';
+    if(localRow) localRow.querySelectorAll('.radio-opt').forEach(function(r){ r.classList.remove('sel'); });
+    if(errorBox3){ errorBox3.textContent = ''; errorBox3.classList.remove('success'); }
+
+    populateAgendamentoClienteSelect();
+  }
+
+  document.addEventListener('click', function(e){
+    if(e.target.closest('[data-goto="novo-agendamento"]')){
+      setTimeout(resetNovoAgendamentoForm, 50);
+    }
+  });
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#agendamento-salvar-btn');
+    if(!btn) return;
+
+    const titulo = (document.getElementById('agendamento-titulo').value || '').trim();
+    const select = document.getElementById('agendamento-cliente-select');
+    const nomeLivre = (document.getElementById('agendamento-cliente-nome-livre').value || '').trim();
+    const data = document.getElementById('agendamento-data').value;
+    const horaInicio = document.getElementById('agendamento-hora-inicio').value;
+    const horaFim = document.getElementById('agendamento-hora-fim').value;
+    const localRow = document.getElementById('agendamento-local');
+    const localSel = localRow.querySelector('.radio-opt.sel');
+    const errorBox3 = document.getElementById('agendamento-error');
+
+    errorBox3.textContent = '';
+
+    let clienteUid = null, clienteNome = null;
+    if(select.value === '__outro__'){
+      clienteNome = nomeLivre;
+    } else if(select.value){
+      clienteUid = select.value;
+      clienteNome = select.options[select.selectedIndex].textContent;
+    }
+
+    if(!titulo || !clienteNome || !data || !horaInicio){
+      errorBox3.textContent = 'Preencha ao menos título, cliente, data e horário de início.';
+      return;
+    }
+
+    btn.classList.add('is-loading');
+    btn.textContent = 'Salvando…';
+
+    try{
+      await addDoc(collection(db, 'agendamentos'), {
+        titulo: titulo,
+        clienteUid: clienteUid,
+        clienteNome: clienteNome,
+        data: data,
+        horaInicio: horaInicio,
+        horaFim: horaFim || '',
+        local: localSel ? localSel.textContent.trim() : '',
+        criadoEm: new Date().toISOString()
+      });
+
+      btn.classList.remove('is-loading');
+      btn.textContent = 'Salvar Agendamento';
+
+      if(window.__gdGoTo) window.__gdGoTo('agenda', 'back');
+    } catch(err){
+      console.error('GD: erro ao salvar agendamento', err);
+      btn.classList.remove('is-loading');
+      btn.textContent = 'Salvar Agendamento';
+      errorBox3.textContent = 'Erro ao salvar agendamento. (' + (err.code || 'erro') + ')';
+    }
+  });
+
+  const DIAS_SEMANA = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+  function formatDataBR(isoDate){
+    const parts = isoDate.split('-');
+    if(parts.length !== 3) return isoDate;
+    const d = new Date(parseInt(parts[0],10), parseInt(parts[1],10)-1, parseInt(parts[2],10));
+    return { dow: DIAS_SEMANA[d.getDay()], dnum: parts[2] };
+  }
+
+  async function renderAgendaList(){
+    const listEl = document.getElementById('agenda-list');
+    if(!listEl) return;
+
+    listEl.innerHTML = '<div class="stat-card" style="text-align:center;"><p style="font-family:\'Cormorant Garamond\', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">Carregando...</p></div>';
+
+    try{
+      const q = query(collection(db, 'agendamentos'), orderBy('data', 'asc'), orderBy('horaInicio', 'asc'));
+      const snap = await getDocs(q);
+
+      if(snap.empty){
+        listEl.innerHTML = '<div class="stat-card" style="text-align:center;"><p style="font-family:\'Cormorant Garamond\', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">Nenhum agendamento cadastrado ainda.</p></div>';
+        return;
+      }
+
+      // Group by date
+      const groups = {};
+      snap.forEach(function(docSnap){
+        const a = docSnap.data();
+        const key = a.data;
+        if(!groups[key]) groups[key] = [];
+        groups[key].push({ id: docSnap.id, ...a });
+      });
+
+      let html = '';
+      Object.keys(groups).sort().forEach(function(dataKey){
+        const dt = formatDataBR(dataKey);
+        html += '<div class="day-group"><div class="day-label"><span class="dow">' + escapeHtml(dt.dow) + '</span><span class="dnum">' + escapeHtml(dt.dnum) + '</span></div>';
+
+        groups[dataKey].forEach(function(a){
+          const horario = a.horaFim ? (a.horaInicio + '–' + a.horaFim) : a.horaInicio;
+          html += '<div class="appt" data-agendamento-id="' + a.id + '">' +
+            '<div>' +
+              '<div class="appt-title">' + escapeHtml(a.titulo) + '</div>' +
+              '<div class="appt-sub">' + escapeHtml(a.clienteNome) + ' · ' + escapeHtml(horario) + '</div>' +
+            '</div>' +
+            '<div style="display:flex; align-items:center; gap:8px;">' +
+              (a.local ? '<span class="tag">' + escapeHtml(a.local) + '</span>' : '') +
+              '<div class="agendamento-delete" data-agendamento-delete="' + a.id + '" title="Excluir">✕</div>' +
+            '</div>' +
+          '</div>';
+        });
+
+        html += '</div>';
+      });
+
+      listEl.innerHTML = html;
+    } catch(err){
+      console.error('GD: erro ao carregar agenda', err);
+      listEl.innerHTML = '<div class="stat-card" style="text-align:center;"><p style="font-family:\'Cormorant Garamond\', serif; font-size:15px; font-style:italic; color:var(--vinho); padding:8px 0;">Erro ao carregar agenda.</p></div>';
+    }
+  }
+
+  document.addEventListener('click', async function(e){
+    const delBtn = e.target.closest('[data-agendamento-delete]');
+    if(!delBtn) return;
+    e.stopPropagation();
+
+    const id = delBtn.getAttribute('data-agendamento-delete');
+    if(!confirm('Excluir este agendamento?')) return;
+
+    try{
+      await deleteDoc(doc(db, 'agendamentos', id));
+      renderAgendaList();
+    } catch(err){
+      console.error('GD: erro ao excluir agendamento', err);
+      alert('Erro ao excluir agendamento.');
+    }
+  });
+
+  const previousGoTo3 = window.__gdGoTo;
+  if(previousGoTo3){
+    window.__gdGoTo = function(screenId, direction){
+      previousGoTo3(screenId, direction);
+      if(screenId === 'agenda'){
+        renderAgendaList();
+      }
+    };
+  }
+
+  document.addEventListener('click', function(e){
+    const el = e.target.closest('[data-goto="agenda"]');
+    if(el) setTimeout(renderAgendaList, 50);
+  });
+
+  // ===================================================================
+  // EXCLUIR CLIENTE
+  // ===================================================================
+
+  document.addEventListener('click', async function(e){
+    const delBtn = e.target.closest('[data-cliente-delete]');
+    if(!delBtn) return;
+    e.stopPropagation();
+
+    const uid = delBtn.getAttribute('data-cliente-delete');
+    const nome = delBtn.getAttribute('data-cliente-delete-nome') || 'esta cliente';
+
+    if(!confirm('Excluir ' + nome + '? Isso remove os dados de anamnese e fotos do sistema (a conta de login pode continuar existindo no Firebase Authentication, mas precisa ser removida manualmente lá se desejar).')) return;
+
+    try{
+      // Delete subcollection docs we know about
+      const stepsToDelete = ['step1','step2','step3','step4','step5','step6','step7','step8','_progress'];
+      for(const stepId of stepsToDelete){
+        try{ await deleteDoc(doc(db, 'clientes', uid, 'anamnese', stepId)); } catch(err){ /* ignore missing */ }
+      }
+      try{ await deleteDoc(doc(db, 'clientes', uid, 'fotos', '_meta')); } catch(err){ /* ignore missing */ }
+
+      // Delete the user profile doc
+      await deleteDoc(doc(db, 'users', uid));
+
+      cachedClientes = null;
+      renderClientesList();
+    } catch(err){
+      console.error('GD: erro ao excluir cliente', err);
+      alert('Erro ao excluir cliente. (' + (err.code || 'erro') + ')');
     }
   });
 </script>
