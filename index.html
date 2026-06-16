@@ -1621,6 +1621,8 @@
           </div>
         </div>
 
+        <button class="btn-primary" data-goto="cadastrar-cliente">+ Cadastrar Nova Cliente</button>
+
         <div class="stat-card">
           <div class="stat-label" style="margin-bottom:0;">Lista de Clientes</div>
           <div id="clientes-list">
@@ -1635,6 +1637,50 @@
         <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
         <div class="navitem active" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
         <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CADASTRAR NOVA CLIENTE ================= -->
+  <div class="screen-wrap" id="screen-cadastrar-cliente">
+    <div class="screen-label">Cadastrar Nova Cliente</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+      </div>
+      <div class="content">
+        <div class="eyebrow">Nova Cliente</div>
+        <div class="page-title">Cadastrar Cliente</div>
+        <div class="page-sub">A cliente receberá um e-mail para definir a senha</div>
+
+        <div class="form-section" id="cadastrar-cliente-form">
+          <label class="form-label">Nome completo</label>
+          <input class="input-field" type="text" id="cadastrar-nome" placeholder="Ex: Marina Telles">
+
+          <label class="form-label">E-mail</label>
+          <input class="input-field" type="email" id="cadastrar-email" placeholder="email@exemplo.com">
+
+          <label class="form-label">Telefone (opcional)</label>
+          <input class="input-field" type="tel" id="cadastrar-telefone" placeholder="(11) 99999-9999">
+        </div>
+
+        <div class="login-error" id="cadastrar-error"></div>
+
+        <button class="btn-primary" id="cadastrar-cliente-btn">Cadastrar Cliente</button>
+        <button class="btn-secondary" data-goto="clientes">Cancelar</button>
+
+        <div class="stat-card" id="cadastrar-sucesso-card" hidden>
+          <div class="stat-label" style="margin-bottom:8px;">Cliente cadastrada com sucesso</div>
+          <p style="font-family:'Cormorant Garamond', serif; font-size:15px; color:var(--graphite); line-height:1.6;">
+            Envie o link abaixo para <strong id="cadastrar-sucesso-nome"></strong> definir a senha dela:
+          </p>
+          <p id="cadastrar-sucesso-link" style="font-family:'Manrope', sans-serif; font-size:12px; color:var(--champagne); word-break:break-all; padding:10px; background:var(--champagne-light); border-radius:8px;"></p>
+          <button class="btn-secondary" id="cadastrar-copiar-link-btn" style="margin-top:10px; margin-bottom:0;">Copiar Link</button>
+        </div>
+
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
     </div>
   </div>
@@ -2600,6 +2646,10 @@
     uploadBytes,
     getDownloadURL
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js";
+  import {
+    getFunctions,
+    httpsCallable
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-functions.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBBH4zsdmS0I7a4IsXuJ444kqwPIelGIxw",
@@ -2614,6 +2664,7 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
   const storage = getStorage(app);
+  const functions = getFunctions(app, 'us-central1');
 
   const loginBtn = document.getElementById('login-btn');
   const emailInput = document.getElementById('login-email');
@@ -3195,6 +3246,113 @@
   let selectedClienteUid = null;
   let selectedClienteNome = null;
   let cachedClientes = null; // [{uid, nome, anamneseDone, anamneseFinished, fotosCount}]
+
+  // ---- "Cadastrar Nova Cliente" form ----
+
+  const criarClienteFn = httpsCallable(functions, 'criarCliente');
+
+  function resetCadastrarClienteForm(){
+    const nomeInput = document.getElementById('cadastrar-nome');
+    const emailInput2 = document.getElementById('cadastrar-email');
+    const telefoneInput = document.getElementById('cadastrar-telefone');
+    const errorBox2 = document.getElementById('cadastrar-error');
+    const sucessoCard = document.getElementById('cadastrar-sucesso-card');
+    const form = document.getElementById('cadastrar-cliente-form');
+    const btn = document.getElementById('cadastrar-cliente-btn');
+
+    if(nomeInput) nomeInput.value = '';
+    if(emailInput2) emailInput2.value = '';
+    if(telefoneInput) telefoneInput.value = '';
+    if(errorBox2) errorBox2.textContent = '';
+    if(sucessoCard) sucessoCard.hidden = true;
+    if(form) form.hidden = false;
+    if(btn) btn.hidden = false;
+  }
+
+  document.addEventListener('click', function(e){
+    if(e.target.closest('[data-goto="cadastrar-cliente"]')){
+      setTimeout(resetCadastrarClienteForm, 50);
+    }
+  });
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#cadastrar-cliente-btn');
+    if(!btn) return;
+
+    const nomeInput = document.getElementById('cadastrar-nome');
+    const emailInput2 = document.getElementById('cadastrar-email');
+    const telefoneInput = document.getElementById('cadastrar-telefone');
+    const errorBox2 = document.getElementById('cadastrar-error');
+
+    const nome = (nomeInput.value || '').trim();
+    const email = (emailInput2.value || '').trim();
+    const telefone = (telefoneInput.value || '').trim();
+
+    errorBox2.textContent = '';
+    errorBox2.classList.remove('success');
+
+    if(!nome || !email){
+      errorBox2.textContent = 'Preencha nome e e-mail.';
+      return;
+    }
+
+    btn.classList.add('is-loading');
+    btn.textContent = 'Cadastrando…';
+
+    try{
+      const result = await criarClienteFn({ nome, email, telefone });
+      const data = result.data || {};
+
+      btn.classList.remove('is-loading');
+      btn.textContent = 'Cadastrar Cliente';
+
+      // Show success card with the reset link
+      const form = document.getElementById('cadastrar-cliente-form');
+      const sucessoCard = document.getElementById('cadastrar-sucesso-card');
+      const sucessoNome = document.getElementById('cadastrar-sucesso-nome');
+      const sucessoLink = document.getElementById('cadastrar-sucesso-link');
+
+      if(form) form.hidden = true;
+      btn.hidden = true;
+      if(sucessoCard) sucessoCard.hidden = false;
+      if(sucessoNome) sucessoNome.textContent = nome;
+      if(sucessoLink) sucessoLink.textContent = data.resetLink || '';
+
+      cachedClientes = null; // force refresh of client list
+    } catch(err){
+      btn.classList.remove('is-loading');
+      btn.textContent = 'Cadastrar Cliente';
+      console.error('GD: erro ao cadastrar cliente', err);
+
+      let msg = 'Não foi possível cadastrar a cliente.';
+      if(err.code === 'functions/already-exists'){
+        msg = 'Já existe uma conta com esse e-mail.';
+      } else if(err.code === 'functions/invalid-argument'){
+        msg = 'Preencha nome e e-mail corretamente.';
+      } else if(err.code === 'functions/permission-denied'){
+        msg = 'Apenas a consultora pode cadastrar clientes.';
+      }
+      errorBox2.textContent = msg;
+    }
+  });
+
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('#cadastrar-copiar-link-btn');
+    if(!btn) return;
+
+    const sucessoLink = document.getElementById('cadastrar-sucesso-link');
+    const link = sucessoLink ? sucessoLink.textContent : '';
+
+    if(navigator.clipboard && link){
+      navigator.clipboard.writeText(link).then(function(){
+        btn.textContent = 'Link copiado!';
+        setTimeout(function(){ btn.textContent = 'Copiar Link'; }, 2000);
+      }).catch(function(){
+        btn.textContent = 'Erro ao copiar';
+      });
+    }
+  });
+
 
   // ---- Anamnese field label map (section -> [ {field, label, type} ]) ----
 
