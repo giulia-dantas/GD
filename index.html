@@ -1110,6 +1110,103 @@
     flex-shrink:0;
   }
 
+  .category-header{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    padding:18px 0 14px;
+    margin-top:6px;
+  }
+
+  .category-header:first-of-type{
+    margin-top:0;
+  }
+
+  .category-icon{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--champagne-light);
+    color:var(--champagne);
+  }
+
+  .category-header.tone-cromatico .category-icon{
+    background: rgba(110,42,58,0.08);
+    color:var(--vinho);
+  }
+
+  .category-title{
+    font-family:'Cormorant Garamond', serif;
+    font-size:22px;
+    font-weight:600;
+    color:var(--graphite);
+    line-height:1.2;
+    margin-bottom:4px;
+  }
+
+  .category-desc{
+    font-family:'Manrope', sans-serif;
+    font-size:12.5px;
+    color:var(--graphite-soft);
+    line-height:1.5;
+  }
+
+  .category-divider{
+    height:1px;
+    background: linear-gradient(to right, var(--champagne), transparent);
+    margin: 28px 0 4px;
+  }
+
+  .category-divider.tone-cromatico{
+    background: linear-gradient(to right, var(--vinho), transparent);
+  }
+
+  .photo-tips-card{
+    background: rgba(110,42,58,0.05);
+    border: 1px solid rgba(110,42,58,0.18);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin: 6px 0 18px;
+  }
+
+  .photo-tips-title{
+    font-family:'Manrope', sans-serif;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--vinho);
+    margin-bottom:8px;
+  }
+
+  .photo-tips-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+
+  .photo-tips-list li{
+    font-family:'Manrope', sans-serif;
+    font-size:12.5px;
+    color:var(--graphite);
+    line-height:1.6;
+    padding-left:18px;
+    position:relative;
+  }
+
+  .photo-tips-list li::before{
+    content:'✦';
+    position:absolute;
+    left:0;
+    font-size:9px;
+    color:var(--vinho);
+    top:5px;
+  }
+
   .form-label{
     font-size:11px;
     letter-spacing:0.1em;
@@ -2021,8 +2118,8 @@
         </div>
       </div>
       <div class="content">
-        <div class="eyebrow">Etapa 1 de 8</div>
-<div class="step-dots"><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        <div class="eyebrow">Etapa 1 de 9</div>
+<div class="step-dots"><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
         <div class="page-title">Vamos começar</div>
         <div class="page-sub">Conte um pouco sobre você</div>
 
@@ -2066,8 +2163,8 @@
         </div>
       </div>
       <div class="content">
-        <div class="eyebrow">Etapa 2 de 8</div>
-<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        <div class="eyebrow">Etapa 2 de 9</div>
+<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
         <div class="page-title">Seu objetivo</div>
         <div class="page-sub">O que você busca com essa consultoria</div>
 
@@ -2115,8 +2212,8 @@
         </div>
       </div>
       <div class="content">
-        <div class="eyebrow">Etapa 3 de 8</div>
-<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        <div class="eyebrow">Etapa 3 de 9</div>
+<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
         <div class="page-title">Sua rotina</div>
         <div class="page-sub">Os ambientes que você frequenta moldam seu guarda-roupa</div>
 
@@ -2173,8 +2270,8 @@
         </div>
       </div>
       <div class="content">
-        <div class="eyebrow">Etapa 4 de 8</div>
-<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        <div class="eyebrow">Etapa 4 de 9</div>
+<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
         <div class="page-title">Seu estilo</div>
         <div class="page-sub">Como você se vê e como deseja ser vista</div>
 
@@ -2243,8 +2340,8 @@
         </div>
       </div>
       <div class="content">
-        <div class="eyebrow">Etapa 5 de 8</div>
-<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        <div class="eyebrow">Etapa 5 de 9</div>
+<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
         <div class="page-title">Seu guarda-roupa</div>
         <div class="page-sub">Vamos entender o que você já tem</div>
 
@@ -2300,8 +2397,8 @@
         </div>
       </div>
       <div class="content">
-        <div class="eyebrow">Etapa 6 de 8</div>
-<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div></div>
+        <div class="eyebrow">Etapa 6 de 9</div>
+<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
         <div class="page-title">Suas cores</div>
         <div class="page-sub">Preferências e histórico de coloração pessoal</div>
 
@@ -2348,8 +2445,8 @@
         </div>
       </div>
       <div class="content">
-        <div class="eyebrow">Etapa 7 de 8</div>
-<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div></div>
+        <div class="eyebrow">Etapa 7 de 9</div>
+<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div><div class="dot"></div></div>
         <div class="page-title">Biotipo & corpo</div>
         <div class="page-sub">Para valorizarmos o que você ama em você</div>
 
@@ -2393,8 +2490,8 @@
         </div>
       </div>
       <div class="content">
-        <div class="eyebrow">Etapa 8 de 8</div>
-<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div></div>
+        <div class="eyebrow">Etapa 8 de 9</div>
+<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot"></div></div>
         <div class="page-title">Últimos detalhes</div>
         <div class="page-sub">Suas expectativas para o resultado final</div>
 
@@ -2435,7 +2532,99 @@
 
         <div class="step-nav">
             <button class="btn-secondary" data-goto="anamnese-7">Voltar</button>
-            <button class="btn-primary" data-goto="cliente-inicio" data-save-step="8" data-finish-anamnese="true">Concluir Anamnese</button>
+            <button class="btn-primary" data-goto="anamnese-9" data-save-step="8">Continuar</button>
+          </div>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
+      </div>
+      <div class="bottomnav">
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
+        <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ANAMNESE — ETAPA 9 (DIRECIONAMENTO CROMÁTICO) ================= -->
+  <div class="screen-wrap" id="screen-anamnese-9">
+    <div class="screen-label">Anamnese — Direcionamento Cromático</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+      </div>
+      <div class="content">
+        <div class="eyebrow">Etapa 9 de 9</div>
+<div class="step-dots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div></div>
+        <div class="page-title">Direcionamento Cromático</div>
+        <div class="page-sub">Informações para identificar as cores que mais harmonizam com você</div>
+
+        <div class="form-section" id="anamnese-9-form">
+          <label class="form-label">Seu cabelo está na cor natural atualmente?</label>
+          <div class="radio-row" data-field="cabeloCorNatural">
+            <div class="radio-opt"><div class="dot-circle"></div>Sim</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Não</div>
+          </div>
+          <label class="form-label">Se não, qual a cor utilizada atualmente?</label>
+          <input class="input-field" type="text" data-field="cabeloCorAtual" placeholder="Ex: Castanho escuro com luzes">
+
+          <label class="form-label">Você costuma realizar coloração, luzes ou descoloração nos cabelos?</label>
+          <div class="radio-row" data-field="realizaColoracaoCabelo">
+            <div class="radio-opt"><div class="dot-circle"></div>Sim</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Não</div>
+          </div>
+          <label class="form-label">Se sim, descreva:</label>
+          <textarea class="input-field textarea" data-field="descricaoColoracaoCabelo" placeholder="Escreva livremente..."></textarea>
+
+          <label class="form-label">Existe alguma cor de roupa que você sente que te valoriza mais ou costuma receber elogios quando usa?</label>
+          <textarea class="input-field textarea" data-field="corQueValoriza" placeholder="Escreva livremente..."></textarea>
+
+          <label class="form-label">Existe alguma cor que você evita utilizar ou sente que não combina com você?</label>
+          <textarea class="input-field textarea" data-field="corQueEvitaCromatico" placeholder="Escreva livremente..."></textarea>
+
+          <label class="form-label">Qual é o seu principal objetivo com a análise de cores?</label>
+          <div class="radio-row" data-field="objetivoAnaliseCores">
+            <div class="radio-opt"><div class="dot-circle"></div>Mais elegância</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Mais naturalidade</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Mais feminilidade</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Mais profissionalismo</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Mais presença e impacto visual</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Outro</div>
+          </div>
+
+          <label class="form-label">Você costuma utilizar maquiagem?</label>
+          <div class="radio-row" data-field="usaMaquiagem">
+            <div class="radio-opt"><div class="dot-circle"></div>Sim</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Não</div>
+          </div>
+          <label class="form-label">Se sim, existe alguma cor de maquiagem que você prefere ou sente que combina mais com você?</label>
+          <textarea class="input-field textarea" data-field="corMaquiagemPreferida" placeholder="Escreva livremente..."></textarea>
+
+          <label class="form-label">Como você descreveria o tom natural dos seus cabelos?</label>
+          <div class="radio-row" data-field="tomNaturalCabelo">
+            <div class="radio-opt"><div class="dot-circle"></div>Muito claro</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Claro</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Médio</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Escuro</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Muito escuro</div>
+          </div>
+
+          <label class="form-label">Como você descreveria a cor dos seus olhos?</label>
+          <div class="radio-row" data-field="corOlhos">
+            <div class="radio-opt"><div class="dot-circle"></div>Azuis</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Verdes</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Castanhos claros</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Castanhos médios</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Castanhos escuros</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Pretos</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Outro</div>
+          </div>
+        </div>
+
+        <div class="step-nav">
+            <button class="btn-secondary" data-goto="anamnese-8">Voltar</button>
+            <button class="btn-primary" data-goto="cliente-inicio" data-save-step="9" data-finish-anamnese="true">Concluir Anamnese</button>
           </div>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -2463,6 +2652,16 @@
         <div class="page-title">Envie suas fotos</div>
         <div class="page-sub">Fotos atuais ajudam a consultora a te conhecer melhor</div>
 
+        <div class="category-header">
+          <div class="category-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/></svg>
+          </div>
+          <div>
+            <div class="category-title">Consultoria de Imagem</div>
+            <div class="category-desc">Essas fotos ajudam na análise do seu estilo, biotipo, proporções corporais e construção do seu dossiê personalizado.</div>
+          </div>
+        </div>
+
         <div class="form-section">
           <div class="form-section-title"><span class="num">1</span>Fotos do corpo</div>
           <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Frente, perfil, costas e rosto, com roupas justas e luz natural</p>
@@ -2485,7 +2684,7 @@
 <div class="upload-box" data-photo-slot="corpo-rosto">
               <input type="file" accept="image/*" class="upload-input" data-photo-slot="corpo-rosto" hidden>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
-              <div class="label">Rosto (sem maquiagem)</div>
+              <div class="label">Rosto</div>
             </div>
           </div>
         </div>
@@ -2540,6 +2739,79 @@
             </div>
           </div>
           <button class="btn-secondary" style="margin-top:12px;" id="add-guarda-roupa-btn">+ Adicionar mais fotos do guarda-roupa</button>
+        </div>
+
+        <div class="category-divider tone-cromatico"></div>
+
+        <div class="category-header tone-cromatico">
+          <div class="category-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 010 16"/></svg>
+          </div>
+          <div>
+            <div class="category-title">Direcionamento Cromático Online</div>
+            <div class="category-desc">Essas fotos ajudam na identificação das cores que mais harmonizam com suas características naturais, contribuindo para escolhas mais estratégicas em roupas, acessórios e maquiagem.</div>
+          </div>
+        </div>
+
+        <div class="photo-tips-card">
+          <div class="photo-tips-title">Orientações importantes</div>
+          <ul class="photo-tips-list">
+            <li>Utilize luz natural sempre que possível</li>
+            <li>Não utilize filtros</li>
+            <li>Não utilize maquiagem</li>
+            <li>Evite o modo retrato</li>
+            <li>Mantenha o rosto totalmente visível</li>
+            <li>Utilize fotos atuais</li>
+          </ul>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title"><span class="num">5</span>Rosto e características naturais</div>
+          <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Sem maquiagem, com boa iluminação natural</p>
+          <div class="upload-grid">
+<div class="upload-box" data-photo-slot="cromatico-rosto">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="cromatico-rosto" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
+              <div class="label">Rosto sem maquiagem</div>
+            </div>
+<div class="upload-box" data-photo-slot="cromatico-olhos">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="cromatico-olhos" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
+              <div class="label">Olhos (aproximação)</div>
+            </div>
+<div class="upload-box" data-photo-slot="cromatico-cabelo">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="cromatico-cabelo" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
+              <div class="label">Cabelo natural</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title"><span class="num">6</span>Blusas para contraste de cor</div>
+          <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Fotografe-se com cada blusa, mesma pose e iluminação</p>
+          <div class="upload-grid">
+<div class="upload-box" data-photo-slot="cromatico-blusa-branca">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="cromatico-blusa-branca" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
+              <div class="label">Blusa branca</div>
+            </div>
+<div class="upload-box" data-photo-slot="cromatico-blusa-preta">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="cromatico-blusa-preta" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
+              <div class="label">Blusa preta</div>
+            </div>
+<div class="upload-box" data-photo-slot="cromatico-blusa-cinza">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="cromatico-blusa-cinza" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
+              <div class="label">Blusa cinza</div>
+            </div>
+<div class="upload-box" data-photo-slot="cromatico-blusa-bege">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="cromatico-blusa-bege" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
+              <div class="label">Blusa bege ou off-white</div>
+            </div>
+          </div>
         </div>
 
         <button class="btn-primary" data-goto="cliente-inicio" id="enviar-fotos-btn">Enviar Fotos</button>
@@ -3002,7 +3274,7 @@
   // ===================================================================
 
   let currentUser = null;
-  const TOTAL_STEPS = 8;
+  const TOTAL_STEPS = 9;
   let authResolved = false;
 
   // ---- Load a user's profile (role + nome) from Firestore ----
@@ -3693,6 +3965,22 @@
         { field: 'preferenciaCompra', label: 'Preferência de compra' },
         { field: 'resultadoExcelente', label: 'Resultado excelente esperado' },
         { field: 'informacaoAdicional', label: 'Informação adicional' }
+      ]
+    },
+    {
+      title: 'Direcionamento Cromático', step: 9,
+      fields: [
+        { field: 'cabeloCorNatural', label: 'Cabelo na cor natural?' },
+        { field: 'cabeloCorAtual', label: 'Cor utilizada atualmente' },
+        { field: 'realizaColoracaoCabelo', label: 'Realiza coloração/luzes/descoloração?' },
+        { field: 'descricaoColoracaoCabelo', label: 'Descrição da coloração' },
+        { field: 'corQueValoriza', label: 'Cor de roupa que mais valoriza' },
+        { field: 'corQueEvitaCromatico', label: 'Cor que evita ou não combina' },
+        { field: 'objetivoAnaliseCores', label: 'Objetivo da análise de cores' },
+        { field: 'usaMaquiagem', label: 'Usa maquiagem?' },
+        { field: 'corMaquiagemPreferida', label: 'Cor de maquiagem preferida' },
+        { field: 'tomNaturalCabelo', label: 'Tom natural do cabelo' },
+        { field: 'corOlhos', label: 'Cor dos olhos' }
       ]
     }
   ];
