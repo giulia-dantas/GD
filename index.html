@@ -5045,6 +5045,8 @@
     }
 
     // ---- COVER PAGE ----
+    const CX = 105; // exact center of A4 (210mm / 2)
+
     pdf.setFillColor(...OFFWHITE);
     pdf.rect(0, 0, W, H, 'F');
 
@@ -5055,30 +5057,30 @@
     // Bottom gold bar
     pdf.rect(0, H - 4, W, 4, 'F');
 
-    // GD monogram (text-based, since we can't load images easily)
+    // GD monogram
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(48);
     pdf.setTextColor(...CHAMPAGNE);
-    pdf.text('GD', W / 2, 70, { align: 'center' });
+    pdf.text('GD', CX, 70, { align: 'center' });
 
     // Studio name
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(11);
     pdf.setTextColor(...SOFT);
     pdf.setCharSpace(3);
-    pdf.text('GIULIA DANTAS', W / 2, 82, { align: 'center' });
+    pdf.text('GIULIA DANTAS', CX, 82, { align: 'center' });
     pdf.setCharSpace(0);
 
     // Hairline
     pdf.setDrawColor(...CHAMPAGNE);
     pdf.setLineWidth(0.4);
-    pdf.line(W / 2 - 20, 87, W / 2 + 20, 87);
+    pdf.line(CX - 20, 87, CX + 20, 87);
 
     // Document title
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(22);
     pdf.setTextColor(...GRAPHITE);
-    pdf.text('Dossiê de Estilo', W / 2, 110, { align: 'center' });
+    pdf.text('Dossie de Estilo', CX, 110, { align: 'center' });
 
     // Get client name — fallback to the materiais screen title if selectedClienteNome is null
     const clienteNomePDF = selectedClienteNome ||
@@ -5090,26 +5092,25 @@
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(14);
     pdf.setTextColor(...SOFT);
-    pdf.text(clienteNomePDF, W / 2, 120, { align: 'center' });
+    pdf.text(clienteNomePDF, CX, 120, { align: 'center' });
 
     // Date
     const hoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
     pdf.setFontSize(10);
-    pdf.text(hoje, W / 2, 130, { align: 'center' });
+    pdf.text(hoje, CX, 130, { align: 'center' });
 
-    // Decorative diamond (drawn, not text — avoids Unicode issues)
+    // Decorative diamond
     pdf.setFillColor(...CHAMPAGNE);
     pdf.setDrawColor(...CHAMPAGNE);
-    // Draw a small diamond shape using lines
-    const cx = W / 2, cy = 152, ds = 5;
-    pdf.triangle(cx, cy - ds, cx + ds, cy, cx, cy + ds, 'F');
-    pdf.triangle(cx, cy - ds, cx - ds, cy, cx, cy + ds, 'F');
+    const cy = 152, ds = 5;
+    pdf.triangle(CX, cy - ds, CX + ds, cy, CX, cy + ds, 'F');
+    pdf.triangle(CX, cy - ds, CX - ds, cy, CX, cy + ds, 'F');
 
     // Consultoria de Imagem & Estilo
     pdf.setFontSize(9);
     pdf.setTextColor(...SOFT);
     pdf.setCharSpace(1.5);
-    pdf.text('CONSULTORIA DE IMAGEM  &  ESTILO', W / 2, 163, { align: 'center' });
+    pdf.text('CONSULTORIA DE IMAGEM  &  ESTILO', CX, 163, { align: 'center' });
     pdf.setCharSpace(0);
 
     // ---- CONTENT PAGES ----
