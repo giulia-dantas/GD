@@ -5017,9 +5017,20 @@
       } catch(err){ /* ignore */ }
     }
 
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const W = pdf.internal.pageSize.getWidth();
-    const H = pdf.internal.pageSize.getHeight();
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', putOnlyUsedFonts: true });
+    const W = 210; // A4 width in mm — fixed, not computed
+    const H = 297; // A4 height in mm — fixed, not computed
+    const CX = W / 2; // 105mm
+
+    // Helper: draw centered text
+    function ctext(text, y, fontSize, fontStyle, color){
+      pdf.setFont('helvetica', fontStyle || 'normal');
+      pdf.setFontSize(fontSize || 11);
+      pdf.setTextColor(...(color || GRAPHITE));
+      const strW = pdf.getStringUnitWidth(text) * fontSize / pdf.internal.scaleFactor;
+      const x = CX - strW / 2;
+      pdf.text(text, x, y);
+    }
 
     // ---- Color palette ----
     const CHAMPAGNE = [200, 164, 106];   // #C8A46A
@@ -5045,8 +5056,6 @@
     }
 
     // ---- COVER PAGE ----
-    const CX = 105; // exact center of A4 (210mm / 2)
-
     pdf.setFillColor(...OFFWHITE);
     pdf.rect(0, 0, W, H, 'F');
 
@@ -5058,60 +5067,49 @@
     pdf.rect(0, H - 4, W, 4, 'F');
 
     // GD monogram
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(48);
-    pdf.setTextColor(...CHAMPAGNE);
-    pdf.text('GD', CX, 70, { align: 'center' });
+    ctext('GD', 72, 48, 'bold', CHAMPAGNE);
 
     // Studio name
     pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(11);
+    pdf.setFontSize(10);
     pdf.setTextColor(...SOFT);
-    pdf.setCharSpace(3);
-    pdf.text('GIULIA DANTAS', CX, 82, { align: 'center' });
-    pdf.setCharSpace(0);
+    const giuliaText = 'G  I  U  L  I  A     D  A  N  T  A  S';
+    const giuliaW = pdf.getStringUnitWidth(giuliaText) * 10 / pdf.internal.scaleFactor;
+    pdf.text(giuliaText, CX - giuliaW / 2, 82);
 
-    // Hairline
+    // Hairline under name
     pdf.setDrawColor(...CHAMPAGNE);
     pdf.setLineWidth(0.4);
-    pdf.line(CX - 20, 87, CX + 20, 87);
+    pdf.line(CX - 22, 87, CX + 22, 87);
 
     // Document title
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(22);
-    pdf.setTextColor(...GRAPHITE);
-    pdf.text('Dossie de Estilo', CX, 110, { align: 'center' });
+    ctext('Dossie de Estilo', 112, 22, 'bold', GRAPHITE);
 
-    // Get client name — fallback to the materiais screen title if selectedClienteNome is null
+    // Client name
     const clienteNomePDF = selectedClienteNome ||
       (document.getElementById('materiais-cliente-nome') && document.getElementById('materiais-cliente-nome').textContent !== 'Selecione uma cliente'
         ? document.getElementById('materiais-cliente-nome').textContent
         : 'Cliente');
-
-    // Client name
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(14);
-    pdf.setTextColor(...SOFT);
-    pdf.text(clienteNomePDF, CX, 120, { align: 'center' });
+    ctext(clienteNomePDF, 122, 14, 'normal', SOFT);
 
     // Date
     const hoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
-    pdf.setFontSize(10);
-    pdf.text(hoje, CX, 130, { align: 'center' });
+    ctext(hoje, 132, 10, 'normal', SOFT);
 
     // Decorative diamond
     pdf.setFillColor(...CHAMPAGNE);
     pdf.setDrawColor(...CHAMPAGNE);
-    const cy = 152, ds = 5;
-    pdf.triangle(CX, cy - ds, CX + ds, cy, CX, cy + ds, 'F');
-    pdf.triangle(CX, cy - ds, CX - ds, cy, CX, cy + ds, 'F');
+    const dcy = 152, ds = 5;
+    pdf.triangle(CX, dcy - ds, CX + ds, dcy, CX, dcy + ds, 'F');
+    pdf.triangle(CX, dcy - ds, CX - ds, dcy, CX, dcy + ds, 'F');
 
-    // Consultoria de Imagem & Estilo
-    pdf.setFontSize(9);
+    // Bottom tagline
+    const tagline = 'C O N S U L T O R I A   D E   I M A G E M   &   E S T I L O';
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(8);
     pdf.setTextColor(...SOFT);
-    pdf.setCharSpace(1.5);
-    pdf.text('CONSULTORIA DE IMAGEM  &  ESTILO', CX, 163, { align: 'center' });
-    pdf.setCharSpace(0);
+    const tagW = pdf.getStringUnitWidth(tagline) * 8 / pdf.internal.scaleFactor;
+    pdf.text(tagline, CX - tagW / 2, 163);
 
     // ---- CONTENT PAGES ----
     addPage();
@@ -5137,7 +5135,7 @@
 
       // Section title
       pdf.setFillColor(...CHAMPAGNE);
-      pdf.rect(14, y - 1, W - 28, 8, 'F');
+      pdf.rect(14, y - 1, 182, 8, 'F'); // 210 - 28 = 182mm
       pdf.setFont('helvetica', 'bold');
       pdf.setFontSize(10);
       pdf.setTextColor(...WHITE);
@@ -5181,7 +5179,7 @@
       pdf.setFontSize(8);
       pdf.setTextColor(...SOFT);
       pdf.text('Giulia Dantas — Consultoria de Imagem & Estilo', 14, H - 7);
-      pdf.text('Página ' + p + ' de ' + totalPages, W - 14, H - 7, { align: 'right' });
+      pdf.text('Pagina ' + p + ' de ' + totalPages, 196, H - 7, { align: 'right' });
     }
 
     // Save
