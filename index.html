@@ -1207,6 +1207,43 @@
     top:5px;
   }
 
+  .ciencia-label{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    cursor:pointer;
+    padding:14px 16px;
+    background:var(--card);
+    border:1.5px solid var(--champagne);
+    border-radius:var(--radius);
+    transition: background .2s ease, border-color .2s ease;
+  }
+
+  .ciencia-label:active{
+    background:var(--champagne-light);
+  }
+
+  .ciencia-label input[type="checkbox"]{
+    width:20px;
+    height:20px;
+    flex-shrink:0;
+    accent-color:var(--champagne);
+    margin-top:1px;
+    cursor:pointer;
+  }
+
+  .ciencia-label span{
+    font-family:'Manrope', sans-serif;
+    font-size:13px;
+    color:var(--graphite);
+    line-height:1.6;
+  }
+
+  .ciencia-label.checked{
+    background:var(--champagne-light);
+    border-color:var(--champagne);
+  }
+
   .form-label{
     font-size:11px;
     letter-spacing:0.1em;
@@ -2562,7 +2599,25 @@
         <div class="page-title">Direcionamento Cromático</div>
         <div class="page-sub">Informações para identificar as cores que mais harmonizam com você</div>
 
-        <div class="form-section" id="anamnese-9-form">
+        <div class="photo-tips-card" style="background:rgba(200,164,106,0.07); border-color:rgba(200,164,106,0.3); margin-bottom:20px;">
+          <div class="photo-tips-title" style="color:var(--champagne); margin-bottom:12px;">Ciência sobre o Direcionamento Cromático Online</div>
+          <p style="font-family:'Manrope', sans-serif; font-size:13px; color:var(--graphite); line-height:1.7; margin-bottom:14px;">
+            O Direcionamento Cromático Online é realizado a partir das fotos e informações fornecidas durante a análise. Para maior precisão do resultado, é fundamental seguir corretamente as orientações de iluminação, posicionamento, ausência de maquiagem, filtros e demais etapas indicadas no aplicativo.
+          </p>
+          <p style="font-family:'Manrope', sans-serif; font-size:13px; color:var(--graphite); line-height:1.7; margin-bottom:20px;">
+            Por se tratar de uma avaliação realizada por meio digital, fatores como iluminação, configurações da câmera e reprodução de cores na tela podem influenciar a percepção das tonalidades. Por isso, o direcionamento obtido pode apresentar diferenças em relação à análise de coloração pessoal realizada presencialmente.
+          </p>
+          <label class="ciencia-label" id="ciencia-cromatico-label">
+            <input type="checkbox" id="ciencia-cromatico-checkbox">
+            <span>Li as orientações, comprometo-me a seguir as etapas indicadas e estou ciente das características e limitações do Direcionamento Cromático Online.</span>
+          </label>
+        </div>
+
+        <div id="anamnese-9-bloqueado" style="text-align:center; padding:16px 0; font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft);">
+          Marque a caixa acima para continuar.
+        </div>
+
+        <div class="form-section" id="anamnese-9-form" style="display:none;">
           <label class="form-label">Seu cabelo está na cor natural atualmente?</label>
           <div class="radio-row" data-field="cabeloCorNatural">
             <div class="radio-opt"><div class="dot-circle"></div>Sim</div>
@@ -2624,7 +2679,7 @@
           </div>
         </div>
 
-        <div class="step-nav">
+        <div class="step-nav" id="anamnese-9-stepnav" style="display:none;">
             <button class="btn-secondary" data-goto="anamnese-8">Voltar</button>
             <button class="btn-primary" data-goto="cliente-inicio" data-save-step="9" data-finish-anamnese="true">Concluir Anamnese</button>
           </div>
@@ -3075,6 +3130,29 @@
   });
 
   goTo(DEFAULT_SCREEN);
+
+  // ---- Ciência Cromático: show/hide form based on checkbox ----
+  document.addEventListener('change', function(e){
+    var cb = e.target.closest('#ciencia-cromatico-checkbox');
+    if(!cb) return;
+
+    var form = document.getElementById('anamnese-9-form');
+    var nav = document.getElementById('anamnese-9-stepnav');
+    var bloqueado = document.getElementById('anamnese-9-bloqueado');
+    var label = document.getElementById('ciencia-cromatico-label');
+
+    if(cb.checked){
+      if(form) form.style.display = '';
+      if(nav) nav.style.display = '';
+      if(bloqueado) bloqueado.style.display = 'none';
+      if(label) label.classList.add('checked');
+    } else {
+      if(form) form.style.display = 'none';
+      if(nav) nav.style.display = 'none';
+      if(bloqueado) bloqueado.style.display = '';
+      if(label) label.classList.remove('checked');
+    }
+  });
 
   if(DEFAULT_SCREEN === 'brand'){
     setTimeout(function(){
@@ -3723,6 +3801,20 @@
       const m = /^anamnese-(\d)$/.exec(screenId);
       if(m){
         loadAnamneseStep(parseInt(m[1], 10));
+
+        // Reset ciencia checkbox on step 9
+        if(m[1] === '9'){
+          const cb = document.getElementById('ciencia-cromatico-checkbox');
+          const form = document.getElementById('anamnese-9-form');
+          const nav = document.getElementById('anamnese-9-stepnav');
+          const bloqueado = document.getElementById('anamnese-9-bloqueado');
+          const label = document.getElementById('ciencia-cromatico-label');
+          if(cb) cb.checked = false;
+          if(form) form.style.display = 'none';
+          if(nav) nav.style.display = 'none';
+          if(bloqueado) bloqueado.style.display = '';
+          if(label) label.classList.remove('checked');
+        }
       }
       if(screenId === 'cliente-inicio'){
         refreshClienteProgress();
