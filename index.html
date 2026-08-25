@@ -5080,27 +5080,36 @@
     pdf.setTextColor(...GRAPHITE);
     pdf.text('Dossiê de Estilo', W / 2, 110, { align: 'center' });
 
+    // Get client name — fallback to the materiais screen title if selectedClienteNome is null
+    const clienteNomePDF = selectedClienteNome ||
+      (document.getElementById('materiais-cliente-nome') && document.getElementById('materiais-cliente-nome').textContent !== 'Selecione uma cliente'
+        ? document.getElementById('materiais-cliente-nome').textContent
+        : 'Cliente');
+
     // Client name
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(14);
     pdf.setTextColor(...SOFT);
-    pdf.text(selectedClienteNome || 'Cliente', W / 2, 120, { align: 'center' });
+    pdf.text(clienteNomePDF, W / 2, 120, { align: 'center' });
 
     // Date
     const hoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
     pdf.setFontSize(10);
     pdf.text(hoje, W / 2, 130, { align: 'center' });
 
-    // Decorative seal
-    pdf.setFontSize(28);
-    pdf.setTextColor(...CHAMPAGNE);
-    pdf.text('✦', W / 2, 158, { align: 'center' });
+    // Decorative diamond (drawn, not text — avoids Unicode issues)
+    pdf.setFillColor(...CHAMPAGNE);
+    pdf.setDrawColor(...CHAMPAGNE);
+    // Draw a small diamond shape using lines
+    const cx = W / 2, cy = 152, ds = 5;
+    pdf.triangle(cx, cy - ds, cx + ds, cy, cx, cy + ds, 'F');
+    pdf.triangle(cx, cy - ds, cx - ds, cy, cx, cy + ds, 'F');
 
     // Consultoria de Imagem & Estilo
     pdf.setFontSize(9);
     pdf.setTextColor(...SOFT);
     pdf.setCharSpace(1.5);
-    pdf.text('CONSULTORIA DE IMAGEM & ESTILO', W / 2, 168, { align: 'center' });
+    pdf.text('CONSULTORIA DE IMAGEM  &  ESTILO', W / 2, 163, { align: 'center' });
     pdf.setCharSpace(0);
 
     // ---- CONTENT PAGES ----
@@ -5175,7 +5184,7 @@
     }
 
     // Save
-    const nomeArquivo = 'dossie-' + (selectedClienteNome || 'cliente').toLowerCase().replace(/\s+/g, '-') + '.pdf';
+    const nomeArquivo = 'dossie-' + clienteNomePDF.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '.pdf';
     pdf.save(nomeArquivo);
   }
 
