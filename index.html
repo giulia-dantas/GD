@@ -1585,6 +1585,8 @@
     object-fit:contain;
   }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
 
@@ -2875,7 +2877,7 @@
         </div>
 
         <button class="btn-secondary" data-goto="editar-cliente">Editar Dados da Cliente</button>
-        <button class="download-btn" disabled style="opacity:0.5; cursor:default;" title="Em breve">⬇ Exportação em PDF — em breve</button>
+        <button class="download-btn exportar-pdf-btn">⬇ Baixar Dossiê em PDF</button>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
@@ -2941,7 +2943,7 @@
 
         <div id="anamnese-completa-content"></div>
 
-        <button class="download-btn" disabled style="opacity:0.5; cursor:default;" title="Em breve">⬇ Exportação em PDF — em breve</button>
+        <button class="download-btn exportar-pdf-btn">⬇ Baixar Dossiê em PDF</button>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
       <div class="bottomnav">
@@ -4988,6 +4990,214 @@
       listEl.innerHTML = '<p style="font-family:\'Cormorant Garamond\', serif; font-size:14px; font-style:italic; color:var(--vinho); text-align:center; padding:12px 0;">Erro ao carregar histórico.</p>';
     }
   }
+
+  // ===================================================================
+  // EXPORTAR DOSSIÊ EM PDF
+  // ===================================================================
+
+  async function gerarDossierPDF(){
+    if(!selectedClienteUid){
+      alert('Selecione uma cliente primeiro.');
+      return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    if(!jsPDF){
+      alert('Biblioteca de PDF não carregada. Verifique sua conexão e tente novamente.');
+      return;
+    }
+
+    // Fetch all step data
+    const stepsData = {};
+    for(let i = 1; i <= TOTAL_STEPS; i++){
+      try{
+        const stepRef = doc(db, 'clientes', selectedClienteUid, 'anamnese', 'step' + i);
+        const snap = await getDoc(stepRef);
+        if(snap.exists()) stepsData[i] = snap.data();
+      } catch(err){ /* ignore */ }
+    }
+
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const W = pdf.internal.pageSize.getWidth();
+    const H = pdf.internal.pageSize.getHeight();
+
+    // ---- Color palette ----
+    const CHAMPAGNE = [200, 164, 106];   // #C8A46A
+    const GRAPHITE  = [51,  51,  51];    // #333
+    const SOFT      = [120, 113, 108];   // graphite-soft
+    const OFFWHITE  = [247, 244, 239];   // #F7F4EF
+    const WHITE     = [255, 255, 255];
+
+    let y = 0;
+
+    function addPage(){
+      pdf.addPage();
+      y = 20;
+      // Subtle top bar
+      pdf.setFillColor(...CHAMPAGNE);
+      pdf.rect(0, 0, W, 3, 'F');
+    }
+
+    function checkPageBreak(needed){
+      if(y + needed > H - 20){
+        addPage();
+      }
+    }
+
+    // ---- COVER PAGE ----
+    pdf.setFillColor(...OFFWHITE);
+    pdf.rect(0, 0, W, H, 'F');
+
+    // Top gold bar
+    pdf.setFillColor(...CHAMPAGNE);
+    pdf.rect(0, 0, W, 4, 'F');
+
+    // Bottom gold bar
+    pdf.rect(0, H - 4, W, 4, 'F');
+
+    // GD monogram (text-based, since we can't load images easily)
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(48);
+    pdf.setTextColor(...CHAMPAGNE);
+    pdf.text('GD', W / 2, 70, { align: 'center' });
+
+    // Studio name
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(11);
+    pdf.setTextColor(...SOFT);
+    pdf.setCharSpace(3);
+    pdf.text('GIULIA DANTAS', W / 2, 82, { align: 'center' });
+    pdf.setCharSpace(0);
+
+    // Hairline
+    pdf.setDrawColor(...CHAMPAGNE);
+    pdf.setLineWidth(0.4);
+    pdf.line(W / 2 - 20, 87, W / 2 + 20, 87);
+
+    // Document title
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(22);
+    pdf.setTextColor(...GRAPHITE);
+    pdf.text('Dossiê de Estilo', W / 2, 110, { align: 'center' });
+
+    // Client name
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(14);
+    pdf.setTextColor(...SOFT);
+    pdf.text(selectedClienteNome || 'Cliente', W / 2, 120, { align: 'center' });
+
+    // Date
+    const hoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+    pdf.setFontSize(10);
+    pdf.text(hoje, W / 2, 130, { align: 'center' });
+
+    // Decorative seal
+    pdf.setFontSize(28);
+    pdf.setTextColor(...CHAMPAGNE);
+    pdf.text('✦', W / 2, 158, { align: 'center' });
+
+    // Consultoria de Imagem & Estilo
+    pdf.setFontSize(9);
+    pdf.setTextColor(...SOFT);
+    pdf.setCharSpace(1.5);
+    pdf.text('CONSULTORIA DE IMAGEM & ESTILO', W / 2, 168, { align: 'center' });
+    pdf.setCharSpace(0);
+
+    // ---- CONTENT PAGES ----
+    addPage();
+
+    for(const section of ANAMNESE_SECTIONS){
+      const data = stepsData[section.step];
+
+      // Collect rows with content
+      const rows = [];
+      for(const f of section.fields){
+        if(!data) continue;
+        const value = data[f.field];
+        if(value === undefined || value === null || value === '') continue;
+        if(Array.isArray(value) && value.length === 0) continue;
+
+        const displayValue = Array.isArray(value) ? value.join(', ') : String(value);
+        rows.push([f.label, displayValue]);
+      }
+
+      if(rows.length === 0) continue;
+
+      checkPageBreak(20 + rows.length * 10);
+
+      // Section title
+      pdf.setFillColor(...CHAMPAGNE);
+      pdf.rect(14, y - 1, W - 28, 8, 'F');
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10);
+      pdf.setTextColor(...WHITE);
+      pdf.text(section.title.toUpperCase(), 18, y + 4.5);
+      y += 12;
+
+      // AutoTable for the rows
+      pdf.autoTable({
+        startY: y,
+        head: [],
+        body: rows,
+        theme: 'plain',
+        styles: {
+          font: 'helvetica',
+          fontSize: 9.5,
+          textColor: GRAPHITE,
+          cellPadding: { top: 3, right: 4, bottom: 3, left: 4 },
+          lineColor: [230, 225, 218],
+          lineWidth: 0.3,
+        },
+        columnStyles: {
+          0: { fontStyle: 'bold', cellWidth: 65, textColor: SOFT },
+          1: { cellWidth: 'auto' },
+        },
+        alternateRowStyles: { fillColor: [250, 248, 244] },
+        margin: { left: 14, right: 14 },
+        tableLineColor: [230, 225, 218],
+        tableLineWidth: 0.3,
+      });
+
+      y = pdf.lastAutoTable.finalY + 10;
+    }
+
+    // ---- FOOTER on each page ----
+    const totalPages = pdf.internal.getNumberOfPages();
+    for(let p = 2; p <= totalPages; p++){
+      pdf.setPage(p);
+      pdf.setFillColor(...CHAMPAGNE);
+      pdf.rect(0, H - 3, W, 3, 'F');
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(8);
+      pdf.setTextColor(...SOFT);
+      pdf.text('Giulia Dantas — Consultoria de Imagem & Estilo', 14, H - 7);
+      pdf.text('Página ' + p + ' de ' + totalPages, W - 14, H - 7, { align: 'right' });
+    }
+
+    // Save
+    const nomeArquivo = 'dossie-' + (selectedClienteNome || 'cliente').toLowerCase().replace(/\s+/g, '-') + '.pdf';
+    pdf.save(nomeArquivo);
+  }
+
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('.exportar-pdf-btn');
+    if(!btn) return;
+
+    btn.classList.add('is-loading');
+    btn.textContent = 'Gerando PDF…';
+
+    gerarDossierPDF()
+      .then(function(){
+        btn.classList.remove('is-loading');
+        btn.textContent = '⬇ Baixar Dossiê em PDF';
+      })
+      .catch(function(err){
+        console.error('GD: erro ao gerar PDF', err);
+        btn.classList.remove('is-loading');
+        btn.textContent = '⬇ Baixar Dossiê em PDF';
+        alert('Erro ao gerar o PDF. (' + (err.message || 'erro') + ')');
+      });
+  });
 </script>
 
 </body>
