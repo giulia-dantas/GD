@@ -1244,6 +1244,18 @@
     border-color:var(--champagne);
   }
 
+  .outro-input{
+    margin-top:-2px !important;
+    border-radius: var(--radius) !important;
+    font-size:13px;
+    animation: fadeIn .2s ease;
+  }
+
+  @keyframes fadeIn{
+    from{ opacity:0; transform:translateY(-4px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
   .form-label{
     font-size:11px;
     letter-spacing:0.1em;
@@ -2239,6 +2251,7 @@
             <div class="chip">Melhorar minha imagem pessoal</div>
             <div class="chip">Outro</div>
           </div>
+          <input class="input-field outro-input" type="text" data-field="melhoriasOutro" id="outro-melhorias" placeholder="O que mais você gostaria de melhorar?" style="display:none; margin-top:-6px;">
         </div>
 
 
@@ -2286,6 +2299,7 @@
             <div class="chip">Aposentada</div>
             <div class="chip">Outro</div>
           </div>
+          <input class="input-field outro-input" type="text" data-field="rotinaOutro" id="outro-rotina" placeholder="Como é sua rotina? Descreva..." style="display:none; margin-top:-6px;">
 
           <label class="form-label">Quais ambientes você frequenta com mais frequência?</label>
           <div class="chip-row" data-field="ambientes">
@@ -2299,6 +2313,7 @@
             <div class="chip">Eventos corporativos</div>
             <div class="chip">Outro</div>
           </div>
+          <input class="input-field outro-input" type="text" data-field="ambientesOutro" id="outro-ambientes" placeholder="Quais outros ambientes você frequenta?" style="display:none; margin-top:-6px;">
         </div>
 
 
@@ -2368,6 +2383,7 @@
             <div class="chip">Marcante</div>
             <div class="chip">Outro</div>
           </div>
+          <input class="input-field outro-input" type="text" data-field="percepcaoDesejadaOutro" id="outro-percepcaoDesejada" placeholder="Como mais você gostaria de ser percebida?" style="display:none; margin-top:-6px;">
 
           <label class="form-label">Existe alguma pessoa cuja imagem ou estilo você admira?</label>
           <textarea class="input-field textarea" data-field="pessoaAdmirada" placeholder="Escreva livremente..."></textarea>
@@ -2689,6 +2705,7 @@
             <div class="radio-opt"><div class="dot-circle"></div>Mais presença e impacto visual</div>
             <div class="radio-opt"><div class="dot-circle"></div>Outro</div>
           </div>
+          <input class="input-field outro-input" type="text" data-field="objetivoAnaliseCoresOutro" id="outro-objetivoAnaliseCores" placeholder="Qual é o seu objetivo? Descreva..." style="display:none; margin-top:-6px;">
 
           <label class="form-label">Você costuma utilizar maquiagem?</label>
           <div class="radio-row" data-field="usaMaquiagem">
@@ -2717,6 +2734,7 @@
             <div class="radio-opt"><div class="dot-circle"></div>Pretos</div>
             <div class="radio-opt"><div class="dot-circle"></div>Outro</div>
           </div>
+          <input class="input-field outro-input" type="text" data-field="corOlhosOutro" id="outro-corOlhos" placeholder="Como você descreveria a cor dos seus olhos?" style="display:none; margin-top:-6px;">
         </div>
 
         <div class="step-nav" id="anamnese-9-stepnav" style="display:none;">
@@ -3202,6 +3220,49 @@
     }
   });
 
+  // ---- "Outro" chip/radio: show text input ----
+  document.addEventListener('click', function(e){
+    // Chip "Outro"
+    var chip = e.target.closest('.chip');
+    if(chip && chip.textContent.trim() === 'Outro'){
+      var chipRow = chip.closest('.chip-row[data-field]');
+      if(!chipRow) return;
+      var field = chipRow.getAttribute('data-field');
+      var input = document.getElementById('outro-' + field);
+      if(!input) return;
+      // chip.classList.toggle('sel') already handled by existing chip handler
+      // Show/hide based on whether it will be selected after toggle
+      setTimeout(function(){
+        input.style.display = chip.classList.contains('sel') ? '' : 'none';
+        if(chip.classList.contains('sel')) input.focus();
+      }, 0);
+      return;
+    }
+
+    // Radio "Outro"
+    var radio = e.target.closest('.radio-opt');
+    if(radio && radio.textContent.trim() === 'Outro'){
+      var radioRow = radio.closest('.radio-row[data-field]');
+      if(!radioRow) return;
+      var fieldR = radioRow.getAttribute('data-field');
+      var inputR = document.getElementById('outro-' + fieldR);
+      if(!inputR) return;
+      inputR.style.display = '';
+      inputR.focus();
+      return;
+    }
+
+    // If any other radio in the same row is clicked, hide the outro input
+    var radioOther = e.target.closest('.radio-opt');
+    if(radioOther && radioOther.textContent.trim() !== 'Outro'){
+      var radioRowOther = radioOther.closest('.radio-row[data-field]');
+      if(!radioRowOther) return;
+      var fieldOther = radioRowOther.getAttribute('data-field');
+      var inputOther = document.getElementById('outro-' + fieldOther);
+      if(inputOther) inputOther.style.display = 'none';
+    }
+  });
+
   // ---- Cabelo natural/pintado: show conditional fields ----
   document.addEventListener('click', function(e){
     var radio = e.target.closest('#cabelo-natural-radio .radio-opt');
@@ -3608,6 +3669,26 @@
             setFieldValue(form, field, data[field]);
           }
         });
+      });
+
+      // Restore "Outro" input visibility for chip-rows and radio-rows
+      const OUTRO_CHIP_FIELDS = ['melhorias','rotina','ambientes','percepcaoDesejada'];
+      const OUTRO_RADIO_FIELDS = ['objetivoAnaliseCores','corOlhos'];
+
+      OUTRO_CHIP_FIELDS.forEach(function(field){
+        const val = data[field];
+        const input = document.getElementById('outro-' + field);
+        if(input && Array.isArray(val) && val.indexOf('Outro') !== -1){
+          input.style.display = '';
+        }
+      });
+
+      OUTRO_RADIO_FIELDS.forEach(function(field){
+        const val = data[field];
+        const input = document.getElementById('outro-' + field);
+        if(input && val === 'Outro'){
+          input.style.display = '';
+        }
       });
 
       // Restore conditional hair color fields for step 9
@@ -4085,14 +4166,17 @@
       title: 'Objetivo da Consultoria', step: 2,
       fields: [
         { field: 'motivacao', label: 'Motivação' },
-        { field: 'melhorias', label: 'O que deseja melhorar', type: 'tags' }
+        { field: 'melhorias', label: 'O que deseja melhorar', type: 'tags' },
+        { field: 'melhoriaOutro', label: 'Outro (melhorias)' }
       ]
     },
     {
       title: 'Rotina', step: 3,
       fields: [
         { field: 'rotina', label: 'Rotina atual', type: 'tags' },
-        { field: 'ambientes', label: 'Ambientes frequentados', type: 'tags' }
+        { field: 'rotinaOutro', label: 'Outra rotina' },
+        { field: 'ambientes', label: 'Ambientes frequentados', type: 'tags' },
+        { field: 'ambientesOutro', label: 'Outro ambiente' }
       ]
     },
     {
@@ -4100,6 +4184,7 @@
       fields: [
         { field: 'estiloAtual', label: 'Estilo atual', type: 'tags' },
         { field: 'percepcaoDesejada', label: 'Como gostaria de ser percebida', type: 'tags' },
+        { field: 'percepcaoDesejadaOutro', label: 'Outra percepção desejada' },
         { field: 'pessoaAdmirada', label: 'Pessoa cujo estilo admira' }
       ]
     },
@@ -4151,10 +4236,12 @@
         { field: 'corQueValoriza', label: 'Cor de roupa que mais valoriza' },
         { field: 'corQueEvitaCromatico', label: 'Cor que evita ou não combina' },
         { field: 'objetivoAnaliseCores', label: 'Objetivo da análise de cores' },
+        { field: 'objetivoAnaliseCoresOutro', label: 'Outro objetivo (análise de cores)' },
         { field: 'usaMaquiagem', label: 'Usa maquiagem?' },
         { field: 'corMaquiagemPreferida', label: 'Cor de maquiagem preferida' },
         { field: 'tomNaturalCabelo', label: 'Tom natural do cabelo' },
-        { field: 'corOlhos', label: 'Cor dos olhos' }
+        { field: 'corOlhos', label: 'Cor dos olhos' },
+        { field: 'corOlhosOutro', label: 'Outra cor de olhos' }
       ]
     }
   ];
