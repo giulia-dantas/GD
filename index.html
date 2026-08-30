@@ -1157,6 +1157,11 @@
     color:var(--vinho);
   }
 
+  .category-header.tone-dossie .category-icon{
+    background: var(--champagne);
+    color:#fff;
+  }
+
   .category-title{
     font-family:'Cormorant Garamond', serif;
     font-size:22px;
@@ -1181,6 +1186,10 @@
 
   .category-divider.tone-cromatico{
     background: linear-gradient(to right, var(--vinho), transparent);
+  }
+
+  .category-divider.tone-dossie{
+    background: linear-gradient(to right, var(--graphite), transparent);
   }
 
   .photo-tips-card{
@@ -1620,6 +1629,29 @@
   .ficha-photo-tile.dossie-chosen .ficha-photo-star{
     background:var(--champagne);
     color:var(--graphite);
+  }
+
+  /* ===== Cartela Digital (Cliente) — Fase 4 ===== */
+  .cartela-swatch-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:14px 10px;
+  }
+
+  .cartela-swatch{ text-align:center; }
+
+  .cartela-swatch-circle{
+    width:100%;
+    aspect-ratio:1/1;
+    border-radius:50%;
+    border:var(--hairline);
+    margin-bottom:6px;
+  }
+
+  .cartela-swatch-label{
+    font-size:9.5px;
+    color:var(--graphite-soft);
+    line-height:1.3;
   }
 
   .download-btn{
@@ -2480,13 +2512,13 @@
               </div>
               <div class="status-action" id="status-action-fotos">Iniciar</div>
             </div>
-            <div class="status-item">
+            <div class="status-item" data-goto="cliente-dossie">
               <div class="status-icon" id="status-icon-dossie">○</div>
               <div>
                 <div class="status-text-title">Dossiê Final</div>
                 <div class="status-text-sub" id="status-sub-dossie">Aguardando etapas anteriores</div>
               </div>
-              <div class="status-action">—</div>
+              <div class="status-action" id="status-action-dossie">Acessar</div>
             </div>
           </div>
         </div>
@@ -2496,7 +2528,7 @@
         <div class="navitem active" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
         <div class="navitem" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
         <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-dossie" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -2543,7 +2575,7 @@
         <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
         <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
         <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-dossie" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -2595,7 +2627,7 @@
         <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
         <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
         <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-dossie" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -2657,7 +2689,7 @@
         <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
         <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
         <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-dossie" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -2730,7 +2762,7 @@
         <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
         <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
         <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-dossie" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -2789,7 +2821,7 @@
         <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
         <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
         <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-dossie" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -2839,7 +2871,7 @@
         <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
         <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
         <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-dossie" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -2886,7 +2918,7 @@
         <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
         <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
         <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-dossie" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -2953,7 +2985,7 @@
         <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
         <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
         <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-dossie" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -3077,7 +3109,7 @@
         <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
         <div class="navitem active" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
         <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-dossie" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
       </div>
     </div>
   </div>
@@ -3261,6 +3293,43 @@
           </div>
         </div>
 
+        <div class="category-divider tone-dossie"></div>
+
+        <div class="category-header tone-dossie">
+          <div class="category-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>
+          </div>
+          <div>
+            <div class="category-title">Foto para o Seu Dossiê</div>
+            <div class="category-desc">Esta fotografia poderá ser utilizada na composição do seu material personalizado.</div>
+          </div>
+        </div>
+
+        <div class="photo-tips-card">
+          <div class="photo-tips-title">Orientações importantes</div>
+          <ul class="photo-tips-list">
+            <li>Boa resolução</li>
+            <li>Boa iluminação</li>
+            <li>Sem filtros</li>
+            <li>Rosto visível</li>
+            <li>Postura natural</li>
+            <li>Preferencialmente busto ou cintura para cima</li>
+            <li>Fundo neutro quando possível</li>
+          </ul>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title"><span class="num">7</span>Foto para o dossiê</div>
+          <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Você pode enviar e substituir esta foto quando quiser</p>
+          <div class="upload-grid">
+<div class="upload-box" data-photo-slot="dossie-foto">
+              <input type="file" accept="image/*" class="upload-input" data-photo-slot="dossie-foto" hidden>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
+              <div class="label">Adicionar foto</div>
+            </div>
+          </div>
+        </div>
+
         <button class="btn-primary" data-goto="cliente-inicio" id="enviar-fotos-btn">Enviar Fotos</button>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -3268,7 +3337,110 @@
         <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
         <div class="navitem" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
         <div class="navitem active" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
-        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+        <div class="navitem" data-goto="cliente-dossie" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MEU DOSSIÊ (CLIENTE) ================= -->
+  <div class="screen-wrap" id="screen-cliente-dossie">
+    <div class="screen-label">Meu Dossiê</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+        <div class="logout-btn" data-goto="cliente-inicio" title="Voltar" style="left:16px; right:auto;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg></div>
+        
+      </div>
+      <div class="content">
+        <div class="eyebrow">Seu Material</div>
+        <div class="page-title" id="cliente-dossie-titulo">Seu Dossiê</div>
+        <div class="page-sub" id="cliente-dossie-subtitulo">Seu material ainda está sendo preparado pela consultora.</div>
+
+        <div class="stat-card" id="cliente-dossie-aguardando" style="text-align:center; padding:32px 20px;">
+          <div class="seal" style="font-size:22px; margin-bottom:12px;">✦</div>
+          <p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); line-height:1.6;">
+            Assim que sua análise estiver pronta, seu material personalizado aparecerá aqui.
+          </p>
+        </div>
+
+        <div id="cliente-dossie-liberado" hidden>
+          <div class="stat-card">
+            <div class="stat-label" style="margin-bottom:10px;">Dossiê Personalizado</div>
+            <div class="ficha-status-row">
+              <div class="label">Tipo</div>
+              <div class="ficha-info-value" id="cliente-dossie-tipo">—</div>
+            </div>
+            <div class="ficha-status-row">
+              <div class="label">Data da entrega</div>
+              <div class="ficha-info-value" id="cliente-dossie-data">—</div>
+            </div>
+            <button class="btn-primary" id="cliente-dossie-ver-btn" style="margin-top:16px;">Ver Dossiê</button>
+            <button class="btn-secondary" id="cliente-dossie-baixar-btn" style="margin-bottom:0;">Baixar PDF</button>
+          </div>
+
+          <div class="stat-card" id="cliente-dossie-cartela-card" hidden>
+            <div class="stat-label" style="margin-bottom:4px;">Seu Direcionamento Cromático</div>
+            <div class="page-title" style="font-size:24px; margin-bottom:14px;" id="cliente-dossie-cartela-nome">—</div>
+            <div class="ficha-info-grid">
+              <div class="ficha-info-item"><div class="ficha-info-label">Temperatura</div><div class="ficha-info-value" id="cliente-dossie-cartela-temperatura">—</div></div>
+              <div class="ficha-info-item"><div class="ficha-info-label">Intensidade</div><div class="ficha-info-value" id="cliente-dossie-cartela-intensidade">—</div></div>
+              <div class="ficha-info-item"><div class="ficha-info-label">Profundidade</div><div class="ficha-info-value" id="cliente-dossie-cartela-profundidade">—</div></div>
+              <div class="ficha-info-item"><div class="ficha-info-label">Contraste</div><div class="ficha-info-value" id="cliente-dossie-cartela-contraste">—</div></div>
+            </div>
+            <button class="btn-secondary" data-goto="cartela-digital" style="margin-top:16px; margin-bottom:0;">Explorar Minha Cartela</button>
+          </div>
+        </div>
+
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
+      </div>
+      <div class="bottomnav">
+        <div class="navitem" data-goto="cliente-inicio" data-nav-label="Início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Início</div>
+        <div class="navitem" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
+        <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
+        <div class="navitem active" data-goto="cliente-dossie" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MINHA CARTELA (CLIENTE) ================= -->
+  <div class="screen-wrap" id="screen-cartela-digital">
+    <div class="screen-label">Minha Cartela</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+        <div class="logout-btn" data-goto="cliente-dossie" title="Voltar" style="left:16px; right:auto;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg></div>
+        
+      </div>
+      <div class="content">
+        <div class="eyebrow">Direcionamento Cromático</div>
+        <div class="page-title" id="cartela-nome">Minha Cartela</div>
+        <div class="page-sub">Sua análise de coloração pessoal</div>
+
+        <div class="stat-card">
+          <div class="ficha-info-grid">
+            <div class="ficha-info-item"><div class="ficha-info-label">Temperatura</div><div class="ficha-info-value" id="cartela-temperatura">—</div></div>
+            <div class="ficha-info-item"><div class="ficha-info-label">Intensidade</div><div class="ficha-info-value" id="cartela-intensidade">—</div></div>
+            <div class="ficha-info-item"><div class="ficha-info-label">Profundidade</div><div class="ficha-info-value" id="cartela-profundidade">—</div></div>
+            <div class="ficha-info-item"><div class="ficha-info-label">Contraste pessoal</div><div class="ficha-info-value" id="cartela-contraste">—</div></div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:10px;">Suas Cores</div>
+          <div class="pill-row" style="margin-bottom:16px;">
+            <div class="pill active" data-cartela-cor-tab="todas">Todas</div>
+            <div class="pill" data-cartela-cor-tab="neutros">Neutros</div>
+            <div class="pill" data-cartela-cor-tab="destaques">Destaques</div>
+          </div>
+          <div class="cartela-swatch-grid" id="cartela-cores-grid"></div>
+          <p id="cartela-cores-vazio" style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:20px 0;">Sua cartela digital será disponibilizada em breve.</p>
+        </div>
+
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
     </div>
   </div>
@@ -4355,7 +4527,6 @@
     const actionFotos = document.getElementById('status-action-fotos');
     const iconDossie = document.getElementById('status-icon-dossie');
     const subDossie = document.getElementById('status-sub-dossie');
-
     let anamneseDone = 0;
     let anamneseFinished = false;
     let fotosCount = 0;
@@ -4409,17 +4580,28 @@
       if(actionFotos) actionFotos.textContent = 'Iniciar';
     }
 
-    // Dossie status
-    const stepsTotal = 3; // anamnese, fotos, dossie final
+    // Dossie status — a fonte da verdade é o campo "liberado" definido pelo Admin (Fase 3)
+    let dossieLiberado = false;
+    try{
+      const dossieSnap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_principal'));
+      if(dossieSnap.exists()) dossieLiberado = !!dossieSnap.data().liberado;
+    } catch(err){
+      console.error('GD: erro ao carregar status do dossiê', err);
+    }
+
+    const iconDossieEl = iconDossie;
+    if(dossieLiberado){
+      if(iconDossieEl){ iconDossieEl.textContent = '✓'; iconDossieEl.classList.add('done'); }
+      if(subDossie) subDossie.textContent = 'Seu material personalizado está pronto';
+    } else {
+      if(iconDossieEl){ iconDossieEl.textContent = '○'; iconDossieEl.classList.remove('done'); }
+      if(subDossie) subDossie.textContent = 'Aguardando análise da consultora';
+    }
+    const stepsTotal = 3; // anamnese, fotos, dossiê liberado
     let stepsDone = 0;
     if(anamneseFinished) stepsDone++;
     if(fotosCount > 0) stepsDone++;
-
-    if(stepsDone >= 2){
-      if(subDossie) subDossie.textContent = 'Em análise pela consultora';
-    } else {
-      if(subDossie) subDossie.textContent = 'Aguardando etapas anteriores';
-    }
+    if(dossieLiberado) stepsDone++;
 
     const pct = Math.round((stepsDone / stepsTotal) * 100);
     if(fillEl) fillEl.style.width = pct + '%';
@@ -6435,6 +6617,169 @@
     }
   });
 
+  // ===================================================================
+  // SESSÃO CLIENTE — DOSSIÊ + CARTELA DIGITAL (Fase 4)
+  // Somente leitura para a cliente. Tudo vem de documentos já
+  // controlados pelo Admin (clientes/{uid}/dossie/_principal e
+  // clientes/{uid}/interno/analiseCromatica) usando currentUser.uid,
+  // nunca selectedClienteUid — garante que cada cliente só acessa
+  // seus próprios dados. Observações internas e Análise Profissional
+  // nunca são lidas aqui.
+  // ===================================================================
+
+  async function renderClienteDossie(){
+    if(!currentUser) return;
+
+    const aguardandoEl = document.getElementById('cliente-dossie-aguardando');
+    const liberadoEl = document.getElementById('cliente-dossie-liberado');
+    const subtituloEl = document.getElementById('cliente-dossie-subtitulo');
+    const cartelaCardEl = document.getElementById('cliente-dossie-cartela-card');
+
+    let dossieData = null;
+    try{
+      const snap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_principal'));
+      if(snap.exists()) dossieData = snap.data();
+    } catch(err){ console.error('GD: erro ao carregar dossiê da cliente', err); }
+
+    const liberado = !!(dossieData && dossieData.liberado && dossieData.pdfUrl);
+
+    if(!liberado){
+      if(aguardandoEl) aguardandoEl.hidden = false;
+      if(liberadoEl) liberadoEl.hidden = true;
+      if(subtituloEl) subtituloEl.textContent = 'Seu material ainda está sendo preparado pela consultora.';
+      return;
+    }
+
+    if(subtituloEl) subtituloEl.textContent = 'Sua análise e recomendações personalizadas';
+    if(aguardandoEl) aguardandoEl.hidden = true;
+    if(liberadoEl) liberadoEl.hidden = false;
+
+    document.getElementById('cliente-dossie-tipo').textContent = dossieData.tipo || '—';
+    document.getElementById('cliente-dossie-data').textContent = formatFichaDate(dossieData.dataLiberacao || dossieData.pdfDataUpload);
+
+    // Resultado cromático — somente leitura, vem exclusivamente do que a Giulia cadastrou
+    let cromData = {};
+    try{
+      const cromSnap = await getDoc(doc(db, 'clientes', currentUser.uid, 'interno', 'analiseCromatica'));
+      if(cromSnap.exists()) cromData = cromSnap.data();
+    } catch(err){ console.error('GD: erro ao carregar resultado cromático', err); }
+
+    if(cromData.direcionamentoRealizado === 'Sim' && cromData.cartela){
+      if(cartelaCardEl) cartelaCardEl.hidden = false;
+      document.getElementById('cliente-dossie-cartela-nome').textContent = cromData.cartela;
+      document.getElementById('cliente-dossie-cartela-temperatura').textContent = cromData.temperatura || '—';
+      document.getElementById('cliente-dossie-cartela-intensidade').textContent = cromData.intensidade || '—';
+      document.getElementById('cliente-dossie-cartela-profundidade').textContent = cromData.profundidade || '—';
+      document.getElementById('cliente-dossie-cartela-contraste').textContent = cromData.contrastePessoal || '—';
+    } else if(cartelaCardEl){
+      cartelaCardEl.hidden = true;
+    }
+  }
+
+  document.addEventListener('click', async function(e){
+    const verBtn = e.target.closest('#cliente-dossie-ver-btn');
+    const baixarBtn = e.target.closest('#cliente-dossie-baixar-btn');
+    if((!verBtn && !baixarBtn) || !currentUser) return;
+
+    let dossieData = null;
+    try{
+      const snap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_principal'));
+      if(snap.exists()) dossieData = snap.data();
+    } catch(err){ console.error(err); }
+
+    if(!dossieData || !dossieData.liberado || !dossieData.pdfUrl) return;
+
+    if(verBtn){
+      // Abre o PDF exatamente desta cliente no visualizador do dispositivo (viável dentro da arquitetura atual)
+      window.open(dossieData.pdfUrl, '_blank');
+    } else if(baixarBtn){
+      const a = document.createElement('a');
+      a.href = dossieData.pdfUrl;
+      a.download = dossieData.pdfNome || 'dossie.pdf';
+      a.target = '_blank';
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+  });
+
+  // ---- Minha Cartela: leitura exclusiva de interno/analiseCromatica ----
+
+  let cartelaCoresAtual = { cores: [], neutros: [], destaques: [] };
+
+  function normalizeCorEntry(entry){
+    if(typeof entry === 'string') return { hex: entry, nome: '' };
+    if(entry && typeof entry === 'object') return { hex: entry.hex || '', nome: entry.nome || '' };
+    return { hex: '', nome: '' };
+  }
+
+  function renderCartelaSwatches(tab){
+    const gridEl = document.getElementById('cartela-cores-grid');
+    const vazioEl = document.getElementById('cartela-cores-vazio');
+    if(!gridEl || !vazioEl) return;
+
+    let lista = [];
+    if(tab === 'neutros') lista = cartelaCoresAtual.neutros;
+    else if(tab === 'destaques') lista = cartelaCoresAtual.destaques;
+    else lista = cartelaCoresAtual.cores.concat(cartelaCoresAtual.neutros, cartelaCoresAtual.destaques);
+
+    if(!lista || lista.length === 0){
+      gridEl.hidden = true;
+      vazioEl.hidden = false;
+      return;
+    }
+
+    vazioEl.hidden = true;
+    gridEl.hidden = false;
+    gridEl.innerHTML = lista.map(function(item){
+      const cor = normalizeCorEntry(item);
+      return '<div class="cartela-swatch">' +
+        '<div class="cartela-swatch-circle" style="background:' + escapeHtml(cor.hex || 'var(--champagne-light)') + ';"></div>' +
+        '<div class="cartela-swatch-label">' + escapeHtml(cor.nome || '') + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  document.addEventListener('click', function(e){
+    const tabBtn = e.target.closest('#screen-cartela-digital .pill[data-cartela-cor-tab]');
+    if(!tabBtn) return;
+    document.querySelectorAll('#screen-cartela-digital .pill[data-cartela-cor-tab]').forEach(function(p){ p.classList.remove('active'); });
+    tabBtn.classList.add('active');
+    renderCartelaSwatches(tabBtn.getAttribute('data-cartela-cor-tab'));
+  });
+
+  async function renderCartelaDigital(){
+    if(!currentUser) return;
+
+    let cromData = {};
+    try{
+      const snap = await getDoc(doc(db, 'clientes', currentUser.uid, 'interno', 'analiseCromatica'));
+      if(snap.exists()) cromData = snap.data();
+    } catch(err){ console.error('GD: erro ao carregar cartela da cliente', err); }
+
+    const nomeCartela = (cromData.direcionamentoRealizado === 'Sim' && cromData.cartela) ? cromData.cartela : null;
+
+    document.getElementById('cartela-nome').textContent = nomeCartela || 'Minha Cartela';
+    document.getElementById('cartela-temperatura').textContent = cromData.temperatura || '—';
+    document.getElementById('cartela-intensidade').textContent = cromData.intensidade || '—';
+    document.getElementById('cartela-profundidade').textContent = cromData.profundidade || '—';
+    document.getElementById('cartela-contraste').textContent = cromData.contrastePessoal || '—';
+
+    const base = nomeCartela && CARTELAS_BASE[nomeCartela] ? CARTELAS_BASE[nomeCartela] : null;
+    cartelaCoresAtual = {
+      cores: (base && Array.isArray(base.cores)) ? base.cores : [],
+      neutros: (base && Array.isArray(base.neutros)) ? base.neutros : [],
+      destaques: (base && Array.isArray(base.destaques)) ? base.destaques : []
+    };
+
+    // Sempre volta para a aba "Todas" ao abrir a tela
+    document.querySelectorAll('#screen-cartela-digital .pill[data-cartela-cor-tab]').forEach(function(p, i){
+      p.classList.toggle('active', i === 0);
+    });
+    renderCartelaSwatches('todas');
+  }
+
   // ---- Update painel/dashboard summary stats ----
 
   async function refreshConsultantStats(){
@@ -6485,6 +6830,12 @@
       if(screenId === 'dados-dossie'){
         renderDadosDossie();
       }
+      if(screenId === 'cliente-dossie'){
+        renderClienteDossie();
+      }
+      if(screenId === 'cartela-digital'){
+        renderCartelaDigital();
+      }
       if(screenId === 'anamnese-completa'){
         renderAnamneseCompleta();
       }
@@ -6518,6 +6869,12 @@
     }
     if(target === 'dados-dossie'){
       setTimeout(renderDadosDossie, 50);
+    }
+    if(target === 'cliente-dossie'){
+      setTimeout(renderClienteDossie, 50);
+    }
+    if(target === 'cartela-digital'){
+      setTimeout(renderCartelaDigital, 50);
     }
     if(target === 'anamnese-completa'){
       setTimeout(renderAnamneseCompleta, 50);
