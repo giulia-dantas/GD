@@ -2401,8 +2401,19 @@
      aqui e no rodapé (mais abaixo) faz o espaço livre da coluna se dividir em DOIS
      vãos equilibrados (antes deste bloco e antes do rodapé) em vez de um único vazio
      grande concentrado no fim — dá ritmo editorial sem centralizar mecanicamente. */
+  /* Fase 6C.11 — flex-shrink:0 garante que o bloco de texto nunca seja espremido
+     pelos espaçadores flexíveis ao redor dele (eles crescem, o texto mantém seu
+     tamanho natural). A distribuição vertical agora vem dos dois .dm-capa-espaco
+     (flex-grow explícito), não mais de margin-top:auto. */
+  /* Fase 6C.12 — o bloco inteiro (Dossiê Personalizado + frase + Cliente/nome) é
+     deslocado como UMA unidade só, por um único margin-top direto aqui — sem
+     espaçadores extras espalhados pela capa. flex-shrink:0 garante que ele nunca
+     seja espremido. Alinhamento horizontal (à esquerda), tipografia, tamanhos e
+     hierarquia internos permanecem exatamente os mesmos (nada mudou dentro do
+     bloco, só a posição vertical do bloco como um todo). */
   .dm-capa-texto-principal{
-    margin-top:auto;
+    flex-shrink:0;
+    margin-top:70%;
   }
 
   .dm-capa-titulo{
@@ -2599,6 +2610,16 @@
     margin:-4px 0 10px;
   }
 
+  /* Fase 6C.11 — respiro vertical interno reduzido ESCOPADO só a esta página
+     específica (classe aplicada apenas em dm_buildArmarioCapsuloCromatico), para
+     garantir espaço de sobra até o rodapé "Vestir com Intenção" sem tocar em
+     .dm-cor-grupo/.dossie-mestre-bloco/.dm-capsula-legenda usados por outras
+     páginas (Paleta, Combinações, Maquiagem, etc. permanecem exatamente iguais). */
+  .dossie-mestre-armario-capsula .dm-cor-grupo{ margin-bottom:12px; }
+  .dossie-mestre-armario-capsula .dm-capsula-legenda{ margin:-4px 0 8px; }
+  .dossie-mestre-armario-capsula .dossie-mestre-bloco{ margin-bottom:13px; }
+  .dossie-mestre-armario-capsula .dm-intro-texto{ margin-bottom:12px; }
+
   .dm-divisor-suave{
     height:1px;
     background:rgba(184,146,90,0.22);
@@ -2739,13 +2760,32 @@
   }
 
   /* =====================================================================
-     IMPRESSÃO / "SALVAR COMO PDF" (Fase 6C.10)
-     Estratégia: reaproveitar o próprio mecanismo de troca de tela do app
-     (.screen-wrap{display:none} / .screen-wrap.active{display:block}) — força
-     TODAS as telas para display:none (removidas do fluxo, sem risco de página
-     em branco por conteúdo invisível ocupando espaço) e reexibe só a tela da
-     prévia do Dossiê Mestre. Muito mais seguro do que visibility:hidden global,
-     que deixaria dezenas de outras telas do app ainda ocupando espaço de layout.
+     IMPRESSÃO / "SALVAR COMO PDF" (Fase 6C.11)
+     CAUSA RAIZ REAL DO CORTE HORIZONTAL, encontrada investigando TODA a cadeia de
+     ancestrais de .dossie-mestre-page até a raiz do documento:
+
+       html > body > #app-root(.app-gallery.app-mode) > .screen-wrap
+         > .phone > .content > #dossie-mestre-paginas > .dossie-mestre-page
+
+     - .app-gallery{ max-width:420px; }  (regra base)
+     - .app-gallery.app-mode{ max-width:430px; overflow-x:hidden; position:relative; }
+       #app-root tem AS DUAS classes — ou seja, o próprio contêiner raiz do app já
+       nasce limitado a ~430px de largura E com overflow-x:hidden. Isso, e não
+       nenhum "scale"/"zoom" explícito, é o que corta .dossie-mestre-page (que
+       precisa de 210mm ≈ 794px) pela metade: o ancestral raiz simplesmente não
+       deixa nada mais largo que ~430px aparecer, e ainda recorta o excedente.
+     - .phone{ width:380px; overflow:hidden; } — segunda camada de estreitamento
+       (o "quadro de celular" da simulação em tela).
+     - .content{ overflow-y:auto; } — como overflow-x não é declarado, a regra da
+       especificação CSS ("se um eixo é 'visible' e o outro não, o 'visible' vira
+       'auto'") faz overflow-x se comportar como 'auto' aqui também, contribuindo
+       para o recorte.
+
+     Nenhum destes usa transform/scale/zoom — o "encolhimento" observado no PDF é
+     100% um problema de largura máxima + overflow:hidden em cascata. A correção
+     abaixo neutraliza EXPLICITAMENTE cada um desses níveis, do mais externo ao
+     mais interno, e ainda zera transform/scale/zoom por precaução (custo zero,
+     caso algum navegador aplique algum desses via engine de impressão).
      ===================================================================== */
   @media print{
     @page{
@@ -2756,6 +2796,16 @@
     html, body{
       margin:0 !important;
       padding:0 !important;
+      width:auto !important;
+      height:auto !important;
+      max-width:none !important;
+      min-width:0 !important;
+      overflow:visible !important;
+      transform:none !important;
+    }
+
+    body{
+      display:block !important;
     }
 
     *{
@@ -2763,21 +2813,55 @@
       print-color-adjust: exact !important;
     }
 
+    /* CAUSA RAIZ 1: o contêiner raiz do app (.app-gallery.app-mode) é o principal
+       responsável pelo corte — remove o teto de largura e o overflow-x:hidden. */
+    #app-root{
+      max-width:none !important;
+      min-width:0 !important;
+      width:auto !important;
+      height:auto !important;
+      overflow:visible !important;
+      overflow-x:visible !important;
+      position:static !important;
+      padding:0 !important;
+      transform:none !important;
+      scale:1 !important;
+      zoom:1 !important;
+    }
+
     /* Esconde qualquer outra tela do app (dezenas de telas existem; nenhuma delas
        deve aparecer nem ocupar espaço na impressão) e mostra só a prévia. */
     .screen-wrap{ display:none !important; }
-    #screen-dossie-mestre-previa{ display:block !important; }
+    #screen-dossie-mestre-previa{
+      display:block !important;
+      width:auto !important;
+      max-width:none !important;
+      overflow:visible !important;
+      transform:none !important;
+    }
 
-    /* O "quadro de celular" (largura fixa, overflow:hidden, bordas arredondadas)
-       existe só para a simulação visual em tela — na impressão ele não pode
-       recortar nem estreitar as páginas A4 reais. */
+    /* CAUSA RAIZ 2: o "quadro de celular" (largura fixa 380px, overflow:hidden,
+       bordas arredondadas) existe só para a simulação visual em tela. */
     #screen-dossie-mestre-previa .phone{
       all: unset;
       display:block;
+      width:auto !important;
+      max-width:none !important;
+      min-width:0 !important;
+      overflow:visible !important;
+      transform:none !important;
     }
+
+    /* CAUSA RAIZ 3: overflow-y:auto do .content faz overflow-x se comportar como
+       'auto' também (regra da especificação CSS), recortando conteúdo mais largo. */
     #screen-dossie-mestre-previa .content{
       all: unset;
       display:block;
+      width:auto !important;
+      max-width:none !important;
+      min-width:0 !important;
+      overflow:visible !important;
+      transform:none !important;
     }
 
     /* Salvaguarda explícita: mesmo com a estratégia de display:none/display:block
@@ -2788,22 +2872,57 @@
 
     #dossie-mestre-paginas{
       display:block !important;
-      width:210mm;
+      width:210mm !important;
+      max-width:none !important;
+      min-width:0 !important;
       background:none !important;
       padding:0 !important;
       margin:0 !important;
       gap:0 !important;
+      overflow:visible !important;
+      transform:none !important;
     }
 
     .dossie-mestre-page{
       width:210mm !important;
+      height:auto !important;
       min-height:297mm !important;
       max-width:none !important;
+      min-width:0 !important;
       aspect-ratio:unset !important;
       box-shadow:none !important;
       margin:0 !important;
+      overflow:visible !important;
+      transform:none !important;
+      scale:1 !important;
+      zoom:1 !important;
+      box-sizing:border-box;
+      break-after:page;
+      page-break-after:always;
+      break-inside:avoid;
+      page-break-inside:avoid;
       /* Cada folha visual = exatamente uma página A4; a última não força uma
          folha extra em branco depois dela (regra :last-child já cobre isso). */
+    }
+
+    .dossie-mestre-page:last-child{
+      break-after:auto;
+      page-break-after:auto;
+    }
+
+    /* Foto da capa: garante que nenhuma restrição de tamanho/overflow herdada dos
+       ancestrais acima interfira — a lógica de proporção (dm_aplicarClasseFotoCapa,
+       object-fit/object-position por classe) permanece 100% intacta e é a única
+       responsável por como a foto é enquadrada; aqui só liberamos o container. */
+    .dm-capa-foto{
+      overflow:hidden; /* mantido — é o recorte INTENCIONAL do quadro da foto, não um bug */
+      width:auto !important;
+      max-width:none !important;
+      transform:none !important;
+    }
+    .dm-capa-foto img{
+      max-width:none !important;
+      transform:none !important;
     }
   }
 
@@ -20889,6 +21008,36 @@
     }
   }
 
+  // Fase 6C.11 — validação GEOMÉTRICA real de cada página do Dossiê Mestre, usando
+  // getBoundingClientRect() (medição real do navegador já renderizado — nunca
+  // contagem de elementos nem estimativa). Para cada .dossie-mestre-page, compara
+  // o retângulo do seu ÚLTIMO filho direto (o bloco mais provável de "vazar" pelo
+  // final da página) com o retângulo da própria página, com uma pequena margem de
+  // segurança. Não corrige nada sozinha — apenas relata violações no console, para
+  // que qualquer estouro real seja investigado como bug de layout (nunca escondido
+  // criando página nova ou cortando conteúdo). Roda automaticamente ao final de
+  // cada montagem da prévia (ver renderDossieMestrePrevia).
+  function dm_validarGeometriaPaginas(){
+    if(typeof document === 'undefined') return [];
+    const paginas = document.querySelectorAll('#dossie-mestre-paginas .dossie-mestre-page');
+    const MARGEM_SEGURANCA_PX = 4;
+    const resultados = [];
+    paginas.forEach(function(pagina, i){
+      const filhos = pagina.children;
+      if(!filhos.length) return;
+      const ultimoElemento = filhos[filhos.length - 1];
+      const paginaRect = pagina.getBoundingClientRect();
+      const ultimoRect = ultimoElemento.getBoundingClientRect();
+      const cabe = ultimoRect.bottom <= (paginaRect.bottom - MARGEM_SEGURANCA_PX);
+      const excedente = Math.max(0, ultimoRect.bottom - paginaRect.bottom);
+      resultados.push({ indice: i + 1, cabe: cabe, paginaBottom: paginaRect.bottom, ultimoElementoBottom: ultimoRect.bottom, excedente: excedente });
+      if(!cabe){
+        console.warn('GD: página ' + (i + 1) + ' do Dossiê Mestre — o último bloco ultrapassa o limite inferior real da folha em ' + excedente.toFixed(1) + 'px.', pagina, ultimoElemento);
+      }
+    });
+    return resultados;
+  }
+
   function dm_buildCapa(dados){
     const fotoUrl = dm_resolverFotoPrincipal(dados);
     const galhoSvg = '<svg class="dm-capa-galho" viewBox="0 0 200 160" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M10 10c30 6 60 24 78 58"/><path d="M28 20c8 10 10 22 6 34M46 32c8 8 12 18 10 30M64 46c7 7 10 16 9 26"/></svg>';
@@ -20908,6 +21057,10 @@
         '<div class="dm-capa-identidade-sub">Consultoria de Imagem</div>' +
       '</div>';
 
+    // Fase 6C.12 — o bloco de texto principal é deslocado como UMA unidade só, via
+    // um único margin-top direto nele mesmo (nada de espaçadores extras espalhados
+    // pela capa). O rodapé mantém seu próprio margin-top:auto (mecanismo único,
+    // já existente) para ficar ancorado na base, independente da posição do texto.
     const conteudo =
       '<div class="dm-capa-conteudo">' +
         galhoSvg +
@@ -21661,7 +21814,7 @@
       (corpoGrupos ? '<div class="dm-capsula-fluxo">' + corpoGrupos + '</div>' : '') +
       combinacoesHtml +
       dm_rodapeFaixa('Vestir com intenção', 'Peças nessas cores combinam entre si com naturalidade.'),
-      { numero: true, secao: 'Coloração Pessoal' }
+      { numero: true, secao: 'Coloração Pessoal', classesExtra: 'dossie-mestre-armario-capsula' }
     )];
   }
 
@@ -22062,6 +22215,12 @@
         // arquivo carregado — nunca antes disso, e nunca distorcendo a imagem.
         const fotoCapaEl = paginasEl.querySelector('[data-dm-foto-capa]');
         if(fotoCapaEl) dm_aplicarClasseFotoCapa(fotoCapaEl);
+
+        // Fase 6C.11 — validação GEOMÉTRICA real (getBoundingClientRect, não
+        // contagem/estimativa): confirma que o último bloco de cada página está
+        // de fato dentro do retângulo visual da própria folha. Qualquer violação
+        // é reportada no console para investigação; nunca corrige silenciosamente.
+        dm_validarGeometriaPaginas();
       }
 
       const avisos = dm_calcularAvisosAdministrativos(dados);
