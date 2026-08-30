@@ -2371,12 +2371,13 @@
         </div>
 
         <div class="stat-card">
-          <div class="stat-label" style="margin-bottom:4px;">Liberação para a Cliente</div>
-          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:12px; line-height:1.5;">Enquanto estiver desligado, a cliente não vê o dossiê nem o PDF, mesmo já enviado.</p>
+          <div class="stat-label" style="margin-bottom:4px;">Resultado da Análise</div>
+          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:12px; line-height:1.5;">Libera a prévia da consultoria (resultados e, se houver, direcionamento cromático) para a cliente — independente do PDF final já existir ou não.</p>
           <div class="radio-row" id="dossie-liberar-radio">
             <div class="radio-opt"><div class="dot-circle"></div>Desligado</div>
             <div class="radio-opt"><div class="dot-circle"></div>Ligado</div>
           </div>
+          <div class="login-error" id="dossie-liberar-msg"></div>
           <div class="ficha-status-row" id="dossie-data-liberacao-row" hidden>
             <div class="label">Liberado em</div>
             <div class="ficha-info-value" id="dossie-data-liberacao-valor">—</div>
@@ -3366,18 +3367,24 @@
         </div>
 
         <div id="cliente-dossie-liberado" hidden>
-          <div class="stat-card">
-            <div class="stat-label" style="margin-bottom:10px;">Dossiê Personalizado</div>
-            <div class="ficha-status-row">
-              <div class="label">Tipo</div>
-              <div class="ficha-info-value" id="cliente-dossie-tipo">—</div>
+          <div class="stat-card" id="cliente-dossie-imagem-card" hidden>
+            <div class="stat-label" style="margin-bottom:10px;">Seu Direcionamento de Imagem</div>
+            <div class="ficha-status-row" id="cliente-dossie-estilo-row" hidden>
+              <div class="label">Estilo predominante</div>
+              <div class="ficha-info-value" id="cliente-dossie-estilo-predominante">—</div>
             </div>
-            <div class="ficha-status-row">
-              <div class="label">Data da entrega</div>
-              <div class="ficha-info-value" id="cliente-dossie-data">—</div>
+            <div class="ficha-status-row" id="cliente-dossie-estilos-complementares-row" hidden>
+              <div class="label">Estilos complementares</div>
+              <div class="ficha-info-value" id="cliente-dossie-estilos-complementares">—</div>
             </div>
-            <button class="btn-primary" id="cliente-dossie-ver-btn" style="margin-top:16px;">Ver Dossiê</button>
-            <button class="btn-secondary" id="cliente-dossie-baixar-btn" style="margin-bottom:0;">Baixar PDF</button>
+            <div class="ficha-status-row" id="cliente-dossie-objetivo-row" hidden>
+              <div class="label">Objetivo de imagem</div>
+              <div class="ficha-info-value" id="cliente-dossie-objetivo">—</div>
+            </div>
+            <div class="ficha-status-row" id="cliente-dossie-pontos-row" hidden>
+              <div class="label">Pontos a valorizar</div>
+              <div class="ficha-info-value" id="cliente-dossie-pontos">—</div>
+            </div>
           </div>
 
           <div class="stat-card" id="cliente-dossie-cartela-card" hidden>
@@ -3390,6 +3397,31 @@
               <div class="ficha-info-item"><div class="ficha-info-label">Contraste</div><div class="ficha-info-value" id="cliente-dossie-cartela-contraste">—</div></div>
             </div>
             <button class="btn-secondary" data-goto="cartela-digital" style="margin-top:16px; margin-bottom:0;">Explorar Minha Cartela</button>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label" style="margin-bottom:10px;">Dossiê Personalizado</div>
+            <div class="ficha-status-row">
+              <div class="label">Status</div>
+              <div class="ficha-status-tag" id="cliente-dossie-arquivo-status-tag">Em finalização</div>
+            </div>
+
+            <div id="cliente-dossie-arquivo-finalizacao">
+              <p style="font-family:'Cormorant Garamond', serif; font-size:14px; font-style:italic; color:var(--graphite-soft); padding:10px 0 2px; line-height:1.6;">Seu dossiê completo está sendo finalizado pela consultora. Assim que estiver pronto, ele ficará disponível aqui.</p>
+            </div>
+
+            <div id="cliente-dossie-arquivo-disponivel" hidden>
+              <div class="ficha-status-row">
+                <div class="label">Tipo</div>
+                <div class="ficha-info-value" id="cliente-dossie-tipo">—</div>
+              </div>
+              <div class="ficha-status-row">
+                <div class="label">Data da entrega</div>
+                <div class="ficha-info-value" id="cliente-dossie-data">—</div>
+              </div>
+              <button class="btn-primary" id="cliente-dossie-ver-btn" style="margin-top:16px;">Ver Dossiê</button>
+              <button class="btn-secondary" id="cliente-dossie-baixar-btn" style="margin-bottom:0;">Baixar PDF</button>
+            </div>
           </div>
         </div>
 
@@ -4580,28 +4612,34 @@
       if(actionFotos) actionFotos.textContent = 'Iniciar';
     }
 
-    // Dossie status — a fonte da verdade é o campo "liberado" definido pelo Admin (Fase 3)
-    let dossieLiberado = false;
+    // Dossie status — a prévia da análise (analiseLiberada) e o PDF são independentes (Fase 4.1)
+    let dossieDataHome = null;
     try{
       const dossieSnap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_principal'));
-      if(dossieSnap.exists()) dossieLiberado = !!dossieSnap.data().liberado;
+      if(dossieSnap.exists()) dossieDataHome = dossieSnap.data();
     } catch(err){
       console.error('GD: erro ao carregar status do dossiê', err);
     }
 
+    const analiseLiberadaHome = getAnaliseLiberada(dossieDataHome);
+    const pdfDisponivelHome = !!(dossieDataHome && dossieDataHome.pdfUrl);
+
     const iconDossieEl = iconDossie;
-    if(dossieLiberado){
+    if(analiseLiberadaHome && pdfDisponivelHome){
       if(iconDossieEl){ iconDossieEl.textContent = '✓'; iconDossieEl.classList.add('done'); }
-      if(subDossie) subDossie.textContent = 'Seu material personalizado está pronto';
+      if(subDossie) subDossie.textContent = 'Seu material completo está pronto';
+    } else if(analiseLiberadaHome){
+      if(iconDossieEl){ iconDossieEl.textContent = '✓'; iconDossieEl.classList.add('done'); }
+      if(subDossie) subDossie.textContent = 'Seu direcionamento já está disponível';
     } else {
       if(iconDossieEl){ iconDossieEl.textContent = '○'; iconDossieEl.classList.remove('done'); }
       if(subDossie) subDossie.textContent = 'Aguardando análise da consultora';
     }
-    const stepsTotal = 3; // anamnese, fotos, dossiê liberado
+    const stepsTotal = 3; // anamnese, fotos, prévia da análise liberada
     let stepsDone = 0;
     if(anamneseFinished) stepsDone++;
     if(fotosCount > 0) stepsDone++;
-    if(dossieLiberado) stepsDone++;
+    if(analiseLiberadaHome) stepsDone++;
 
     const pct = Math.round((stepsDone / stepsTotal) * 100);
     if(fillEl) fillEl.style.width = pct + '%';
@@ -5931,9 +5969,22 @@
     liberado: 'Liberado para cliente'
   };
 
+  // ---- Prévia da análise x Dossiê final em PDF são estados independentes ----
+  // analiseLiberada: controla o acesso da cliente aos resultados (prévia).
+  // pdfUrl: controla apenas a disponibilidade do arquivo final.
+  // Compatibilidade: registros criados antes desta mudança só têm o campo legado
+  // "liberado" (que antigamente misturava as duas coisas) — nesses casos,
+  // tratamos "liberado: true" como "analiseLiberada: true" para não quebrar
+  // dossiês já liberados, sem apagar ou reescrever o campo antigo.
+  function getAnaliseLiberada(dossieData){
+    if(!dossieData) return false;
+    if(typeof dossieData.analiseLiberada === 'boolean') return dossieData.analiseLiberada;
+    return !!dossieData.liberado;
+  }
+
   function computeEffectiveDossieStatus(dossieData){
     if(!dossieData) return 'nao_iniciado';
-    return dossieData.liberado ? 'liberado' : (dossieData.statusProcesso || 'aguardando_analise');
+    return getAnaliseLiberada(dossieData) ? 'liberado' : (dossieData.statusProcesso || 'aguardando_analise');
   }
 
   async function fetchDossieDoc(uid){
@@ -6240,6 +6291,11 @@
     }
     if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
 
+    const liberarMsgElReset = document.getElementById('dossie-liberar-msg');
+    if(liberarMsgElReset){ liberarMsgElReset.textContent = ''; liberarMsgElReset.classList.remove('success'); }
+    const pdfMsgElReset = document.getElementById('dossie-pdf-msg');
+    if(pdfMsgElReset){ pdfMsgElReset.textContent = ''; pdfMsgElReset.classList.remove('success'); }
+
     const dossieData = await fetchDossieDoc(selectedClienteUid);
 
     document.getElementById('dossie-individual-tipo').textContent = dossieData ? (dossieData.tipo || '—') : 'Dossiê ainda não criado';
@@ -6275,15 +6331,16 @@
     // Restore liberação Ligado/Desligado
     const liberarRadioRow = document.getElementById('dossie-liberar-radio');
     liberarRadioRow.querySelectorAll('.radio-opt').forEach(function(el){ el.classList.remove('sel'); });
-    const liberado = dossieData ? !!dossieData.liberado : false;
+    const analiseLiberada = getAnaliseLiberada(dossieData);
     liberarRadioRow.querySelectorAll('.radio-opt').forEach(function(el){
-      if(el.textContent.trim() === (liberado ? 'Ligado' : 'Desligado')) el.classList.add('sel');
+      if(el.textContent.trim() === (analiseLiberada ? 'Ligado' : 'Desligado')) el.classList.add('sel');
     });
 
     const dataLiberacaoRow = document.getElementById('dossie-data-liberacao-row');
-    if(dossieData && dossieData.dataLiberacao){
+    const dataLiberacaoMostrar = dossieData && (dossieData.dataLiberacaoAnalise || dossieData.dataLiberacao);
+    if(dataLiberacaoMostrar){
       dataLiberacaoRow.hidden = false;
-      document.getElementById('dossie-data-liberacao-valor').textContent = formatFichaDate(dossieData.dataLiberacao);
+      document.getElementById('dossie-data-liberacao-valor').textContent = formatFichaDate(dataLiberacaoMostrar);
     } else {
       dataLiberacaoRow.hidden = true;
     }
@@ -6347,19 +6404,24 @@
     }
   });
 
-  // ---- Liberação ON/OFF para a cliente ----
+  // ---- Liberação da prévia da análise (independente do PDF) ----
+  // analiseLiberada controla exclusivamente o acesso da cliente aos resultados.
+  // A existência do PDF NUNCA bloqueia nem exige esta liberação.
 
   document.addEventListener('click', async function(e){
     const radio = e.target.closest('#dossie-liberar-radio .radio-opt');
     if(!radio || !selectedClienteUid) return;
+
+    const liberarMsgEl = document.getElementById('dossie-liberar-msg');
+    if(liberarMsgEl){ liberarMsgEl.textContent = ''; liberarMsgEl.classList.remove('success'); }
 
     const ligar = radio.textContent.trim() === 'Ligado';
     const nowIso = new Date().toISOString();
     const dossieRef = doc(db, 'clientes', selectedClienteUid, 'dossie', '_principal');
 
     try{
-      const payload = { liberado: ligar, updatedAt: nowIso };
-      if(ligar) payload.dataLiberacao = nowIso;
+      const payload = { analiseLiberada: ligar, updatedAt: nowIso };
+      if(ligar) payload.dataLiberacaoAnalise = nowIso;
       await setDoc(dossieRef, payload, { merge: true });
 
       const dossieData = await fetchDossieDoc(selectedClienteUid);
@@ -6373,16 +6435,22 @@
       else statusTagEl.classList.add('warn');
 
       const dataLiberacaoRow = document.getElementById('dossie-data-liberacao-row');
-      if(dossieData && dossieData.dataLiberacao){
+      const dataLiberacaoMostrar = dossieData && (dossieData.dataLiberacaoAnalise || dossieData.dataLiberacao);
+      if(dataLiberacaoMostrar){
         dataLiberacaoRow.hidden = false;
-        document.getElementById('dossie-data-liberacao-valor').textContent = formatFichaDate(dossieData.dataLiberacao);
+        document.getElementById('dossie-data-liberacao-valor').textContent = formatFichaDate(dataLiberacaoMostrar);
       }
     } catch(err){
-      console.error('GD: erro ao atualizar liberação do dossiê', err);
+      console.error('GD: erro ao atualizar liberação da análise', { code: err && err.code, message: err && err.message, uid: selectedClienteUid });
+      if(liberarMsgEl) liberarMsgEl.textContent = 'Não foi possível atualizar a liberação. Tente novamente.';
     }
   });
 
   // ---- Upload / Substituição do PDF do dossiê ----
+  // Validações antes do upload (tipo e tamanho) + diagnóstico completo no console
+  // em caso de falha real do Firebase Storage, incluindo error.code e error.message.
+
+  const DOSSIE_PDF_MAX_BYTES = 25 * 1024 * 1024; // 25MB
 
   document.addEventListener('change', async function(e){
     const input = e.target.closest('#dossie-pdf-input');
@@ -6390,15 +6458,35 @@
 
     const file = input.files[0];
     const msgEl = document.getElementById('dossie-pdf-msg');
+
+    // ---- Validação de tipo MIME ----
+    // Alguns sistemas operacionais não preenchem file.type para PDFs; nesse caso,
+    // aceitamos com base na extensão do nome do arquivo em vez de bloquear indevidamente.
+    const pareceExtensaoPdf = /\.pdf$/i.test(file.name || '');
+    const mimeValido = file.type === 'application/pdf' || (file.type === '' && pareceExtensaoPdf);
+    if(!mimeValido){
+      if(msgEl){ msgEl.classList.remove('success'); msgEl.textContent = 'Selecione um arquivo em formato PDF.'; }
+      input.value = '';
+      return;
+    }
+
+    // ---- Validação de tamanho ----
+    if(file.size > DOSSIE_PDF_MAX_BYTES){
+      if(msgEl){ msgEl.classList.remove('success'); msgEl.textContent = 'O arquivo excede o tamanho máximo permitido (25MB).'; }
+      input.value = '';
+      return;
+    }
+
     if(msgEl){ msgEl.textContent = 'Enviando PDF…'; msgEl.classList.remove('success'); }
+
+    const storagePath = 'clientes/' + selectedClienteUid + '/dossie/dossie-' + Date.now() + '.pdf';
 
     try{
       const existing = await fetchDossieDoc(selectedClienteUid);
       const oldPath = existing ? existing.pdfPath : null;
 
-      const storagePath = 'clientes/' + selectedClienteUid + '/dossie/dossie-' + Date.now() + '.pdf';
       const fileRef = ref(storage, storagePath);
-      await uploadBytes(fileRef, file);
+      await uploadBytes(fileRef, file, { contentType: 'application/pdf' });
       const url = await getDownloadURL(fileRef);
 
       const nowIso = new Date().toISOString();
@@ -6410,7 +6498,7 @@
         updatedAt: nowIso
       }, { merge: true });
 
-      // Only remove the old file after the new one is safely saved
+      // Só remove o arquivo antigo depois que o novo já está salvo com sucesso
       if(oldPath && oldPath !== storagePath){
         try{ await deleteObject(ref(storage, oldPath)); } catch(err){ console.error('GD: erro ao remover PDF anterior', err); }
       }
@@ -6421,8 +6509,30 @@
       document.getElementById('dossie-pdf-data').textContent = formatFichaDate(nowIso);
       if(msgEl){ msgEl.classList.add('success'); msgEl.textContent = 'PDF enviado com sucesso.'; setTimeout(function(){ msgEl.textContent=''; msgEl.classList.remove('success'); }, 2500); }
     } catch(err){
-      console.error('GD: erro ao enviar PDF do dossiê', err);
-      if(msgEl){ msgEl.classList.remove('success'); msgEl.textContent = 'Não foi possível enviar o PDF. Tente novamente.'; }
+      // Diagnóstico completo no console: código e mensagem reais do Firebase Storage,
+      // caminho utilizado, UID, nome/tamanho/tipo do arquivo — para identificar a causa exata.
+      console.error('GD: FALHA NO UPLOAD DO PDF DO DOSSIÊ', {
+        code: err && err.code,
+        message: err && err.message,
+        storagePath: storagePath,
+        clienteUid: selectedClienteUid,
+        arquivoNome: file.name,
+        arquivoTamanhoBytes: file.size,
+        arquivoTipoMime: file.type
+      });
+
+      let msgUsuario = 'Não foi possível enviar o PDF. Tente novamente.';
+      if(err && err.code === 'storage/unauthorized'){
+        msgUsuario = 'Envio bloqueado pelas regras do Firebase Storage (storage/unauthorized). É necessário liberar escrita para clientes/{uid}/dossie/ nas Storage Rules.';
+      } else if(err && err.code === 'storage/quota-exceeded'){
+        msgUsuario = 'Cota do Firebase Storage excedida (storage/quota-exceeded).';
+      } else if(err && err.code === 'storage/canceled'){
+        msgUsuario = 'Envio cancelado.';
+      } else if(err && err.code){
+        msgUsuario = 'Não foi possível enviar o PDF (' + err.code + '). Veja o console para detalhes.';
+      }
+
+      if(msgEl){ msgEl.classList.remove('success'); msgEl.textContent = msgUsuario; }
     } finally{
       input.value = '';
     }
@@ -6447,6 +6557,7 @@
         try{ await deleteObject(ref(storage, existing.pdfPath)); } catch(err){ console.error('GD: erro ao remover arquivo do storage', err); }
       }
 
+      // O PDF é independente da liberação da análise: removê-lo nunca altera analiseLiberada.
       await setDoc(doc(db, 'clientes', selectedClienteUid, 'dossie', '_principal'), {
         pdfUrl: null,
         pdfPath: null,
@@ -6634,6 +6745,7 @@
     const liberadoEl = document.getElementById('cliente-dossie-liberado');
     const subtituloEl = document.getElementById('cliente-dossie-subtitulo');
     const cartelaCardEl = document.getElementById('cliente-dossie-cartela-card');
+    const imagemCardEl = document.getElementById('cliente-dossie-imagem-card');
 
     let dossieData = null;
     try{
@@ -6647,9 +6759,10 @@
       }
     }
 
-    const liberado = !!(dossieData && dossieData.liberado && dossieData.pdfUrl);
+    // A prévia da análise (analiseLiberada) é totalmente independente da existência do PDF.
+    const analiseLiberada = getAnaliseLiberada(dossieData);
 
-    if(!liberado){
+    if(!analiseLiberada){
       if(aguardandoEl) aguardandoEl.hidden = false;
       if(liberadoEl) liberadoEl.hidden = true;
       if(subtituloEl) subtituloEl.textContent = 'Seu material ainda está sendo preparado pela consultora.';
@@ -6660,10 +6773,55 @@
     if(aguardandoEl) aguardandoEl.hidden = true;
     if(liberadoEl) liberadoEl.hidden = false;
 
-    document.getElementById('cliente-dossie-tipo').textContent = dossieData.tipo || '—';
-    document.getElementById('cliente-dossie-data').textContent = formatFichaDate(dossieData.dataLiberacao || dossieData.pdfDataUpload);
+    // ---- Seu Direcionamento de Imagem — resumo curto, somente os campos apropriados para entrega ----
+    let profData = {};
+    try{
+      const profSnap = await getDoc(doc(db, 'clientes', currentUser.uid, 'interno', 'analiseProfissional'));
+      if(profSnap.exists()) profData = profSnap.data();
+    } catch(err){
+      if(err && err.code === 'permission-denied'){
+        console.error('GD: PERMISSÃO NEGADA ao ler clientes/' + currentUser.uid + '/interno/analiseProfissional — verifique as regras do Firestore para esta subcoleção.', err);
+      } else {
+        console.error('GD: erro ao carregar direcionamento de imagem', err);
+      }
+    }
 
-    // Resultado cromático — somente leitura, vem exclusivamente do que a Giulia cadastrou
+    const estilo = profData.estiloPredominante === 'Outro' ? (profData.estiloPredominanteOutro || '') : (profData.estiloPredominante || '');
+    const complementares = Array.isArray(profData.estilosComplementares) ? profData.estilosComplementares.filter(function(v){ return v !== 'Outro'; }) : [];
+    if(profData.estilosComplementaresOutro) complementares.push(profData.estilosComplementaresOutro);
+
+    let temImagem = false;
+    const estiloRow = document.getElementById('cliente-dossie-estilo-row');
+    if(estilo){
+      temImagem = true;
+      estiloRow.hidden = false;
+      document.getElementById('cliente-dossie-estilo-predominante').textContent = estilo;
+    } else if(estiloRow){ estiloRow.hidden = true; }
+
+    const complementaresRow = document.getElementById('cliente-dossie-estilos-complementares-row');
+    if(complementares.length){
+      temImagem = true;
+      complementaresRow.hidden = false;
+      document.getElementById('cliente-dossie-estilos-complementares').textContent = complementares.join(', ');
+    } else if(complementaresRow){ complementaresRow.hidden = true; }
+
+    const objetivoRow = document.getElementById('cliente-dossie-objetivo-row');
+    if(profData.objetivoImagem){
+      temImagem = true;
+      objetivoRow.hidden = false;
+      document.getElementById('cliente-dossie-objetivo').textContent = profData.objetivoImagem;
+    } else if(objetivoRow){ objetivoRow.hidden = true; }
+
+    const pontosRow = document.getElementById('cliente-dossie-pontos-row');
+    if(profData.pontosValorizar){
+      temImagem = true;
+      pontosRow.hidden = false;
+      document.getElementById('cliente-dossie-pontos').textContent = profData.pontosValorizar;
+    } else if(pontosRow){ pontosRow.hidden = true; }
+
+    if(imagemCardEl) imagemCardEl.hidden = !temImagem;
+
+    // ---- Resultado cromático — somente leitura, vem exclusivamente do que a Giulia cadastrou ----
     let cromData = {};
     try{
       const cromSnap = await getDoc(doc(db, 'clientes', currentUser.uid, 'interno', 'analiseCromatica'));
@@ -6686,6 +6844,24 @@
     } else if(cartelaCardEl){
       cartelaCardEl.hidden = true;
     }
+
+    // ---- Dossiê Personalizado — "Em finalização" ou "Disponível", controlado só pelo pdfUrl ----
+    const statusTagEl = document.getElementById('cliente-dossie-arquivo-status-tag');
+    const finalizacaoEl = document.getElementById('cliente-dossie-arquivo-finalizacao');
+    const disponivelEl = document.getElementById('cliente-dossie-arquivo-disponivel');
+    const pdfDisponivel = !!(dossieData && dossieData.pdfUrl);
+
+    if(pdfDisponivel){
+      if(statusTagEl){ statusTagEl.textContent = 'Disponível'; statusTagEl.classList.remove('warn'); statusTagEl.classList.add('done'); }
+      if(finalizacaoEl) finalizacaoEl.hidden = true;
+      if(disponivelEl) disponivelEl.hidden = false;
+      document.getElementById('cliente-dossie-tipo').textContent = dossieData.tipo || '—';
+      document.getElementById('cliente-dossie-data').textContent = formatFichaDate(dossieData.pdfDataUpload || dossieData.dataLiberacaoAnalise || dossieData.dataLiberacao);
+    } else {
+      if(statusTagEl){ statusTagEl.textContent = 'Em finalização'; statusTagEl.classList.remove('done'); statusTagEl.classList.add('warn'); }
+      if(finalizacaoEl) finalizacaoEl.hidden = false;
+      if(disponivelEl) disponivelEl.hidden = true;
+    }
   }
 
   document.addEventListener('click', async function(e){
@@ -6705,7 +6881,7 @@
       }
     }
 
-    if(!dossieData || !dossieData.liberado || !dossieData.pdfUrl) return;
+    if(!dossieData || !dossieData.pdfUrl) return;
 
     if(verBtn){
       // Abre o PDF exatamente desta cliente no visualizador do dispositivo (viável dentro da arquitetura atual)
@@ -6769,6 +6945,28 @@
 
   async function renderCartelaDigital(){
     if(!currentUser) return;
+
+    // A cartela só pode ser exibida quando a prévia da análise estiver liberada —
+    // mesma trava usada em "Seu Dossiê", para nunca expor dados após um OFF do Admin.
+    let dossieData = null;
+    try{
+      const dossieSnap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_principal'));
+      if(dossieSnap.exists()) dossieData = dossieSnap.data();
+    } catch(err){ console.error('GD: erro ao verificar liberação da cartela', err); }
+
+    if(!getAnaliseLiberada(dossieData)){
+      document.getElementById('cartela-nome').textContent = 'Minha Cartela';
+      document.getElementById('cartela-temperatura').textContent = '—';
+      document.getElementById('cartela-intensidade').textContent = '—';
+      document.getElementById('cartela-profundidade').textContent = '—';
+      document.getElementById('cartela-contraste').textContent = '—';
+      cartelaCoresAtual = { cores: [], neutros: [], destaques: [] };
+      document.querySelectorAll('#screen-cartela-digital .pill[data-cartela-cor-tab]').forEach(function(p, i){
+        p.classList.toggle('active', i === 0);
+      });
+      renderCartelaSwatches('todas');
+      return;
+    }
 
     let cromData = {};
     try{
