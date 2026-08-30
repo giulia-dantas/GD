@@ -1850,6 +1850,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>console.log('[GD-PDF] Diagnóstico de carregamento — logo após a tag <script> do pdf.min.js: typeof window.pdfjsLib =', typeof window.pdfjsLib, '| pdfjsLib.version =', window.pdfjsLib && window.pdfjsLib.version);</script>
 </head>
 <body>
 
@@ -7063,14 +7064,22 @@
   let pdfJsWorkerConfigurado = false;
 
   function ensurePdfJsWorker(){
+    console.log('[GD-PDF] 7. ensurePdfJsWorker() chamada. já configurado antes?', pdfJsWorkerConfigurado, '| typeof window.pdfjsLib =', typeof window.pdfjsLib);
     if(pdfJsWorkerConfigurado) return;
     if(window.pdfjsLib){
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const workerUrl = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
       pdfJsWorkerConfigurado = true;
+      console.log('[GD-PDF] 8. GlobalWorkerOptions.workerSrc definido como:', window.pdfjsLib.GlobalWorkerOptions.workerSrc, '| versão do pdfjsLib (pdfjsLib.version):', window.pdfjsLib.version);
+    } else {
+      console.warn('[GD-PDF] 8. NÃO configurou o worker porque window.pdfjsLib ainda não existe neste momento.');
     }
   }
 
   async function renderVisualizarDossie(){
+    console.log('[GD-PDF] ===== Início de renderVisualizarDossie() =====');
+    console.log('[GD-PDF] 0. typeof window.pdfjsLib no início da função:', typeof window.pdfjsLib);
+
     const loadingEl = document.getElementById('visualizar-dossie-loading');
     const erroEl = document.getElementById('visualizar-dossie-erro');
     const paginasEl = document.getElementById('visualizar-dossie-paginas');
@@ -7079,42 +7088,62 @@
     if(erroEl) erroEl.hidden = true;
     if(paginasEl) paginasEl.innerHTML = '';
 
-    if(!currentUser) return;
+    if(!currentUser){
+      console.warn('[GD-PDF] Abortado: currentUser ainda não está definido.');
+      return;
+    }
+    console.log('[GD-PDF] currentUser.uid =', currentUser.uid);
 
     try{
+      console.log('[GD-PDF] 1. Lendo clientes/' + currentUser.uid + '/dossie/_entrega ...');
       const snap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_entrega'));
+      console.log('[GD-PDF] 1. _entrega existe?', snap.exists());
       const dossieData = snap.exists() ? snap.data() : null;
+      console.log('[GD-PDF] 1. Conteúdo de _entrega:', dossieData);
 
       if(!dossieData || !dossieData.analiseLiberada || !dossieData.pdfPath){
+        console.warn('[GD-PDF] Abortado antes do PDF.js: analiseLiberada =', dossieData && dossieData.analiseLiberada, '| pdfPath =', dossieData && dossieData.pdfPath);
         throw new Error('Dossiê indisponível ou não liberado');
       }
 
+      console.log('[GD-PDF] 2. pdfPath obtido de _entrega:', dossieData.pdfPath);
+
+      console.log('[GD-PDF] 3. Chamando getDownloadURL()...');
       const url = await getDownloadURL(ref(storage, dossieData.pdfPath));
+      console.log('[GD-PDF] 3. getDownloadURL() retornou (tamanho da string, não a URL completa por segurança):', url ? url.length + ' caracteres' : url);
 
       ensurePdfJsWorker();
       if(!window.pdfjsLib){
+        console.error('[GD-PDF] FALHA: window.pdfjsLib continua indefinido mesmo depois de ensurePdfJsWorker(). A tag <script> do pdf.min.js pode não ter carregado (bloqueada por rede/CDN/CSP) ou carregou depois deste ponto.');
         throw new Error('Biblioteca de visualização de PDF não carregou');
       }
 
-      // O PDF.js, ao receber uma URL diretamente, faz suas próprias requisições HTTP
-      // internas (inclusive com cabeçalho Range para carregamento progressivo). Esse
-      // Range vira uma requisição "não simples" para o navegador, que exige preflight
-      // CORS — e é exatamente aí que o Firebase Storage costuma rejeitar, mesmo quando
-      // um fetch() simples (como o do botão Baixar PDF) funciona normalmente. Por isso,
-      // buscamos os bytes nós mesmos com fetch() comum e entregamos prontos ao PDF.js.
+      console.log('[GD-PDF] 4. Chamando fetch(url)...');
       const resp = await fetch(url);
+      console.log('[GD-PDF] 5. fetch concluído. resp.ok =', resp.ok, '| resp.status =', resp.status, '| Content-Type =', resp.headers.get('content-type'), '| Content-Length (header) =', resp.headers.get('content-length'));
       if(!resp.ok) throw new Error('Falha ao buscar o PDF (HTTP ' + resp.status + ')');
-      const arrayBuffer = await resp.arrayBuffer();
 
-      const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const arrayBuffer = await resp.arrayBuffer();
+      console.log('[GD-PDF] 6. arrayBuffer obtido. Tamanho real em bytes:', arrayBuffer.byteLength);
+      if(arrayBuffer.byteLength === 0){
+        console.error('[GD-PDF] FALHA: o arquivo baixado tem 0 bytes.');
+      }
+
+      console.log('[GD-PDF] 9. Chamando pdfjsLib.getDocument({ data }) com workerSrc =', window.pdfjsLib.GlobalWorkerOptions.workerSrc);
+      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+      loadingTask.onProgress = function(p){ console.log('[GD-PDF] progresso do carregamento:', p); };
+
+      console.log('[GD-PDF] 10. Aguardando loadingTask.promise...');
+      const pdf = await loadingTask.promise;
+      console.log('[GD-PDF] 10. loadingTask.promise resolvida com sucesso. pdf.numPages =', pdf.numPages);
 
       if(loadingEl) loadingEl.hidden = true;
 
-      // Largura disponível dentro da tela (a área de conteúdo já tem padding próprio),
-      // recalculada a cada abertura para se ajustar ao aparelho da cliente.
       const containerWidth = Math.max(240, (paginasEl.clientWidth || 320) - 2);
+      console.log('[GD-PDF] containerWidth calculado:', containerWidth, '| paginasEl.clientWidth =', paginasEl.clientWidth);
 
       for(let pageNum = 1; pageNum <= pdf.numPages; pageNum++){
+        console.log('[GD-PDF] 11. Obtendo página', pageNum, 'de', pdf.numPages, '...');
         const page = await pdf.getPage(pageNum);
         const baseViewport = page.getViewport({ scale: 1 });
         const scale = containerWidth / baseViewport.width;
@@ -7126,13 +7155,21 @@
         canvas.height = Math.floor(viewport.height);
         const ctx = canvas.getContext('2d');
 
+        console.log('[GD-PDF] 12. Renderizando página', pageNum, 'no canvas', canvas.width, 'x', canvas.height, '...');
         await page.render({ canvasContext: ctx, viewport: viewport }).promise;
         paginasEl.appendChild(canvas);
+        console.log('[GD-PDF] 12. Página', pageNum, 'renderizada e anexada ao DOM com sucesso.');
       }
+
+      console.log('[GD-PDF] ===== Concluído com sucesso: todas as páginas renderizadas =====');
     } catch(err){
       // Log completo para diagnóstico real (não só a mensagem genérica mostrada à cliente).
-      console.error('GD: erro ao carregar visualização do dossiê — DIAGNÓSTICO COMPLETO', err);
-      console.error('GD: erro.name =', err && err.name, '| erro.code =', err && err.code, '| erro.message =', err && err.message);
+      console.error('[GD-PDF] ===== ERRO — objeto completo abaixo ===== ');
+      console.error(err);
+      console.error('[GD-PDF] erro.name =', err && err.name);
+      console.error('[GD-PDF] erro.code =', err && err.code);
+      console.error('[GD-PDF] erro.message =', err && err.message);
+      console.error('[GD-PDF] erro.stack =', err && err.stack);
       if(loadingEl) loadingEl.hidden = true;
       if(erroEl) erroEl.hidden = false;
     }
