@@ -2345,6 +2345,23 @@
         </div>
 
         <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:4px;">Fotos da Cliente</div>
+          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:14px; line-height:1.5;">Toque na estrela para marcar a Foto Principal do Dossiê.</p>
+          <div class="ficha-photo-category">
+            <div class="ficha-photo-category-title">Consultoria de Imagem</div>
+            <div class="ficha-photo-grid" id="dossie-fotos-consultoria"></div>
+          </div>
+          <div class="ficha-photo-category">
+            <div class="ficha-photo-category-title">Direcionamento Cromático</div>
+            <div class="ficha-photo-grid" id="dossie-fotos-cromatico"></div>
+          </div>
+          <div class="ficha-photo-category">
+            <div class="ficha-photo-category-title">Foto para o Dossiê</div>
+            <div class="ficha-photo-grid" id="dossie-fotos-dossie"></div>
+          </div>
+        </div>
+
+        <div class="stat-card">
           <div class="stat-label" style="margin-bottom:10px;">Status do Processo</div>
           <div class="radio-row" id="dossie-status-radio">
             <div class="radio-opt"><div class="dot-circle"></div>Aguardando análise</div>
@@ -2425,8 +2442,13 @@
         <button class="btn-primary" id="dados-dossie-copiar-btn">Copiar Dados</button>
         <div class="login-error" id="dados-dossie-copiar-msg"></div>
 
-        <div id="dados-dossie-foto-wrap" style="margin-bottom:16px;"></div>
         <div id="dados-dossie-content"></div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:4px;">Fotos para Análise</div>
+          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:12px; line-height:1.5;">A foto com estrela dourada é a Foto Principal do Dossiê.</p>
+          <div id="dados-dossie-fotos-analise"></div>
+        </div>
 
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -5565,7 +5587,11 @@
 
     try{
       await setDoc(adminPhotosRef, { escolhidaDossie: novoValor, updatedAt: new Date().toISOString() }, { merge: true });
+      // Duas telas podem mostrar essa mesma seleção (Ficha da Cliente e Dossiê Individual);
+      // cada função já verifica se seus próprios elementos existem no DOM antes de renderizar,
+      // então chamar as duas aqui é seguro mesmo que só uma esteja montada no momento.
       renderFichaFotosTab(selectedClienteUid);
+      renderDossieFotosGaleria(selectedClienteUid);
     } catch(err){
       console.error('GD: erro ao marcar foto para o dossiê', err);
     }
@@ -14076,6 +14102,48 @@
       vazioEl.hidden = false;
       preenchidoEl.hidden = true;
     }
+
+    await renderDossieFotosGaleria(selectedClienteUid);
+  }
+
+  // ---- Fotos da Cliente — galeria completa dentro do Dossiê (Admin) ----
+  // Reaproveita exatamente a mesma estrutura e as mesmas funções já usadas na aba
+  // Fotos da Ficha da Cliente (Fase 1): categorizePhotoSlot() e renderFichaPhotoGrid().
+  // Nenhum arquivo é duplicado — só lê clientes/{uid}/fotos/_meta e /_admin.
+
+  async function renderDossieFotosGaleria(uid){
+    const consultoriaGrid = document.getElementById('dossie-fotos-consultoria');
+    const cromaticoGrid = document.getElementById('dossie-fotos-cromatico');
+    const dossieGrid = document.getElementById('dossie-fotos-dossie');
+    if(!consultoriaGrid && !cromaticoGrid && !dossieGrid) return;
+
+    let urls = {};
+    try{
+      const snap = await getDoc(doc(db, 'clientes', uid, 'fotos', '_meta'));
+      if(snap.exists()) urls = snap.data().urls || {};
+    } catch(err){ console.error('GD: erro ao carregar fotos do dossiê', err); }
+
+    let chosenSlot = null;
+    try{
+      const adminSnap = await getDoc(doc(db, 'clientes', uid, 'fotos', '_admin'));
+      if(adminSnap.exists()) chosenSlot = adminSnap.data().escolhidaDossie || null;
+    } catch(err){ console.error('GD: erro ao carregar foto principal do dossiê', err); }
+
+    const consultoria = [], cromatico = [], dossieCategoria = [];
+    Object.keys(urls).forEach(function(slotId){
+      const entry = urls[slotId];
+      const url = entry && (entry.url || entry);
+      if(!url) return;
+      const item = { slotId: slotId, url: url };
+      const cat = categorizePhotoSlot(slotId);
+      if(cat === 'cromatico') cromatico.push(item);
+      else if(cat === 'dossie') dossieCategoria.push(item);
+      else consultoria.push(item);
+    });
+
+    renderFichaPhotoGrid(consultoriaGrid, consultoria, 'Nenhuma foto enviada', chosenSlot);
+    renderFichaPhotoGrid(cromaticoGrid, cromatico, 'Nenhuma foto enviada', chosenSlot);
+    renderFichaPhotoGrid(dossieGrid, dossieCategoria, 'Nenhuma foto enviada nesta categoria', chosenSlot);
   }
 
   document.addEventListener('click', function(e){
@@ -14370,7 +14438,7 @@
   async function renderDadosDossie(){
     const nomeEl = document.getElementById('dados-dossie-cliente-nome');
     const contentEl = document.getElementById('dados-dossie-content');
-    const fotoWrapEl = document.getElementById('dados-dossie-foto-wrap');
+    const fotosAnaliseEl = document.getElementById('dados-dossie-fotos-analise');
 
     if(!selectedClienteUid){
       if(nomeEl) nomeEl.textContent = 'Cliente';
@@ -14391,21 +14459,50 @@
       if(snap.exists()) cromData = snap.data();
     } catch(err){ console.error(err); }
 
-    let fotoUrl = null;
+    // ---- Fotos para Análise: galeria completa por categoria, reaproveitando os
+    // mesmos dados e a mesma categorização já usados na Ficha da Cliente e no Dossiê ----
+    let fotoUrls = {}, chosenSlot = null;
+    try{
+      const metaSnap = await getDoc(doc(db, 'clientes', selectedClienteUid, 'fotos', '_meta'));
+      fotoUrls = metaSnap.exists() ? (metaSnap.data().urls || {}) : {};
+    } catch(err){ console.error(err); }
     try{
       const adminFotosSnap = await getDoc(doc(db, 'clientes', selectedClienteUid, 'fotos', '_admin'));
-      const metaSnap = await getDoc(doc(db, 'clientes', selectedClienteUid, 'fotos', '_meta'));
-      const escolhida = adminFotosSnap.exists() ? adminFotosSnap.data().escolhidaDossie : null;
-      const urls = metaSnap.exists() ? (metaSnap.data().urls || {}) : {};
-      if(escolhida && urls[escolhida]){
-        fotoUrl = urls[escolhida].url || urls[escolhida];
-      }
+      chosenSlot = adminFotosSnap.exists() ? (adminFotosSnap.data().escolhidaDossie || null) : null;
     } catch(err){ console.error(err); }
 
-    if(fotoWrapEl){
-      fotoWrapEl.innerHTML = fotoUrl
-        ? '<div class="ficha-photo-tile" style="max-width:220px;"><img src="' + escapeHtml(fotoUrl) + '" alt="Foto do dossiê"></div>'
-        : `<p style="font-family:'Cormorant Garamond', serif; font-size:14px; font-style:italic; color:var(--graphite-soft);">Nenhuma foto escolhida para o dossiê ainda.</p>`;
+    const fotosConsultoria = [], fotosCromatico = [], fotosDossie = [];
+    Object.keys(fotoUrls).forEach(function(slotId){
+      const entry = fotoUrls[slotId];
+      const url = entry && (entry.url || entry);
+      if(!url) return;
+      const item = { slotId: slotId, url: url };
+      const cat = categorizePhotoSlot(slotId);
+      if(cat === 'cromatico') fotosCromatico.push(item);
+      else if(cat === 'dossie') fotosDossie.push(item);
+      else fotosConsultoria.push(item);
+    });
+
+    if(fotosAnaliseEl){
+      const categorias = [
+        { titulo: 'Consultoria de Imagem', itens: fotosConsultoria, vazio: 'Nenhuma foto enviada' },
+        { titulo: 'Direcionamento Cromático', itens: fotosCromatico, vazio: 'Nenhuma foto enviada' },
+        { titulo: 'Foto para o Dossiê', itens: fotosDossie, vazio: 'Nenhuma foto enviada nesta categoria' }
+      ];
+      fotosAnaliseEl.innerHTML = categorias.map(function(c){
+        const gridHtml = c.itens.length
+          ? c.itens.map(function(item){
+              return '<div class="ficha-photo-tile' + (item.slotId === chosenSlot ? ' dossie-chosen' : '') + '">' +
+                '<img src="' + escapeHtml(item.url) + '" alt="' + escapeHtml(fichaPhotoLabel(item.slotId)) + '">' +
+                (item.slotId === chosenSlot ? '<div class="ficha-photo-star">★</div>' : '') +
+              '</div>';
+            }).join('')
+          : '<div class="ficha-photo-tile"><div class="ficha-photo-empty">' + escapeHtml(c.vazio) + '</div></div>';
+        return '<div class="ficha-photo-category">' +
+          '<div class="ficha-photo-category-title">' + escapeHtml(c.titulo) + '</div>' +
+          '<div class="ficha-photo-grid">' + gridHtml + '</div>' +
+        '</div>';
+      }).join('');
     }
 
     const CLIENT_SECTIONS = [
@@ -14435,7 +14532,12 @@
     const cromResult = buildDadosDossieSection('Resultado Cromático (Giulia)', CROM_DATA_FIELDS, cromData);
     if(cromResult){ html += cromResult.html; text += cromResult.text; }
 
-    text += 'Foto para o Dossiê: ' + (fotoUrl ? fotoUrl : 'nenhuma foto escolhida ainda') + '\n';
+    // Só contagens e disponibilidade no texto copiado — nunca URLs técnicas do Storage.
+    text += 'FOTOS:\n';
+    text += '- ' + fotosConsultoria.length + ' foto(s) de Consultoria de Imagem\n';
+    text += '- ' + fotosCromatico.length + ' foto(s) de Direcionamento Cromático\n';
+    text += '- Foto para o Dossiê: ' + (fotosDossie.length ? 'disponível' : 'não disponível') + '\n';
+    text += '- Foto principal selecionada: ' + (chosenSlot ? 'sim' : 'não') + '\n';
 
     if(contentEl){
       contentEl.innerHTML = html || `<div class="stat-card" style="text-align:center;"><p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">Ainda não há dados suficientes desta cliente.</p></div>`;
