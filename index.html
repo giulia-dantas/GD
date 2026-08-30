@@ -1992,14 +1992,12 @@
     opacity:0.55;
   }
 
-  .dm-divisoria-gd{
-    font-family:'Cormorant Garamond', serif;
-    font-style:italic;
-    font-weight:600;
-    font-size:13px;
-    letter-spacing:0.14em;
-    color:var(--dm-ouro);
+  .dm-divisoria-monograma{
+    width:30px;
+    height:30px;
+    object-fit:contain;
     flex-shrink:0;
+    display:block;
   }
 
   /* ---- Tipografia editorial ---- */
@@ -2846,7 +2844,6 @@
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -3749,7 +3746,7 @@
         </div>
         <div id="dossie-mestre-aviso-incompleto" class="dossie-mestre-admin-aviso no-print" hidden></div>
         <div class="dossie-mestre-gerar-pdf-wrap no-print">
-          <button type="button" class="dossie-mestre-gerar-pdf-btn" data-action="gerar-pdf-dossie">Gerar PDF</button>
+          <button type="button" class="dossie-mestre-gerar-pdf-btn" data-action="baixar-html-dossie">Baixar HTML do Dossiê</button>
         </div>
         <div id="dossie-mestre-loading" class="no-print" style="text-align:center; padding:60px 20px;">
           <p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft);">Montando a prévia…</p>
@@ -5745,21 +5742,16 @@
     }
   });
 
-  // ---- Gerar PDF (Dossiê Mestre) — CAPTURA VISUAL CONTÍNUA (Fase 6C.15) ----
-  // A geração de PDF via window.print() foi abandonada: o navegador reinterpretava
-  // o layout. Agora usamos html2canvas (captura o DOM já renderizado, em alta
-  // resolução) + jsPDF (monta o arquivo), SEM rasterizar tudo de uma vez — cada
-  // capítulo/divisória é capturado individualmente (unidades pequenas e seguras),
-  // e as imagens resultantes são encaixadas lado a lado verticalmente no PDF, sem
-  // nenhuma aparência de "fim de folha" (sem cabeçalho, sem rodapé, sem numeração,
-  // sem espaço em branco de quebra). Duas passagens:
-  //   1ª (leve): mede cada unidade via getBoundingClientRect e planeja em quais
-  //      "folhas físicas" do PDF elas caem — evita depender de redimensionar uma
-  //      página do jsPDF depois de criada (não é suportado) e evita qualquer
-  //      captura de canvas gigantesco de uma vez (risco de estourar memória).
-  //   2ª (captura de verdade): para cada unidade, aguarda suas imagens, captura
-  //      via html2canvas na escala definida, desenha na posição planejada, e
-  //      libera a referência do canvas imediatamente.
+  // ---- Baixar HTML do Dossiê (Fase 6C.16) ----
+  // A responsabilidade de gerar PDF saiu do app. Em vez disso, este botão gera um
+  // arquivo HTML autossuficiente a partir do MESMO DOM final já renderizado na
+  // prévia (nunca uma segunda implementação/template do dossiê) — clona o
+  // container, incorpora imagens como Data URL (com fallback gracioso para a URL
+  // original se a conversão falhar), copia o <style> inteiro do app (prioridade:
+  // fidelidade visual, não "otimização") e inclui os mesmos links de fonte do
+  // Google Fonts. Nenhum window.print(), nenhum jsPDF, nenhum html2canvas — só
+  // HTML + CSS + imagens embutidas, prontos para abrir offline (file://) ou
+  // enviar para outra ferramenta converter em PDF depois.
 
   function dm_sanitizarNomeArquivo(nome){
     return (nome || 'Cliente')
@@ -5769,143 +5761,114 @@
       .replace(/\s+/g, '-') || 'Cliente';
   }
 
-  async function dm_aguardarImagens(el){
-    const imgs = Array.prototype.slice.call(el.querySelectorAll('img'));
-    await Promise.all(imgs.map(function(img){
-      if(img.complete) return Promise.resolve();
-      return new Promise(function(resolve){
-        img.addEventListener('load', resolve);
-        img.addEventListener('error', resolve);
+  // Converte a URL de uma imagem em Data URL (base64) para o arquivo exportado
+  // não depender de nenhuma rede/estado do app depois de baixado. Se a imagem já
+  // for Data URL, retorna como está; se a conversão falhar (ex.: CORS bloqueado),
+  // devolve null — quem chamar mantém a URL original como salvaguarda (a imagem
+  // ainda funciona ao abrir o arquivo, desde que haja internet).
+  async function dm_converterImagemParaDataUrl(url){
+    if(!url || url.indexOf('data:') === 0) return url || null;
+    try{
+      const resp = await fetch(url, { mode: 'cors' });
+      const blob = await resp.blob();
+      return await new Promise(function(resolve, reject){
+        const reader = new FileReader();
+        reader.onload = function(){ resolve(reader.result); };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
       });
-    }));
+    } catch(err){
+      console.warn('GD: não foi possível incorporar a imagem como Data URL (mantendo URL original):', url, err);
+      return null;
+    }
   }
 
-  async function dm_gerarPdfContinuo(){
-    const btn = document.querySelector('[data-action="gerar-pdf-dossie"]');
-    const capaEl = document.querySelector('#dossie-mestre-paginas .dossie-mestre-page.dossie-mestre-capa');
-    const fluxoEl = document.querySelector('#dossie-mestre-paginas .dossie-mestre-fluxo');
-    if(!capaEl && !fluxoEl) return;
-    if(typeof html2canvas === 'undefined' || !window.jspdf || !window.jspdf.jsPDF){
-      console.error('GD: html2canvas/jsPDF não disponíveis para gerar o PDF.');
-      return;
-    }
+  async function dm_baixarHtmlDossie(){
+    const btn = document.querySelector('[data-action="baixar-html-dossie"]');
+    const paginasEl = document.getElementById('dossie-mestre-paginas');
+    if(!paginasEl || !paginasEl.children.length) return;
 
     const textoOriginalBtn = btn ? btn.textContent : '';
-    if(btn){ btn.textContent = 'Gerando PDF...'; btn.disabled = true; }
+    if(btn){ btn.textContent = 'Preparando dossiê...'; btn.disabled = true; }
 
     try{
       if(document.fonts && document.fonts.ready){
         try{ await document.fonts.ready; } catch(e){}
       }
 
-      const PX_TO_MM = 25.4 / 96;
-      const ESCALA = 2;
-      const MAX_ALTURA_PAGINA_MM = 3000; // limite seguro, bem abaixo de limites técnicos de leitores de PDF
+      // Clona o DOM final já renderizado (capa + fluxo) — nenhuma reconstrução,
+      // nenhum novo template. #dossie-mestre-paginas não contém nenhum elemento
+      // administrativo (faixa, botões, avisos ficam fora dele, como irmãos), então
+      // não há nada exclusivamente administrativo a remover do clone.
+      const clone = paginasEl.cloneNode(true);
 
-      // Unidades de captura, na ordem visual real do documento: a capa inteira
-      // primeiro, depois cada filho direto do fluxo (cada .dm-capitulo e cada
-      // .dm-divisoria-capitulo) — nunca o documento inteiro numa única captura.
-      const unidades = [];
-      if(capaEl) unidades.push({ el: capaEl, comPaddingDoFluxo: false });
-      let fluxoPadEsq = '0px', fluxoPadDir = '0px', fluxoFundo = '#FBF9F5';
-      if(fluxoEl){
-        const fluxoStyle = getComputedStyle(fluxoEl);
-        fluxoPadEsq = fluxoStyle.paddingLeft;
-        fluxoPadDir = fluxoStyle.paddingRight;
-        fluxoFundo = fluxoStyle.backgroundColor || '#FBF9F5';
-        Array.prototype.forEach.call(fluxoEl.children, function(filho){
-          unidades.push({ el: filho, comPaddingDoFluxo: true });
-        });
-      }
-      if(!unidades.length) return;
-
-      // ---- 1ª passagem: mede (sem capturar) para planejar as folhas do PDF ----
-      const medidas = unidades.map(function(u){
-        const rect = u.el.getBoundingClientRect();
-        return { larguraMM: rect.width * PX_TO_MM, alturaMM: rect.height * PX_TO_MM };
-      });
-      const larguraPaginaMM = medidas.reduce(function(max, m){ return Math.max(max, m.larguraMM); }, 0);
-
-      const planos = []; // cada plano = { alturaMM, itens: [{ indice, yMM, alturaMM }] }
-      let planoAtual = null;
-      medidas.forEach(function(m, i){
-        if(!planoAtual || (planoAtual.alturaMM + m.alturaMM) > MAX_ALTURA_PAGINA_MM){
-          planoAtual = { alturaMM: 0, itens: [] };
-          planos.push(planoAtual);
+      // Incorpora cada imagem do clone como Data URL — com cache para não repetir
+      // a mesma conversão (ex.: o monograma GD aparece várias vezes: capa, rodapé,
+      // divisórias, encerramento). Preserva 100% da lógica visual (proporção,
+      // enquadramento, object-fit, classes) — só troca a origem do arquivo.
+      const imgs = Array.prototype.slice.call(clone.querySelectorAll('img'));
+      const cacheDataUrl = {};
+      for(let i = 0; i < imgs.length; i++){
+        const img = imgs[i];
+        const src = img.getAttribute('src');
+        if(!src) continue;
+        if(!(src in cacheDataUrl)){
+          cacheDataUrl[src] = await dm_converterImagemParaDataUrl(src);
         }
-        planoAtual.itens.push({ indice: i, yMM: planoAtual.alturaMM, alturaMM: m.alturaMM });
-        planoAtual.alturaMM += m.alturaMM;
-      });
-
-      // ---- 2ª passagem: captura de verdade, uma unidade por vez ----
-      let pdf = null;
-      for(let p = 0; p < planos.length; p++){
-        const plano = planos[p];
-        const alturaFolhaMM = Math.max(plano.alturaMM, 1);
-        if(!pdf){
-          pdf = new window.jspdf.jsPDF({ unit: 'mm', format: [larguraPaginaMM, alturaFolhaMM], compress: true });
-        } else {
-          // Segmentação técnica interna — SEM aparência de quebra de página: sem
-          // cabeçalho/rodapé repetido, sem numeração, sem espaço em branco. É só
-          // uma nova folha do arquivo continuando de onde a anterior parou.
-          pdf.addPage([larguraPaginaMM, alturaFolhaMM]);
-        }
-
-        for(let k = 0; k < plano.itens.length; k++){
-          const item = plano.itens[k];
-          const u = unidades[item.indice];
-          const el = u.el;
-
-          const estiloInlineOriginal = el.getAttribute('style');
-          if(u.comPaddingDoFluxo){
-            el.style.paddingLeft = fluxoPadEsq;
-            el.style.paddingRight = fluxoPadDir;
-            el.style.boxSizing = 'border-box';
-          }
-
-          await dm_aguardarImagens(el);
-
-          let canvas;
-          try{
-            canvas = await html2canvas(el, {
-              scale: ESCALA,
-              useCORS: true,
-              backgroundColor: u.comPaddingDoFluxo ? fluxoFundo : '#FBF9F5',
-              logging: false
-            });
-          } finally {
-            if(u.comPaddingDoFluxo){
-              if(estiloInlineOriginal) el.setAttribute('style', estiloInlineOriginal);
-              else el.removeAttribute('style');
-            }
-          }
-
-          const imgData = canvas.toDataURL('image/jpeg', 0.92);
-          // Libera a referência do canvas assim que possível (evita acumular
-          // memória em dossiês longos, especialmente em navegadores mobile).
-          canvas.width = 0;
-          canvas.height = 0;
-          canvas = null;
-
-          pdf.addImage(imgData, 'JPEG', 0, item.yMM, larguraPaginaMM, medidas[item.indice].alturaMM);
-        }
+        if(cacheDataUrl[src]) img.setAttribute('src', cacheDataUrl[src]);
+        // Se a conversão falhou, a URL original permanece — a imagem ainda
+        // funciona ao abrir o arquivo, desde que haja internet.
       }
 
-      const nomeClienteEl = document.querySelector('#dossie-mestre-paginas .dm-capa-cliente-nome');
+      // Mesmo CSS do app, cópia literal — inclui exatamente as regras que já
+      // produzem a aparência aprovada da prévia (fidelidade visual acima de
+      // qualquer tentativa de "enxugar" o CSS exportado).
+      const estiloOriginal = document.querySelector('style');
+      const cssOriginal = estiloOriginal ? estiloOriginal.textContent : '';
+
+      const nomeClienteEl = clone.querySelector('.dm-capa-cliente-nome');
       const nomeCliente = (nomeClienteEl && nomeClienteEl.textContent.trim()) || selectedClienteNome || 'Cliente';
-      const nomeArquivo = 'Dossie-' + dm_sanitizarNomeArquivo(nomeCliente) + '.pdf';
-      pdf.save(nomeArquivo);
+
+      const htmlFinal =
+        '<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n' +
+        '<meta charset="UTF-8">\n' +
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+        '<title>Dossiê — ' + escapeHtml(nomeCliente) + '</title>\n' +
+        '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+        '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">\n' +
+        '<style>\n' + cssOriginal + '\n' +
+        // Layout-base real do dossiê — nenhuma folha A4, nenhum @page, nenhuma
+        // quebra de página artificial. Apenas remove o "quadro de celular" da
+        // prévia (largura fixa/overflow do wrapper mobile), que existe só para a
+        // visualização em tela, nunca fazendo parte da estrutura do documento.
+        'html,body{ margin:0; padding:0; background:#E7E1D3; }\n' +
+        '#dossie-mestre-paginas{ margin:0 auto; }\n' +
+        '</style>\n</head>\n<body>\n' +
+        clone.outerHTML +
+        '\n</body>\n</html>';
+
+      const blob = new Blob([htmlFinal], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Dossie-' + dm_sanitizarNomeArquivo(nomeCliente) + '.html';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
     } catch(err){
-      console.error('GD: erro ao gerar o PDF contínuo do Dossiê Mestre', err);
+      console.error('GD: erro ao preparar o HTML do Dossiê Mestre', err);
+      alert('Não foi possível preparar o arquivo do dossiê. Tente novamente.');
     } finally{
-      if(btn){ btn.textContent = textoOriginalBtn || 'Gerar PDF'; btn.disabled = false; }
+      if(btn){ btn.textContent = textoOriginalBtn || 'Baixar HTML do Dossiê'; btn.disabled = false; }
     }
   }
 
-  const gerarPdfBtns = document.querySelectorAll('[data-action="gerar-pdf-dossie"]');
-  gerarPdfBtns.forEach(function(btn){
+  const baixarHtmlBtns = document.querySelectorAll('[data-action="baixar-html-dossie"]');
+  baixarHtmlBtns.forEach(function(btn){
     btn.addEventListener('click', function(){
-      dm_gerarPdfContinuo();
+      dm_baixarHtmlDossie();
     });
   });
 
@@ -20968,10 +20931,11 @@
   }
 
   // Divisória editorial entre CAPÍTULOS PRINCIPAIS (nunca entre subtópicos de um
-  // mesmo capítulo) — linha fina dourada + monograma GD + linha fina dourada,
-  // minimalista, sempre o mesmo componente reutilizado em todo o documento.
+  // mesmo capítulo) — linha fina dourada + monograma GD OFICIAL (o mesmo círculo
+  // dourado já usado na capa/rodapé/encerramento, nunca "GD" textual solto) +
+  // linha fina dourada, sempre o mesmo componente reutilizado em todo o documento.
   function dm_divisoriaCapitulo(){
-    return '<div class="dm-divisoria-capitulo"><span class="dm-divisoria-linha"></span><span class="dm-divisoria-gd">GD</span><span class="dm-divisoria-linha"></span></div>';
+    return '<div class="dm-divisoria-capitulo"><span class="dm-divisoria-linha"></span><img class="dm-divisoria-monograma" src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"><span class="dm-divisoria-linha"></span></div>';
   }
 
   // Rodapé em faixa — presente em toda página numerada. "extra" permite um selo
