@@ -6020,6 +6020,37 @@
     return Object.assign({}, principal || {}, entrega || {});
   }
 
+  // ---- Migração pontual: dossiês criados antes da separação _principal/_entrega ----
+  // Antes, tipo/analiseLiberada (ou o campo legado "liberado")/pdfPath viviam todos em
+  // _principal. Só migra se _entrega ainda não existir E _principal tiver algum desses
+  // campos legados — nunca sobrescreve um _entrega já existente, nunca apaga nada de
+  // _principal.
+  async function migrarDossieParaEntregaSeNecessario(uid){
+    try{
+      const entrega = await fetchDossieEntregaDoc(uid);
+      if(entrega) return; // já está no formato novo
+
+      const legacy = await fetchDossiePrincipalDoc(uid);
+      if(!legacy) return; // não existe dossiê nenhum ainda
+
+      const temCampoLegado = ('tipo' in legacy) || ('liberado' in legacy) || ('analiseLiberada' in legacy) || ('pdfUrl' in legacy) || ('pdfPath' in legacy);
+      if(!temCampoLegado) return;
+
+      const nowIso = new Date().toISOString();
+      await setDoc(doc(db, 'clientes', uid, 'dossie', '_entrega'), {
+        tipo: legacy.tipo || null,
+        analiseLiberada: (typeof legacy.analiseLiberada === 'boolean') ? legacy.analiseLiberada : !!legacy.liberado,
+        dataLiberacaoAnalise: legacy.dataLiberacaoAnalise || legacy.dataLiberacao || null,
+        pdfPath: legacy.pdfPath || null,
+        pdfNome: legacy.pdfNome || null,
+        pdfDataUpload: legacy.pdfDataUpload || null,
+        updatedAt: nowIso
+      }, { merge: true });
+    } catch(err){
+      console.error('GD: erro ao migrar dossiê legado para _entrega', err);
+    }
+  }
+
   // ---- Keep the "Dossiê" status shown in Visão Geral (Fase 1) always in sync ----
 
   async function syncDossieStatusToFicha(uid, status){
@@ -6325,6 +6356,13 @@
     if(liberarMsgElReset){ liberarMsgElReset.textContent = ''; liberarMsgElReset.classList.remove('success'); }
     const pdfMsgElReset = document.getElementById('dossie-pdf-msg');
     if(pdfMsgElReset){ pdfMsgElReset.textContent = ''; pdfMsgElReset.classList.remove('success'); }
+
+    // Correção pontual: dossiês criados ANTES da separação _principal/_entrega guardavam
+    // tipo/analiseLiberada(ou liberado)/pdfPath tudo em _principal. Como a cliente não pode
+    // mais ler _principal, esses dossiês antigos ficam sem _entrega e a prévia some para ela.
+    // Aqui, ao abrir o dossiê no Admin, migramos esses campos legados para _entrega uma única
+    // vez (só quando _entrega ainda não existe) — sem alterar a arquitetura nem os dados de _principal.
+    await migrarDossieParaEntregaSeNecessario(selectedClienteUid);
 
     const dossieData = await fetchDossieDoc(selectedClienteUid);
 
