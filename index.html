@@ -1844,6 +1844,279 @@
     opacity:0.35;
     object-fit:contain;
   }
+
+  /* ======================================================================
+     DOSSIÊ MESTRE — PRÉVIA EDITORIAL (Fase 6C)
+     Namespace isolado (.dossie-mestre-*): nenhuma classe administrativa
+     (.stat-card, .mini-row, .radio-row, .input-field etc.) é reaproveitada
+     aqui de propósito — este é um documento editorial, não uma tela do app.
+     ====================================================================== */
+
+  .dossie-mestre-admin-faixa{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:12px 20px;
+    background:var(--graphite);
+    color:var(--off-white);
+    font-family:'Manrope', sans-serif;
+    font-size:11px;
+    letter-spacing:0.02em;
+  }
+
+  .dossie-mestre-admin-faixa-tag{
+    font-size:9.5px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--champagne-light);
+    text-align:right;
+  }
+
+  .dossie-mestre-admin-aviso{
+    margin:14px 20px 0;
+    padding:12px 16px;
+    border:1px solid var(--terracota);
+    border-radius:10px;
+    background:rgba(193,105,60,0.06);
+    color:var(--terracota);
+    font-family:'Manrope', sans-serif;
+    font-size:11.5px;
+    line-height:1.5;
+  }
+
+  .dossie-mestre-viewport{
+    background:#E7E3DA;
+    padding:28px 14px 60px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:24px;
+  }
+
+  .dossie-mestre-page{
+    position:relative;
+    background:#FFFFFF;
+    width:100%;
+    max-width:640px;
+    aspect-ratio:210 / 297;
+    box-shadow:0 2px 20px rgba(47,47,47,0.10);
+    box-sizing:border-box;
+    padding:9% 8%;
+    font-family:'Manrope', sans-serif;
+    color:var(--graphite);
+    overflow:visible;
+    display:flex;
+    flex-direction:column;
+    break-after:page;
+  }
+
+  .dossie-mestre-rodape{
+    margin-top:auto;
+    padding-top:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:8.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--graphite-soft);
+    border-top:1px solid rgba(200,164,106,0.25);
+  }
+
+  .dossie-mestre-rodape img{
+    width:16px;
+    height:16px;
+    opacity:0.5;
+    object-fit:contain;
+  }
+
+  .dossie-mestre-eyebrow{
+    font-family:'Manrope', sans-serif;
+    font-size:9.5px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--champagne);
+    margin-bottom:10px;
+  }
+
+  .dossie-mestre-titulo{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:26px;
+    line-height:1.15;
+    color:var(--graphite);
+    margin-bottom:18px;
+  }
+
+  .dossie-mestre-subtitulo{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:15px;
+    color:var(--graphite-soft);
+    margin-bottom:16px;
+  }
+
+  .dossie-mestre-bloco{
+    margin-bottom:22px;
+  }
+
+  .dossie-mestre-bloco-titulo{
+    font-family:'Manrope', sans-serif;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--champagne);
+    margin-bottom:8px;
+  }
+
+  .dossie-mestre-texto{
+    font-family:'Manrope', sans-serif;
+    font-size:12.5px;
+    line-height:1.7;
+    color:var(--graphite);
+    white-space:pre-line;
+  }
+
+  .dossie-mestre-divisor{
+    height:1px;
+    background:linear-gradient(to right, var(--champagne), transparent);
+    margin:18px 0;
+  }
+
+  /* ---- Capa ---- */
+  .dossie-mestre-capa{
+    justify-content:space-between;
+    align-items:center;
+    text-align:center;
+    padding-top:11%;
+    padding-bottom:9%;
+  }
+
+  .dossie-mestre-capa-foto{
+    width:58%;
+    aspect-ratio:3/4;
+    border-radius:4px;
+    overflow:hidden;
+    margin:0 auto 26px;
+    box-shadow:0 6px 24px rgba(47,47,47,0.14);
+  }
+
+  .dossie-mestre-capa-foto img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .dossie-mestre-capa-marca{
+    font-family:'Cormorant Garamond', serif;
+    font-size:15px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--graphite);
+  }
+
+  .dossie-mestre-capa-sub{
+    font-family:'Manrope', sans-serif;
+    font-size:9.5px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--champagne);
+    margin-top:4px;
+  }
+
+  .dossie-mestre-capa-tipo{
+    font-family:'Manrope', sans-serif;
+    font-size:10px;
+    letter-spacing:0.24em;
+    text-transform:uppercase;
+    color:var(--graphite-soft);
+    margin-top:30px;
+  }
+
+  .dossie-mestre-capa-nome{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:30px;
+    color:var(--graphite);
+    margin-top:8px;
+  }
+
+  .dossie-mestre-capa-monograma{
+    width:44px;
+    height:44px;
+    opacity:0.8;
+    object-fit:contain;
+  }
+
+  /* ---- Encerramento ---- */
+  .dossie-mestre-encerramento{
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+  }
+
+  /* ---- Estratégia: grid de 2 colunas ---- */
+  .dossie-mestre-grid2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px 20px;
+  }
+
+  /* ---- Paleta / swatches curados ---- */
+  .dossie-mestre-swatch-grid{
+    display:grid;
+    grid-template-columns:repeat(6, 1fr);
+    gap:10px 8px;
+  }
+
+  .dossie-mestre-swatch{ text-align:center; }
+
+  .dossie-mestre-swatch-circulo{
+    width:100%;
+    aspect-ratio:1/1;
+    border-radius:50%;
+    border:1px solid rgba(47,47,47,0.08);
+    margin-bottom:4px;
+  }
+
+  .dossie-mestre-swatch-nome{
+    font-family:'Manrope', sans-serif;
+    font-size:7px;
+    color:var(--graphite-soft);
+    line-height:1.2;
+  }
+
+  /* ---- Checklist de provador ---- */
+  .dossie-mestre-checklist-item{
+    display:flex;
+    gap:8px;
+    font-family:'Manrope', sans-serif;
+    font-size:11.5px;
+    line-height:1.6;
+    color:var(--graphite);
+    margin-bottom:8px;
+  }
+
+  .dossie-mestre-checklist-item::before{
+    content:'—';
+    color:var(--champagne);
+    flex-shrink:0;
+  }
+
+  /* ---- Chamada para a cartela digital no app ---- */
+  .dossie-mestre-nota{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:12px;
+    color:var(--graphite-soft);
+    text-align:center;
+    margin-top:14px;
+  }
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -2488,6 +2761,9 @@
           <div id="editor-checklist"></div>
         </div>
 
+        <div class="login-error" id="editor-previa-aviso" hidden style="text-align:left;"></div>
+        <button class="btn-primary" id="editor-gerar-previa-btn">Gerar Prévia</button>
+
         <p id="editor-sem-capitulos" hidden style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Nenhum capítulo de imagem se aplica a esta cliente com os serviços atuais. Ajuste em Serviços da Cliente, na Ficha da Cliente, se necessário.</p>
 
         <!-- ---- PERFIL DE IMAGEM ---- -->
@@ -2689,6 +2965,32 @@
         </div>
 
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PRÉVIA DO DOSSIÊ MESTRE (ADMIN) — Fase 6C ================= -->
+  <!-- Documento editorial isolado: não reutiliza cards/inputs administrativos. -->
+  <div class="screen-wrap" id="screen-dossie-mestre-previa">
+    <div class="screen-label">Prévia do Dossiê Mestre</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+        <div class="logout-btn" data-goto="editor-dossie" title="Voltar ao Editor" style="left:16px; right:auto;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg></div>
+        
+      </div>
+      <div class="content" style="padding:0;">
+        <div class="dossie-mestre-admin-faixa">
+          <span>← Voltar ao Editor</span>
+          <span class="dossie-mestre-admin-faixa-tag">Prévia administrativa — a cliente não vê esta tela</span>
+        </div>
+        <div id="dossie-mestre-aviso-incompleto" class="dossie-mestre-admin-aviso" hidden></div>
+        <div id="dossie-mestre-loading" style="text-align:center; padding:60px 20px;">
+          <p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft);">Montando a prévia…</p>
+        </div>
+        <div class="dossie-mestre-viewport" id="dossie-mestre-paginas"></div>
       </div>
     </div>
   </div>
@@ -15018,6 +15320,569 @@
     }
   });
 
+  // ===================================================================
+  // PRÉVIA DO DOSSIÊ MESTRE (Admin) — Fase 6C
+  // Documento editorial montado inteiramente na hora, a partir das fontes já
+  // existentes (users, anamnese, interno/servicos, interno/analiseProfissional,
+  // interno/analiseCromatica, interno/dossieEditorial, fotos, CARTELAS_BASE).
+  // Nada é copiado para outro documento. Nunca acessível pela sessão Cliente.
+  // ===================================================================
+
+  // ---- Textos institucionais padrão — centralizados aqui, nunca espalhados pelo HTML ----
+
+  const DOSSIE_MESTRE_BOAS_VINDAS_PADRAO = 'Foi um prazer conduzir esta consultoria e, agora, entrego este dossiê como um retrato do trabalho que construímos juntas. Aqui você encontrará, de forma clara e organizada, os direcionamentos pensados especialmente para você — para que cada escolha, daqui em diante, seja também um gesto de autoconhecimento.';
+
+  const DOSSIE_MESTRE_MENSAGEM_FINAL_PADRAO = 'Que este material seja um ponto de partida — não um conjunto de regras fixas, mas um convite para se vestir com mais intenção e confiança. Estou à disposição para acompanhar os próximos passos dessa jornada.';
+
+  const DOSSIE_MESTRE_COMO_USAR_CARTELA = [
+    'As cores mais próximas ao seu rosto — na gola, nos acessórios ou na maquiagem — têm o maior impacto visual, pois influenciam diretamente a percepção da sua pele, dos seus olhos e do seu cabelo.',
+    'Já nas partes inferiores do look, como calças, saias e sapatos, você tem mais liberdade para explorar tons fora da sua cartela principal, já que estão mais distantes do rosto.',
+    'Se uma cor que você ama está fora da sua cartela, ela ainda pode ser usada com equilíbrio: aproxime-a de um neutro da sua paleta ou reserve-a para peças mais distantes do rosto.',
+    'O contraste entre as cores de uma combinação também comunica algo — combinações com um nível de contraste semelhante ao seu tendem a parecer mais naturais e harmoniosas.',
+    'Metais, acessórios e maquiagem completam a leitura de cor do look: usar os metais recomendados para você reforça a harmonia construída pela sua cartela.'
+  ];
+
+  const DOSSIE_MESTRE_CHECKLIST_PROVADOR = [
+    'Isso conversa com o meu estilo?',
+    'Funciona para a minha rotina?',
+    'O caimento está adequado ao meu corpo?',
+    'Favorece a proporção que desejo comunicar?',
+    'Combina com peças que eu já possuo?',
+    'Essa cor funciona para a minha proposta de imagem?',
+    'Estou comprando por necessidade real, ou por impulso e promoção?'
+  ];
+
+  // ---- Coleta única de todos os dados necessários (sem duplicar nada em outro documento) ----
+
+  async function coletarDadosDossieMestre(uid){
+    const dados = {};
+
+    try{ const s = await getDoc(doc(db, 'users', uid)); dados.usuario = s.exists() ? s.data() : {}; }
+    catch(err){ console.error(err); dados.usuario = {}; }
+
+    try{ dados.anamnese = await fetchAnamneseStepsData(uid); }
+    catch(err){ console.error(err); dados.anamnese = {}; }
+
+    try{ const s = await getDoc(doc(db, 'clientes', uid, 'interno', 'servicos')); dados.servicos = s.exists() ? s.data() : {}; }
+    catch(err){ console.error(err); dados.servicos = {}; }
+
+    try{ const s = await getDoc(doc(db, 'clientes', uid, 'interno', 'analiseProfissional')); dados.prof = s.exists() ? s.data() : {}; }
+    catch(err){ console.error(err); dados.prof = {}; }
+
+    try{ const s = await getDoc(doc(db, 'clientes', uid, 'interno', 'analiseCromatica')); dados.crom = s.exists() ? s.data() : {}; }
+    catch(err){ console.error(err); dados.crom = {}; }
+
+    try{ const s = await getDoc(doc(db, 'clientes', uid, 'interno', 'dossieEditorial')); dados.editorial = s.exists() ? s.data() : {}; }
+    catch(err){ console.error(err); dados.editorial = {}; }
+
+    try{ const s = await getDoc(doc(db, 'clientes', uid, 'fotos', '_meta')); dados.fotoUrls = s.exists() ? (s.data().urls || {}) : {}; }
+    catch(err){ console.error(err); dados.fotoUrls = {}; }
+
+    try{ const s = await getDoc(doc(db, 'clientes', uid, 'fotos', '_admin')); dados.fotoEscolhida = s.exists() ? (s.data().escolhidaDossie || null) : null; }
+    catch(err){ console.error(err); dados.fotoEscolhida = null; }
+
+    return dados;
+  }
+
+  function dm_resolverFotoPrincipal(dados){
+    if(!dados.fotoEscolhida) return null;
+    const entry = dados.fotoUrls[dados.fotoEscolhida];
+    if(!entry) return null;
+    return entry.url || entry;
+  }
+
+  // cartelaId é preferido; para análises antigas sem cartelaId, normaliza o nome
+  // na leitura (mesma compatibilidade já usada na Cartela Digital) — nunca reescreve o Firestore.
+  function dm_resolverCartela(dados){
+    if(dados.crom.direcionamentoRealizado !== 'Sim') return null;
+    const cartelaId = dados.crom.cartelaId || (dados.crom.cartela ? slugifyCartela(dados.crom.cartela) : null);
+    const base = cartelaId ? CARTELAS_BASE[cartelaId] : null;
+    const nome = dados.crom.cartela || (base && base.nome) || null;
+    if(!nome) return null;
+    return { base: base, nome: nome };
+  }
+
+  // ---- Helpers de composição editorial ----
+
+  function dm_pagina(innerHtml, classesExtra){
+    return '<div class="dossie-mestre-page' + (classesExtra ? ' ' + classesExtra : '') + '">' + innerHtml + '</div>';
+  }
+
+  function dm_rodape(){
+    return '<div class="dossie-mestre-rodape"><span>Giulia Dantas — Consultoria de Imagem</span><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>';
+  }
+
+  // Filtra uma lista de {titulo, valor}, descartando qualquer item sem conteúdo —
+  // é assim que subseções vazias são simplesmente omitidas, nunca mostradas como "—".
+  function dm_blocosComConteudo(lista){
+    return lista.filter(function(b){ return b.valor && String(b.valor).trim(); });
+  }
+
+  function dm_renderBlocos(blocos){
+    return blocos.map(function(b){
+      return '<div class="dossie-mestre-bloco">' +
+        '<div class="dossie-mestre-bloco-titulo">' + escapeHtml(b.titulo) + '</div>' +
+        '<div class="dossie-mestre-texto">' + escapeHtml(b.valor) + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function dm_renderBlocosGrid(blocos){
+    return '<div class="dossie-mestre-grid2">' + blocos.map(function(b){
+      return '<div class="dossie-mestre-bloco">' +
+        '<div class="dossie-mestre-bloco-titulo">' + escapeHtml(b.titulo) + '</div>' +
+        '<div class="dossie-mestre-texto">' + escapeHtml(b.valor) + '</div>' +
+      '</div>';
+    }).join('') + '</div>';
+  }
+
+  // Divide uma lista de blocos em várias páginas quando não cabem confortavelmente
+  // em uma só — aproximação determinística por quantidade (não corta parágrafos).
+  function dm_paginarBlocos(eyebrow, titulo, blocos, maxPorPagina){
+    const paginas = [];
+    for(let i = 0; i < blocos.length; i += maxPorPagina){
+      const fatia = blocos.slice(i, i + maxPorPagina);
+      const continuando = i > 0;
+      paginas.push(dm_pagina(
+        '<div class="dossie-mestre-eyebrow">' + escapeHtml(eyebrow) + '</div>' +
+        '<div class="dossie-mestre-titulo">' + escapeHtml(titulo) + (continuando ? ' (continuação)' : '') + '</div>' +
+        dm_renderBlocos(fatia) +
+        dm_rodape()
+      ));
+    }
+    return paginas;
+  }
+
+  // ---- Capítulos: cada função retorna um array de páginas (HTML), ou null se o
+  // módulo não se aplica / não tem conteúdo suficiente — nunca uma página vazia. ----
+
+  function dm_buildCapa(dados){
+    const fotoUrl = dm_resolverFotoPrincipal(dados);
+    const fotoHtml = fotoUrl
+      ? '<div class="dossie-mestre-capa-foto"><img src="' + escapeHtml(fotoUrl) + '" alt=""></div>'
+      : '<div></div>';
+    const inner =
+      '<img class="dossie-mestre-capa-monograma" src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD" style="margin:0 auto;">' +
+      fotoHtml +
+      '<div>' +
+        '<div class="dossie-mestre-capa-marca">Giulia Dantas</div>' +
+        '<div class="dossie-mestre-capa-sub">Consultoria de Imagem</div>' +
+        '<div class="dossie-mestre-capa-tipo">Dossiê Personalizado</div>' +
+        '<div class="dossie-mestre-capa-nome">' + escapeHtml(dados.nomeCompleto) + '</div>' +
+      '</div>';
+    return [dm_pagina(inner, 'dossie-mestre-capa')];
+  }
+
+  function dm_buildAbertura(dados){
+    const texto = (dados.editorial.boasVindasPersonalizada && dados.editorial.boasVindasPersonalizada.trim())
+      ? dados.editorial.boasVindasPersonalizada
+      : DOSSIE_MESTRE_BOAS_VINDAS_PADRAO;
+    return [dm_pagina(
+      '<div class="dossie-mestre-eyebrow">Bem-vinda</div>' +
+      '<div class="dossie-mestre-titulo">Seu Dossiê Personalizado</div>' +
+      '<div class="dossie-mestre-texto">' + escapeHtml(texto) + '</div>' +
+      dm_rodape()
+    )];
+  }
+
+  function dm_buildPerfilImagem(dados){
+    if(!dados.servicos.consultoriaImagem) return null;
+    const estilo = dados.prof.estiloPredominante === 'Outro' ? dados.prof.estiloPredominanteOutro : dados.prof.estiloPredominante;
+    const complementares = Array.isArray(dados.prof.estilosComplementares) ? dados.prof.estilosComplementares.filter(function(v){ return v !== 'Outro'; }) : [];
+    if(dados.prof.estilosComplementaresOutro) complementares.push(dados.prof.estilosComplementaresOutro);
+
+    const blocos = dm_blocosComConteudo([
+      { titulo: 'Seu momento', valor: dados.editorial.sinteseMomento },
+      { titulo: 'Objetivo de imagem', valor: dados.prof.objetivoImagem },
+      { titulo: 'Estilo predominante', valor: estilo },
+      { titulo: 'Estilos complementares', valor: complementares.join(', ') },
+      { titulo: 'Parecer profissional', valor: dados.editorial.parecerProfissional }
+    ]);
+    if(!blocos.length) return null;
+
+    return [dm_pagina(
+      '<div class="dossie-mestre-eyebrow">Consultoria de Imagem</div>' +
+      '<div class="dossie-mestre-titulo">Seu Perfil de Imagem</div>' +
+      dm_renderBlocos(blocos) +
+      dm_rodape()
+    )];
+  }
+
+  function dm_buildEstrategia(dados){
+    if(!dados.servicos.consultoriaImagem) return null;
+    // "pontosNaoDestacar" é apresentado editorialmente como "Equilibrar" — o campo
+    // original em interno/analiseProfissional nunca é renomeado nem alterado.
+    const blocos = dm_blocosComConteudo([
+      { titulo: 'Valorizar', valor: dados.prof.pontosValorizar },
+      { titulo: 'Equilibrar', valor: dados.prof.pontosNaoDestacar },
+      { titulo: 'Comunicar', valor: dados.editorial.comunicar },
+      { titulo: 'Prioridade', valor: dados.editorial.prioridade }
+    ]);
+    if(!blocos.length) return null;
+
+    return [dm_pagina(
+      '<div class="dossie-mestre-eyebrow">Consultoria de Imagem</div>' +
+      '<div class="dossie-mestre-titulo">Sua Estratégia de Imagem</div>' +
+      dm_renderBlocosGrid(blocos) +
+      dm_rodape()
+    )];
+  }
+
+  function dm_buildAnaliseCorporal(dados){
+    if(!dados.servicos.consultoriaImagem) return null;
+    const biotipo = dados.prof.biotipo === 'Outro' ? dados.prof.biotipoOutro : dados.prof.biotipo;
+    const blocos = dm_blocosComConteudo([
+      { titulo: 'Biotipo', valor: biotipo },
+      { titulo: 'Proporções observadas', valor: dados.editorial.proporcoesObservadas },
+      { titulo: 'Direcionamento corporal', valor: dados.editorial.direcionamentoCorporal }
+    ]);
+    if(!blocos.length) return null;
+
+    // Nesta primeira versão, no máximo a própria Foto Principal — nunca a galeria inteira —
+    // e só quando ela pertence à categoria Consultoria de Imagem.
+    let fotoHtml = '';
+    const fotoUrl = dm_resolverFotoPrincipal(dados);
+    if(fotoUrl && categorizePhotoSlot(dados.fotoEscolhida) === 'consultoria'){
+      fotoHtml = '<div class="dossie-mestre-capa-foto" style="width:38%; margin:0 0 20px;"><img src="' + escapeHtml(fotoUrl) + '" alt=""></div>';
+    }
+
+    return [dm_pagina(
+      '<div class="dossie-mestre-eyebrow">Consultoria de Imagem</div>' +
+      '<div class="dossie-mestre-titulo">Sua Análise Corporal</div>' +
+      fotoHtml +
+      dm_renderBlocos(blocos) +
+      dm_rodape()
+    )];
+  }
+
+  function dm_buildVestuario(dados){
+    if(!dados.servicos.consultoriaImagem) return null;
+    const blocos = dm_blocosComConteudo([
+      { titulo: 'Recomendações de modelagem', valor: dados.prof.recomendacoesModelagem },
+      { titulo: 'Recomendações de tecidos', valor: dados.prof.recomendacoesTecidos },
+      { titulo: 'Partes superiores', valor: dados.editorial.partesSuperiores },
+      { titulo: 'Partes inferiores', valor: dados.editorial.partesInferiores },
+      { titulo: 'Vestidos / Macacões', valor: dados.editorial.vestidosMacacoes },
+      { titulo: 'Terceira peça', valor: dados.editorial.terceiraPeca },
+      { titulo: 'Estampas', valor: dados.editorial.estampas }
+    ]);
+    if(!blocos.length) return null;
+    return dm_paginarBlocos('Consultoria de Imagem', 'Seu Vestuário', blocos, 4);
+  }
+
+  function dm_buildAcessorios(dados){
+    if(!dados.servicos.consultoriaImagem) return null;
+    const blocos = dm_blocosComConteudo([
+      { titulo: 'Orientação profissional', valor: dados.prof.recomendacoesAcessorios },
+      { titulo: 'Bolsas', valor: dados.editorial.acessoriosBolsas },
+      { titulo: 'Calçados', valor: dados.editorial.acessoriosCalcados },
+      { titulo: 'Cintos', valor: dados.editorial.acessoriosCintos },
+      { titulo: 'Joias e bijuterias', valor: dados.editorial.acessoriosJoias },
+      { titulo: 'Óculos', valor: dados.editorial.acessoriosOculos },
+      { titulo: 'Relógios', valor: dados.editorial.acessoriosRelogios },
+      { titulo: 'Outras observações', valor: dados.editorial.acessoriosOutros }
+    ]);
+    if(!blocos.length) return null;
+    return dm_paginarBlocos('Consultoria de Imagem', 'Seus Acessórios', blocos, 4);
+  }
+
+  function dm_buildColoracaoPessoal(dados){
+    if(!dados.servicos.coloracaoPessoal) return null;
+    const cartelaInfo = dm_resolverCartela(dados);
+    if(!cartelaInfo) return null;
+
+    const blocos = dm_blocosComConteudo([
+      { titulo: 'Temperatura', valor: dados.crom.temperatura },
+      { titulo: 'Intensidade', valor: dados.crom.intensidade },
+      { titulo: 'Profundidade', valor: dados.crom.profundidade },
+      { titulo: 'Contraste pessoal', valor: dados.crom.contrastePessoal }
+    ]);
+
+    let descricaoHtml = '';
+    if(cartelaInfo.base && cartelaInfo.base.descricao && cartelaInfo.base.descricao.trim()){
+      descricaoHtml = '<div class="dossie-mestre-bloco"><div class="dossie-mestre-texto">' + escapeHtml(cartelaInfo.base.descricao) + '</div></div>';
+    }
+
+    let pitHtml = '';
+    if(cartelaInfo.base && cartelaInfo.base.pit){
+      const pitBlocos = dm_blocosComConteudo([
+        { titulo: 'Característica principal', valor: cartelaInfo.base.pit.principal },
+        { titulo: 'Característica secundária', valor: cartelaInfo.base.pit.secundaria },
+        { titulo: 'Característica terciária', valor: cartelaInfo.base.pit.terciaria }
+      ]);
+      if(pitBlocos.length) pitHtml = dm_renderBlocos(pitBlocos);
+    }
+
+    if(!blocos.length && !descricaoHtml && !pitHtml) return null;
+
+    return [dm_pagina(
+      '<div class="dossie-mestre-eyebrow">Coloração Pessoal</div>' +
+      '<div class="dossie-mestre-titulo">Sua Coloração Pessoal</div>' +
+      '<div class="dossie-mestre-subtitulo">' + escapeHtml(cartelaInfo.nome) + '</div>' +
+      descricaoHtml +
+      (blocos.length ? dm_renderBlocosGrid(blocos) : '') +
+      pitHtml +
+      dm_rodape()
+    )];
+  }
+
+  function dm_buildComoUsarCartela(dados){
+    if(!dados.servicos.coloracaoPessoal) return null;
+    if(!dm_resolverCartela(dados)) return null;
+    return [dm_pagina(
+      '<div class="dossie-mestre-eyebrow">Coloração Pessoal</div>' +
+      '<div class="dossie-mestre-titulo">Como Usar Sua Cartela</div>' +
+      DOSSIE_MESTRE_COMO_USAR_CARTELA.map(function(p){
+        return '<div class="dossie-mestre-bloco"><div class="dossie-mestre-texto">' + escapeHtml(p) + '</div></div>';
+      }).join('') +
+      dm_rodape()
+    )];
+  }
+
+  function dm_buildPaleta(dados){
+    if(!dados.servicos.coloracaoPessoal) return null;
+    const cartelaInfo = dm_resolverCartela(dados);
+    const base = cartelaInfo && cartelaInfo.base;
+    if(!base || !Array.isArray(base.cores) || !base.cores.length) return null;
+
+    // Seleção sempre determinística (ordem oficial da própria CARTELAS_BASE), nunca aleatória.
+    const neutros = base.cores.filter(function(c){ return c.familia === 'neutros'; }).slice(0, 12);
+    const destaques = base.cores.filter(function(c){ return c.destaque === true; }).slice(0, 20);
+    if(!neutros.length && !destaques.length) return null;
+
+    function grid(lista){
+      return '<div class="dossie-mestre-swatch-grid">' + lista.map(function(c){
+        return '<div class="dossie-mestre-swatch">' +
+          '<div class="dossie-mestre-swatch-circulo" style="background:' + escapeHtml(c.hex || '#eee') + ';"></div>' +
+          '<div class="dossie-mestre-swatch-nome">' + escapeHtml(c.nome || '') + '</div>' +
+        '</div>';
+      }).join('') + '</div>';
+    }
+
+    const obs = dm_blocosComConteudo([
+      { titulo: 'Melhores neutros — observação profissional', valor: dados.crom.melhoresNeutros },
+      { titulo: 'Cores de destaque — observação profissional', valor: dados.crom.coresDestaque }
+    ]);
+
+    let html = '<div class="dossie-mestre-eyebrow">Coloração Pessoal</div><div class="dossie-mestre-titulo">Sua Paleta</div>';
+    if(neutros.length) html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Neutros Essenciais</div>' + grid(neutros) + '</div>';
+    if(destaques.length) html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Cores Estratégicas</div>' + grid(destaques) + '</div>';
+    if(obs.length) html += dm_renderBlocos(obs);
+    html += '<div class="dossie-mestre-nota">Sua cartela digital completa, com 100 cores, está disponível no aplicativo.</div>';
+    html += dm_rodape();
+
+    return [dm_pagina(html)];
+  }
+
+  function dm_buildMetais(dados){
+    if(!dados.servicos.coloracaoPessoal) return null;
+    const cartelaInfo = dm_resolverCartela(dados);
+    const base = cartelaInfo && cartelaInfo.base;
+    if(!base || !Array.isArray(base.metais) || !base.metais.length) return null;
+
+    let html = '<div class="dossie-mestre-eyebrow">Coloração Pessoal</div><div class="dossie-mestre-titulo">Metais Recomendados</div>';
+    html += '<div class="dossie-mestre-swatch-grid">' + base.metais.map(function(m){
+      return '<div class="dossie-mestre-swatch">' +
+        '<div class="dossie-mestre-swatch-circulo" style="background:' + escapeHtml(m.hex || '#eee') + ';"></div>' +
+        '<div class="dossie-mestre-swatch-nome">' + escapeHtml(m.nome || '') + '</div>' +
+      '</div>';
+    }).join('') + '</div>';
+
+    if(dados.crom.metaisRecomendados && dados.crom.metaisRecomendados.trim()){
+      html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Orientação Profissional</div><div class="dossie-mestre-texto">' + escapeHtml(dados.crom.metaisRecomendados) + '</div></div>';
+    }
+    html += dm_rodape();
+
+    return [dm_pagina(html)];
+  }
+
+  function dm_buildMaquiagem(dados){
+    if(!dados.servicos.maquiagem) return null;
+    const texto = dados.crom.direcionamentoMaquiagem;
+    if(!texto || !texto.trim()) return null;
+    return [dm_pagina(
+      '<div class="dossie-mestre-eyebrow">Beleza</div>' +
+      '<div class="dossie-mestre-titulo">Maquiagem</div>' +
+      '<div class="dossie-mestre-texto">' + escapeHtml(texto) + '</div>' +
+      dm_rodape()
+    )];
+  }
+
+  function dm_buildCabelo(dados){
+    if(!dados.servicos.cabelo) return null;
+    const texto = dados.crom.direcionamentoCabelo;
+    if(!texto || !texto.trim()) return null;
+    return [dm_pagina(
+      '<div class="dossie-mestre-eyebrow">Beleza</div>' +
+      '<div class="dossie-mestre-titulo">Cabelo</div>' +
+      '<div class="dossie-mestre-texto">' + escapeHtml(texto) + '</div>' +
+      dm_rodape()
+    )];
+  }
+
+  function dm_buildAplicacaoPratica(dados){
+    if(!dados.servicos.consultoriaImagem) return null;
+    const blocos = dm_blocosComConteudo([
+      { titulo: 'Seu armário estratégico', valor: dados.editorial.armarioEstrategico },
+      { titulo: 'Propostas de looks', valor: dados.editorial.looksPropostos },
+      { titulo: 'Plano de compras', valor: dados.editorial.planoCompras }
+    ]);
+    if(!blocos.length) return null;
+    return dm_paginarBlocos('Consultoria de Imagem', 'Aplicação Prática', blocos, 4);
+  }
+
+  function dm_buildChecklistProvador(dados){
+    if(!dados.servicos.consultoriaImagem) return null;
+    return [dm_pagina(
+      '<div class="dossie-mestre-eyebrow">Guia Rápido</div>' +
+      '<div class="dossie-mestre-titulo">Checklist de Provador</div>' +
+      '<div class="dossie-mestre-subtitulo">Antes de comprar, pergunte-se:</div>' +
+      DOSSIE_MESTRE_CHECKLIST_PROVADOR.map(function(p){
+        return '<div class="dossie-mestre-checklist-item">' + escapeHtml(p) + '</div>';
+      }).join('') +
+      dm_rodape()
+    )];
+  }
+
+  function dm_buildGuiaRapido(dados){
+    const blocos = [];
+
+    if(dados.servicos.consultoriaImagem){
+      const estilo = dados.prof.estiloPredominante === 'Outro' ? dados.prof.estiloPredominanteOutro : dados.prof.estiloPredominante;
+      const complementares = Array.isArray(dados.prof.estilosComplementares) ? dados.prof.estilosComplementares.filter(function(v){ return v !== 'Outro'; }) : [];
+      if(dados.prof.estilosComplementaresOutro) complementares.push(dados.prof.estilosComplementaresOutro);
+      const biotipo = dados.prof.biotipo === 'Outro' ? dados.prof.biotipoOutro : dados.prof.biotipo;
+
+      blocos.push.apply(blocos, dm_blocosComConteudo([
+        { titulo: 'Estilo predominante', valor: estilo },
+        { titulo: 'Estilos complementares', valor: complementares.join(', ') },
+        { titulo: 'Biotipo', valor: biotipo },
+        { titulo: 'Prioridade de imagem', valor: dados.editorial.prioridade }
+      ]));
+    }
+
+    if(dados.servicos.coloracaoPessoal){
+      const cartelaInfo = dm_resolverCartela(dados);
+      const base = cartelaInfo && cartelaInfo.base;
+      const metaisNomes = (base && Array.isArray(base.metais) && base.metais.length) ? base.metais.map(function(m){ return m.nome; }).join(', ') : '';
+      blocos.push.apply(blocos, dm_blocosComConteudo([
+        { titulo: 'Cartela', valor: cartelaInfo && cartelaInfo.nome },
+        { titulo: 'Temperatura', valor: dados.crom.temperatura },
+        { titulo: 'Intensidade', valor: dados.crom.intensidade },
+        { titulo: 'Profundidade', valor: dados.crom.profundidade },
+        { titulo: 'Contraste', valor: dados.crom.contrastePessoal },
+        { titulo: 'Metais', valor: metaisNomes }
+      ]));
+    }
+
+    let obsHtml = '';
+    if(dados.editorial.guiaRapido && dados.editorial.guiaRapido.trim()){
+      obsHtml = '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Observação da Consultora</div><div class="dossie-mestre-texto">' + escapeHtml(dados.editorial.guiaRapido) + '</div></div>';
+    }
+
+    if(!blocos.length && !obsHtml) return null;
+
+    return [dm_pagina(
+      '<div class="dossie-mestre-eyebrow">Guia Rápido</div>' +
+      '<div class="dossie-mestre-titulo">Seu Guia Rápido</div>' +
+      (blocos.length ? dm_renderBlocosGrid(blocos) : '') +
+      obsHtml +
+      dm_rodape()
+    )];
+  }
+
+  function dm_buildEncerramento(dados){
+    const texto = (dados.editorial.mensagemFinal && dados.editorial.mensagemFinal.trim()) ? dados.editorial.mensagemFinal : DOSSIE_MESTRE_MENSAGEM_FINAL_PADRAO;
+    return [dm_pagina(
+      '<div class="dossie-mestre-texto" style="margin-bottom:26px;">' + escapeHtml(texto) + '</div>' +
+      '<img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD" style="width:38px; height:38px; opacity:0.85; margin:0 auto 8px;">' +
+      '<div class="dossie-mestre-capa-marca">Giulia Dantas</div>',
+      'dossie-mestre-encerramento'
+    )];
+  }
+
+  // ---- Avisos administrativos (nunca aparecem dentro das páginas do documento) ----
+
+  function dm_calcularAvisosAdministrativos(dados){
+    const avisos = [];
+
+    if(dados.servicos.maquiagem && (!dados.crom.direcionamentoMaquiagem || !dados.crom.direcionamentoMaquiagem.trim())){
+      avisos.push('Módulo Maquiagem contratado, mas sem direcionamento preenchido.');
+    }
+    if(dados.servicos.cabelo && (!dados.crom.direcionamentoCabelo || !dados.crom.direcionamentoCabelo.trim())){
+      avisos.push('Módulo Cabelo contratado, mas sem direcionamento preenchido.');
+    }
+
+    const capitulosParaChecklist = dados.servicos.consultoriaImagem
+      ? ['perfil', 'estrategia', 'corporal', 'vestuario', 'acessorios', 'aplicacao', 'finalizacao']
+      : ['finalizacao'];
+    const incompletos = capitulosParaChecklist.filter(function(cap){
+      return !EDITOR_CAPITULOS[cap].some(function(campo){ return dados.editorial[campo] && String(dados.editorial[campo]).trim(); });
+    });
+    if(incompletos.length){
+      avisos.push('Existem capítulos editoriais ainda incompletos: ' + incompletos.map(function(c){ return EDITOR_CAPITULO_LABELS[c]; }).join(', ') + '.');
+    }
+
+    return avisos;
+  }
+
+  // ---- Montagem principal da prévia ----
+
+  async function renderDossieMestrePrevia(){
+    const loadingEl = document.getElementById('dossie-mestre-loading');
+    const paginasEl = document.getElementById('dossie-mestre-paginas');
+    const avisoEl = document.getElementById('dossie-mestre-aviso-incompleto');
+
+    if(loadingEl) loadingEl.hidden = false;
+    if(paginasEl) paginasEl.innerHTML = '';
+    if(avisoEl){ avisoEl.hidden = true; avisoEl.innerHTML = ''; }
+
+    if(!selectedClienteUid) return;
+
+    try{
+      const dados = await coletarDadosDossieMestre(selectedClienteUid);
+      dados.nomeCompleto = (dados.anamnese[1] && dados.anamnese[1].nomeCompleto) || dados.usuario.nome || selectedClienteNome || 'Cliente';
+
+      const paginas = [];
+      function push(resultado){ if(resultado) paginas.push.apply(paginas, resultado); }
+
+      push(dm_buildCapa(dados));
+      push(dm_buildAbertura(dados));
+      push(dm_buildPerfilImagem(dados));
+      push(dm_buildEstrategia(dados));
+      push(dm_buildAnaliseCorporal(dados));
+      push(dm_buildVestuario(dados));
+      push(dm_buildAcessorios(dados));
+      push(dm_buildColoracaoPessoal(dados));
+      push(dm_buildComoUsarCartela(dados));
+      push(dm_buildPaleta(dados));
+      push(dm_buildMetais(dados));
+      push(dm_buildMaquiagem(dados));
+      push(dm_buildCabelo(dados));
+      push(dm_buildAplicacaoPratica(dados));
+      push(dm_buildChecklistProvador(dados));
+      push(dm_buildGuiaRapido(dados));
+      push(dm_buildEncerramento(dados));
+
+      if(paginasEl) paginasEl.innerHTML = paginas.join('');
+
+      const avisos = dm_calcularAvisosAdministrativos(dados);
+      if(avisos.length && avisoEl){
+        avisoEl.innerHTML = avisos.map(function(a){ return '<div>' + escapeHtml(a) + '</div>'; }).join('');
+        avisoEl.hidden = false;
+      }
+    } catch(err){
+      console.error('GD: erro ao montar a prévia do dossiê mestre', err);
+    } finally{
+      if(loadingEl) loadingEl.hidden = true;
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('#editor-gerar-previa-btn') || !selectedClienteUid) return;
+    if(window.__gdGoTo) window.__gdGoTo('dossie-mestre-previa', 'fwd');
+  });
+
   // ---- Ver Dados para o Dossiê ----
 
   const PROF_DATA_FIELDS = [
@@ -15596,6 +16461,9 @@
       if(screenId === 'editor-dossie'){
         renderEditorDossie();
       }
+      if(screenId === 'dossie-mestre-previa'){
+        renderDossieMestrePrevia();
+      }
       if(screenId === 'cliente-dossie'){
         renderClienteDossie();
       }
@@ -15638,6 +16506,9 @@
     }
     if(target === 'editor-dossie'){
       setTimeout(renderEditorDossie, 50);
+    }
+    if(target === 'dossie-mestre-previa'){
+      setTimeout(renderDossieMestrePrevia, 50);
     }
     if(target === 'cliente-dossie'){
       setTimeout(renderClienteDossie, 50);
