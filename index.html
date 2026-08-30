@@ -1631,17 +1631,6 @@
     color:var(--graphite);
   }
 
-  /* ===== Visualizador de Dossiê em PDF (Cliente) — PDF.js ===== */
-  .dossie-pdf-page{
-    display:block;
-    width:100%;
-    height:auto;
-    margin:0 0 12px;
-    border:var(--hairline);
-    border-radius:8px;
-    background:#fff;
-  }
-
 
   /* ===== Cartela Digital (Cliente) — Fase 4 ===== */
   .cartela-swatch-grid{
@@ -1849,8 +1838,6 @@
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script>console.log('[GD-PDF] Diagnóstico de carregamento — logo após a tag <script> do pdf.min.js: typeof window.pdfjsLib =', typeof window.pdfjsLib, '| pdfjsLib.version =', window.pdfjsLib && window.pdfjsLib.version);</script>
 </head>
 <body>
 
@@ -3433,8 +3420,7 @@
                 <div class="label">Data da entrega</div>
                 <div class="ficha-info-value" id="cliente-dossie-data">—</div>
               </div>
-              <button class="btn-primary" id="cliente-dossie-ver-btn" style="margin-top:16px;">Ver Dossiê</button>
-              <button class="btn-secondary" id="cliente-dossie-baixar-btn" style="margin-bottom:0;">Baixar PDF</button>
+              <button class="btn-primary" id="cliente-dossie-baixar-btn" style="margin-top:16px; margin-bottom:0;">Baixar Meu Dossiê</button>
             </div>
           </div>
         </div>
@@ -3446,37 +3432,6 @@
         <div class="navitem" data-goto="anamnese-1" data-nav-label="Anamnese"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="3.5" width="13" height="17" rx="1.5"/><path d="M8 8.5h7M8 12h7M8 15.5h4"/><path d="M19.5 3.5l-1.5 1.5 1.2 1.2 1.5-1.5z" fill="currentColor"/></svg>Anamnese</div>
         <div class="navitem" data-goto="fotos" data-nav-label="Fotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.5"/><path d="M8.5 6.5l1.3-2h4.4l1.3 2"/><circle cx="12" cy="13" r="3.2"/><circle cx="17.3" cy="9.3" r="0.5" fill="currentColor" stroke="none"/></svg>Fotos</div>
         <div class="navitem active" data-goto="cliente-dossie" data-nav-label="Dossiê"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiê</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= VISUALIZAR DOSSIÊ (CLIENTE) ================= -->
-  <div class="screen-wrap" id="screen-visualizar-dossie">
-    <div class="screen-label">Visualizar Dossiê</div>
-    <div class="phone">
-      <div class="topbar">
-        <div class="brand brand-centered">
-          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
-        </div>
-        <div class="logout-btn" data-goto="cliente-dossie" title="Voltar" style="left:16px; right:auto;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg></div>
-        
-      </div>
-      <div class="content">
-        <div class="eyebrow">Seu Material</div>
-        <div class="page-title">Visualizar Dossiê</div>
-        <div class="page-sub" style="margin-bottom:18px;">Seu dossiê completo, página por página</div>
-
-        <div id="visualizar-dossie-loading" style="text-align:center; padding:60px 12px;">
-          <p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft);">Carregando seu dossiê…</p>
-        </div>
-
-        <div id="visualizar-dossie-erro" hidden class="stat-card" style="text-align:center; padding:32px 20px;">
-          <p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); line-height:1.6;">Não foi possível carregar o dossiê agora. Tente novamente em instantes.</p>
-        </div>
-
-        <div id="visualizar-dossie-paginas"></div>
-
-        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
     </div>
   </div>
@@ -6991,14 +6946,6 @@
     }
   }
 
-  // "Ver Dossiê" agora abre uma tela interna com o PDF renderizado via PDF.js —
-  // não depende mais do comportamento nativo do navegador para PDFs (que no
-  // Chrome/Android pode forçar download mesmo com contentDisposition: inline).
-  document.addEventListener('click', function(e){
-    if(!e.target.closest('#cliente-dossie-ver-btn') || !currentUser) return;
-    if(window.__gdGoTo) window.__gdGoTo('visualizar-dossie', 'fwd');
-  });
-
   document.addEventListener('click', async function(e){
     const baixarBtn = e.target.closest('#cliente-dossie-baixar-btn');
     if(!baixarBtn || !currentUser) return;
@@ -7056,124 +7003,6 @@
       baixarBtn.textContent = originalBaixarText;
     }
   });
-
-  // ---- Visualizar Dossiê: PDF renderizado dentro do próprio app via PDF.js ----
-  // Nunca guarda a URL nem o PDF; getDownloadURL() é chamado só ao abrir esta tela,
-  // e passa pelas Storage Rules (inclusive a checagem de analiseLiberada) a cada vez.
-
-  let pdfJsWorkerConfigurado = false;
-
-  function ensurePdfJsWorker(){
-    console.log('[GD-PDF] 7. ensurePdfJsWorker() chamada. já configurado antes?', pdfJsWorkerConfigurado, '| typeof window.pdfjsLib =', typeof window.pdfjsLib);
-    if(pdfJsWorkerConfigurado) return;
-    if(window.pdfjsLib){
-      const workerUrl = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
-      pdfJsWorkerConfigurado = true;
-      console.log('[GD-PDF] 8. GlobalWorkerOptions.workerSrc definido como:', window.pdfjsLib.GlobalWorkerOptions.workerSrc, '| versão do pdfjsLib (pdfjsLib.version):', window.pdfjsLib.version);
-    } else {
-      console.warn('[GD-PDF] 8. NÃO configurou o worker porque window.pdfjsLib ainda não existe neste momento.');
-    }
-  }
-
-  async function renderVisualizarDossie(){
-    console.log('[GD-PDF] ===== Início de renderVisualizarDossie() =====');
-    console.log('[GD-PDF] 0. typeof window.pdfjsLib no início da função:', typeof window.pdfjsLib);
-
-    const loadingEl = document.getElementById('visualizar-dossie-loading');
-    const erroEl = document.getElementById('visualizar-dossie-erro');
-    const paginasEl = document.getElementById('visualizar-dossie-paginas');
-
-    if(loadingEl) loadingEl.hidden = false;
-    if(erroEl) erroEl.hidden = true;
-    if(paginasEl) paginasEl.innerHTML = '';
-
-    if(!currentUser){
-      console.warn('[GD-PDF] Abortado: currentUser ainda não está definido.');
-      return;
-    }
-    console.log('[GD-PDF] currentUser.uid =', currentUser.uid);
-
-    try{
-      console.log('[GD-PDF] 1. Lendo clientes/' + currentUser.uid + '/dossie/_entrega ...');
-      const snap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_entrega'));
-      console.log('[GD-PDF] 1. _entrega existe?', snap.exists());
-      const dossieData = snap.exists() ? snap.data() : null;
-      console.log('[GD-PDF] 1. Conteúdo de _entrega:', dossieData);
-
-      if(!dossieData || !dossieData.analiseLiberada || !dossieData.pdfPath){
-        console.warn('[GD-PDF] Abortado antes do PDF.js: analiseLiberada =', dossieData && dossieData.analiseLiberada, '| pdfPath =', dossieData && dossieData.pdfPath);
-        throw new Error('Dossiê indisponível ou não liberado');
-      }
-
-      console.log('[GD-PDF] 2. pdfPath obtido de _entrega:', dossieData.pdfPath);
-
-      console.log('[GD-PDF] 3. Chamando getDownloadURL()...');
-      const url = await getDownloadURL(ref(storage, dossieData.pdfPath));
-      console.log('[GD-PDF] 3. getDownloadURL() retornou (tamanho da string, não a URL completa por segurança):', url ? url.length + ' caracteres' : url);
-
-      ensurePdfJsWorker();
-      if(!window.pdfjsLib){
-        console.error('[GD-PDF] FALHA: window.pdfjsLib continua indefinido mesmo depois de ensurePdfJsWorker(). A tag <script> do pdf.min.js pode não ter carregado (bloqueada por rede/CDN/CSP) ou carregou depois deste ponto.');
-        throw new Error('Biblioteca de visualização de PDF não carregou');
-      }
-
-      console.log('[GD-PDF] 4. Chamando fetch(url)...');
-      const resp = await fetch(url);
-      console.log('[GD-PDF] 5. fetch concluído. resp.ok =', resp.ok, '| resp.status =', resp.status, '| Content-Type =', resp.headers.get('content-type'), '| Content-Length (header) =', resp.headers.get('content-length'));
-      if(!resp.ok) throw new Error('Falha ao buscar o PDF (HTTP ' + resp.status + ')');
-
-      const arrayBuffer = await resp.arrayBuffer();
-      console.log('[GD-PDF] 6. arrayBuffer obtido. Tamanho real em bytes:', arrayBuffer.byteLength);
-      if(arrayBuffer.byteLength === 0){
-        console.error('[GD-PDF] FALHA: o arquivo baixado tem 0 bytes.');
-      }
-
-      console.log('[GD-PDF] 9. Chamando pdfjsLib.getDocument({ data }) com workerSrc =', window.pdfjsLib.GlobalWorkerOptions.workerSrc);
-      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
-      loadingTask.onProgress = function(p){ console.log('[GD-PDF] progresso do carregamento:', p); };
-
-      console.log('[GD-PDF] 10. Aguardando loadingTask.promise...');
-      const pdf = await loadingTask.promise;
-      console.log('[GD-PDF] 10. loadingTask.promise resolvida com sucesso. pdf.numPages =', pdf.numPages);
-
-      if(loadingEl) loadingEl.hidden = true;
-
-      const containerWidth = Math.max(240, (paginasEl.clientWidth || 320) - 2);
-      console.log('[GD-PDF] containerWidth calculado:', containerWidth, '| paginasEl.clientWidth =', paginasEl.clientWidth);
-
-      for(let pageNum = 1; pageNum <= pdf.numPages; pageNum++){
-        console.log('[GD-PDF] 11. Obtendo página', pageNum, 'de', pdf.numPages, '...');
-        const page = await pdf.getPage(pageNum);
-        const baseViewport = page.getViewport({ scale: 1 });
-        const scale = containerWidth / baseViewport.width;
-        const viewport = page.getViewport({ scale: scale });
-
-        const canvas = document.createElement('canvas');
-        canvas.className = 'dossie-pdf-page';
-        canvas.width = Math.floor(viewport.width);
-        canvas.height = Math.floor(viewport.height);
-        const ctx = canvas.getContext('2d');
-
-        console.log('[GD-PDF] 12. Renderizando página', pageNum, 'no canvas', canvas.width, 'x', canvas.height, '...');
-        await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-        paginasEl.appendChild(canvas);
-        console.log('[GD-PDF] 12. Página', pageNum, 'renderizada e anexada ao DOM com sucesso.');
-      }
-
-      console.log('[GD-PDF] ===== Concluído com sucesso: todas as páginas renderizadas =====');
-    } catch(err){
-      // Log completo para diagnóstico real (não só a mensagem genérica mostrada à cliente).
-      console.error('[GD-PDF] ===== ERRO — objeto completo abaixo ===== ');
-      console.error(err);
-      console.error('[GD-PDF] erro.name =', err && err.name);
-      console.error('[GD-PDF] erro.code =', err && err.code);
-      console.error('[GD-PDF] erro.message =', err && err.message);
-      console.error('[GD-PDF] erro.stack =', err && err.stack);
-      if(loadingEl) loadingEl.hidden = true;
-      if(erroEl) erroEl.hidden = false;
-    }
-  }
 
   // ---- Minha Cartela: leitura exclusiva de interno/analiseCromatica ----
 
@@ -7332,9 +7161,6 @@
       if(screenId === 'cliente-dossie'){
         renderClienteDossie();
       }
-      if(screenId === 'visualizar-dossie'){
-        renderVisualizarDossie();
-      }
       if(screenId === 'cartela-digital'){
         renderCartelaDigital();
       }
@@ -7374,9 +7200,6 @@
     }
     if(target === 'cliente-dossie'){
       setTimeout(renderClienteDossie, 50);
-    }
-    if(target === 'visualizar-dossie'){
-      setTimeout(renderVisualizarDossie, 50);
     }
     if(target === 'cartela-digital'){
       setTimeout(renderCartelaDigital, 50);
