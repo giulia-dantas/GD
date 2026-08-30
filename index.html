@@ -1019,6 +1019,15 @@
     color:var(--olive);
   }
 
+  .cartela-divergencia-aviso{
+    font-size:11px;
+    color:var(--terracota);
+    font-style:italic;
+    font-family:'Manrope', sans-serif;
+    margin-top:-8px;
+    margin-bottom:12px;
+  }
+
   .login-error:empty{
     display:none;
   }
@@ -3463,13 +3472,14 @@
 
         <div class="stat-card">
           <div class="stat-label" style="margin-bottom:10px;">Suas Cores</div>
-          <div class="pill-row" style="margin-bottom:16px;">
-            <div class="pill active" data-cartela-cor-tab="todas">Todas</div>
-            <div class="pill" data-cartela-cor-tab="neutros">Neutros</div>
-            <div class="pill" data-cartela-cor-tab="destaques">Destaques</div>
-          </div>
+          <div class="pill-row ficha-tabs-scroll" id="cartela-cor-tabs" style="margin-bottom:16px;"></div>
           <div class="cartela-swatch-grid" id="cartela-cores-grid"></div>
           <p id="cartela-cores-vazio" style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:20px 0;">Sua cartela digital será disponibilizada em breve.</p>
+        </div>
+
+        <div class="stat-card" id="cartela-metais-card" hidden>
+          <div class="stat-label" style="margin-bottom:10px;">Metais Recomendados</div>
+          <div class="cartela-swatch-grid" id="cartela-metais-grid"></div>
         </div>
 
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
@@ -3757,7 +3767,7 @@
 
             <div id="analise-cromatico-campos" style="display:none;">
               <label class="form-label">Cartela</label>
-              <div class="radio-row" data-field="cartela">
+              <div class="radio-row" data-field="cartela" id="analise-cartela-radio">
                 <div class="radio-opt"><div class="dot-circle"></div>Primavera Clara</div>
                 <div class="radio-opt"><div class="dot-circle"></div>Primavera Quente</div>
                 <div class="radio-opt"><div class="dot-circle"></div>Primavera Brilhante</div>
@@ -3766,33 +3776,39 @@
                 <div class="radio-opt"><div class="dot-circle"></div>Verão Suave</div>
                 <div class="radio-opt"><div class="dot-circle"></div>Outono Suave</div>
                 <div class="radio-opt"><div class="dot-circle"></div>Outono Quente</div>
-                <div class="radio-opt"><div class="dot-circle"></div>Outono Profundo</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Outono Escuro</div>
                 <div class="radio-opt"><div class="dot-circle"></div>Inverno Brilhante</div>
                 <div class="radio-opt"><div class="dot-circle"></div>Inverno Frio</div>
-                <div class="radio-opt"><div class="dot-circle"></div>Inverno Profundo</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Inverno Escuro</div>
               </div>
 
               <label class="form-label">Temperatura</label>
-              <div class="radio-row" data-field="temperatura">
+              <div class="radio-row" data-field="temperatura" id="analise-temperatura-radio">
                 <div class="radio-opt"><div class="dot-circle"></div>Quente</div>
                 <div class="radio-opt"><div class="dot-circle"></div>Fria</div>
                 <div class="radio-opt"><div class="dot-circle"></div>Neutra-quente</div>
                 <div class="radio-opt"><div class="dot-circle"></div>Neutra-fria</div>
               </div>
+              <div class="cartela-divergencia-aviso" id="analise-temperatura-aviso" hidden></div>
 
               <label class="form-label">Intensidade</label>
-              <div class="radio-row" data-field="intensidade">
+              <div class="radio-row" data-field="intensidade" id="analise-intensidade-radio">
                 <div class="radio-opt"><div class="dot-circle"></div>Suave</div>
                 <div class="radio-opt"><div class="dot-circle"></div>Média</div>
                 <div class="radio-opt"><div class="dot-circle"></div>Brilhante</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Variável</div>
               </div>
+              <div class="cartela-divergencia-aviso" id="analise-intensidade-aviso" hidden></div>
 
               <label class="form-label">Profundidade</label>
-              <div class="radio-row" data-field="profundidade">
+              <div class="radio-row" data-field="profundidade" id="analise-profundidade-radio">
                 <div class="radio-opt"><div class="dot-circle"></div>Clara</div>
                 <div class="radio-opt"><div class="dot-circle"></div>Média</div>
                 <div class="radio-opt"><div class="dot-circle"></div>Escura</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Variável</div>
               </div>
+              <div class="cartela-divergencia-aviso" id="analise-profundidade-aviso" hidden></div>
+
 
               <label class="form-label">Contraste pessoal</label>
               <div class="radio-row" data-field="contrastePessoal">
@@ -5582,26 +5598,7586 @@
   // seção nunca sobrescreva a outra nem as observações internas da Fase 1.
   // ===================================================================
 
-  // ---- Base das 12 cartelas cromáticas ----
-  // Estrutura apenas: nenhuma cor, neutro ou destaque é inventado aqui.
-  // Os códigos oficiais serão preenchidos posteriormente pela Giulia.
-  const CARTELAS_BASE = [
-    'Primavera Clara', 'Primavera Quente', 'Primavera Brilhante',
-    'Verão Claro', 'Verão Frio', 'Verão Suave',
-    'Outono Suave', 'Outono Quente', 'Outono Profundo',
-    'Inverno Brilhante', 'Inverno Frio', 'Inverno Profundo'
-  ].reduce(function(acc, nome){
-    acc[nome] = {
-      nome: nome,
-      temperatura: '',
-      intensidade: '',
-      profundidade: '',
-      cores: [],
-      neutros: [],
-      destaques: []
-    };
-    return acc;
-  }, {});
+  // ---- Base oficial das 12 cartelas cromáticas (Fase 5B) ----
+  // Fonte de verdade: base fornecida pela Giulia (método sazonal expandido).
+  // Indexada por cartelaId (slug estável). 100 cores por cartela, metais à parte.
+  // Nunca editar estes dados diretamente no código — qualquer atualização deve
+  // vir de uma nova base oficial fornecida pela Giulia.
+  const CARTELAS_BASE = {
+  "primavera_clara": {
+    "id": "primavera_clara",
+    "nome": "Primavera Clara",
+    "temperatura": "Quente",
+    "intensidade": "Variável",
+    "profundidade": "Clara",
+    "pit": {
+      "principal": "Profundidade clara",
+      "secundaria": "Temperatura quente",
+      "terciaria": "Intensidade variável"
+    },
+    "descricao": "Cartela de profundidade clara predominante, temperatura quente secundária e intensidade variável; luminosa, alegre e delicada.",
+    "quantidadeCores": 100,
+    "cores": [
+      {
+        "nome": "Off-White",
+        "hex": "#F3F0EC",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Off-White",
+        "hex": "#EAE5DF",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Marfim",
+        "hex": "#E0DAD3",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#D6CFC7",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Areia",
+        "hex": "#CBC4BB",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Fendi",
+        "hex": "#C0B9B0",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Greige",
+        "hex": "#B6AEA4",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Taupe",
+        "hex": "#AEA396",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Pérola",
+        "hex": "#A79887",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#A08D77",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Chumbo",
+        "hex": "#998267",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Grafite",
+        "hex": "#8F775B",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Amêndoa",
+        "hex": "#E3BFB6",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Avelã",
+        "hex": "#CF7B5D",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Caramelo",
+        "hex": "#E8B096",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Canela",
+        "hex": "#E17938",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Conhaque",
+        "hex": "#D8AD8B",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Camel",
+        "hex": "#D08D48",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Tabaco",
+        "hex": "#E2AC65",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#F7F0DF",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Baunilha",
+        "hex": "#EEE0B8",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Milho",
+        "hex": "#E3CA7C",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Mel",
+        "hex": "#F5EDCD",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Dourado",
+        "hex": "#ECDA8F",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Mostarda",
+        "hex": "#FAF5DC",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Açafrão",
+        "hex": "#F3E8A4",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Ocre",
+        "hex": "#EDDC63",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Girassol",
+        "hex": "#F9F2BB",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Canário",
+        "hex": "#F5EB78",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Limão",
+        "hex": "#FCFAD4",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Ouro Velho",
+        "hex": "#FAF78F",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Pêssego",
+        "hex": "#F3D8D0",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Damasco",
+        "hex": "#E5A992",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Salmão",
+        "hex": "#DA7C53",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Papaya",
+        "hex": "#EEBFA7",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Tangerina",
+        "hex": "#E59466",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Coral Alaranjado",
+        "hex": "#F5D4BE",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Abóbora",
+        "hex": "#EEAB7B",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Laranja Queimado",
+        "hex": "#E88635",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Terracota",
+        "hex": "#F5C192",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Telha",
+        "hex": "#F19F4A",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Ferrugem",
+        "hex": "#FAD5AA",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Cobre",
+        "hex": "#F8B761",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Melancia",
+        "hex": "#F3D0D6",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Tomate",
+        "hex": "#D5495A",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Papoula",
+        "hex": "#DD555F",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Escarlate",
+        "hex": "#E46266",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#EB7371",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Cereja",
+        "hex": "#F08780",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rubi",
+        "hex": "#F59B90",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Tijolo",
+        "hex": "#F9AEA0",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Queimado",
+        "hex": "#FCC1B2",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Pêssego",
+        "hex": "#F3D0DF",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Chá",
+        "hex": "#F695BC",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#E86C99",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Queimado",
+        "hex": "#D54974",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Malva",
+        "hex": "#F9A4BB",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Goiaba",
+        "hex": "#EE7993",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Médio",
+        "hex": "#DC546B",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Frio",
+        "hex": "#FCB4BD",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Chiclete",
+        "hex": "#F2878F",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Vivo",
+        "hex": "#E26064",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Maçã",
+        "hex": "#EDF3D0",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Pistache",
+        "hex": "#C0ED4A",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Maçã",
+        "hex": "#BBE677",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Lima",
+        "hex": "#C2FA89",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Abacate",
+        "hex": "#CEF6B3",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Oliva",
+        "hex": "#6FD945",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Sálvia",
+        "hex": "#6CF54E",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Folha",
+        "hex": "#84EE7C",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Musgo",
+        "hex": "#A5EBA7",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Militar",
+        "hex": "#BBFAC5",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Garrafa",
+        "hex": "#47E36F",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Esmeralda",
+        "hex": "#73DD9A",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Floresta",
+        "hex": "#82F4B8",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Jade",
+        "hex": "#ABF1D4",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Céu",
+        "hex": "#D0F3EA",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Gelo",
+        "hex": "#4AEDD1",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Pó",
+        "hex": "#77E6DB",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Hortênsia",
+        "hex": "#89FAF8",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pervinca",
+        "hex": "#B3F2F6",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Jeans",
+        "hex": "#45C5D9",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Ardósia",
+        "hex": "#4ED2F5",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Aço",
+        "hex": "#7CCDEE",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#A5D1EB",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Petróleo",
+        "hex": "#BBDEFA",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Turquesa",
+        "hex": "#4792E3",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Turquesa Profundo",
+        "hex": "#739EDD",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pavão",
+        "hex": "#82A7F4",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Royal",
+        "hex": "#ABBDF1",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Lavanda",
+        "hex": "#E1D0F3",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Lilás",
+        "hex": "#D295F6",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Malva",
+        "hex": "#CA6CE8",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Orquídea",
+        "hex": "#C549D5",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Violeta",
+        "hex": "#F9A4F8",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Ametista",
+        "hex": "#EE79DC",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Íris",
+        "hex": "#DC54B6",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Uva",
+        "hex": "#FCB4DF",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Ameixa",
+        "hex": "#F287B9",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Berinjela",
+        "hex": "#E2608B",
+        "familia": "roxos",
+        "destaque": true
+      }
+    ],
+    "metais": [
+      {
+        "nome": "Dourado claro",
+        "hex": "#D8B45A"
+      },
+      {
+        "nome": "Prateado claro",
+        "hex": "#C7CCD4"
+      },
+      {
+        "nome": "Rosé claro",
+        "hex": "#D6A19B"
+      }
+    ]
+  },
+  "primavera_quente": {
+    "id": "primavera_quente",
+    "nome": "Primavera Quente",
+    "temperatura": "Quente",
+    "intensidade": "Variável",
+    "profundidade": "Variável",
+    "pit": {
+      "principal": "Temperatura quente",
+      "secundaria": "Variável",
+      "terciaria": "Variável"
+    },
+    "descricao": "Cartela de temperatura quente predominante; clara, luminosa e viva, com intensidade e profundidade variáveis dentro do DNA da Primavera.",
+    "quantidadeCores": 100,
+    "cores": [
+      {
+        "nome": "Off-White Quente",
+        "hex": "#F3F0EC",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Off-White",
+        "hex": "#E8E2DD",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Marfim",
+        "hex": "#DCD5CD",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#CFC7BF",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Areia",
+        "hex": "#C1BAB2",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Fendi",
+        "hex": "#B5ACA3",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Greige",
+        "hex": "#AB9F91",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Taupe",
+        "hex": "#A3927E",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Pérola",
+        "hex": "#9B846B",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#8F775B",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Amêndoa",
+        "hex": "#D9A193",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Avelã",
+        "hex": "#E07857",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Caramelo",
+        "hex": "#CD6035",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Canela",
+        "hex": "#9A5332",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Conhaque",
+        "hex": "#E69263",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Camel",
+        "hex": "#D47B40",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Tabaco",
+        "hex": "#AB6833",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Cacau",
+        "hex": "#EBAB70",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Chocolate",
+        "hex": "#DA964B",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Café",
+        "hex": "#BC8133",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Dourado",
+        "hex": "#F3E8CC",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Baunilha",
+        "hex": "#FCEAB7",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Milho",
+        "hex": "#F9E7AD",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Mel",
+        "hex": "#F5E4A4",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Dourado",
+        "hex": "#F1E09C",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Mostarda",
+        "hex": "#EDDD94",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Açafrão",
+        "hex": "#E7D98D",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Ocre",
+        "hex": "#FAE76D",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Girassol",
+        "hex": "#F6E565",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Canário",
+        "hex": "#F1E25D",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Limão",
+        "hex": "#EBDF56",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Ouro Velho",
+        "hex": "#E4DC50",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Âmbar",
+        "hex": "#DDD84B",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Tangerina",
+        "hex": "#ECBAAA",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Damasco",
+        "hex": "#EC5921",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Salmão",
+        "hex": "#E37C50",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Papaya",
+        "hex": "#FA905D",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Tangerina",
+        "hex": "#F3AE89",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Coral Alaranjado",
+        "hex": "#D06425",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Abóbora",
+        "hex": "#F57724",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Laranja Queimado",
+        "hex": "#EC9353",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Terracota",
+        "hex": "#E6AC7E",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Telha",
+        "hex": "#F9C190",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Ferrugem",
+        "hex": "#E27F1F",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Cobre",
+        "hex": "#D9964D",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Argila",
+        "hex": "#F3AC58",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Páprica",
+        "hex": "#EDBF83",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Coral",
+        "hex": "#ECAAB5",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Tomate",
+        "hex": "#E0253D",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Papoula",
+        "hex": "#F23345",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Escarlate",
+        "hex": "#DF666C",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#EE7779",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Cereja",
+        "hex": "#F98D8C",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rubi",
+        "hex": "#CF2F26",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Tijolo",
+        "hex": "#E93D2B",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Queimado",
+        "hex": "#F9543C",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Bordô",
+        "hex": "#E7816E",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vinho",
+        "hex": "#F49881",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Pêssego",
+        "hex": "#ECAAC7",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Chá",
+        "hex": "#EF347D",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#EA7EA1",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Queimado",
+        "hex": "#ED0746",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Malva",
+        "hex": "#EC4E6F",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Goiaba",
+        "hex": "#EA94A1",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Médio",
+        "hex": "#F2192E",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Frio",
+        "hex": "#EA666B",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Folha",
+        "hex": "#E1ECAA",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Pistache",
+        "hex": "#B4EC21",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Maçã",
+        "hex": "#AAE350",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Lima",
+        "hex": "#ADFA5D",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Abacate",
+        "hex": "#B3F389",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Oliva",
+        "hex": "#56D025",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Sálvia",
+        "hex": "#4AF524",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Folha",
+        "hex": "#5EEC53",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Musgo",
+        "hex": "#7EE682",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Militar",
+        "hex": "#90F9A0",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Garrafa",
+        "hex": "#1FE251",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Esmeralda",
+        "hex": "#4DD980",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Floresta",
+        "hex": "#58F3A2",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Jade",
+        "hex": "#83EDC1",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Céu",
+        "hex": "#AAECDB",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Gelo",
+        "hex": "#6CE0CE",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Pó",
+        "hex": "#2CD7CC",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Hortênsia",
+        "hex": "#80E7EA",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Pervinca",
+        "hex": "#3ED0E2",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Jeans",
+        "hex": "#95DEF1",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Ardósia",
+        "hex": "#52BEEC",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Aço",
+        "hex": "#1591E0",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#68B1F3",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Petróleo",
+        "hex": "#217BF1",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Turquesa",
+        "hex": "#7FA9F9",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Turquesa Profundo",
+        "hex": "#3667F9",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Lavanda",
+        "hex": "#CBAAEC",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Lilás",
+        "hex": "#B034EF",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Malva",
+        "hex": "#D87EEA",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Orquídea",
+        "hex": "#ED07ED",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Violeta",
+        "hex": "#EC4ED2",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Ametista",
+        "hex": "#EA94CD",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Íris",
+        "hex": "#F21986",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Uva",
+        "hex": "#EA6692",
+        "familia": "roxos",
+        "destaque": true
+      }
+    ],
+    "metais": [
+      {
+        "nome": "Dourado claro",
+        "hex": "#D5A43B"
+      },
+      {
+        "nome": "Rosé claro",
+        "hex": "#D39A8C"
+      }
+    ]
+  },
+  "primavera_brilhante": {
+    "id": "primavera_brilhante",
+    "nome": "Primavera Brilhante",
+    "temperatura": "Quente",
+    "intensidade": "Brilhante",
+    "profundidade": "Variável",
+    "pit": {
+      "principal": "Intensidade brilhante",
+      "secundaria": "Temperatura quente",
+      "terciaria": "Profundidade variável"
+    },
+    "descricao": "Cartela de intensidade brilhante predominante e temperatura quente secundária; cores limpas, vivas e de alto impacto.",
+    "quantidadeCores": 100,
+    "cores": [
+      {
+        "nome": "Branco",
+        "hex": "#F9F7F6",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Preto",
+        "hex": "#E7E1DB",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Marfim",
+        "hex": "#D3CBC2",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#BEB5AA",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Areia",
+        "hex": "#A99F93",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Fendi",
+        "hex": "#95887A",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Greige",
+        "hex": "#817261",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Taupe",
+        "hex": "#6A5C4C",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Pérola",
+        "hex": "#514537",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#382F24",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Amêndoa",
+        "hex": "#DC9C8C",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Avelã",
+        "hex": "#CA5829",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Caramelo",
+        "hex": "#EB8F56",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Canela",
+        "hex": "#A36329",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Conhaque",
+        "hex": "#DF983B",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Amarelo Vivo",
+        "hex": "#F5E8C6",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Baunilha",
+        "hex": "#EDD38C",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Milho",
+        "hex": "#E6C24F",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Mel",
+        "hex": "#F3E1A0",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Dourado",
+        "hex": "#EED362",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Mostarda",
+        "hex": "#F8EDB6",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Açafrão",
+        "hex": "#F4E277",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Ocre",
+        "hex": "#F2DB36",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Girassol",
+        "hex": "#F9EE8C",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Canário",
+        "hex": "#F8EB4A",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Limão",
+        "hex": "#FDF8A4",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Ouro Velho",
+        "hex": "#FDF860",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Pêssego",
+        "hex": "#EFB5A2",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Damasco",
+        "hex": "#F88F64",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Salmão",
+        "hex": "#EC753D",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Papaya",
+        "hex": "#D46121",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Tangerina",
+        "hex": "#FBA873",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Coral Alaranjado",
+        "hex": "#F19149",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Abóbora",
+        "hex": "#E27C25",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Laranja Queimado",
+        "hex": "#FEBF82",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Terracota",
+        "hex": "#F5AB57",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Telha",
+        "hex": "#E79830",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#EFA2AF",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Tomate",
+        "hex": "#E66475",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Papoula",
+        "hex": "#E02336",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Escarlate",
+        "hex": "#EE7880",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#E9363C",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Cereja",
+        "hex": "#F48E8E",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rubi",
+        "hex": "#F1514B",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Tijolo",
+        "hex": "#E61D0F",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Queimado",
+        "hex": "#F77061",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Bordô",
+        "hex": "#F7381B",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vinho",
+        "hex": "#FC8E79",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Borgonha",
+        "hex": "#FD5931",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Pêssego",
+        "hex": "#EFA2C5",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Chá",
+        "hex": "#E66499",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#E0236A",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Queimado",
+        "hex": "#EE78A0",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Malva",
+        "hex": "#E9366C",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Goiaba",
+        "hex": "#F48EA9",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Médio",
+        "hex": "#F14B70",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Frio",
+        "hex": "#E60F37",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Chiclete",
+        "hex": "#F76177",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Vivo",
+        "hex": "#F71B33",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Framboesa",
+        "hex": "#FC7982",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Fúcsia",
+        "hex": "#FD3137",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Esmeralda",
+        "hex": "#E2EFA2",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Pistache",
+        "hex": "#B7F21B",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Maçã",
+        "hex": "#ABE948",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Lima",
+        "hex": "#ABFD58",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Abacate",
+        "hex": "#B1F682",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Oliva",
+        "hex": "#53D81D",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Sálvia",
+        "hex": "#46FA1F",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Folha",
+        "hex": "#58F14C",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Musgo",
+        "hex": "#76EB7B",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Militar",
+        "hex": "#8AFB9A",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Garrafa",
+        "hex": "#17E94D",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Esmeralda",
+        "hex": "#44E17D",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Floresta",
+        "hex": "#51F7A0",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Jade",
+        "hex": "#7CF1C0",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Royal",
+        "hex": "#A2EFDC",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Gelo",
+        "hex": "#1BF2CD",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Pó",
+        "hex": "#48E9DA",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Hortênsia",
+        "hex": "#58FDFA",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Pervinca",
+        "hex": "#82F0F6",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Jeans",
+        "hex": "#1DBFD8",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Ardósia",
+        "hex": "#1FCCFA",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Aço",
+        "hex": "#4CC1F1",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#76C0EB",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Petróleo",
+        "hex": "#8AC9FB",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Turquesa",
+        "hex": "#177CE9",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Turquesa Profundo",
+        "hex": "#4483E1",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Pavão",
+        "hex": "#5188F7",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Royal",
+        "hex": "#7C99F1",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Lavanda",
+        "hex": "#C8A2EF",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Lilás",
+        "hex": "#9A1DE8",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Malva",
+        "hex": "#C12DF7",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Orquídea",
+        "hex": "#D15DE6",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Violeta",
+        "hex": "#EE70F3",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Ametista",
+        "hex": "#FC85F2",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Íris",
+        "hex": "#D71EB2",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Uva",
+        "hex": "#F024AF",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Ameixa",
+        "hex": "#FD36A7",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Berinjela",
+        "hex": "#EC66A2",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Roxo Real",
+        "hex": "#F87AA4",
+        "familia": "roxos",
+        "destaque": false
+      }
+    ],
+    "metais": [
+      {
+        "nome": "Dourado polido",
+        "hex": "#D4AF37"
+      },
+      {
+        "nome": "Prateado claro",
+        "hex": "#C8CDD2"
+      },
+      {
+        "nome": "Rosé polido",
+        "hex": "#D69A8A"
+      }
+    ]
+  },
+  "verao_claro": {
+    "id": "verao_claro",
+    "nome": "Verão Claro",
+    "temperatura": "Fria",
+    "intensidade": "Variável",
+    "profundidade": "Clara",
+    "pit": {
+      "principal": "Profundidade clara",
+      "secundaria": "Temperatura fria",
+      "terciaria": "Intensidade variável"
+    },
+    "descricao": "Cartela de profundidade clara predominante e temperatura fria secundária; leve, delicada e refrescante.",
+    "quantidadeCores": 100,
+    "cores": [
+      {
+        "nome": "Branco",
+        "hex": "#EBECF0",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#DEE0E5",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Marfim",
+        "hex": "#D1D4DA",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#C5C8CF",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Areia",
+        "hex": "#B9BDC4",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Fendi",
+        "hex": "#ADB1B8",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Greige",
+        "hex": "#A2A5AC",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Taupe",
+        "hex": "#9499A3",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Pérola",
+        "hex": "#868C99",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#788090",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Chumbo",
+        "hex": "#6B7486",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Grafite",
+        "hex": "#5F687A",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Preto",
+        "hex": "#535C6E",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Amêndoa",
+        "hex": "#D1C0BC",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Avelã",
+        "hex": "#B17D67",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Caramelo",
+        "hex": "#D4A78A",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Canela",
+        "hex": "#A98B6F",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Conhaque",
+        "hex": "#C19E70",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#EFEDE6",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Baunilha",
+        "hex": "#CFC18E",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Milho",
+        "hex": "#EFE9C5",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Mel",
+        "hex": "#BAB478",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Dourado",
+        "hex": "#E1DFA7",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Pêssego",
+        "hex": "#E3D6D2",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Damasco",
+        "hex": "#C1886C",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Salmão",
+        "hex": "#E6BDA1",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Papaya",
+        "hex": "#B18B67",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Tangerina",
+        "hex": "#D6B285",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Melancia",
+        "hex": "#E3D2D6",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Tomate",
+        "hex": "#CA697C",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Papoula",
+        "hex": "#D5ACB2",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Escarlate",
+        "hex": "#CF4A56",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#CD8083",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Cereja",
+        "hex": "#DCC0BF",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rubi",
+        "hex": "#C95850",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Tijolo",
+        "hex": "#D09D97",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Chá",
+        "hex": "#EBDFE6",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Chá",
+        "hex": "#D191B4",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#F1CBDF",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Queimado",
+        "hex": "#CB8AAA",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Malva",
+        "hex": "#EEC2D6",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Goiaba",
+        "hex": "#C4839F",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Médio",
+        "hex": "#EAB9CD",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Frio",
+        "hex": "#BE7D95",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Chiclete",
+        "hex": "#E5B0C3",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Vivo",
+        "hex": "#B7768B",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Framboesa",
+        "hex": "#E1A8B8",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Fúcsia",
+        "hex": "#B07181",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Magenta",
+        "hex": "#DCA0AD",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Mortadela",
+        "hex": "#AA6E7A",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Pêssego Claro",
+        "hex": "#D698A3",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Menta",
+        "hex": "#DBE3D2",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Pistache",
+        "hex": "#80B761",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Maçã",
+        "hex": "#7ECE68",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Lima",
+        "hex": "#9AC397",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Abacate",
+        "hex": "#A5D9A9",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Oliva",
+        "hex": "#B9EAC3",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Sálvia",
+        "hex": "#69AF82",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Folha",
+        "hex": "#61C291",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Musgo",
+        "hex": "#6FD9B2",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Militar",
+        "hex": "#9DCFC4",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Garrafa",
+        "hex": "#AEE2DE",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pervinca",
+        "hex": "#D2E2E3",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Gelo",
+        "hex": "#8FD1D8",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pó",
+        "hex": "#62AAB7",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Hortênsia",
+        "hex": "#B6CED4",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pervinca",
+        "hex": "#6DB7CE",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Jeans",
+        "hex": "#C7DDE6",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Ardósia",
+        "hex": "#9AB6C5",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Aço",
+        "hex": "#519AC7",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#A8C4DA",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Petróleo",
+        "hex": "#7D9BB6",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Turquesa",
+        "hex": "#BAD1EA",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Turquesa Profundo",
+        "hex": "#88A6CE",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pavão",
+        "hex": "#6A84AF",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Royal",
+        "hex": "#98B0E1",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Cobalto",
+        "hex": "#6781C3",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Safira",
+        "hex": "#BEC5DD",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Marinho",
+        "hex": "#7587D8",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Céu Claro",
+        "hex": "#5967C0",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Gelo Claro",
+        "hex": "#A0A4D0",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pó Claro",
+        "hex": "#5157D1",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Hortênsia Claro",
+        "hex": "#B0B0E2",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pervinca Claro",
+        "hex": "#8582C3",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Lavanda",
+        "hex": "#D5D2E3",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Lilás",
+        "hex": "#AFA5D4",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Malva",
+        "hex": "#8C71CB",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Orquídea",
+        "hex": "#7D4ACF",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Violeta",
+        "hex": "#C1AED6",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Ametista",
+        "hex": "#A77CCC",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Íris",
+        "hex": "#9B4CCC",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Uva",
+        "hex": "#CFB8D9",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Ameixa",
+        "hex": "#BD86CE",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Berinjela",
+        "hex": "#B74FCA",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Roxo Real",
+        "hex": "#DAC1DC",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Roxo Profundo",
+        "hex": "#CF91CF",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Vinho Ameixa",
+        "hex": "#CA5AC0",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Lavanda Claro",
+        "hex": "#DFC9DC",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Lilás Claro",
+        "hex": "#D19BC4",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Malva Claro",
+        "hex": "#CA65AA",
+        "familia": "roxos",
+        "destaque": false
+      }
+    ],
+    "metais": [
+      {
+        "nome": "Prateado claro",
+        "hex": "#C0C6CF"
+      },
+      {
+        "nome": "Dourado claro",
+        "hex": "#D9BE76"
+      },
+      {
+        "nome": "Rosé claro",
+        "hex": "#CFA4A6"
+      }
+    ]
+  },
+  "verao_frio": {
+    "id": "verao_frio",
+    "nome": "Verão Frio",
+    "temperatura": "Fria",
+    "intensidade": "Variável",
+    "profundidade": "Variável",
+    "pit": {
+      "principal": "Temperatura fria",
+      "secundaria": "Variável",
+      "terciaria": "Variável"
+    },
+    "descricao": "Cartela de temperatura fria predominante; suaves, frias e elegantes, com intensidade e profundidade variáveis.",
+    "quantidadeCores": 100,
+    "cores": [
+      {
+        "nome": "Off-White Frio",
+        "hex": "#EBECF0",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#DFE1E6",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Marfim",
+        "hex": "#D3D6DC",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#C8CBD2",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Areia",
+        "hex": "#BCC0C8",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Fendi",
+        "hex": "#B1B5BD",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Greige",
+        "hex": "#A7ABB2",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Taupe",
+        "hex": "#9BA0A8",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Pérola",
+        "hex": "#8F949F",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#818997",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Chumbo",
+        "hex": "#747D8E",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Grafite",
+        "hex": "#697284",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Preto",
+        "hex": "#5E6779",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Bege",
+        "hex": "#535C6E",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Amêndoa",
+        "hex": "#BC9E97",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Avelã",
+        "hex": "#B0816B",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Caramelo",
+        "hex": "#9F6D45",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Canela",
+        "hex": "#805C2D",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#DFD8C6",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Baunilha",
+        "hex": "#BAA94F",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Milho",
+        "hex": "#DEDA7A",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Pêssego",
+        "hex": "#D0B4AB",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Damasco",
+        "hex": "#AB742B",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Melancia",
+        "hex": "#D0ABB4",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Tomate",
+        "hex": "#8D4957",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Papoula",
+        "hex": "#A04B59",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Escarlate",
+        "hex": "#B34D58",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#BD575D",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Cereja",
+        "hex": "#C86163",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rubi",
+        "hex": "#D16F6C",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Tijolo",
+        "hex": "#D97F79",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Queimado",
+        "hex": "#E19086",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Frio",
+        "hex": "#D7B8CA",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Chá",
+        "hex": "#D4A7C0",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#D195B5",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Queimado",
+        "hex": "#D081A9",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Malva",
+        "hex": "#D16C9C",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Goiaba",
+        "hex": "#D2568E",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Médio",
+        "hex": "#AD6785",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Frio",
+        "hex": "#AD5277",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Chiclete",
+        "hex": "#A74469",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Vivo",
+        "hex": "#E0A5BA",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Framboesa",
+        "hex": "#DE92AB",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Fúcsia",
+        "hex": "#DF7D9A",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Magenta",
+        "hex": "#C18696",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Mortadela",
+        "hex": "#C07386",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Pêssego Claro",
+        "hex": "#C05E73",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Chá Claro",
+        "hex": "#C2485F",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Antigo Claro",
+        "hex": "#BF364D",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Menta",
+        "hex": "#BDD0AB",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Pistache",
+        "hex": "#93D371",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Maçã",
+        "hex": "#67B954",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Lima",
+        "hex": "#4B8D49",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Abacate",
+        "hex": "#7CDA88",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Oliva",
+        "hex": "#5DC37A",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Sálvia",
+        "hex": "#4B9D70",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Folha",
+        "hex": "#88E1BD",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Musgo",
+        "hex": "#66CBB3",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Militar",
+        "hex": "#4DAEA6",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Jeans",
+        "hex": "#ABCED0",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Gelo",
+        "hex": "#77C7D0",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pó",
+        "hex": "#5FA7B3",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Hortênsia",
+        "hex": "#3196AD",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pervinca",
+        "hex": "#87BECF",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Jeans",
+        "hex": "#709FB1",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Ardósia",
+        "hex": "#3B8BB1",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Aço",
+        "hex": "#96BACE",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#5DA2D3",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Petróleo",
+        "hex": "#4682B5",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Turquesa",
+        "hex": "#A4BACF",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Turquesa Profundo",
+        "hex": "#6F9BD0",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pavão",
+        "hex": "#577CB4",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Royal",
+        "hex": "#2C59AA",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Cobalto",
+        "hex": "#7F98CF",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Safira",
+        "hex": "#687CB2",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Marinho",
+        "hex": "#3651AF",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Céu Claro",
+        "hex": "#8F9ACE",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Gelo Claro",
+        "hex": "#5465D4",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pó Claro",
+        "hex": "#414BB3",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Hortênsia Claro",
+        "hex": "#9D9FCF",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pervinca Claro",
+        "hex": "#6666D2",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Jeans Claro",
+        "hex": "#534EB5",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Lilás",
+        "hex": "#B1ABD0",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Lilás",
+        "hex": "#594B8B",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Malva",
+        "hex": "#614C94",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Orquídea",
+        "hex": "#694D9C",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Violeta",
+        "hex": "#734EA5",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Ametista",
+        "hex": "#7E4FAE",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Íris",
+        "hex": "#8953B4",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Uva",
+        "hex": "#9557B9",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Ameixa",
+        "hex": "#A15CBE",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Berinjela",
+        "hex": "#AC61C3",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Roxo Real",
+        "hex": "#B866C8",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Roxo Profundo",
+        "hex": "#C36BCC",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Vinho Ameixa",
+        "hex": "#CE71D0",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Lavanda Claro",
+        "hex": "#D476D0",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Lilás Claro",
+        "hex": "#D87CCE",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Malva Claro",
+        "hex": "#DC82CC",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Orquídea Claro",
+        "hex": "#DF88CA",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Violeta Claro",
+        "hex": "#E38EC8",
+        "familia": "roxos",
+        "destaque": false
+      }
+    ],
+    "metais": [
+      {
+        "nome": "Prateado",
+        "hex": "#BFC5CE"
+      },
+      {
+        "nome": "Rosé frio",
+        "hex": "#BE9DA8"
+      }
+    ]
+  },
+  "verao_suave": {
+    "id": "verao_suave",
+    "nome": "Verão Suave",
+    "temperatura": "Fria",
+    "intensidade": "Suave",
+    "profundidade": "Variável",
+    "pit": {
+      "principal": "Intensidade suave",
+      "secundaria": "Temperatura fria",
+      "terciaria": "Profundidade variável"
+    },
+    "descricao": "Cartela de intensidade suave predominante e temperatura fria secundária; cores opacas, misturadas e sofisticadas.",
+    "quantidadeCores": 100,
+    "cores": [
+      {
+        "nome": "Off-White Frio",
+        "hex": "#EBECF0",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Cinza Escuro",
+        "hex": "#E0E3E7",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Marfim",
+        "hex": "#D6D9DF",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#CCCFD6",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Areia",
+        "hex": "#C2C6CD",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Fendi",
+        "hex": "#B9BDC4",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Greige",
+        "hex": "#AFB3BB",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Taupe",
+        "hex": "#A6AAB1",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Pérola",
+        "hex": "#9CA0A9",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#9196A1",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Chumbo",
+        "hex": "#868C99",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Grafite",
+        "hex": "#7A8292",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Preto",
+        "hex": "#6F788B",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Bege",
+        "hex": "#666F81",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Camelo",
+        "hex": "#5C6678",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cáqui",
+        "hex": "#535C6E",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Amêndoa",
+        "hex": "#BAA9A5",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Avelã",
+        "hex": "#945E4C",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Caramelo",
+        "hex": "#AC8E81",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Canela",
+        "hex": "#794D34",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Conhaque",
+        "hex": "#A07659",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Camel",
+        "hex": "#B2A293",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Tabaco",
+        "hex": "#87643F",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Cacau",
+        "hex": "#A68D6D",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#DFDCD3",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Baunilha",
+        "hex": "#BBAD78",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Milho",
+        "hex": "#E1D8A6",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Mel",
+        "hex": "#A39D66",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Dourado",
+        "hex": "#D0CE8E",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Pêssego",
+        "hex": "#CEBFBA",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Damasco",
+        "hex": "#AB7358",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Salmão",
+        "hex": "#D6A685",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Papaya",
+        "hex": "#866A51",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Tangerina",
+        "hex": "#C39D6C",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Melancia",
+        "hex": "#CEBABF",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Tomate",
+        "hex": "#B65367",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Papoula",
+        "hex": "#C1959B",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Escarlate",
+        "hex": "#A1363F",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#B86A6D",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Cereja",
+        "hex": "#C6A8A8",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rubi",
+        "hex": "#AE4942",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Tijolo",
+        "hex": "#BC8780",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#D6C6D0",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Chá",
+        "hex": "#B45288",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#B37C99",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Queimado",
+        "hex": "#D582AB",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Malva",
+        "hex": "#D8A9BE",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Goiaba",
+        "hex": "#925971",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Médio",
+        "hex": "#C1527E",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Frio",
+        "hex": "#C07D95",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Chiclete",
+        "hex": "#C3A2AD",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Vivo",
+        "hex": "#E0AEBD",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Framboesa",
+        "hex": "#A45569",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Fúcsia",
+        "hex": "#A67C85",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Magenta",
+        "hex": "#CB7F8E",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Mortadela",
+        "hex": "#CEA5AC",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Menta",
+        "hex": "#C4CEBA",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Pistache",
+        "hex": "#B5DC9D",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Maçã",
+        "hex": "#A7D496",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Lima",
+        "hex": "#99CB91",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Abacate",
+        "hex": "#8DC18B",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Oliva",
+        "hex": "#87B78B",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Sálvia",
+        "hex": "#84AB8C",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Folha",
+        "hex": "#59C87D",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Musgo",
+        "hex": "#54BD83",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Militar",
+        "hex": "#51B287",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Garrafa",
+        "hex": "#51A289",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Esmeralda",
+        "hex": "#539285",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Floresta",
+        "hex": "#54837F",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Acinzentado",
+        "hex": "#BACDCE",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Gelo",
+        "hex": "#577A7F",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pó",
+        "hex": "#598087",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Hortênsia",
+        "hex": "#5B8490",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pervinca",
+        "hex": "#5D8899",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Jeans",
+        "hex": "#5F8AA1",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Ardósia",
+        "hex": "#638CA8",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Aço",
+        "hex": "#678DAE",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#6C8EB4",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Petróleo",
+        "hex": "#718FB9",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Turquesa",
+        "hex": "#7690BF",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Turquesa Profundo",
+        "hex": "#7B91C4",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pavão",
+        "hex": "#8092C9",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Royal",
+        "hex": "#8693CE",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Cobalto",
+        "hex": "#8C95D2",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Safira",
+        "hex": "#9297D7",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Marinho",
+        "hex": "#9899DB",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Céu Claro",
+        "hex": "#A29FDF",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Malva",
+        "hex": "#BDBACE",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Lilás",
+        "hex": "#AD9DDC",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Malva",
+        "hex": "#AC96D4",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Orquídea",
+        "hex": "#AA91CB",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Violeta",
+        "hex": "#A88BC1",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Ametista",
+        "hex": "#A587B7",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Íris",
+        "hex": "#A184AB",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Uva",
+        "hex": "#B559C8",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Ameixa",
+        "hex": "#B654BD",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Berinjela",
+        "hex": "#B251B0",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Roxo Real",
+        "hex": "#A25198",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Roxo Profundo",
+        "hex": "#925384",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Vinho Ameixa",
+        "hex": "#835474",
+        "familia": "roxos",
+        "destaque": false
+      }
+    ],
+    "metais": [
+      {
+        "nome": "Prateado fosco",
+        "hex": "#AEB4BC"
+      },
+      {
+        "nome": "Dourado fosco claro",
+        "hex": "#C7AE72"
+      },
+      {
+        "nome": "Rosé fosco",
+        "hex": "#BFA0A2"
+      }
+    ]
+  },
+  "outono_suave": {
+    "id": "outono_suave",
+    "nome": "Outono Suave",
+    "temperatura": "Quente",
+    "intensidade": "Suave",
+    "profundidade": "Variável",
+    "pit": {
+      "principal": "Intensidade suave",
+      "secundaria": "Temperatura quente",
+      "terciaria": "Profundidade variável"
+    },
+    "descricao": "Cartela de intensidade suave predominante e temperatura quente secundária; terrosa, amortecida e natural.",
+    "quantidadeCores": 100,
+    "cores": [
+      {
+        "nome": "Taupe",
+        "hex": "#ECE6DF",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Off-White",
+        "hex": "#E1D9CF",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Marfim",
+        "hex": "#D6CCBF",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#CABEB1",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Areia",
+        "hex": "#BEB1A2",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Fendi",
+        "hex": "#B1A495",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Greige",
+        "hex": "#A49687",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Taupe",
+        "hex": "#988978",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Pérola",
+        "hex": "#8E7C68",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#816F5A",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Chumbo",
+        "hex": "#73614D",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Grafite",
+        "hex": "#655441",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Preto",
+        "hex": "#564735",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Bege",
+        "hex": "#47392A",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Amêndoa",
+        "hex": "#997269",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Avelã",
+        "hex": "#46271E",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Caramelo",
+        "hex": "#5C3E33",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Canela",
+        "hex": "#8A4A30",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Conhaque",
+        "hex": "#9D6348",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Camel",
+        "hex": "#2D211A",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Tabaco",
+        "hex": "#53321F",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Cacau",
+        "hex": "#6A4933",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Chocolate",
+        "hex": "#7C614D",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Café",
+        "hex": "#AF7545",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Mogno",
+        "hex": "#392A1D",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Castanha",
+        "hex": "#4E4133",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Cobre Queimado",
+        "hex": "#795932",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Terracota Marrom",
+        "hex": "#8C704B",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#BFB496",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Baunilha",
+        "hex": "#A08636",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Milho",
+        "hex": "#B7A76B",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Mel",
+        "hex": "#837121",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Dourado",
+        "hex": "#AD9E42",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Mostarda",
+        "hex": "#BBB581",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Açafrão",
+        "hex": "#928B2A",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Ocre",
+        "hex": "#B5B253",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Terracota Suave",
+        "hex": "#B0887B",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Damasco",
+        "hex": "#B45C39",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Salmão",
+        "hex": "#7A4B34",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Papaya",
+        "hex": "#483328",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Tangerina",
+        "hex": "#C7713A",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Coral Alaranjado",
+        "hex": "#8D5B36",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Abóbora",
+        "hex": "#58412D",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Laranja Queimado",
+        "hex": "#D18A45",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Terracota",
+        "hex": "#A06F38",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Telha",
+        "hex": "#695131",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Melancia",
+        "hex": "#B07B84",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Tomate",
+        "hex": "#48282C",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Papoula",
+        "hex": "#5B2D30",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Escarlate",
+        "hex": "#6E3133",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#823634",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Cereja",
+        "hex": "#973D37",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rubi",
+        "hex": "#AD4438",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Tijolo",
+        "hex": "#C44E38",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Queimado",
+        "hex": "#D05F43",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#B07B93",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Chá",
+        "hex": "#7C294A",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#A5506C",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Queimado",
+        "hex": "#5A1629",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Malva",
+        "hex": "#8B3547",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Goiaba",
+        "hex": "#AB646F",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Médio",
+        "hex": "#6C1F26",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Frio",
+        "hex": "#994245",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Oliva Suave",
+        "hex": "#A7B07B",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Pistache",
+        "hex": "#8BA14B",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Maçã",
+        "hex": "#63812D",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Lima",
+        "hex": "#3B5A16",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Abacate",
+        "hex": "#79A752",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Oliva",
+        "hex": "#518833",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Sálvia",
+        "hex": "#2E621A",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Folha",
+        "hex": "#69AA5B",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Musgo",
+        "hex": "#3F8F38",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Militar",
+        "hex": "#1F6A20",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Garrafa",
+        "hex": "#66AC6E",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Esmeralda",
+        "hex": "#3E9550",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Floresta",
+        "hex": "#23723B",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Jade",
+        "hex": "#71AD89",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Pinheiro",
+        "hex": "#449C6F",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Petróleo",
+        "hex": "#287A58",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Petróleo Suave",
+        "hex": "#80ABA0",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Gelo",
+        "hex": "#56C5B3",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pó",
+        "hex": "#51BBB2",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Hortênsia",
+        "hex": "#4DAFAF",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pervinca",
+        "hex": "#4F979E",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Jeans",
+        "hex": "#4F838E",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Ardósia",
+        "hex": "#4F737E",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Aço",
+        "hex": "#2E6F90",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#2F5E80",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Petróleo",
+        "hex": "#2F4F70",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Turquesa",
+        "hex": "#2E4361",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Turquesa Profundo",
+        "hex": "#2C3954",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pavão",
+        "hex": "#2A3147",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Lavanda",
+        "hex": "#957BB0",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Lilás",
+        "hex": "#61297C",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Malva",
+        "hex": "#9750A5",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Orquídea",
+        "hex": "#5A165A",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Violeta",
+        "hex": "#8B357D",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Ametista",
+        "hex": "#AB6494",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Íris",
+        "hex": "#6C1F45",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Uva",
+        "hex": "#99425F",
+        "familia": "roxos",
+        "destaque": false
+      }
+    ],
+    "metais": [
+      {
+        "nome": "Dourado fosco",
+        "hex": "#B89852"
+      },
+      {
+        "nome": "Prateado fosco claro",
+        "hex": "#A8ADB0"
+      },
+      {
+        "nome": "Rosé fosco",
+        "hex": "#B98D82"
+      }
+    ]
+  },
+  "outono_quente": {
+    "id": "outono_quente",
+    "nome": "Outono Quente",
+    "temperatura": "Quente",
+    "intensidade": "Variável",
+    "profundidade": "Variável",
+    "pit": {
+      "principal": "Temperatura quente",
+      "secundaria": "Variável",
+      "terciaria": "Variável"
+    },
+    "descricao": "Cartela de temperatura quente predominante; terrosa, rica e acolhedora, com intensidade e profundidade variáveis.",
+    "quantidadeCores": 100,
+    "cores": [
+      {
+        "nome": "Branco",
+        "hex": "#ECE6DF",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Off-White",
+        "hex": "#DED5CA",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Marfim",
+        "hex": "#CFC4B6",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#BFB2A4",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Areia",
+        "hex": "#AEA192",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Fendi",
+        "hex": "#9D9081",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Greige",
+        "hex": "#907F6B",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Taupe",
+        "hex": "#7F6D59",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Pérola",
+        "hex": "#6D5C48",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#5B4B38",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Chumbo",
+        "hex": "#47392A",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Chocolate",
+        "hex": "#A46C5E",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Avelã",
+        "hex": "#6B3A2C",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Caramelo",
+        "hex": "#BF5836",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Canela",
+        "hex": "#613929",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Conhaque",
+        "hex": "#B25B35",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Camel",
+        "hex": "#563627",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Tabaco",
+        "hex": "#A65D34",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Cacau",
+        "hex": "#4C3324",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Chocolate",
+        "hex": "#995D33",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Café",
+        "hex": "#422F20",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Mogno",
+        "hex": "#8E5C32",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Castanha",
+        "hex": "#382A1D",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Cobre Queimado",
+        "hex": "#825A30",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Terracota Marrom",
+        "hex": "#2E2519",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Madeira",
+        "hex": "#77572E",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Mostarda",
+        "hex": "#C9B88C",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Baunilha",
+        "hex": "#88702D",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Milho",
+        "hex": "#B19128",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Mel",
+        "hex": "#B09B4C",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Dourado",
+        "hex": "#CBB555",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Mostarda",
+        "hex": "#E0CC63",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Açafrão",
+        "hex": "#756B2E",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Ocre",
+        "hex": "#9C8F2B",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Girassol",
+        "hex": "#C7B923",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Canário",
+        "hex": "#BFB84F",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Limão",
+        "hex": "#D6D25B",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Terracota",
+        "hex": "#BC826F",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Ferrugem",
+        "hex": "#70331C",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Salmão",
+        "hex": "#874B31",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Papaya",
+        "hex": "#C15522",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Tangerina",
+        "hex": "#CB7242",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Coral Alaranjado",
+        "hex": "#51321F",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Abóbora",
+        "hex": "#824319",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Laranja Queimado",
+        "hex": "#995B2D",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Terracota",
+        "hex": "#AB7346",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Telha",
+        "hex": "#D78A45",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Ferrugem",
+        "hex": "#603F1E",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Cobre",
+        "hex": "#765634",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Argila",
+        "hex": "#AC7028",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Páprica",
+        "hex": "#BF8841",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Melancia",
+        "hex": "#BC6F7C",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Tomate",
+        "hex": "#622129",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Papoula",
+        "hex": "#891F29",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Escarlate",
+        "hex": "#903E42",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#BA393B",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Cereja",
+        "hex": "#D9423F",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Rubi",
+        "hex": "#502220",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Tijolo",
+        "hex": "#752820",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Queimado",
+        "hex": "#9F2D1C",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Bordô",
+        "hex": "#A44D3C",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vinho",
+        "hex": "#CD5638",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Pêssego",
+        "hex": "#BC6F91",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Chá",
+        "hex": "#502032",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#70253B",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Queimado",
+        "hex": "#92293E",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Malva",
+        "hex": "#B7293A",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Goiaba",
+        "hex": "#DA2C31",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Oliva",
+        "hex": "#AFBC6F",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Pistache",
+        "hex": "#78932D",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Maçã",
+        "hex": "#A3DD40",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Lima",
+        "hex": "#5C872C",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Abacate",
+        "hex": "#7CD838",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Oliva",
+        "hex": "#457B2B",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Sálvia",
+        "hex": "#54D32F",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Folha",
+        "hex": "#326F29",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Musgo",
+        "hex": "#31C82E",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Militar",
+        "hex": "#27642C",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Garrafa",
+        "hex": "#2EBA47",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Esmeralda",
+        "hex": "#255933",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Floresta",
+        "hex": "#2EAD5E",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Jade",
+        "hex": "#224E37",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Pinheiro",
+        "hex": "#2EA070",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#76B5A5",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Gelo",
+        "hex": "#37B5A4",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pó",
+        "hex": "#317D7B",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Hortênsia",
+        "hex": "#25484B",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pervinca",
+        "hex": "#39ACC8",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Jeans",
+        "hex": "#34738F",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Ardósia",
+        "hex": "#2A475B",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Aço",
+        "hex": "#4587D1",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#365DA2",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Petróleo",
+        "hex": "#2E3D6C",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Lavanda",
+        "hex": "#956FBC",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Lilás",
+        "hex": "#672E81",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Malva",
+        "hex": "#BD3ECD",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Orquídea",
+        "hex": "#7A1571",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Violeta",
+        "hex": "#A8458C",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Ametista",
+        "hex": "#561A3A",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Íris",
+        "hex": "#A92551",
+        "familia": "roxos",
+        "destaque": true
+      }
+    ],
+    "metais": [
+      {
+        "nome": "Dourado envelhecido",
+        "hex": "#A9863D"
+      },
+      {
+        "nome": "Cobre envelhecido",
+        "hex": "#A96342"
+      },
+      {
+        "nome": "Rosé",
+        "hex": "#B77F77"
+      }
+    ]
+  },
+  "outono_escuro": {
+    "id": "outono_escuro",
+    "nome": "Outono Escuro",
+    "temperatura": "Quente",
+    "intensidade": "Variável",
+    "profundidade": "Escura",
+    "pit": {
+      "principal": "Profundidade escura",
+      "secundaria": "Temperatura quente",
+      "terciaria": "Intensidade variável"
+    },
+    "descricao": "Cartela de profundidade escura predominante e temperatura quente secundária; terrosa, profunda e encorpada, com telhas, terracotas, militares, petróleos, mostardas e marrons.",
+    "quantidadeCores": 100,
+    "cores": [
+      {
+        "nome": "Branco",
+        "hex": "#E8E1D8",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Off-White",
+        "hex": "#D9CFC3",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Marfim",
+        "hex": "#CABDAE",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#B9AA9A",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Areia",
+        "hex": "#A79887",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Fendi",
+        "hex": "#948675",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Greige",
+        "hex": "#837361",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Taupe",
+        "hex": "#71614F",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Pérola",
+        "hex": "#5D4F3E",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#493C2D",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Chumbo",
+        "hex": "#332A1E",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Chocolate",
+        "hex": "#86594E",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Avelã",
+        "hex": "#7D4D40",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Caramelo",
+        "hex": "#724333",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Canela",
+        "hex": "#663928",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Conhaque",
+        "hex": "#582F1E",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Camel",
+        "hex": "#4A2616",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Tabaco",
+        "hex": "#34251D",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Cacau",
+        "hex": "#37251B",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Chocolate",
+        "hex": "#392519",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Café",
+        "hex": "#915C37",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Mogno",
+        "hex": "#85522C",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Castanha",
+        "hex": "#784922",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Cobre Queimado",
+        "hex": "#55402D",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Terracota Marrom",
+        "hex": "#493522",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Madeira",
+        "hex": "#3B2B19",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Amêndoa Claro",
+        "hex": "#3C2A16",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Avelã Claro",
+        "hex": "#3E2C13",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Mostarda",
+        "hex": "#B9A46E",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Baunilha",
+        "hex": "#866D22",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Milho",
+        "hex": "#B19A43",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Mel",
+        "hex": "#645512",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Dourado",
+        "hex": "#96872C",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Mostarda",
+        "hex": "#B7AD57",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Açafrão",
+        "hex": "#766F19",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Ocre",
+        "hex": "#A4A037",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Terracota",
+        "hex": "#AA6852",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Telha",
+        "hex": "#744634",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Salmão",
+        "hex": "#3B2318",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Papaya",
+        "hex": "#925638",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Tangerina",
+        "hex": "#56331F",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Coral Alaranjado",
+        "hex": "#B2693A",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Abóbora",
+        "hex": "#744523",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Laranja Queimado",
+        "hex": "#402711",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Terracota",
+        "hex": "#945A25",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Telha",
+        "hex": "#523312",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Ferrugem",
+        "hex": "#B67324",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Cobre",
+        "hex": "#724914",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Vinho",
+        "hex": "#AA5261",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Tomate",
+        "hex": "#C6273D",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Papoula",
+        "hex": "#B32B39",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Escarlate",
+        "hex": "#A02E37",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#8E3034",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Cereja",
+        "hex": "#7E3132",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rubi",
+        "hex": "#6E3332",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Tijolo",
+        "hex": "#7A1A16",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Queimado",
+        "hex": "#691D17",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Bordô",
+        "hex": "#591F18",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vinho",
+        "hex": "#4A1E17",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Borgonha",
+        "hex": "#3C1C16",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Carmim",
+        "hex": "#391F18",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#AA527A",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Mortadela",
+        "hex": "#601834",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#903755",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Queimado",
+        "hex": "#450C1C",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Malva",
+        "hex": "#712132",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Goiaba",
+        "hex": "#9E4452",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Médio",
+        "hex": "#4D1016",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Frio",
+        "hex": "#822B2E",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Militar",
+        "hex": "#9CAA52",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Pistache",
+        "hex": "#5B6F23",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Maçã",
+        "hex": "#8ECB24",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Lima",
+        "hex": "#446421",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Abacate",
+        "hex": "#66BD25",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Oliva",
+        "hex": "#32581F",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Sálvia",
+        "hex": "#45AF25",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Folha",
+        "hex": "#234D1D",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Musgo",
+        "hex": "#28A225",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Militar",
+        "hex": "#1B421E",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Garrafa",
+        "hex": "#259539",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Esmeralda",
+        "hex": "#193922",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Floresta",
+        "hex": "#25884B",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Jade",
+        "hex": "#1A3828",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Pinheiro",
+        "hex": "#247C57",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#5AA390",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Gelo",
+        "hex": "#2D9284",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pó",
+        "hex": "#255C5A",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Hortênsia",
+        "hex": "#1C3436",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pervinca",
+        "hex": "#2E8EA6",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Jeans",
+        "hex": "#28586D",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Ardósia",
+        "hex": "#1C2E3B",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Aço",
+        "hex": "#2E70BA",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#2B497F",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Petróleo",
+        "hex": "#212B4B",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Lavanda",
+        "hex": "#7E52AA",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Lilás",
+        "hex": "#31183A",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Malva",
+        "hex": "#4B1A4D",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Orquídea",
+        "hex": "#6E1F5E",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Violeta",
+        "hex": "#912161",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Ametista",
+        "hex": "#B72053",
+        "familia": "roxos",
+        "destaque": true
+      }
+    ],
+    "metais": [
+      {
+        "nome": "Dourado envelhecido",
+        "hex": "#9B7A35"
+      },
+      {
+        "nome": "Prateado envelhecido",
+        "hex": "#8F9292"
+      },
+      {
+        "nome": "Cobre envelhecido",
+        "hex": "#99593A"
+      },
+      {
+        "nome": "Rosé envelhecido",
+        "hex": "#9F726E"
+      }
+    ]
+  },
+  "inverno_brilhante": {
+    "id": "inverno_brilhante",
+    "nome": "Inverno Brilhante",
+    "temperatura": "Fria",
+    "intensidade": "Brilhante",
+    "profundidade": "Variável",
+    "pit": {
+      "principal": "Intensidade brilhante",
+      "secundaria": "Temperatura fria",
+      "terciaria": "Profundidade variável"
+    },
+    "descricao": "Cartela de intensidade brilhante predominante e temperatura fria secundária; nítida, vibrante e contrastante.",
+    "quantidadeCores": 100,
+    "cores": [
+      {
+        "nome": "Branco",
+        "hex": "#F6F7F8",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Preto",
+        "hex": "#DEE1E6",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Marfim",
+        "hex": "#C7CBD2",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#B1B5BE",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Areia",
+        "hex": "#9BA0A9",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Fendi",
+        "hex": "#858A94",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Greige",
+        "hex": "#70757F",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Taupe",
+        "hex": "#5A5F6A",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Pérola",
+        "hex": "#464A54",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#31353D",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Chumbo",
+        "hex": "#1E2126",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Grafite",
+        "hex": "#0B0C0F",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Amêndoa",
+        "hex": "#C0553A",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Avelã",
+        "hex": "#2A1609",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Caramelo",
+        "hex": "#865310",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#E5C269",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Baunilha",
+        "hex": "#B99115",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Milho",
+        "hex": "#F3CE3B",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Mel",
+        "hex": "#AD9202",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Dourado",
+        "hex": "#E1CC2D",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Mostarda",
+        "hex": "#837A0B",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Açafrão",
+        "hex": "#E6DF08",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Pêssego",
+        "hex": "#D76F4C",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Damasco",
+        "hex": "#7D3410",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Salmão",
+        "hex": "#E5650C",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Papaya",
+        "hex": "#4E2D0E",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Tangerina",
+        "hex": "#B06A10",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#DE456B",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Tomate",
+        "hex": "#FA194A",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Papoula",
+        "hex": "#F40E3A",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Escarlate",
+        "hex": "#E11031",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#CC152C",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Cereja",
+        "hex": "#B81828",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Rubi",
+        "hex": "#A51A24",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Tijolo",
+        "hex": "#AD0208",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Queimado",
+        "hex": "#990506",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Bordô",
+        "hex": "#860B08",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vinho",
+        "hex": "#73100A",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Borgonha",
+        "hex": "#61130B",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Carmim",
+        "hex": "#50140C",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Fúcsia",
+        "hex": "#DE459E",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Chá",
+        "hex": "#A30E61",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#FD1890",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Queimado",
+        "hex": "#940F51",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Malva",
+        "hex": "#FA0D7B",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Goiaba",
+        "hex": "#860F43",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Médio",
+        "hex": "#F10766",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Frio",
+        "hex": "#780F36",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Chiclete",
+        "hex": "#E10954",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Vivo",
+        "hex": "#6A0E2B",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Framboesa",
+        "hex": "#D10B44",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Fúcsia",
+        "hex": "#5C0E22",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Magenta",
+        "hex": "#C10C35",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Mortadela",
+        "hex": "#4F0D1A",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Pêssego Claro",
+        "hex": "#B20D29",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Esmeralda",
+        "hex": "#92DE45",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Pistache",
+        "hex": "#6FFA19",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Maçã",
+        "hex": "#4BF40E",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Lima",
+        "hex": "#2FE110",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Abacate",
+        "hex": "#1ACC15",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Oliva",
+        "hex": "#18B826",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Sálvia",
+        "hex": "#1AA537",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Folha",
+        "hex": "#02AD3A",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Musgo",
+        "hex": "#059947",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Militar",
+        "hex": "#08864F",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Garrafa",
+        "hex": "#0A7351",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Esmeralda",
+        "hex": "#0B6150",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Floresta",
+        "hex": "#0C504A",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Royal",
+        "hex": "#45D7DE",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Gelo",
+        "hex": "#0D484F",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pó",
+        "hex": "#0E4D5A",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Hortênsia",
+        "hex": "#0E5165",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pervinca",
+        "hex": "#0F5470",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Jeans",
+        "hex": "#0F567C",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Ardósia",
+        "hex": "#0F5787",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Aço",
+        "hex": "#0F5693",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#0F549F",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Petróleo",
+        "hex": "#0E50AC",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Turquesa",
+        "hex": "#0D4BB8",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Turquesa Profundo",
+        "hex": "#0C44C5",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Pavão",
+        "hex": "#0B3CD2",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Royal",
+        "hex": "#0A31DF",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Cobalto",
+        "hex": "#0825EC",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Safira",
+        "hex": "#0818F8",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Marinho",
+        "hex": "#1113FB",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Céu Claro",
+        "hex": "#261BFD",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Lavanda",
+        "hex": "#5C45DE",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Lilás",
+        "hex": "#210774",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Malva",
+        "hex": "#3E1296",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Orquídea",
+        "hex": "#5A02D4",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Violeta",
+        "hex": "#8415EF",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Ametista",
+        "hex": "#350B51",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Íris",
+        "hex": "#5E0387",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Uva",
+        "hex": "#870EAA",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Ameixa",
+        "hex": "#B21EC8",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Berinjela",
+        "hex": "#EE1CF8",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Roxo Real",
+        "hex": "#62095E",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Roxo Profundo",
+        "hex": "#841575",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Vinho Ameixa",
+        "hex": "#BF0895",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Lavanda Claro",
+        "hex": "#DE189F",
+        "familia": "roxos",
+        "destaque": true
+      }
+    ],
+    "metais": [
+      {
+        "nome": "Dourado polido",
+        "hex": "#D4AF37"
+      },
+      {
+        "nome": "Rosé polido",
+        "hex": "#D09A94"
+      }
+    ]
+  },
+  "inverno_frio": {
+    "id": "inverno_frio",
+    "nome": "Inverno Frio",
+    "temperatura": "Fria",
+    "intensidade": "Variável",
+    "profundidade": "Variável",
+    "pit": {
+      "principal": "Temperatura fria",
+      "secundaria": "Variável",
+      "terciaria": "Variável"
+    },
+    "descricao": "Cartela de temperatura fria predominante; escura, fria e brilhante, com intensidade e profundidade variáveis.",
+    "quantidadeCores": 100,
+    "cores": [
+      {
+        "nome": "Off-White Frio",
+        "hex": "#F6F7F8",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Preto",
+        "hex": "#E2E4E9",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Marfim",
+        "hex": "#CED2D8",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#BBBFC7",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Areia",
+        "hex": "#A8ADB6",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Fendi",
+        "hex": "#969BA4",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Greige",
+        "hex": "#848992",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Taupe",
+        "hex": "#727781",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Pérola",
+        "hex": "#5F646F",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#4D525C",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Chumbo",
+        "hex": "#3C414A",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Grafite",
+        "hex": "#2B2F36",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Preto",
+        "hex": "#1B1D23",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Bege",
+        "hex": "#0B0C0F",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Amêndoa",
+        "hex": "#B4563E",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Avelã",
+        "hex": "#2A1609",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Caramelo",
+        "hex": "#835110",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#DDBC68",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Baunilha",
+        "hex": "#E0BB28",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Milho",
+        "hex": "#BEA90E",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Mel",
+        "hex": "#8D8901",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Pêssego",
+        "hex": "#CF6C4C",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Damasco",
+        "hex": "#573305",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Carmim",
+        "hex": "#D64569",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Tomate",
+        "hex": "#F91244",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Papoula",
+        "hex": "#ED0D38",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Escarlate",
+        "hex": "#D81332",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#C3182E",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Cereja",
+        "hex": "#AF1C2A",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Rubi",
+        "hex": "#9C1F28",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Tijolo",
+        "hex": "#AA0208",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Queimado",
+        "hex": "#950607",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Bordô",
+        "hex": "#820C09",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vinho",
+        "hex": "#70110C",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Borgonha",
+        "hex": "#5E140D",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Carmim",
+        "hex": "#4E160E",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Frio",
+        "hex": "#D64599",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Chá",
+        "hex": "#C01B77",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#910A51",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Queimado",
+        "hex": "#5B012E",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Malva",
+        "hex": "#C8206F",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Goiaba",
+        "hex": "#9B0D4C",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Médio",
+        "hex": "#66022C",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Frio",
+        "hex": "#D02467",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Chiclete",
+        "hex": "#A41046",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Vivo",
+        "hex": "#710428",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Framboesa",
+        "hex": "#D72A5F",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Fúcsia",
+        "hex": "#AE143F",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Magenta",
+        "hex": "#7C0623",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Mortadela",
+        "hex": "#D6385B",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Pêssego Claro",
+        "hex": "#B71736",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Chá Claro",
+        "hex": "#87081D",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Menta",
+        "hex": "#8DD645",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Pistache",
+        "hex": "#2B620D",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Maçã",
+        "hex": "#248E07",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Lima",
+        "hex": "#289C1F",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Abacate",
+        "hex": "#16CC22",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Oliva",
+        "hex": "#0FF840",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Sálvia",
+        "hex": "#0E4E24",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Folha",
+        "hex": "#0A7840",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Musgo",
+        "hex": "#02A66A",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Militar",
+        "hex": "#1BB391",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Garrafa",
+        "hex": "#0FE5D3",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Cobalto",
+        "hex": "#45CED6",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Gelo",
+        "hex": "#089AAA",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Pó",
+        "hex": "#27CDEA",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Hortênsia",
+        "hex": "#167992",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Pervinca",
+        "hex": "#33ACD4",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Jeans",
+        "hex": "#066D99",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Ardósia",
+        "hex": "#149FEA",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Aço",
+        "hex": "#125683",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#2882CC",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Petróleo",
+        "hex": "#044688",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Turquesa",
+        "hex": "#106BDA",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Turquesa Profundo",
+        "hex": "#0F3773",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pavão",
+        "hex": "#2359BE",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Royal",
+        "hex": "#022576",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Cobalto",
+        "hex": "#0D3DCA",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Safira",
+        "hex": "#0C1D63",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Marinho",
+        "hex": "#1E34B0",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Céu Claro",
+        "hex": "#010B64",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Gelo Claro",
+        "hex": "#0A13BA",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Pó Claro",
+        "hex": "#090953",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Hortênsia Claro",
+        "hex": "#211AA1",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Ametista",
+        "hex": "#5B45D6",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Lilás",
+        "hex": "#411BC0",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Malva",
+        "hex": "#340A91",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Orquídea",
+        "hex": "#23015B",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Violeta",
+        "hex": "#6D20C8",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Ametista",
+        "hex": "#5A0D9B",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Íris",
+        "hex": "#400266",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Uva",
+        "hex": "#9C24D0",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Ameixa",
+        "hex": "#8310A4",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Berinjela",
+        "hex": "#610471",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Roxo Real",
+        "hex": "#CA2AD7",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Roxo Profundo",
+        "hex": "#AE14AD",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Vinho Ameixa",
+        "hex": "#7C0672",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Lavanda Claro",
+        "hex": "#D638BD",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Lilás Claro",
+        "hex": "#B71791",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Malva Claro",
+        "hex": "#87085F",
+        "familia": "roxos",
+        "destaque": false
+      }
+    ],
+    "metais": [
+      {
+        "nome": "Prateado polido",
+        "hex": "#C5CBD2"
+      },
+      {
+        "nome": "Rosé frio",
+        "hex": "#B9919E"
+      }
+    ]
+  },
+  "inverno_escuro": {
+    "id": "inverno_escuro",
+    "nome": "Inverno Escuro",
+    "temperatura": "Fria",
+    "intensidade": "Variável",
+    "profundidade": "Escura",
+    "pit": {
+      "principal": "Profundidade escura",
+      "secundaria": "Temperatura fria",
+      "terciaria": "Intensidade variável"
+    },
+    "descricao": "Cartela de profundidade escura predominante e temperatura fria secundária; intensa, profunda e de forte contraste.",
+    "quantidadeCores": 100,
+    "cores": [
+      {
+        "nome": "Branco",
+        "hex": "#F6F7F8",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Preto",
+        "hex": "#E3E6EA",
+        "familia": "neutros",
+        "destaque": true
+      },
+      {
+        "nome": "Marfim",
+        "hex": "#D1D4DB",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#BFC3CB",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Areia",
+        "hex": "#ADB2BB",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Fendi",
+        "hex": "#9CA1AB",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Greige",
+        "hex": "#8B909A",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Taupe",
+        "hex": "#7B8089",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Pérola",
+        "hex": "#6A6F79",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Médio",
+        "hex": "#595E68",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Cinza Chumbo",
+        "hex": "#484D57",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Grafite",
+        "hex": "#383D46",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Preto",
+        "hex": "#292C34",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Bege",
+        "hex": "#1A1C21",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Camelo",
+        "hex": "#0B0C0F",
+        "familia": "neutros",
+        "destaque": false
+      },
+      {
+        "nome": "Amêndoa",
+        "hex": "#9A4B37",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Avelã",
+        "hex": "#401E11",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Caramelo",
+        "hex": "#93421C",
+        "familia": "marrons",
+        "destaque": true
+      },
+      {
+        "nome": "Canela",
+        "hex": "#492109",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Conhaque",
+        "hex": "#6C4221",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Camel",
+        "hex": "#42290F",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Tabaco",
+        "hex": "#5D3B0E",
+        "familia": "marrons",
+        "destaque": false
+      },
+      {
+        "nome": "Manteiga",
+        "hex": "#D6AF4E",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Baunilha",
+        "hex": "#C5A41E",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Milho",
+        "hex": "#97860B",
+        "familia": "amarelos",
+        "destaque": true
+      },
+      {
+        "nome": "Mel",
+        "hex": "#605D01",
+        "familia": "amarelos",
+        "destaque": false
+      },
+      {
+        "nome": "Pêssego",
+        "hex": "#C35A37",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Damasco",
+        "hex": "#98491E",
+        "familia": "laranjas",
+        "destaque": true
+      },
+      {
+        "nome": "Salmão",
+        "hex": "#66350C",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Papaya",
+        "hex": "#4E2E04",
+        "familia": "laranjas",
+        "destaque": false
+      },
+      {
+        "nome": "Vinho",
+        "hex": "#CA2F56",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Tomate",
+        "hex": "#4C0515",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Papoula",
+        "hex": "#6C1122",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Escarlate",
+        "hex": "#AA021D",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vermelho Vivo",
+        "hex": "#C9112A",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Cereja",
+        "hex": "#450C12",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Rubi",
+        "hex": "#5B0209",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Tijolo",
+        "hex": "#7F0D13",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Vermelho Queimado",
+        "hex": "#9D1E21",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Bordô",
+        "hex": "#E10A09",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Vinho",
+        "hex": "#490B09",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Borgonha",
+        "hex": "#591713",
+        "familia": "vermelhos",
+        "destaque": false
+      },
+      {
+        "nome": "Carmim",
+        "hex": "#941408",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Romã",
+        "hex": "#B22A18",
+        "familia": "vermelhos",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Pêssego",
+        "hex": "#CA2F8A",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Chá",
+        "hex": "#480A2B",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Antigo",
+        "hex": "#660536",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Queimado",
+        "hex": "#7A1946",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Malva",
+        "hex": "#AA1352",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Goiaba",
+        "hex": "#DF0658",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Rosa Médio",
+        "hex": "#450D1F",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Frio",
+        "hex": "#50071C",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Chiclete",
+        "hex": "#7E0120",
+        "familia": "rosas",
+        "destaque": false
+      },
+      {
+        "nome": "Rosa Vivo",
+        "hex": "#911730",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Framboesa",
+        "hex": "#C40D2C",
+        "familia": "rosas",
+        "destaque": true
+      },
+      {
+        "nome": "Verde Garrafa",
+        "hex": "#7DCA2F",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Pistache",
+        "hex": "#5AE306",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Maçã",
+        "hex": "#3FCC0C",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Lima",
+        "hex": "#29B611",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Abacate",
+        "hex": "#19A115",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Oliva",
+        "hex": "#188D22",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Sálvia",
+        "hex": "#1A7A2E",
+        "familia": "verdes",
+        "destaque": true
+      },
+      {
+        "nome": "Folha",
+        "hex": "#01812B",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Musgo",
+        "hex": "#056D33",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Militar",
+        "hex": "#075A36",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Garrafa",
+        "hex": "#084935",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Esmeralda",
+        "hex": "#0B473B",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Verde Floresta",
+        "hex": "#0D4540",
+        "familia": "verdes",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Marinho",
+        "hex": "#2FC2CA",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Gelo",
+        "hex": "#0F3D43",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pó",
+        "hex": "#0E3B44",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Hortênsia",
+        "hex": "#0D3845",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Pervinca",
+        "hex": "#0C3546",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Jeans",
+        "hex": "#0D3A51",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Ardósia",
+        "hex": "#0D3D5C",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Aço",
+        "hex": "#0E3E68",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Azul Petróleo",
+        "hex": "#0E3F74",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Petróleo",
+        "hex": "#0D3E80",
+        "familia": "azuis",
+        "destaque": false
+      },
+      {
+        "nome": "Turquesa",
+        "hex": "#0D3B8D",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Turquesa Profundo",
+        "hex": "#0C379A",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Pavão",
+        "hex": "#0B31A7",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Royal",
+        "hex": "#0A29B4",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Cobalto",
+        "hex": "#0820C1",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Safira",
+        "hex": "#0714CF",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Marinho",
+        "hex": "#0507DD",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Azul Céu Claro",
+        "hex": "#0E02EB",
+        "familia": "azuis",
+        "destaque": true
+      },
+      {
+        "nome": "Berinjela",
+        "hex": "#472FCA",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Lilás",
+        "hex": "#16054C",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Malva",
+        "hex": "#2F116C",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Orquídea",
+        "hex": "#4802AA",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Violeta",
+        "hex": "#6F11C9",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Ametista",
+        "hex": "#2E0C45",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Íris",
+        "hex": "#3F025B",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Uva",
+        "hex": "#660D7F",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Ameixa",
+        "hex": "#8C1E9D",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Berinjela",
+        "hex": "#D809E1",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Roxo Real",
+        "hex": "#490946",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Roxo Profundo",
+        "hex": "#591350",
+        "familia": "roxos",
+        "destaque": false
+      },
+      {
+        "nome": "Vinho Ameixa",
+        "hex": "#940874",
+        "familia": "roxos",
+        "destaque": true
+      },
+      {
+        "nome": "Lavanda Claro",
+        "hex": "#B21881",
+        "familia": "roxos",
+        "destaque": true
+      }
+    ],
+    "metais": [
+      {
+        "nome": "Prateado",
+        "hex": "#AEB5BC"
+      },
+      {
+        "nome": "Dourado envelhecido",
+        "hex": "#9F853D"
+      },
+      {
+        "nome": "Rosé envelhecido",
+        "hex": "#A67A78"
+      }
+    ]
+  }
+};
+
+  // ---- Normaliza o nome de exibição de uma cartela para o slug usado como cartelaId ----
+  // Usada como fallback de compatibilidade: análises salvas antes da Fase 5B só têm
+  // o campo "cartela" (nome), sem "cartelaId". Nunca reescreve o documento sozinha.
+  function slugifyCartela(nome){
+    if(!nome) return '';
+    return nome
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove acentos
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '_');
+  }
+
+  // Rótulos em PT-BR para os nomes técnicos de família (usados nas abas de "Minha Cartela")
+  const FAMILIA_LABELS = {
+    neutros: 'Neutros',
+    marrons: 'Marrons',
+    amarelos: 'Amarelos',
+    laranjas: 'Laranjas',
+    vermelhos: 'Vermelhos',
+    rosas: 'Rosas',
+    verdes: 'Verdes',
+    azuis: 'Azuis',
+    roxos: 'Roxos'
+  };
 
   // ---- Read every [data-field] element inside a container into a plain object ----
   // Reuses the same getFieldValue() already used by the anamnese forms, so
@@ -5636,6 +13212,74 @@
     if(campos) campos.style.display = (radio.textContent.trim() === 'Sim') ? '' : 'none';
   });
 
+  // ---- Cartela selecionada: pré-preenche Temperatura/Intensidade/Profundidade a partir
+  // da CARTELAS_BASE e mantém os avisos de divergência atualizados. Nunca bloqueia nem
+  // sobrescreve silenciosamente um valor que a Giulia já tenha ajustado manualmente depois.
+
+  function selecionarRadioPorTexto(radioRowEl, texto){
+    if(!radioRowEl || !texto) return;
+    radioRowEl.querySelectorAll('.radio-opt').forEach(function(el){
+      el.classList.toggle('sel', el.textContent.trim() === texto);
+    });
+  }
+
+  function atualizarAvisoDivergencia(campo, valorBase){
+    const avisoEl = document.getElementById('analise-' + campo + '-aviso');
+    const radioRowEl = document.getElementById('analise-' + campo + '-radio');
+    if(!avisoEl || !radioRowEl) return;
+
+    if(!valorBase){
+      avisoEl.hidden = true;
+      return;
+    }
+
+    const selecionado = radioRowEl.querySelector('.radio-opt.sel');
+    const valorAtual = selecionado ? selecionado.textContent.trim() : '';
+
+    if(valorAtual && valorAtual !== valorBase){
+      const labelCampo = campo === 'temperatura' ? 'Temperatura' : (campo === 'intensidade' ? 'Intensidade' : 'Profundidade');
+      const cartelaSel = document.querySelector('#analise-cartela-radio .radio-opt.sel');
+      const nomeCartelaAtual = cartelaSel ? cartelaSel.textContent.trim() : '';
+      avisoEl.textContent = labelCampo + ' diferente do padrão' + (nomeCartelaAtual ? (' de ' + nomeCartelaAtual) : '') + ' (' + valorBase + ').';
+      avisoEl.hidden = false;
+    } else {
+      avisoEl.hidden = true;
+    }
+  }
+
+  function atualizarTodosAvisosDivergencia(){
+    const cartelaSel = document.querySelector('#analise-cartela-radio .radio-opt.sel');
+    const nomeCartela = cartelaSel ? cartelaSel.textContent.trim() : '';
+    const base = nomeCartela ? CARTELAS_BASE[slugifyCartela(nomeCartela)] : null;
+
+    atualizarAvisoDivergencia('temperatura', base ? base.temperatura : '');
+    atualizarAvisoDivergencia('intensidade', base ? base.intensidade : '');
+    atualizarAvisoDivergencia('profundidade', base ? base.profundidade : '');
+  }
+
+  // Ao escolher a cartela: pré-preenche os 3 campos com os valores oficiais da base.
+  document.addEventListener('click', function(e){
+    const radio = e.target.closest('#analise-cartela-radio .radio-opt');
+    if(!radio) return;
+
+    const nomeCartela = radio.textContent.trim();
+    const base = CARTELAS_BASE[slugifyCartela(nomeCartela)];
+    if(base){
+      selecionarRadioPorTexto(document.getElementById('analise-temperatura-radio'), base.temperatura);
+      selecionarRadioPorTexto(document.getElementById('analise-intensidade-radio'), base.intensidade);
+      selecionarRadioPorTexto(document.getElementById('analise-profundidade-radio'), base.profundidade);
+    }
+    atualizarTodosAvisosDivergencia();
+  });
+
+  // Se a Giulia mudar manualmente Temperatura/Intensidade/Profundidade depois do
+  // pré-preenchimento, apenas recalcula o aviso — nunca reverte a escolha dela.
+  document.addEventListener('click', function(e){
+    const radio = e.target.closest('#analise-temperatura-radio .radio-opt, #analise-intensidade-radio .radio-opt, #analise-profundidade-radio .radio-opt');
+    if(!radio) return;
+    atualizarTodosAvisosDivergencia();
+  });
+
   // ---- Load saved Análise Profissional + Cromática for the selected client ----
 
   async function loadAnaliseProfissionalCromatica(uid){
@@ -5651,6 +13295,7 @@
       container.querySelectorAll('.chip.sel, .radio-opt.sel').forEach(function(el){ el.classList.remove('sel'); });
       container.querySelectorAll('.outro-input').forEach(function(el){ el.style.display = 'none'; });
     });
+    document.querySelectorAll('.cartela-divergencia-aviso').forEach(function(el){ el.hidden = true; });
     if(cromCampos) cromCampos.style.display = 'none';
 
     let profData = {}, cromData = {};
@@ -5691,6 +13336,8 @@
         if(field in cromData) setFieldValue(cromContainer, field, cromData[field]);
       });
       if(cromCampos) cromCampos.style.display = (cromData.direcionamentoRealizado === 'Sim') ? '' : 'none';
+      // Recalcula os avisos de divergência com base no que foi restaurado do Firestore.
+      atualizarTodosAvisosDivergencia();
     }
   }
 
@@ -5713,6 +13360,10 @@
 
       const profData = getContainerFieldsData(profContainer);
       const cromData = getContainerFieldsData(cromContainer);
+
+      // cartelaId é a chave estável usada para consultar CARTELAS_BASE; "cartela"
+      // continua sendo só o nome de exibição/histórico.
+      if(cromData.cartela) cromData.cartelaId = slugifyCartela(cromData.cartela);
 
       const nowIso = new Date().toISOString();
       profData.updatedAt = nowIso;
@@ -7005,13 +14656,53 @@
   });
 
   // ---- Minha Cartela: leitura exclusiva de interno/analiseCromatica ----
+  // Trabalha só com o array de 100 cores da cartela DAQUELA cliente (nunca as 1.200
+  // cores de todas as 12 cartelas) e nunca exibe HEX como texto — só como cor de fundo.
 
-  let cartelaCoresAtual = { cores: [], neutros: [], destaques: [] };
+  let cartelaCoresAtual = [];
+  let cartelaMetaisAtual = [];
 
-  function normalizeCorEntry(entry){
-    if(typeof entry === 'string') return { hex: entry, nome: '' };
-    if(entry && typeof entry === 'object') return { hex: entry.hex || '', nome: entry.nome || '' };
-    return { hex: '', nome: '' };
+  function renderCartelaMetais(){
+    const cardEl = document.getElementById('cartela-metais-card');
+    const gridEl = document.getElementById('cartela-metais-grid');
+    if(!cardEl || !gridEl) return;
+
+    if(!cartelaMetaisAtual.length){
+      cardEl.hidden = true;
+      gridEl.innerHTML = '';
+      return;
+    }
+
+    cardEl.hidden = false;
+    gridEl.innerHTML = cartelaMetaisAtual.map(function(metal){
+      return '<div class="cartela-swatch">' +
+        '<div class="cartela-swatch-circle" style="background:' + escapeHtml(metal.hex || 'var(--champagne-light)') + ';"></div>' +
+        '<div class="cartela-swatch-label">' + escapeHtml(metal.nome || '') + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // Gera as pills de família dinamicamente, só com as famílias que existirem
+  // de fato nas 100 cores desta cartela, mais "Destaques" quando houver alguma.
+  function renderCartelaTabs(){
+    const tabsEl = document.getElementById('cartela-cor-tabs');
+    if(!tabsEl) return;
+
+    const familiasPresentes = [];
+    cartelaCoresAtual.forEach(function(c){
+      if(c.familia && familiasPresentes.indexOf(c.familia) === -1) familiasPresentes.push(c.familia);
+    });
+    const temDestaque = cartelaCoresAtual.some(function(c){ return c.destaque === true; });
+
+    let html = '<div class="pill active" data-cartela-cor-tab="todas">Todas</div>';
+    familiasPresentes.forEach(function(fam){
+      const label = FAMILIA_LABELS[fam] || (fam.charAt(0).toUpperCase() + fam.slice(1));
+      html += '<div class="pill" data-cartela-cor-tab="' + escapeHtml(fam) + '">' + escapeHtml(label) + '</div>';
+    });
+    if(temDestaque){
+      html += '<div class="pill" data-cartela-cor-tab="destaques">Destaques</div>';
+    }
+    tabsEl.innerHTML = html;
   }
 
   function renderCartelaSwatches(tab){
@@ -7019,10 +14710,10 @@
     const vazioEl = document.getElementById('cartela-cores-vazio');
     if(!gridEl || !vazioEl) return;
 
-    let lista = [];
-    if(tab === 'neutros') lista = cartelaCoresAtual.neutros;
-    else if(tab === 'destaques') lista = cartelaCoresAtual.destaques;
-    else lista = cartelaCoresAtual.cores.concat(cartelaCoresAtual.neutros, cartelaCoresAtual.destaques);
+    let lista;
+    if(tab === 'destaques') lista = cartelaCoresAtual.filter(function(c){ return c.destaque === true; });
+    else if(tab === 'todas' || !tab) lista = cartelaCoresAtual;
+    else lista = cartelaCoresAtual.filter(function(c){ return c.familia === tab; });
 
     if(!lista || lista.length === 0){
       gridEl.hidden = true;
@@ -7032,8 +14723,7 @@
 
     vazioEl.hidden = true;
     gridEl.hidden = false;
-    gridEl.innerHTML = lista.map(function(item){
-      const cor = normalizeCorEntry(item);
+    gridEl.innerHTML = lista.map(function(cor){
       return '<div class="cartela-swatch">' +
         '<div class="cartela-swatch-circle" style="background:' + escapeHtml(cor.hex || 'var(--champagne-light)') + ';"></div>' +
         '<div class="cartela-swatch-label">' + escapeHtml(cor.nome || '') + '</div>' +
@@ -7066,11 +14756,11 @@
       document.getElementById('cartela-intensidade').textContent = '—';
       document.getElementById('cartela-profundidade').textContent = '—';
       document.getElementById('cartela-contraste').textContent = '—';
-      cartelaCoresAtual = { cores: [], neutros: [], destaques: [] };
-      document.querySelectorAll('#screen-cartela-digital .pill[data-cartela-cor-tab]').forEach(function(p, i){
-        p.classList.toggle('active', i === 0);
-      });
+      cartelaCoresAtual = [];
+      cartelaMetaisAtual = [];
+      renderCartelaTabs();
       renderCartelaSwatches('todas');
+      renderCartelaMetais();
       return;
     }
 
@@ -7087,6 +14777,9 @@
     }
 
     const nomeCartela = (cromData.direcionamentoRealizado === 'Sim' && cromData.cartela) ? cromData.cartela : null;
+    // cartelaId é a fonte preferida; análises salvas antes da Fase 5B só têm o nome,
+    // então normalizamos aqui na leitura — sem reescrever nada no Firestore.
+    const cartelaId = cromData.cartelaId || (nomeCartela ? slugifyCartela(nomeCartela) : null);
 
     document.getElementById('cartela-nome').textContent = nomeCartela || 'Minha Cartela';
     document.getElementById('cartela-temperatura').textContent = cromData.temperatura || '—';
@@ -7094,18 +14787,14 @@
     document.getElementById('cartela-profundidade').textContent = cromData.profundidade || '—';
     document.getElementById('cartela-contraste').textContent = cromData.contrastePessoal || '—';
 
-    const base = nomeCartela && CARTELAS_BASE[nomeCartela] ? CARTELAS_BASE[nomeCartela] : null;
-    cartelaCoresAtual = {
-      cores: (base && Array.isArray(base.cores)) ? base.cores : [],
-      neutros: (base && Array.isArray(base.neutros)) ? base.neutros : [],
-      destaques: (base && Array.isArray(base.destaques)) ? base.destaques : []
-    };
+    const base = cartelaId && CARTELAS_BASE[cartelaId] ? CARTELAS_BASE[cartelaId] : null;
+    cartelaCoresAtual = (base && Array.isArray(base.cores)) ? base.cores : [];
+    cartelaMetaisAtual = (base && Array.isArray(base.metais)) ? base.metais : [];
 
     // Sempre volta para a aba "Todas" ao abrir a tela
-    document.querySelectorAll('#screen-cartela-digital .pill[data-cartela-cor-tab]').forEach(function(p, i){
-      p.classList.toggle('active', i === 0);
-    });
+    renderCartelaTabs();
     renderCartelaSwatches('todas');
+    renderCartelaMetais();
   }
 
   // ---- Update painel/dashboard summary stats ----
