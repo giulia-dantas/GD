@@ -1453,6 +1453,142 @@
     min-width:60px;
   }
 
+  /* ===== Ficha completa da cliente (Admin) ===== */
+  .ficha-tab-content{ display:none; }
+  .ficha-tab-content.active{ display:block; }
+
+  .ficha-info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px 14px;
+  }
+
+  .ficha-info-label{
+    font-size:10px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--graphite-soft);
+    margin-bottom:3px;
+  }
+
+  .ficha-info-value{
+    font-family:'Cormorant Garamond', serif;
+    font-size:16px;
+    color:var(--graphite);
+    word-break:break-word;
+  }
+
+  .ficha-status-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:12px 0;
+    border-bottom:var(--hairline);
+  }
+
+  .ficha-status-row:last-child{ border-bottom:none; }
+
+  .ficha-status-row .label{
+    font-size:13px;
+    color:var(--graphite);
+  }
+
+  .ficha-status-tag{
+    font-size:10.5px;
+    padding:5px 13px;
+    border-radius:999px;
+    border:1px solid var(--champagne);
+    color:var(--graphite-soft);
+    white-space:nowrap;
+    text-align:center;
+  }
+
+  .ficha-status-tag.done{
+    background:var(--graphite);
+    border-color:var(--graphite);
+    color:var(--off-white);
+  }
+
+  .ficha-status-tag.warn{
+    border-color:var(--terracota);
+    color:var(--terracota);
+  }
+
+  .ficha-photo-category{ margin-bottom:22px; }
+
+  .ficha-photo-category-title{
+    font-family:'Cormorant Garamond', serif;
+    font-size:17px;
+    font-weight:600;
+    color:var(--graphite);
+    margin-bottom:3px;
+  }
+
+  .ficha-photo-category-sub{
+    font-size:11.5px;
+    color:var(--graphite-soft);
+    line-height:1.5;
+    margin-bottom:12px;
+  }
+
+  .ficha-photo-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:8px;
+  }
+
+  .ficha-photo-tile{
+    position:relative;
+    aspect-ratio:1/1;
+    background:var(--champagne-light);
+    border-radius:10px;
+    overflow:hidden;
+    border:var(--hairline);
+  }
+
+  .ficha-photo-tile img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .ficha-photo-empty{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:100%;
+    font-size:9.5px;
+    color:var(--graphite-soft);
+    text-align:center;
+    padding:6px;
+    line-height:1.4;
+  }
+
+  .ficha-photo-star{
+    position:absolute;
+    top:5px;
+    right:5px;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    background:rgba(47,47,47,0.55);
+    color:var(--off-white);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+    cursor:pointer;
+  }
+
+  .ficha-photo-tile.dossie-chosen{ outline:2px solid var(--champagne); }
+
+  .ficha-photo-tile.dossie-chosen .ficha-photo-star{
+    background:var(--champagne);
+    color:var(--graphite);
+  }
+
   .download-btn{
     width:100%;
     border:1px solid var(--graphite);
@@ -3007,6 +3143,137 @@
     </div>
   </div>
 
+  <!-- ================= FICHA COMPLETA DA CLIENTE (ADMIN) ================= -->
+  <div class="screen-wrap" id="screen-ficha-cliente">
+    <div class="screen-label">Painel — Ficha da Cliente</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+        <div class="logout-btn" data-goto="clientes" title="Voltar" style="left:16px; right:auto;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg></div>
+        
+      </div>
+      <div class="content">
+        <div class="eyebrow">Ficha da Cliente</div>
+        <div class="page-title" id="ficha-cliente-nome">Selecione uma cliente</div>
+        <div class="page-sub">Visão geral, anamnese e fotos</div>
+
+        <div class="pill-row" style="margin-bottom:20px;">
+          <div class="pill active" data-ficha-tab="visao">Visão Geral</div>
+          <div class="pill" data-ficha-tab="anamnese">Anamnese</div>
+          <div class="pill" data-ficha-tab="fotos">Fotos</div>
+        </div>
+
+        <!-- ---- ABA: VISÃO GERAL ---- -->
+        <div class="ficha-tab-content active" id="ficha-tab-visao">
+
+          <div class="stat-card">
+            <div class="stat-label" style="margin-bottom:14px;">Dados Cadastrais</div>
+            <div class="ficha-info-grid">
+              <div class="ficha-info-item">
+                <div class="ficha-info-label">Nome completo</div>
+                <div class="ficha-info-value" id="ficha-nome-completo">—</div>
+              </div>
+              <div class="ficha-info-item">
+                <div class="ficha-info-label">Idade</div>
+                <div class="ficha-info-value" id="ficha-idade">—</div>
+              </div>
+              <div class="ficha-info-item">
+                <div class="ficha-info-label">Cidade / Estado</div>
+                <div class="ficha-info-value" id="ficha-cidade">—</div>
+              </div>
+              <div class="ficha-info-item">
+                <div class="ficha-info-label">Profissão</div>
+                <div class="ficha-info-value" id="ficha-profissao">—</div>
+              </div>
+              <div class="ficha-info-item">
+                <div class="ficha-info-label">Telefone</div>
+                <div class="ficha-info-value" id="ficha-telefone">—</div>
+              </div>
+              <div class="ficha-info-item">
+                <div class="ficha-info-label">Instagram</div>
+                <div class="ficha-info-value" id="ficha-instagram">—</div>
+              </div>
+              <div class="ficha-info-item">
+                <div class="ficha-info-label">Data de cadastro</div>
+                <div class="ficha-info-value" id="ficha-data-cadastro">—</div>
+              </div>
+              <div class="ficha-info-item">
+                <div class="ficha-info-label">Última atualização</div>
+                <div class="ficha-info-value" id="ficha-ultima-atualizacao">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label" style="margin-bottom:0;">Status Geral</div>
+            <div class="ficha-status-row">
+              <div class="label">Status da anamnese</div>
+              <div class="ficha-status-tag" id="ficha-status-anamnese">—</div>
+            </div>
+            <div class="ficha-status-row">
+              <div class="label">Status das fotos</div>
+              <div class="ficha-status-tag" id="ficha-status-fotos">—</div>
+            </div>
+            <div class="ficha-status-row">
+              <div class="label">Análise profissional</div>
+              <div class="ficha-status-tag" id="ficha-status-analise">—</div>
+            </div>
+            <div class="ficha-status-row">
+              <div class="label">Dossiê</div>
+              <div class="ficha-status-tag" id="ficha-status-dossie">—</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label">Observações Internas</div>
+            <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-4px; margin-bottom:12px; line-height:1.5;">Visível apenas para você. A cliente nunca tem acesso a este campo.</p>
+            <textarea class="input-field textarea" id="ficha-observacoes-internas" placeholder="Anotações particulares sobre esta cliente..." style="min-height:110px;"></textarea>
+            <button class="btn-secondary" id="ficha-salvar-observacoes-btn" style="margin-top:10px; margin-bottom:0;">Salvar Observações</button>
+            <div class="login-error" id="ficha-observacoes-msg"></div>
+          </div>
+
+          <button class="btn-secondary" data-goto="editar-cliente">Editar Dados de Cadastro</button>
+        </div>
+
+        <!-- ---- ABA: ANAMNESE ---- -->
+        <div class="ficha-tab-content" id="ficha-tab-anamnese">
+          <div class="page-sub" id="ficha-anamnese-status" style="margin-bottom:14px;">Carregando...</div>
+          <div id="ficha-anamnese-content"></div>
+        </div>
+
+        <!-- ---- ABA: FOTOS ---- -->
+        <div class="ficha-tab-content" id="ficha-tab-fotos">
+          <div class="ficha-photo-category">
+            <div class="ficha-photo-category-title">Consultoria de Imagem</div>
+            <div class="ficha-photo-category-sub">Fotos destinadas à análise corporal, de estilo e imagem</div>
+            <div class="ficha-photo-grid" id="ficha-fotos-consultoria"></div>
+          </div>
+          <div class="ficha-photo-category">
+            <div class="ficha-photo-category-title">Direcionamento Cromático</div>
+            <div class="ficha-photo-category-sub">Fotos destinadas à análise de cores</div>
+            <div class="ficha-photo-grid" id="ficha-fotos-cromatico"></div>
+          </div>
+          <div class="ficha-photo-category">
+            <div class="ficha-photo-category-title">Foto para o Dossiê</div>
+            <div class="ficha-photo-category-sub">Imagem para a composição visual do material final. Toque na estrela de qualquer foto para marcá-la como escolhida.</div>
+            <div class="ficha-photo-grid" id="ficha-fotos-dossie"></div>
+          </div>
+        </div>
+
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
+      </div>
+      <div class="bottomnav">
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0116 0"/><path d="M12 15.5l3.2-4.2"/><circle cx="12" cy="15.5" r="0.9"/><path d="M6 19.5h12"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
+        <div class="navitem active" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
+        <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= EDITAR CLIENTE ================= -->
   <div class="screen-wrap" id="screen-editar-cliente">
     <div class="screen-label">Editar Cliente</div>
@@ -3426,7 +3693,8 @@
         profile = {
           email: user.email,
           role: isConsultant ? 'consultora' : 'cliente',
-          nome: isConsultant ? 'Giulia Dantas' : 'Cliente'
+          nome: isConsultant ? 'Giulia Dantas' : 'Cliente',
+          createdAt: new Date().toISOString()
         };
         await setDoc(userRef, profile);
       }
@@ -3639,7 +3907,7 @@
         ? progressSnap.data().completedSteps
         : [];
       if(completed.indexOf(stepNum) === -1) completed.push(stepNum);
-      await setDoc(progressRef, { completedSteps: completed }, { merge: true });
+      await setDoc(progressRef, { completedSteps: completed, updatedAt: new Date().toISOString() }, { merge: true });
 
       return true;
     } catch(err){
@@ -3945,7 +4213,7 @@
     saveAnamneseStep(stepNum).then(function(ok){
       if(btn.getAttribute('data-finish-anamnese') === 'true' && ok && currentUser){
         const progressRef = doc(db, 'clientes', currentUser.uid, 'anamnese', '_progress');
-        setDoc(progressRef, { finished: true }, { merge: true })
+        setDoc(progressRef, { finished: true, updatedAt: new Date().toISOString() }, { merge: true })
           .then(refreshClienteProgress)
           .catch(function(err){ console.error('GD: erro ao concluir anamnese', err); });
       }
@@ -4372,7 +4640,10 @@
     selectedClienteUid = row.getAttribute('data-cliente-uid');
     selectedClienteNome = row.getAttribute('data-cliente-nome');
 
-    if(window.__gdGoTo) window.__gdGoTo('materiais', 'fwd');
+    // Fase 1: tocar em uma cliente abre a Ficha Completa (Visão Geral, Anamnese, Fotos).
+    // A antiga tela "materiais" continua no app e funcional, apenas deixou de ser
+    // o destino padrão a partir da lista de clientes.
+    if(window.__gdGoTo) window.__gdGoTo('ficha-cliente', 'fwd');
   });
 
   // ---- Render "Materiais Recebidos" for the selected client ----
@@ -4480,47 +4751,27 @@
     }
   }
 
-  // ---- Render the full "Anamnese Completa" for the selected client ----
+  // ---- Shared: fetch all anamnese step docs for a client uid ----
 
-  async function renderAnamneseCompleta(){
-    const nomeEl = document.getElementById('anamnese-completa-cliente-nome');
-    const statusEl = document.getElementById('anamnese-completa-status');
-    const contentEl = document.getElementById('anamnese-completa-content');
-
-    if(!contentEl) return;
-
-    if(!selectedClienteUid){
-      if(nomeEl) nomeEl.textContent = 'Cliente';
-      if(statusEl) statusEl.textContent = 'Selecione uma cliente em "Minhas Clientes"';
-      contentEl.innerHTML = '';
-      return;
-    }
-
-    if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
-    if(statusEl) statusEl.textContent = 'Carregando respostas...';
-
-    // Fetch all step documents
+  async function fetchAnamneseStepsData(uid){
     const stepsData = {};
     for(let i = 1; i <= TOTAL_STEPS; i++){
       try{
-        const stepRef = doc(db, 'clientes', selectedClienteUid, 'anamnese', 'step' + i);
+        const stepRef = doc(db, 'clientes', uid, 'anamnese', 'step' + i);
         const snap = await getDoc(stepRef);
         if(snap.exists()) stepsData[i] = snap.data();
       } catch(err){ console.error(err); }
     }
+    return stepsData;
+  }
 
-    let anamneseFinished = false;
-    try{
-      const progressRef = doc(db, 'clientes', selectedClienteUid, 'anamnese', '_progress');
-      const progressSnap = await getDoc(progressRef);
-      if(progressSnap.exists()) anamneseFinished = !!progressSnap.data().finished;
-    } catch(err){ console.error(err); }
+  // ---- Shared: build the read-only HTML for anamnese answers, organized by the 9 sections ----
+  // Used by both the standalone "Anamnese Completa" screen and the "Anamnese" tab inside the Ficha da Cliente.
+  // Never mixes in professional/admin analysis data — client answers only.
 
-    if(statusEl) statusEl.textContent = anamneseFinished ? 'Respostas concluídas pela cliente' : 'Respostas parciais (em andamento)';
-
-    if(Object.keys(stepsData).length === 0){
-      contentEl.innerHTML = `<div class="stat-card" style="text-align:center;"><p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">Esta cliente ainda não preencheu a anamnese.</p></div>`;
-      return;
+  function buildAnamneseHtml(stepsData){
+    if(!stepsData || Object.keys(stepsData).length === 0){
+      return `<div class="stat-card" style="text-align:center;"><p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">Esta cliente ainda não preencheu a anamnese.</p></div>`;
     }
 
     let html = '';
@@ -4549,8 +4800,367 @@
       if(hasContent) html += sectionHtml;
     });
 
-    contentEl.innerHTML = html || `<div class="stat-card" style="text-align:center;"><p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">Nenhuma resposta preenchida ainda.</p></div>`;
+    return html || `<div class="stat-card" style="text-align:center;"><p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">Nenhuma resposta preenchida ainda.</p></div>`;
   }
+
+  // ---- Render the full "Anamnese Completa" for the selected client ----
+
+  async function renderAnamneseCompleta(){
+    const nomeEl = document.getElementById('anamnese-completa-cliente-nome');
+    const statusEl = document.getElementById('anamnese-completa-status');
+    const contentEl = document.getElementById('anamnese-completa-content');
+
+    if(!contentEl) return;
+
+    if(!selectedClienteUid){
+      if(nomeEl) nomeEl.textContent = 'Cliente';
+      if(statusEl) statusEl.textContent = 'Selecione uma cliente em "Minhas Clientes"';
+      contentEl.innerHTML = '';
+      return;
+    }
+
+    if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
+    if(statusEl) statusEl.textContent = 'Carregando respostas...';
+
+    const stepsData = await fetchAnamneseStepsData(selectedClienteUid);
+
+    let anamneseFinished = false;
+    try{
+      const progressRef = doc(db, 'clientes', selectedClienteUid, 'anamnese', '_progress');
+      const progressSnap = await getDoc(progressRef);
+      if(progressSnap.exists()) anamneseFinished = !!progressSnap.data().finished;
+    } catch(err){ console.error(err); }
+
+    if(statusEl) statusEl.textContent = anamneseFinished ? 'Respostas concluídas pela cliente' : 'Respostas parciais (em andamento)';
+
+    contentEl.innerHTML = buildAnamneseHtml(stepsData);
+  }
+
+  // ===================================================================
+  // FICHA COMPLETA DA CLIENTE (Admin) — Fase 1
+  // Visão Geral + Anamnese + Fotos por categoria.
+  // Observações internas e demais dados administrativos ficam em
+  // clientes/{uid}/interno/ficha — um documento separado dos dados da
+  // própria cliente, para nunca ficarem visíveis a ela e para que
+  // salvar uma seção nunca sobrescreva outra (Fases 2 e 3 usarão
+  // documentos irmãos: interno/analiseProfissional, interno/analiseCromatica, etc.)
+  // ===================================================================
+
+  // ---- Categorize an existing photo upload slot into one of the 3 admin categories ----
+  // Slot IDs come from the client's "Envio de Fotos" screen (screen-fotos).
+  // 'cromatico-*' -> Direcionamento Cromático; everything else already collected
+  // (corpo-*, look-atual-*, referencia-*, guarda-roupa-*) -> Consultoria de Imagem.
+  // 'dossie-*' is reserved for a future client-facing upload slot (Fase 4).
+
+  function categorizePhotoSlot(slotId){
+    if(!slotId) return 'consultoria';
+    if(slotId.indexOf('cromatico-') === 0) return 'cromatico';
+    if(slotId.indexOf('dossie-') === 0) return 'dossie';
+    return 'consultoria';
+  }
+
+  function fichaPhotoLabel(slotId){
+    return slotId.replace(/-add$/,'').replace(/-\d+$/,'').replace(/-/g, ' ');
+  }
+
+  // ---- Tab switching inside the Ficha ----
+
+  document.addEventListener('click', function(e){
+    const tabBtn = e.target.closest('.pill[data-ficha-tab]');
+    if(!tabBtn) return;
+    const tab = tabBtn.getAttribute('data-ficha-tab');
+
+    document.querySelectorAll('#screen-ficha-cliente .ficha-tab-content').forEach(function(el){
+      el.classList.remove('active');
+    });
+    const target = document.getElementById('ficha-tab-' + tab);
+    if(target) target.classList.add('active');
+  });
+
+  // ---- Render one photo category grid ----
+
+  function renderFichaPhotoGrid(gridEl, entries, emptyLabel, chosenSlot){
+    if(!gridEl) return;
+    if(!entries.length){
+      gridEl.innerHTML = '<div class="ficha-photo-tile"><div class="ficha-photo-empty">' + escapeHtml(emptyLabel) + '</div></div>';
+      return;
+    }
+    gridEl.innerHTML = '';
+    entries.forEach(function(entry){
+      const tile = document.createElement('div');
+      tile.className = 'ficha-photo-tile' + (entry.slotId === chosenSlot ? ' dossie-chosen' : '');
+      const img = document.createElement('img');
+      img.src = entry.url;
+      img.alt = fichaPhotoLabel(entry.slotId);
+      tile.appendChild(img);
+
+      const star = document.createElement('div');
+      star.className = 'ficha-photo-star';
+      star.setAttribute('data-ficha-photo-star', entry.slotId);
+      star.title = 'Marcar como foto escolhida para o dossiê';
+      star.textContent = '★';
+      tile.appendChild(star);
+
+      gridEl.appendChild(tile);
+    });
+  }
+
+  let fichaFotosUrls = {};
+
+  async function renderFichaFotosTab(uid){
+    const consultoriaGrid = document.getElementById('ficha-fotos-consultoria');
+    const cromaticoGrid = document.getElementById('ficha-fotos-cromatico');
+    const dossieGrid = document.getElementById('ficha-fotos-dossie');
+
+    let urls = {};
+    try{
+      const photosRef = doc(db, 'clientes', uid, 'fotos', '_meta');
+      const snap = await getDoc(photosRef);
+      if(snap.exists()) urls = snap.data().urls || {};
+    } catch(err){ console.error('GD: erro ao carregar fotos da ficha', err); }
+    fichaFotosUrls = urls;
+
+    let chosenSlot = null;
+    try{
+      const adminPhotosRef = doc(db, 'clientes', uid, 'fotos', '_admin');
+      const adminSnap = await getDoc(adminPhotosRef);
+      if(adminSnap.exists()) chosenSlot = adminSnap.data().escolhidaDossie || null;
+    } catch(err){ console.error('GD: erro ao carregar seleção de dossiê', err); }
+
+    const consultoria = [], cromatico = [], dossie = [];
+    Object.keys(urls).forEach(function(slotId){
+      const entry = urls[slotId];
+      const url = entry && (entry.url || entry);
+      if(!url) return;
+      const item = { slotId: slotId, url: url };
+      const cat = categorizePhotoSlot(slotId);
+      if(cat === 'cromatico') cromatico.push(item);
+      else if(cat === 'dossie') dossie.push(item);
+      else consultoria.push(item);
+    });
+
+    renderFichaPhotoGrid(consultoriaGrid, consultoria, 'Não enviada', chosenSlot);
+    renderFichaPhotoGrid(cromaticoGrid, cromatico, 'Não enviada', chosenSlot);
+    // The "Foto para o Dossiê" category can also be filled by choosing (★) any photo above,
+    // since the dedicated client-facing upload slot for this category ships in Fase 4.
+    renderFichaPhotoGrid(dossieGrid, dossie.length ? dossie : (chosenSlot && urls[chosenSlot] ? [{ slotId: chosenSlot, url: urls[chosenSlot].url || urls[chosenSlot] }] : []), 'Nenhuma foto escolhida ainda para o dossiê', chosenSlot);
+  }
+
+  // ---- Toggle a photo as "escolhida para o dossiê" ----
+
+  document.addEventListener('click', async function(e){
+    const star = e.target.closest('[data-ficha-photo-star]');
+    if(!star || !selectedClienteUid) return;
+
+    const slotId = star.getAttribute('data-ficha-photo-star');
+    const adminPhotosRef = doc(db, 'clientes', selectedClienteUid, 'fotos', '_admin');
+
+    let current = null;
+    try{
+      const snap = await getDoc(adminPhotosRef);
+      if(snap.exists()) current = snap.data().escolhidaDossie || null;
+    } catch(err){ console.error(err); }
+
+    const novoValor = (current === slotId) ? null : slotId;
+
+    try{
+      await setDoc(adminPhotosRef, { escolhidaDossie: novoValor, updatedAt: new Date().toISOString() }, { merge: true });
+      renderFichaFotosTab(selectedClienteUid);
+    } catch(err){
+      console.error('GD: erro ao marcar foto para o dossiê', err);
+    }
+  });
+
+  // ---- Status tag helper ----
+
+  function setFichaStatusTag(elId, text, cls){
+    const el = document.getElementById(elId);
+    if(!el) return;
+    el.textContent = text;
+    el.classList.remove('done','warn');
+    if(cls) el.classList.add(cls);
+  }
+
+  function formatFichaDate(iso){
+    if(!iso) return '—';
+    try{
+      const d = new Date(iso);
+      if(isNaN(d.getTime())) return '—';
+      return d.toLocaleDateString('pt-BR');
+    } catch(err){ return '—'; }
+  }
+
+  // ---- Main render for the Ficha da Cliente screen ----
+
+  async function renderFichaCliente(){
+    const nomeEl = document.getElementById('ficha-cliente-nome');
+
+    if(!selectedClienteUid){
+      if(nomeEl) nomeEl.textContent = 'Selecione uma cliente';
+      return;
+    }
+
+    if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
+
+    // Reset to first tab every time a client is opened
+    document.querySelectorAll('#screen-ficha-cliente .pill[data-ficha-tab]').forEach(function(p, i){
+      p.classList.toggle('active', i === 0);
+    });
+    document.querySelectorAll('#screen-ficha-cliente .ficha-tab-content').forEach(function(el, i){
+      el.classList.toggle('active', i === 0);
+    });
+
+    // ---- Dados cadastrais: users doc + anamnese step 1 ----
+    let userData = {};
+    try{
+      const userRef = doc(db, 'users', selectedClienteUid);
+      const userSnap = await getDoc(userRef);
+      if(userSnap.exists()) userData = userSnap.data();
+    } catch(err){ console.error(err); }
+
+    const stepsData = await fetchAnamneseStepsData(selectedClienteUid);
+    const step1 = stepsData[1] || {};
+
+    document.getElementById('ficha-nome-completo').textContent = step1.nomeCompleto || userData.nome || selectedClienteNome || '—';
+    document.getElementById('ficha-idade').textContent = step1.idade || '—';
+    document.getElementById('ficha-cidade').textContent = step1.cidadeEstado || '—';
+    document.getElementById('ficha-profissao').textContent = step1.profissao || '—';
+    document.getElementById('ficha-telefone').textContent = step1.telefone || userData.telefone || '—';
+    document.getElementById('ficha-instagram').textContent = step1.instagram || '—';
+    document.getElementById('ficha-data-cadastro').textContent = formatFichaDate(userData.createdAt);
+
+    // ---- Anamnese progress ----
+    let anamneseDone = 0, anamneseFinished = false, anamneseUpdatedAt = null;
+    try{
+      const progressRef = doc(db, 'clientes', selectedClienteUid, 'anamnese', '_progress');
+      const progressSnap = await getDoc(progressRef);
+      if(progressSnap.exists()){
+        const pd = progressSnap.data();
+        anamneseDone = Array.isArray(pd.completedSteps) ? pd.completedSteps.length : 0;
+        anamneseFinished = !!pd.finished;
+        anamneseUpdatedAt = pd.updatedAt || null;
+      }
+    } catch(err){ console.error(err); }
+
+    if(anamneseFinished){
+      setFichaStatusTag('ficha-status-anamnese', 'Concluída', 'done');
+    } else if(anamneseDone > 0){
+      setFichaStatusTag('ficha-status-anamnese', anamneseDone + ' de ' + TOTAL_STEPS + ' etapas', 'warn');
+    } else {
+      setFichaStatusTag('ficha-status-anamnese', 'Não iniciada', null);
+    }
+
+    // ---- Fotos status ----
+    let fotosCount = 0, fotosUpdatedAt = null;
+    try{
+      const photosRef = doc(db, 'clientes', selectedClienteUid, 'fotos', '_meta');
+      const photosSnap = await getDoc(photosRef);
+      if(photosSnap.exists()){
+        const pd = photosSnap.data();
+        fotosCount = pd.count || 0;
+        fotosUpdatedAt = pd.updatedAt || null;
+      }
+    } catch(err){ console.error(err); }
+
+    if(fotosCount > 0){
+      setFichaStatusTag('ficha-status-fotos', fotosCount + (fotosCount === 1 ? ' foto recebida' : ' fotos recebidas'), 'done');
+    } else {
+      setFichaStatusTag('ficha-status-fotos', 'Não enviada', null);
+    }
+
+    // ---- Dados internos do Admin (observações, status de análise/dossiê) ----
+    // Documento próprio e exclusivo do Admin — nunca lido nas telas da cliente.
+    let interno = {};
+    try{
+      const internoRef = doc(db, 'clientes', selectedClienteUid, 'interno', 'ficha');
+      const internoSnap = await getDoc(internoRef);
+      if(internoSnap.exists()) interno = internoSnap.data();
+    } catch(err){ console.error('GD: erro ao carregar dados internos', err); }
+
+    const obsEl = document.getElementById('ficha-observacoes-internas');
+    if(obsEl) obsEl.value = interno.observacoesInternas || '';
+
+    // Análise profissional (campos chegam na Fase 2 — por ora, apenas o status)
+    const analiseStatus = interno.analiseProfissionalStatus || 'nao_iniciada';
+    if(analiseStatus === 'concluida'){
+      setFichaStatusTag('ficha-status-analise', 'Concluída', 'done');
+    } else if(analiseStatus === 'em_andamento'){
+      setFichaStatusTag('ficha-status-analise', 'Em andamento', 'warn');
+    } else {
+      setFichaStatusTag('ficha-status-analise', 'Não iniciada', null);
+    }
+
+    // Dossiê (fluxo completo chega na Fase 3 — por ora, apenas o status)
+    const dossieStatus = interno.dossieStatus || 'nao_iniciado';
+    const dossieLabels = {
+      nao_iniciado: 'Não iniciado',
+      aguardando_analise: 'Aguardando análise',
+      pronto_producao: 'Pronto para produção',
+      em_producao: 'Em produção',
+      em_revisao: 'Em revisão',
+      finalizado: 'Finalizado',
+      liberado: 'Liberado para cliente'
+    };
+    setFichaStatusTag('ficha-status-dossie', dossieLabels[dossieStatus] || 'Não iniciado', dossieStatus === 'liberado' ? 'done' : null);
+
+    // ---- Última atualização: a mais recente entre anamnese, fotos e dados internos ----
+    const datas = [anamneseUpdatedAt, fotosUpdatedAt, interno.updatedAt].filter(Boolean).sort();
+    const ultima = datas.length ? datas[datas.length - 1] : null;
+    document.getElementById('ficha-ultima-atualizacao').textContent = ultima ? formatFichaDate(ultima) : '—';
+
+    // ---- Aba Anamnese ----
+    const anamneseStatusEl = document.getElementById('ficha-anamnese-status');
+    if(anamneseStatusEl){
+      anamneseStatusEl.textContent = anamneseFinished
+        ? 'Respostas concluídas pela cliente'
+        : (anamneseDone > 0 ? 'Respostas parciais (em andamento)' : 'Esta cliente ainda não iniciou a anamnese');
+    }
+    const anamneseContentEl = document.getElementById('ficha-anamnese-content');
+    if(anamneseContentEl) anamneseContentEl.innerHTML = buildAnamneseHtml(stepsData);
+
+    // ---- Aba Fotos ----
+    await renderFichaFotosTab(selectedClienteUid);
+  }
+
+  // ---- Salvar Observações Internas ----
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#ficha-salvar-observacoes-btn');
+    if(!btn || !selectedClienteUid) return;
+
+    const obsEl = document.getElementById('ficha-observacoes-internas');
+    const msgEl = document.getElementById('ficha-observacoes-msg');
+    const texto = obsEl ? (obsEl.value || '') : '';
+
+    btn.classList.add('is-loading');
+    const originalText = btn.textContent;
+    btn.textContent = 'Salvando…';
+
+    try{
+      const internoRef = doc(db, 'clientes', selectedClienteUid, 'interno', 'ficha');
+      await setDoc(internoRef, {
+        observacoesInternas: texto,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+
+      if(msgEl){
+        msgEl.classList.add('success');
+        msgEl.textContent = 'Observações salvas.';
+        setTimeout(function(){ msgEl.textContent = ''; msgEl.classList.remove('success'); }, 2500);
+      }
+      // Refresh "última atualização" without reloading everything
+      document.getElementById('ficha-ultima-atualizacao').textContent = formatFichaDate(new Date().toISOString());
+    } catch(err){
+      console.error('GD: erro ao salvar observações internas', err);
+      if(msgEl){
+        msgEl.classList.remove('success');
+        msgEl.textContent = 'Não foi possível salvar. Tente novamente.';
+      }
+    } finally{
+      btn.classList.remove('is-loading');
+      btn.textContent = originalText;
+    }
+  });
 
   // ---- Update painel/dashboard summary stats ----
 
@@ -4587,6 +5197,9 @@
       if(screenId === 'materiais'){
         renderMateriaisScreen();
       }
+      if(screenId === 'ficha-cliente'){
+        renderFichaCliente();
+      }
       if(screenId === 'anamnese-completa'){
         renderAnamneseCompleta();
       }
@@ -4605,6 +5218,9 @@
     }
     if(target === 'materiais'){
       setTimeout(renderMateriaisScreen, 50);
+    }
+    if(target === 'ficha-cliente'){
+      setTimeout(renderFichaCliente, 50);
     }
     if(target === 'anamnese-completa'){
       setTimeout(renderAnamneseCompleta, 50);
