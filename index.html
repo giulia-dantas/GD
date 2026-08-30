@@ -1934,10 +1934,6 @@
     overflow:visible;
     display:flex;
     flex-direction:column;
-    break-after:page;
-    page-break-after:always;
-    break-inside:avoid;
-    page-break-inside:avoid;
     /* Fase 6C.6 — nova direção cromática editorial: tokens locais, escopados só ao
        Dossiê Mestre (nunca tocam as variáveis globais do app). */
     --dm-ouro:#B8925A;
@@ -1946,48 +1942,64 @@
     --dm-bg-quase-branco:#FAF8F3;
   }
 
-  /* A última página não deve forçar uma folha extra em branco depois dela. */
-  .dossie-mestre-page:last-child{
-    break-after:auto;
-    page-break-after:auto;
-  }
-
-  /* ---- Cabeçalho corrido (número da página + seção corrente) — Modelo de referência ---- */
-  .dm-cabecalho-linha{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:10px;
-  }
-
-  .dm-numero-pagina{
-    width:25px;
-    height:25px;
-    background:var(--dm-bg-media);
+  /* Fase 6C.15 — MUDANÇA ESTRUTURAL: o Dossiê Mestre não é mais organizado em
+     páginas A4 (.dossie-mestre-page passou a ser usado SOMENTE pela capa, que
+     continua com sua composição fechada e proporção próprias). Todo o restante do
+     conteúdo agora vive dentro de .dossie-mestre-fluxo, um documento contínuo —
+     mesma identidade visual (fundo, sombra, padding, tokens dourados), mas sem
+     aspect-ratio fixo: a altura cresce naturalmente com o conteúdo, sem quebra de
+     página, sem numeração, sem cabeçalho repetido por seção.
+     As antigas regras de cabeçalho numerado (.dm-cabecalho-linha, .dm-numero-pagina,
+     .dm-header-direita, .dm-cabecalho-regua) e de quebra de página foram removidas
+     — não existe mais nenhum elemento que as use. */
+  .dossie-mestre-fluxo{
+    position:relative;
+    background:#FBF9F5;
+    width:100%;
+    max-width:680px;
+    box-shadow:0 6px 32px rgba(47,47,47,0.16);
+    box-sizing:border-box;
+    padding:7% 8%;
+    font-family:'Manrope', sans-serif;
     color:var(--graphite);
-    border:1px solid var(--dm-ouro);
-    font-family:'Manrope', sans-serif;
-    font-size:10.5px;
-    font-weight:700;
+    --dm-ouro:#B8925A;
+    --dm-bg-clara:#F3ECDD;
+    --dm-bg-media:#EFE4CC;
+    --dm-bg-quase-branco:#FAF8F3;
+  }
+
+  /* Cada capítulo é só um bloco de conteúdo dentro do fluxo — respiro editorial
+     consistente entre eles (o mesmo "espaço em branco" que antes vinha do fim de
+     uma folha agora existe porque o design pede, não porque a página acabou). */
+  .dm-capitulo{
+    margin-bottom:48px;
+  }
+
+  .dm-capitulo:last-child{ margin-bottom:0; }
+
+  /* ---- Divisória editorial entre capítulos principais ("── GD ──") ---- */
+  .dm-divisoria-capitulo{
     display:flex;
     align-items:center;
-    justify-content:center;
-    flex-shrink:0;
+    gap:16px;
+    margin:8px 0 48px;
   }
 
-  .dm-header-direita{
-    font-family:'Manrope', sans-serif;
-    font-size:8px;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-    color:var(--graphite-soft);
-    text-align:right;
-  }
-
-  .dm-cabecalho-regua{
+  .dm-divisoria-linha{
+    flex:1;
     height:1px;
-    background:rgba(184,146,90,0.28);
-    margin-bottom:22px;
+    background:var(--dm-ouro);
+    opacity:0.55;
+  }
+
+  .dm-divisoria-gd{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.14em;
+    color:var(--dm-ouro);
+    flex-shrink:0;
   }
 
   /* ---- Tipografia editorial ---- */
@@ -2596,12 +2608,21 @@
   }
 
   /* ---- Encerramento ---- */
+  /* Fase 6C.15 — o encerramento não simula mais uma página vazia (não existe mais
+     "página" nem espaço a preencher). Respiro fixo acima/abaixo, como fechamento
+     elegante do fluxo contínuo. display:flex aqui serve só para centralizar
+     horizontalmente as caixas de largura variável (ex.: o texto com max-width:80%)
+     — não tem relação com os antigos espaçadores flex-grow removidos. */
   .dossie-mestre-encerramento{
+    display:flex;
+    flex-direction:column;
     align-items:center;
     text-align:center;
+    padding-top:52px;
+    padding-bottom:16px;
   }
 
-  .dm-encerramento-bloco{ flex-shrink:0; }
+  .dm-encerramento-bloco{ display:flex; flex-direction:column; align-items:center; max-width:100%; }
 
   /* ---- Paleta / cores curadas — círculos agrupados por categoria, com divisórias finas ---- */
   .dm-cor-grupo{ margin-bottom:16px; break-inside:avoid; page-break-inside:avoid; }
@@ -2825,6 +2846,7 @@
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -5723,95 +5745,167 @@
     }
   });
 
-  // ---- Gerar PDF (Dossiê Mestre) — impressão ISOLADA (Fase 6C.14) ----
-  // Em vez de chamar window.print() na janela principal (que arrastaria consigo
-  // os wrappers do app — .app-gallery/.phone/.content — mesmo depois de ocultados
-  // via CSS), montamos um iframe oculto contendo SOMENTE as páginas do Dossiê
-  // Mestre já renderizadas (clone do innerHTML real, com classes de foto e
-  // numeração já aplicadas) mais uma cópia literal do <style> do documento — sem
-  // nenhum ancestral que restrinja largura. A chamada final continua sendo
-  // window.print() (aqui, iframe.contentWindow.print()) — nenhuma biblioteca de
-  // conversão, nenhuma rasterização.
+  // ---- Gerar PDF (Dossiê Mestre) — CAPTURA VISUAL CONTÍNUA (Fase 6C.15) ----
+  // A geração de PDF via window.print() foi abandonada: o navegador reinterpretava
+  // o layout. Agora usamos html2canvas (captura o DOM já renderizado, em alta
+  // resolução) + jsPDF (monta o arquivo), SEM rasterizar tudo de uma vez — cada
+  // capítulo/divisória é capturado individualmente (unidades pequenas e seguras),
+  // e as imagens resultantes são encaixadas lado a lado verticalmente no PDF, sem
+  // nenhuma aparência de "fim de folha" (sem cabeçalho, sem rodapé, sem numeração,
+  // sem espaço em branco de quebra). Duas passagens:
+  //   1ª (leve): mede cada unidade via getBoundingClientRect e planeja em quais
+  //      "folhas físicas" do PDF elas caem — evita depender de redimensionar uma
+  //      página do jsPDF depois de criada (não é suportado) e evita qualquer
+  //      captura de canvas gigantesco de uma vez (risco de estourar memória).
+  //   2ª (captura de verdade): para cada unidade, aguarda suas imagens, captura
+  //      via html2canvas na escala definida, desenha na posição planejada, e
+  //      libera a referência do canvas imediatamente.
 
-  // Aguarda fontes e imagens do documento do iframe terminarem de carregar antes
-  // de imprimir — evita imprimir com fontes ainda não aplicadas ou fotos em branco.
-  function dm_aguardarRecursosImpressao(doc){
-    const fontesProntas = (doc.fonts && doc.fonts.ready) ? doc.fonts.ready.catch(function(){}) : Promise.resolve();
-    const imgs = Array.prototype.slice.call(doc.images || []);
-    const imagensProntas = Promise.all(imgs.map(function(img){
+  function dm_sanitizarNomeArquivo(nome){
+    return (nome || 'Cliente')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-') || 'Cliente';
+  }
+
+  async function dm_aguardarImagens(el){
+    const imgs = Array.prototype.slice.call(el.querySelectorAll('img'));
+    await Promise.all(imgs.map(function(img){
       if(img.complete) return Promise.resolve();
       return new Promise(function(resolve){
         img.addEventListener('load', resolve);
         img.addEventListener('error', resolve);
       });
     }));
-    return Promise.all([fontesProntas, imagensProntas]);
   }
 
-  async function dm_prepararEImprimirDossie(){
-    const paginasEl = document.getElementById('dossie-mestre-paginas');
-    if(!paginasEl || !paginasEl.children.length){
-      window.print();
+  async function dm_gerarPdfContinuo(){
+    const btn = document.querySelector('[data-action="gerar-pdf-dossie"]');
+    const capaEl = document.querySelector('#dossie-mestre-paginas .dossie-mestre-page.dossie-mestre-capa');
+    const fluxoEl = document.querySelector('#dossie-mestre-paginas .dossie-mestre-fluxo');
+    if(!capaEl && !fluxoEl) return;
+    if(typeof html2canvas === 'undefined' || !window.jspdf || !window.jspdf.jsPDF){
+      console.error('GD: html2canvas/jsPDF não disponíveis para gerar o PDF.');
       return;
     }
 
-    // Cópia literal do <style> do documento principal — garante que as páginas
-    // clonadas usem exatamente as mesmas regras (nenhuma reconstrução de layout).
-    const estiloOriginal = document.querySelector('style');
-    const cssOriginal = estiloOriginal ? estiloOriginal.textContent : '';
-
-    const iframe = document.createElement('iframe');
-    iframe.setAttribute('aria-hidden', 'true');
-    iframe.style.cssText = 'position:fixed; top:-10000px; left:-10000px; width:0; height:0; border:0; visibility:hidden;';
-    document.body.appendChild(iframe);
-
-    const doc = iframe.contentDocument || iframe.contentWindow.document;
-    doc.open();
-    doc.write(
-      '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">' +
-      '<link rel="preconnect" href="https://fonts.googleapis.com">' +
-      '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' +
-      '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">' +
-      '<style>' + cssOriginal +
-      // Only physical pagination is added here — NEVER font-size, padding, gap ou
-      // qualquer proporção interna. .dossie-mestre-page já define sua proporção
-      // A4 via aspect-ratio; aqui só liberamos a largura (sem o teto de 680px da
-      // prévia) para que ela preencha a folha física real do navegador/PDF.
-      'html,body{ margin:0; padding:0; background:#fff; }' +
-      '.dossie-mestre-viewport{ display:block !important; background:none !important; padding:0 !important; margin:0 !important; gap:0 !important; }' +
-      '.dossie-mestre-page{ max-width:none !important; margin:0 auto !important; break-after:page; page-break-after:always; break-inside:avoid; page-break-inside:avoid; }' +
-      '.dossie-mestre-page:last-child{ break-after:auto; page-break-after:auto; }' +
-      '@page{ size:A4 portrait; margin:0; }' +
-      '</style></head><body><div id="dossie-mestre-paginas" class="dossie-mestre-viewport">' +
-      paginasEl.innerHTML +
-      '</div></body></html>'
-    );
-    doc.close();
+    const textoOriginalBtn = btn ? btn.textContent : '';
+    if(btn){ btn.textContent = 'Gerando PDF...'; btn.disabled = true; }
 
     try{
-      await dm_aguardarRecursosImpressao(doc);
+      if(document.fonts && document.fonts.ready){
+        try{ await document.fonts.ready; } catch(e){}
+      }
+
+      const PX_TO_MM = 25.4 / 96;
+      const ESCALA = 2;
+      const MAX_ALTURA_PAGINA_MM = 3000; // limite seguro, bem abaixo de limites técnicos de leitores de PDF
+
+      // Unidades de captura, na ordem visual real do documento: a capa inteira
+      // primeiro, depois cada filho direto do fluxo (cada .dm-capitulo e cada
+      // .dm-divisoria-capitulo) — nunca o documento inteiro numa única captura.
+      const unidades = [];
+      if(capaEl) unidades.push({ el: capaEl, comPaddingDoFluxo: false });
+      let fluxoPadEsq = '0px', fluxoPadDir = '0px', fluxoFundo = '#FBF9F5';
+      if(fluxoEl){
+        const fluxoStyle = getComputedStyle(fluxoEl);
+        fluxoPadEsq = fluxoStyle.paddingLeft;
+        fluxoPadDir = fluxoStyle.paddingRight;
+        fluxoFundo = fluxoStyle.backgroundColor || '#FBF9F5';
+        Array.prototype.forEach.call(fluxoEl.children, function(filho){
+          unidades.push({ el: filho, comPaddingDoFluxo: true });
+        });
+      }
+      if(!unidades.length) return;
+
+      // ---- 1ª passagem: mede (sem capturar) para planejar as folhas do PDF ----
+      const medidas = unidades.map(function(u){
+        const rect = u.el.getBoundingClientRect();
+        return { larguraMM: rect.width * PX_TO_MM, alturaMM: rect.height * PX_TO_MM };
+      });
+      const larguraPaginaMM = medidas.reduce(function(max, m){ return Math.max(max, m.larguraMM); }, 0);
+
+      const planos = []; // cada plano = { alturaMM, itens: [{ indice, yMM, alturaMM }] }
+      let planoAtual = null;
+      medidas.forEach(function(m, i){
+        if(!planoAtual || (planoAtual.alturaMM + m.alturaMM) > MAX_ALTURA_PAGINA_MM){
+          planoAtual = { alturaMM: 0, itens: [] };
+          planos.push(planoAtual);
+        }
+        planoAtual.itens.push({ indice: i, yMM: planoAtual.alturaMM, alturaMM: m.alturaMM });
+        planoAtual.alturaMM += m.alturaMM;
+      });
+
+      // ---- 2ª passagem: captura de verdade, uma unidade por vez ----
+      let pdf = null;
+      for(let p = 0; p < planos.length; p++){
+        const plano = planos[p];
+        const alturaFolhaMM = Math.max(plano.alturaMM, 1);
+        if(!pdf){
+          pdf = new window.jspdf.jsPDF({ unit: 'mm', format: [larguraPaginaMM, alturaFolhaMM], compress: true });
+        } else {
+          // Segmentação técnica interna — SEM aparência de quebra de página: sem
+          // cabeçalho/rodapé repetido, sem numeração, sem espaço em branco. É só
+          // uma nova folha do arquivo continuando de onde a anterior parou.
+          pdf.addPage([larguraPaginaMM, alturaFolhaMM]);
+        }
+
+        for(let k = 0; k < plano.itens.length; k++){
+          const item = plano.itens[k];
+          const u = unidades[item.indice];
+          const el = u.el;
+
+          const estiloInlineOriginal = el.getAttribute('style');
+          if(u.comPaddingDoFluxo){
+            el.style.paddingLeft = fluxoPadEsq;
+            el.style.paddingRight = fluxoPadDir;
+            el.style.boxSizing = 'border-box';
+          }
+
+          await dm_aguardarImagens(el);
+
+          let canvas;
+          try{
+            canvas = await html2canvas(el, {
+              scale: ESCALA,
+              useCORS: true,
+              backgroundColor: u.comPaddingDoFluxo ? fluxoFundo : '#FBF9F5',
+              logging: false
+            });
+          } finally {
+            if(u.comPaddingDoFluxo){
+              if(estiloInlineOriginal) el.setAttribute('style', estiloInlineOriginal);
+              else el.removeAttribute('style');
+            }
+          }
+
+          const imgData = canvas.toDataURL('image/jpeg', 0.92);
+          // Libera a referência do canvas assim que possível (evita acumular
+          // memória em dossiês longos, especialmente em navegadores mobile).
+          canvas.width = 0;
+          canvas.height = 0;
+          canvas = null;
+
+          pdf.addImage(imgData, 'JPEG', 0, item.yMM, larguraPaginaMM, medidas[item.indice].alturaMM);
+        }
+      }
+
+      const nomeClienteEl = document.querySelector('#dossie-mestre-paginas .dm-capa-cliente-nome');
+      const nomeCliente = (nomeClienteEl && nomeClienteEl.textContent.trim()) || selectedClienteNome || 'Cliente';
+      const nomeArquivo = 'Dossie-' + dm_sanitizarNomeArquivo(nomeCliente) + '.pdf';
+      pdf.save(nomeArquivo);
     } catch(err){
-      console.warn('GD: aguardando recursos da janela de impressão isolada', err);
+      console.error('GD: erro ao gerar o PDF contínuo do Dossiê Mestre', err);
+    } finally{
+      if(btn){ btn.textContent = textoOriginalBtn || 'Gerar PDF'; btn.disabled = false; }
     }
-
-    // Pequena folga extra de segurança para o reflow final antes de imprimir.
-    await new Promise(function(resolve){ setTimeout(resolve, 80); });
-
-    iframe.contentWindow.focus();
-    iframe.contentWindow.print();
-
-    // Não existe um evento universal de "impressão concluída/cancelada" entre
-    // navegadores; removemos o iframe depois de um tempo generoso — ele já
-    // cumpriu sua função no momento em que print() foi chamado.
-    setTimeout(function(){
-      if(iframe.parentNode) iframe.parentNode.removeChild(iframe);
-    }, 3000);
   }
 
   const gerarPdfBtns = document.querySelectorAll('[data-action="gerar-pdf-dossie"]');
   gerarPdfBtns.forEach(function(btn){
     btn.addEventListener('click', function(){
-      dm_prepararEImprimirDossie();
+      dm_gerarPdfContinuo();
     });
   });
 
@@ -20856,23 +20950,28 @@
   }
 
   // ---- Helpers de composição editorial ----
-  // dm_pagina: opts = { numero:true|false, secao:'CONSULTORIA DE IMAGEM', classesExtra }
-  // O número real é preenchido depois (ver renderDossieMestrePrevia), por isso o
-  // marcador fica vazio aqui — evita coordenar um contador entre funções que já
-  // retornam mais de uma página cada (paginação de Vestuário/Acessórios).
-
-  // Extraído de dm_pagina (Fase 6C.7) para poder ser medido em pixels reais antes de
-  // decidir a paginação de Combinações — o markup é idêntico ao que dm_pagina gera,
-  // então a medição bate exatamente com o que será renderizado de verdade.
-  function dm_construirCabecalhoNumerado(secao){
-    const headerDireita = secao ? ('DOSSIÊ PERSONALIZADO&nbsp;&nbsp;|&nbsp;&nbsp;' + secao.toUpperCase()) : 'DOSSIÊ PERSONALIZADO';
-    return '<div class="dm-cabecalho-linha"><div class="dm-numero-pagina" data-dm-numero></div><div class="dm-header-direita">' + headerDireita + '</div></div><div class="dm-cabecalho-regua"></div>';
-  }
-
+  // Fase 6C.15 — MUDANÇA ESTRUTURAL: o Dossiê Mestre deixou de ser organizado como
+  // páginas A4 individuais e passou a ser um DOCUMENTO DIGITAL DE LEITURA CONTÍNUA.
+  // A CAPA é a única exceção — continua sendo a composição fechada aprovada
+  // (.dossie-mestre-page.dossie-mestre-capa, com sua proporção/tamanho próprios).
+  // Todo o resto do dossiê agora usa .dm-capitulo: um bloco de conteúdo simples que
+  // flui verticalmente dentro de .dossie-mestre-fluxo — sem numeração, sem
+  // cabeçalho repetido, sem quebra de página, sem altura fixa de folha.
   function dm_pagina(corpoHtml, opts){
     opts = opts || {};
-    const cabecalho = opts.numero ? dm_construirCabecalhoNumerado(opts.secao) : '';
-    return '<div class="dossie-mestre-page' + (opts.classesExtra ? ' ' + opts.classesExtra : '') + '">' + cabecalho + corpoHtml + '</div>';
+    const ehCapa = !!(opts.classesExtra && opts.classesExtra.indexOf('dossie-mestre-capa') !== -1);
+    if(ehCapa){
+      // Capa: comportamento 100% preservado, exatamente como antes desta fase.
+      return '<div class="dossie-mestre-page ' + opts.classesExtra + '">' + corpoHtml + '</div>';
+    }
+    return '<div class="dm-capitulo' + (opts.classesExtra ? ' ' + opts.classesExtra : '') + '">' + corpoHtml + '</div>';
+  }
+
+  // Divisória editorial entre CAPÍTULOS PRINCIPAIS (nunca entre subtópicos de um
+  // mesmo capítulo) — linha fina dourada + monograma GD + linha fina dourada,
+  // minimalista, sempre o mesmo componente reutilizado em todo o documento.
+  function dm_divisoriaCapitulo(){
+    return '<div class="dm-divisoria-capitulo"><span class="dm-divisoria-linha"></span><span class="dm-divisoria-gd">GD</span><span class="dm-divisoria-linha"></span></div>';
   }
 
   // Rodapé em faixa — presente em toda página numerada. "extra" permite um selo
@@ -20926,25 +21025,20 @@
     }).join('') + '</div>';
   }
 
-  // Divide uma lista de blocos em várias páginas quando não cabem confortavelmente
-  // em uma só — aproximação determinística por quantidade (não corta parágrafos).
+  // Fase 6C.15 — documento contínuo: todos os itens seguem juntos no mesmo bloco,
+  // sem paginação, sem "continuação". "maxPorPagina" deixou de ser usado (mantido
+  // como parâmetro por compatibilidade de chamada, sem efeito).
   function dm_paginarBlocos(secao, titulo, tituloItalico, blocos, maxPorPagina, icones){
-    const paginas = [];
-    for(let i = 0; i < blocos.length; i += maxPorPagina){
-      const fatia = blocos.slice(i, i + maxPorPagina);
-      const continuando = i > 0;
-      const corpo = fatia.map(function(b, idx){
-        const iconeKey = (icones && icones[i + idx]) || 'cabide';
-        return dm_itemIcone(iconeKey, b.titulo, b.valor);
-      }).join('');
-      paginas.push(dm_pagina(
-        '<div class="dm-titulo-editorial">' + escapeHtml(titulo) + (continuando ? '' : ' <em>' + escapeHtml(tituloItalico) + '</em>') + (continuando ? ' <em>(continuação)</em>' : '') + '</div>' +
-        '<div class="dm-linha-curta"></div>' +
-        corpo,
-        { numero: true, secao: secao }
-      ));
-    }
-    return paginas;
+    const corpo = blocos.map(function(b, idx){
+      const iconeKey = (icones && icones[idx]) || 'cabide';
+      return dm_itemIcone(iconeKey, b.titulo, b.valor);
+    }).join('');
+    return [dm_pagina(
+      '<div class="dm-titulo-editorial">' + escapeHtml(titulo) + ' <em>' + escapeHtml(tituloItalico) + '</em></div>' +
+      '<div class="dm-linha-curta"></div>' +
+      corpo,
+      { secao: secao }
+    )];
   }
 
   // ---- Capítulos: cada função retorna um array de páginas (HTML), ou null se o
@@ -20984,36 +21078,6 @@
       img.addEventListener('load', aplicar);
       img.addEventListener('error', function(){ img.classList.add('dm-foto-quadrada'); });
     }
-  }
-
-  // Fase 6C.11 — validação GEOMÉTRICA real de cada página do Dossiê Mestre, usando
-  // getBoundingClientRect() (medição real do navegador já renderizado — nunca
-  // contagem de elementos nem estimativa). Para cada .dossie-mestre-page, compara
-  // o retângulo do seu ÚLTIMO filho direto (o bloco mais provável de "vazar" pelo
-  // final da página) com o retângulo da própria página, com uma pequena margem de
-  // segurança. Não corrige nada sozinha — apenas relata violações no console, para
-  // que qualquer estouro real seja investigado como bug de layout (nunca escondido
-  // criando página nova ou cortando conteúdo). Roda automaticamente ao final de
-  // cada montagem da prévia (ver renderDossieMestrePrevia).
-  function dm_validarGeometriaPaginas(){
-    if(typeof document === 'undefined') return [];
-    const paginas = document.querySelectorAll('#dossie-mestre-paginas .dossie-mestre-page');
-    const MARGEM_SEGURANCA_PX = 4;
-    const resultados = [];
-    paginas.forEach(function(pagina, i){
-      const filhos = pagina.children;
-      if(!filhos.length) return;
-      const ultimoElemento = filhos[filhos.length - 1];
-      const paginaRect = pagina.getBoundingClientRect();
-      const ultimoRect = ultimoElemento.getBoundingClientRect();
-      const cabe = ultimoRect.bottom <= (paginaRect.bottom - MARGEM_SEGURANCA_PX);
-      const excedente = Math.max(0, ultimoRect.bottom - paginaRect.bottom);
-      resultados.push({ indice: i + 1, cabe: cabe, paginaBottom: paginaRect.bottom, ultimoElementoBottom: ultimoRect.bottom, excedente: excedente });
-      if(!cabe){
-        console.warn('GD: página ' + (i + 1) + ' do Dossiê Mestre — o último bloco ultrapassa o limite inferior real da folha em ' + excedente.toFixed(1) + 'px.', pagina, ultimoElemento);
-      }
-    });
-    return resultados;
   }
 
   function dm_buildCapa(dados){
@@ -21328,24 +21392,28 @@
     const destaque = secoes[0];
     const restantes = secoes.slice(1);
 
+    // Fase 6C.15 — documento contínuo, priorizando legibilidade no celular: as 4
+    // seções restantes deixam de forçar um grid 2x2 (colunas estreitas demais para
+    // leitura confortável) e passam a seguir em coluna única, uma abaixo da outra.
+    // "Próximo ao Rosto" mantém seu destaque em bloco próprio.
     const blocoDestaque =
       '<div class="dm-box-destaque" style="margin-bottom:20px;">' +
         '<div class="dm-box-destaque-label">' + escapeHtml(destaque.rotulo) + '</div>' +
         '<div class="dm-texto">' + escapeHtml(destaque.texto) + '</div>' +
       '</div>';
 
-    const gridRestante = '<div class="dossie-mestre-grid2">' + restantes.map(function(s){
+    const blocosRestantes = restantes.map(function(s){
       return '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">' + escapeHtml(s.rotulo) + '</div><div class="dm-texto">' + escapeHtml(s.texto) + '</div></div>';
-    }).join('') + '</div>';
+    }).join('');
 
     return [dm_pagina(
       '<div class="dm-eyebrow">Coloração Pessoal</div>' +
       '<div class="dm-titulo-editorial">Como Usar <em>Sua Cartela</em></div>' +
       '<div class="dm-linha-curta"></div>' +
       blocoDestaque +
-      gridRestante +
+      blocosRestantes +
       dm_rodapeFaixa('Sua cartela completa', 'Explore todas as 100 cores da sua cartela digital no aplicativo Giulia Dantas.', '<div class="dm-rodape-faixa-qr">' + dm_icone('paleta') + '</div>'),
-      { numero: true, secao: 'Coloração Pessoal' }
+      { secao: 'Coloração Pessoal' }
     )];
   }
 
@@ -21437,28 +21505,15 @@
     const rodapeHtml = '<div class="dossie-mestre-nota">Sua cartela digital completa, com 100 cores, está disponível no aplicativo.</div>' +
       dm_rodapeFaixa('Combinações que funcionam para você', rodapeTexto, '<div class="dm-rodape-faixa-qr" style="opacity:' + (temCombinacoesReais ? '1' : '0.35') + ';">' + dm_icone('paleta') + '</div>');
 
-    const cabecalhoPrincipalHtml = dm_construirCabecalhoNumerado(secaoRotulo) +
-      '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Sua <em>Paleta</em></div><div class="dm-linha-curta"></div>';
-    const cabecalhoContinuacaoTexto = '<div class="dm-titulo-editorial" style="font-size:18px; margin-bottom:6px;">Sua Paleta <span style="font-size:12px; font-style:italic; text-transform:none; letter-spacing:0; color:var(--graphite-soft);">— continuação</span></div><div class="dm-linha-curta" style="margin-top:0;"></div>';
-    const cabecalhoContinuacaoHtml = dm_construirCabecalhoNumerado(secaoRotulo) + cabecalhoContinuacaoTexto;
-
-    // Paginação por ALTURA REAL do DOM (mesma filosofia de Combinações, Fase 6C.7/6C.8):
-    // mede o cabeçalho, o rodapé e cada grupo já renderizados na largura real de uma
-    // página, e só então decide quantos grupos cabem em cada página. Sem medição real
-    // disponível, cai para a distribuição por contagem já validada, como salvaguarda.
-    let paginasDeGrupos = dm_paginarPorAlturaReal(itensPaginaveis, cabecalhoPrincipalHtml, cabecalhoContinuacaoHtml, rodapeHtml);
-    if(!paginasDeGrupos){
-      paginasDeGrupos = dm_distribuirEquilibrado(itensPaginaveis, 3);
-    }
-
-    return paginasDeGrupos.map(function(fatia, i){
-      const continuando = i > 0;
-      const corpo = (continuando
-        ? cabecalhoContinuacaoTexto
-        : '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Sua <em>Paleta</em></div><div class="dm-linha-curta"></div>'
-      ) + fatia.join('') + rodapeHtml;
-      return dm_pagina(corpo, { numero: true, secao: secaoRotulo });
-    });
+    // Fase 6C.15 — documento contínuo: sem paginação, sem "continuação", sem
+    // medição de altura de folha. Todos os grupos (subtópicos do capítulo "Sua
+    // Paleta") seguem juntos no mesmo fluxo vertical, na ordem editorial fixa.
+    return [dm_pagina(
+      '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Sua <em>Paleta</em></div><div class="dm-linha-curta"></div>' +
+      itensPaginaveis.join('') +
+      rodapeHtml,
+      { secao: secaoRotulo }
+    )];
   }
 
   // ===================================================================
@@ -21539,152 +21594,6 @@
     return nomeAparado.replace(prefixoRegex, '');
   }
 
-  // Distribui uma lista de itens por CONTAGEM (unidades editoriais indivisíveis, ex.:
-  // seções por desejo de imagem) — usada apenas como salvaguarda quando a medição
-  // real do DOM (dm_paginarPorAlturaReal, Fase 6C.7) não está disponível no ambiente
-  // atual. Nunca um grupo cortado ao meio; nunca uma última página isolada quando uma
-  // distribuição mais uniforme é possível.
-  function dm_distribuirEquilibrado(items, maxPorPagina){
-    const n = items.length;
-    if(!n) return [];
-    const numPaginas = Math.max(1, Math.ceil(n / maxPorPagina));
-    const tamanhoBase = Math.floor(n / numPaginas);
-    let resto = n % numPaginas;
-    const paginas = [];
-    let idx = 0;
-    for(let p = 0; p < numPaginas; p++){
-      const tamanho = tamanhoBase + (resto > 0 ? 1 : 0);
-      if(resto > 0) resto--;
-      paginas.push(items.slice(idx, idx + tamanho));
-      idx += tamanho;
-    }
-    return paginas;
-  }
-
-  // ---- Paginação por altura real do DOM (Fase 6C.7) ----
-  // Guarda a última medição para fins de relatório/depuração — nunca influencia a
-  // renderização em si, é só um espelho do que foi medido na última chamada.
-  let dmUltimaMedicaoPaginacao = null;
-
-  // Mede, num container invisível anexado ao próprio viewport da prévia (mesma
-  // largura real de uma página), a altura útil disponível de uma página A4 (descontado
-  // o padding interno do .dossie-mestre-page) e devolve um "medidor" reutilizável que
-  // calcula a altura real de qualquer trecho de HTML naquela largura exata. Se o
-  // container da prévia ainda não existir no DOM (ex.: chamada fora do fluxo normal
-  // de renderização), devolve null — quem chamar cai then para a distribuição por
-  // contagem, nunca quebra a montagem do documento.
-  function dm_criarMedidorReal(){
-    if(typeof document === 'undefined') return null;
-    const viewportEl = document.getElementById('dossie-mestre-paginas');
-    if(!viewportEl) return null;
-
-    // Fase 6C.9 — medição em FLUXO NORMAL (nunca position:absolute). Antes, o clone de
-    // referência e o medidor usavam position:absolute+left:-9999px, o que podia fazer
-    // "width:100%" resolver contra um ancestral posicionado diferente do real (caso
-    // #dossie-mestre-paginas não fosse ele mesmo um contexto de posicionamento),
-    // gerando uma largura de medição incorreta e, por consequência, alturas erradas.
-    // Inserindo como filho normal do MESMO container onde as páginas de verdade serão
-    // colocadas, a largura resolvida é garantidamente idêntica à real. A inserção/
-    // remoção acontece de forma síncrona, antes de qualquer pintura do navegador, então
-    // não há flash visual.
-    const referencia = document.createElement('div');
-    referencia.className = 'dossie-mestre-page';
-    referencia.style.visibility = 'hidden';
-    viewportEl.appendChild(referencia);
-    const refRect = referencia.getBoundingClientRect();
-    const refStyle = getComputedStyle(referencia);
-    const padTop = parseFloat(refStyle.paddingTop) || 0;
-    const padBottom = parseFloat(refStyle.paddingBottom) || 0;
-    const padLeft = parseFloat(refStyle.paddingLeft) || 0;
-    const padRight = parseFloat(refStyle.paddingRight) || 0;
-    const alturaUtilTotal = refRect.height - padTop - padBottom;
-    const larguraConteudo = refRect.width - padLeft - padRight;
-    viewportEl.removeChild(referencia);
-
-    if(!alturaUtilTotal || !larguraConteudo) return null;
-
-    // Container de medição de fragmentos — mesma largura de conteúdo real E o mesmo
-    // contexto de flex-coluna de .dossie-mestre-page. Isso é essencial: um elemento
-    // bloco comum (não-flex) deixa a margin-bottom do ÚLTIMO filho colapsar para fora do próprio
-    // container, subestimando a altura de qualquer fragmento que termine com margem
-    // (ex.: .dm-cor-grupo, .dm-desejo-secao, .dossie-mestre-bloco). Como na página real
-    // esses elementos são filhos de um flex container (onde margens nunca colapsam),
-    // medir dentro de outro flex container reproduz fielmente o comportamento real.
-    const medidor = document.createElement('div');
-    medidor.style.visibility = 'hidden';
-    medidor.style.width = larguraConteudo + 'px';
-    medidor.style.boxSizing = 'border-box';
-    medidor.style.display = 'flex';
-    medidor.style.flexDirection = 'column';
-    medidor.style.fontFamily = "'Manrope', sans-serif";
-    viewportEl.appendChild(medidor);
-
-    return {
-      alturaUtilTotal: alturaUtilTotal,
-      medir: function(html){
-        medidor.innerHTML = html;
-        const altura = medidor.getBoundingClientRect().height;
-        medidor.innerHTML = '';
-        return altura;
-      },
-      destruir: function(){ viewportEl.removeChild(medidor); }
-    };
-  }
-
-  // Empacota uma lista de fragmentos HTML indivisíveis em páginas, respeitando a
-  // altura útil real de uma página A4 já renderizada — nunca divide um item ao meio;
-  // se um único item já não couber sozinho numa página vazia, ele ainda assim é
-  // colocado ali (a página cresce via overflow:visible em vez de cortar conteúdo).
-  // "cabecalhoPrincipal"/"cabecalhoContinuacao"/"rodape" são strings HTML medidas uma
-  // única vez e descontadas da altura disponível de cada página.
-  function dm_paginarPorAlturaReal(itensHtml, cabecalhoPrincipalHtml, cabecalhoContinuacaoHtml, rodapeHtml){
-    const medidor = dm_criarMedidorReal();
-    if(!medidor){
-      dmUltimaMedicaoPaginacao = null;
-      return null; // sinaliza para o chamador usar a salvaguarda por contagem
-    }
-
-    // Margem reduzida de 20px para 10px na Fase 6C.9: com os dois bugs de medição acima
-    // corrigidos (largura e colapso de margem), a altura medida passou a ser mais
-    // confiável, então uma margem de segurança menor já é suficiente e evita quebras
-    // de página prematuras (falsos positivos) quando o conteúdo cabe de verdade.
-    const MARGEM_SEGURANCA = 10;
-    const alturaCabecalhoPrincipal = medidor.medir(cabecalhoPrincipalHtml);
-    const alturaCabecalhoContinuacao = medidor.medir(cabecalhoContinuacaoHtml);
-    const alturaRodape = medidor.medir(rodapeHtml);
-    const alturasItens = itensHtml.map(medidor.medir);
-    medidor.destruir();
-
-    const paginas = [];
-    let paginaAtual = [];
-    let alturaUsada = 0;
-    let alturaDisponivel = medidor.alturaUtilTotal - alturaCabecalhoPrincipal - alturaRodape - MARGEM_SEGURANCA;
-
-    itensHtml.forEach(function(html, i){
-      const alturaItem = alturasItens[i];
-      if(paginaAtual.length > 0 && (alturaUsada + alturaItem) > alturaDisponivel){
-        paginas.push(paginaAtual);
-        paginaAtual = [];
-        alturaUsada = 0;
-        alturaDisponivel = medidor.alturaUtilTotal - alturaCabecalhoContinuacao - alturaRodape - MARGEM_SEGURANCA;
-      }
-      paginaAtual.push(html);
-      alturaUsada += alturaItem;
-    });
-    if(paginaAtual.length) paginas.push(paginaAtual);
-
-    dmUltimaMedicaoPaginacao = {
-      alturaUtilTotal: medidor.alturaUtilTotal,
-      alturaCabecalhoPrincipal: alturaCabecalhoPrincipal,
-      alturaCabecalhoContinuacao: alturaCabecalhoContinuacao,
-      alturaRodape: alturaRodape,
-      alturasItens: alturasItens,
-      distribuicao: paginas.map(function(p){ return p.length; })
-    };
-
-    return paginas;
-  }
-
   // Página(s) "Combinações que Funcionam" — agrupadas por desejo de imagem (Atemporal,
   // Contemporâneo, Acessível, Artsy [exibido como "Criativo"], Minimalista), cada uma
   // com identidade editorial própria (barra de acento + título serifado), não cinco
@@ -21722,28 +21631,17 @@
     if(!secoesDesejo.length) return null;
 
     const secaoRotulo = 'Coloração Pessoal';
-    const cabecalhoPrincipalHtml = dm_construirCabecalhoNumerado(secaoRotulo) +
-      '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Combinações <em>que Funcionam</em></div><div class="dm-intro-texto">Proporções e combinações pensadas especialmente para a sua cartela.</div><div class="dm-linha-curta"></div>';
-    // Continuação discreta (item 11): rótulo pequeno, nada de repetir o título grande.
-    const cabecalhoContinuacaoHtml = dm_construirCabecalhoNumerado(secaoRotulo) +
-      '<div class="dm-titulo-editorial" style="font-size:18px; margin-bottom:6px;">Combinações que Funcionam <span style="font-size:12px; font-style:italic; text-transform:none; letter-spacing:0; color:var(--graphite-soft);">— continuação</span></div><div class="dm-linha-curta" style="margin-top:0;"></div>';
     const rodapeHtml = dm_rodapeFaixa('Sua cartela completa', 'Explore todas as 100 cores da sua cartela digital no aplicativo Giulia Dantas.');
 
-    let paginasDeSecoes = dm_paginarPorAlturaReal(secoesDesejo, cabecalhoPrincipalHtml, cabecalhoContinuacaoHtml, rodapeHtml);
-    if(!paginasDeSecoes){
-      // Salvaguarda: sem medição real disponível, mantém a distribuição por contagem já validada.
-      paginasDeSecoes = dm_distribuirEquilibrado(secoesDesejo, 3);
-    }
-
-    const paginas = paginasDeSecoes.map(function(fatia, i){
-      const continuando = i > 0;
-      const corpo = (continuando
-        ? '<div class="dm-titulo-editorial" style="font-size:18px; margin-bottom:6px;">Combinações que Funcionam <span style="font-size:12px; font-style:italic; text-transform:none; letter-spacing:0; color:var(--graphite-soft);">— continuação</span></div><div class="dm-linha-curta" style="margin-top:0;"></div>'
-        : '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Combinações <em>que Funcionam</em></div><div class="dm-intro-texto">Proporções e combinações pensadas especialmente para a sua cartela.</div><div class="dm-linha-curta"></div>'
-      ) + fatia.join('') + rodapeHtml;
-      return dm_pagina(corpo, { numero: true, secao: secaoRotulo });
-    });
-    return paginas;
+    // Fase 6C.15 — documento contínuo: os cinco desejos de imagem (subtópicos do
+    // capítulo "Combinações que Funcionam") seguem juntos no mesmo fluxo vertical,
+    // sem paginação, sem "continuação", sem medição de altura de folha.
+    return [dm_pagina(
+      '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Combinações <em>que Funcionam</em></div><div class="dm-intro-texto">Proporções e combinações pensadas especialmente para a sua cartela.</div><div class="dm-linha-curta"></div>' +
+      secoesDesejo.join('') +
+      rodapeHtml,
+      { secao: secaoRotulo }
+    )];
   }
 
   // Página "Armário Cápsula" — seleção cromática coordenada (base/apoio/destaque)
@@ -22087,12 +21985,11 @@
   // MODELO — encerramento com espaço negativo generoso e assinatura discreta.
   function dm_buildEncerramento(dados){
     const texto = (dados.editorial.mensagemFinal && dados.editorial.mensagemFinal.trim()) ? dados.editorial.mensagemFinal : DOSSIE_MESTRE_MENSAGEM_FINAL_PADRAO;
-    // Fase 6C.10 — o bloco inteiro (texto + linha + monograma + marca + sub) é
-    // tratado como UMA composição única, deslocada para a região central da página
-    // via dois espaçadores flexíveis assimétricos (0.85 acima / 1.15 abaixo) — dá uma
-    // leve tendência para cima, mais sofisticada que o centro geométrico exato, sem
-    // depender só de justify-content (mais previsível entre navegadores) e sem
-    // adicionar nenhum elemento decorativo novo.
+    // Fase 6C.15 — documento contínuo: o encerramento não simula mais uma página
+    // vazia (não existe mais "página" nem espaço a preencher). O bloco (texto +
+    // linha + monograma + marca + sub) é uma composição única, com respiro fixo
+    // acima e abaixo — um fechamento elegante do fluxo, não um centro geométrico
+    // artificial dentro de uma folha A4 que não existe mais.
     const blocoFinal =
       '<div class="dm-texto" style="margin-bottom:24px; max-width:80%;">' + escapeHtml(texto) + '</div>' +
       '<div class="dm-linha-curta centro"></div>' +
@@ -22101,9 +21998,7 @@
       '<div class="dm-capa-sub" style="text-align:center;">Consultoria de Imagem</div>';
 
     return [dm_pagina(
-      '<div style="flex:0.85 0 0%;"></div>' +
-      '<div class="dm-encerramento-bloco">' + blocoFinal + '</div>' +
-      '<div style="flex:1.15 0 0%;"></div>',
+      '<div class="dm-encerramento-bloco">' + blocoFinal + '</div>',
       { classesExtra: 'dossie-mestre-encerramento' }
     )];
   }
@@ -22168,47 +22063,47 @@
       const dados = await coletarDadosDossieMestre(selectedClienteUid);
       dados.nomeCompleto = (dados.anamnese[1] && dados.anamnese[1].nomeCompleto) || dados.usuario.nome || selectedClienteNome || 'Cliente';
 
-      const paginas = [];
-      function push(resultado){ if(resultado) paginas.push.apply(paginas, resultado); }
+      // Fase 6C.15 — a CAPA continua isolada, exatamente como antes (composição
+      // fechada aprovada). Tudo depois dela entra no FLUXO CONTÍNUO: os
+      // construtores são agrupados em "capítulos principais"; uma divisória GD
+      // aparece SOMENTE entre grupos que de fato têm conteúdo (nunca uma
+      // divisória órfã sem capítulo seguinte, nunca uma dupla se um grupo
+      // inteiro estiver vazio).
+      const capaHtml = dm_buildCapa(dados) || [];
 
-      push(dm_buildCapa(dados));
-      push(dm_buildAbertura(dados));
-      push(dm_buildPerfilImagem(dados));
-      push(dm_buildEstrategia(dados));
-      push(dm_buildAnaliseCorporal(dados));
-      push(dm_buildVestuario(dados));
-      push(dm_buildAcessorios(dados));
-      push(dm_buildColoracaoPessoal(dados));
-      push(dm_buildComoUsarCartela(dados));
-      push(dm_buildPaleta(dados));
-      push(dm_buildCombinacoesCromaticas(dados));
-      push(dm_buildArmarioCapsuloCromatico(dados));
-      push(dm_buildMetais(dados));
-      push(dm_buildMaquiagem(dados));
-      push(dm_buildCabelo(dados));
-      push(dm_buildAplicacaoPratica(dados));
-      push(dm_buildChecklistProvador(dados));
-      push(dm_buildGuiaRapido(dados));
-      push(dm_buildEncerramento(dados));
+      const fluxo = [];
+      function pushFluxo(resultado){ if(resultado) fluxo.push.apply(fluxo, resultado); }
+      function grupoCapitulo(construtores){
+        const conteudoGrupo = [];
+        construtores.forEach(function(fn){
+          const r = fn(dados);
+          if(r) conteudoGrupo.push.apply(conteudoGrupo, r);
+        });
+        if(conteudoGrupo.length){
+          if(fluxo.length) fluxo.push(dm_divisoriaCapitulo());
+          fluxo.push.apply(fluxo, conteudoGrupo);
+        }
+      }
+
+      pushFluxo(dm_buildAbertura(dados));
+      grupoCapitulo([dm_buildPerfilImagem, dm_buildEstrategia, dm_buildAnaliseCorporal, dm_buildVestuario, dm_buildAcessorios]);
+      grupoCapitulo([dm_buildColoracaoPessoal, dm_buildComoUsarCartela, dm_buildPaleta, dm_buildCombinacoesCromaticas, dm_buildArmarioCapsuloCromatico, dm_buildMetais]);
+      grupoCapitulo([dm_buildMaquiagem, dm_buildCabelo]);
+      grupoCapitulo([dm_buildAplicacaoPratica]);
+      grupoCapitulo([dm_buildChecklistProvador, dm_buildGuiaRapido]);
+      // Encerramento sempre existe (usa texto padrão quando não personalizado) —
+      // por isso a divisória antes dele é incondicional, fechando o fluxo.
+      if(fluxo.length) fluxo.push(dm_divisoriaCapitulo());
+      pushFluxo(dm_buildEncerramento(dados));
 
       if(paginasEl){
-        paginasEl.innerHTML = paginas.join('');
-        // Numeração sequencial real: cada dm_pagina({numero:true}) deixou um marcador
-        // vazio [data-dm-numero]; aqui, e só aqui, sabemos a ordem final de todas as
-        // páginas já montadas (inclusive as extras de paginação de Vestuário/Acessórios).
-        const marcadores = paginasEl.querySelectorAll('[data-dm-numero]');
-        marcadores.forEach(function(el, i){ el.textContent = String(i + 1).padStart(2, '0'); });
+        paginasEl.innerHTML = capaHtml.join('') +
+          (fluxo.length ? '<div class="dossie-mestre-fluxo">' + fluxo.join('') + '</div>' : '');
 
         // Fase 6C.8: decide o tratamento da foto da capa pela proporção real do
         // arquivo carregado — nunca antes disso, e nunca distorcendo a imagem.
         const fotoCapaEl = paginasEl.querySelector('[data-dm-foto-capa]');
         if(fotoCapaEl) dm_aplicarClasseFotoCapa(fotoCapaEl);
-
-        // Fase 6C.11 — validação GEOMÉTRICA real (getBoundingClientRect, não
-        // contagem/estimativa): confirma que o último bloco de cada página está
-        // de fato dentro do retângulo visual da própria folha. Qualquer violação
-        // é reportada no console para investigação; nunca corrige silenciosamente.
-        dm_validarGeometriaPaginas();
       }
 
       const avisos = dm_calcularAvisosAdministrativos(dados);
