@@ -570,6 +570,24 @@
     margin-bottom:20px;
   }
 
+  .stat-grid-4{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:20px;
+  }
+
+  .client-row.selectable{ cursor:pointer; }
+
+  .client-row.sel{
+    background:var(--champagne-light);
+    border-radius:12px;
+    padding-left:10px;
+    padding-right:10px;
+    margin-left:-10px;
+    margin-right:-10px;
+  }
+
   .stat-small{
     background:var(--card);
     border:var(--hairline);
@@ -2172,30 +2190,23 @@
         
       </div>
       <div class="content">
-        <div class="eyebrow" id="dossies-cliente-nome">Dossiês</div>
-        <div class="page-title">Dossiês em PDF</div>
-        <div class="page-sub">Documentos personalizados para suas clientes</div>
+        <div class="eyebrow">Central de Dossiês</div>
+        <div class="page-title">Dossiês</div>
+        <div class="page-sub">Materiais personalizados para suas clientes</div>
 
-        <div class="stat-card" style="text-align:center; padding:32px 20px;">
-          <div class="seal" style="font-size:22px; margin-bottom:12px;">✦</div>
-          <p style="font-family:'Cormorant Garamond', serif; font-size:18px; font-weight:500; color:var(--graphite); line-height:1.6; margin-bottom:8px;">
-            Em breve
-          </p>
-          <p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); line-height:1.6;">
-            Aqui você poderá gerar e baixar dossiês em PDF com a análise completa de cada cliente — estilo, cores, biotipo e recomendações personalizadas.
-          </p>
+        <div class="stat-grid-4">
+          <div class="stat-small"><div class="num" id="dossies-stat-total">0</div><div class="lab">Clientes cadastradas</div></div>
+          <div class="stat-small"><div class="num" id="dossies-stat-pendentes">0</div><div class="lab">Dossiês pendentes</div></div>
+          <div class="stat-small"><div class="num" id="dossies-stat-revisao">0</div><div class="lab">Em revisão</div></div>
+          <div class="stat-small"><div class="num" id="dossies-stat-liberados">0</div><div class="lab">Liberados</div></div>
         </div>
 
-        <div class="hairline"></div>
+        <button class="btn-primary" data-goto="novo-dossie">+ Novo Dossiê</button>
 
         <div class="stat-card">
-          <div class="stat-label" style="margin-bottom:0;">Onde encontrar os dados da cliente agora</div>
-          <div class="mini-row" data-goto="clientes" style="border-bottom:none; padding-top:6px;">
-            <div>
-              <div class="mini-row-title">Minhas Clientes</div>
-              <div class="mini-row-sub">Anamnese, fotos e progresso de cada cliente</div>
-            </div>
-            <div class="arrow">→</div>
+          <div class="stat-label" style="margin-bottom:0;">Dossiês das Clientes</div>
+          <div id="dossies-list">
+            <p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Carregando...</p>
           </div>
         </div>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
@@ -2210,6 +2221,174 @@
     </div>
   </div>
 
+  <!-- ================= NOVO DOSSIÊ ================= -->
+  <div class="screen-wrap" id="screen-novo-dossie">
+    <div class="screen-label">Novo Dossiê</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+        <div class="logout-btn" data-goto="dossies" title="Voltar" style="left:16px; right:auto;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg></div>
+        
+      </div>
+      <div class="content">
+        <div class="eyebrow">Novo Dossiê</div>
+        <div class="page-title">Criar Dossiê</div>
+        <div class="page-sub">Selecione a cliente e o tipo de material</div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:10px;">Etapa 1 — Selecionar Cliente</div>
+          <div id="novo-dossie-clientes-list">
+            <p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Carregando...</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:10px;">Etapa 2 — Tipo de Dossiê</div>
+          <div class="radio-row" id="novo-dossie-tipo-radio">
+            <div class="radio-opt"><div class="dot-circle"></div>Consultoria de Imagem</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Direcionamento Cromático</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Completo</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:4px;">Etapa 3 — Dados Disponíveis</div>
+          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:10px; line-height:1.5;">Não é necessário ter tudo pronto para criar o dossiê.</p>
+          <div id="novo-dossie-checklist">
+            <p style="font-family:'Cormorant Garamond', serif; font-size:14px; font-style:italic; color:var(--graphite-soft); padding:6px 0;">Selecione uma cliente na Etapa 1.</p>
+          </div>
+        </div>
+
+        <div class="login-error" id="novo-dossie-msg"></div>
+        <button class="btn-primary" id="novo-dossie-criar-btn">Criar Dossiê</button>
+        <button class="btn-secondary" data-goto="dossies">Cancelar</button>
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= DOSSIÊ INDIVIDUAL ================= -->
+  <div class="screen-wrap" id="screen-dossie-individual">
+    <div class="screen-label">Dossiê da Cliente</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+        <div class="logout-btn" data-goto="dossies" title="Voltar" style="left:16px; right:auto;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg></div>
+        
+      </div>
+      <div class="content">
+        <div class="eyebrow" id="dossie-individual-cliente-nome">Cliente</div>
+        <div class="page-title">Dossiê</div>
+        <div class="page-sub" id="dossie-individual-tipo">—</div>
+
+        <div class="stat-card">
+          <div class="ficha-status-row">
+            <div class="label">Cartela</div>
+            <div class="ficha-status-tag" id="dossie-individual-cartela">—</div>
+          </div>
+          <div class="ficha-status-row">
+            <div class="label">Status atual</div>
+            <div class="ficha-status-tag" id="dossie-individual-status">—</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:4px;">Dados Disponíveis</div>
+          <div id="dossie-individual-checklist"></div>
+          <button class="btn-secondary" id="dossie-individual-ver-dados-btn" style="margin-top:14px; margin-bottom:0;">Ver Dados para o Dossiê</button>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:10px;">Status do Processo</div>
+          <div class="radio-row" id="dossie-status-radio">
+            <div class="radio-opt"><div class="dot-circle"></div>Aguardando análise</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Pronto para produção</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Em produção</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Em revisão</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Finalizado</div>
+          </div>
+          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:12px; line-height:1.5;">Quando o dossiê é liberado para a cliente, o status passa a ser "Liberado para cliente" automaticamente.</p>
+          <button class="btn-secondary" id="dossie-salvar-status-btn" style="margin-bottom:0;">Salvar Status</button>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:10px;">Arquivo Final</div>
+          <div id="dossie-arquivo-vazio">
+            <p style="font-family:'Cormorant Garamond', serif; font-size:14px; font-style:italic; color:var(--graphite-soft); margin-bottom:12px;">Nenhum PDF enviado ainda.</p>
+            <label class="btn-primary" for="dossie-pdf-input" style="display:block; text-align:center; cursor:pointer; margin-bottom:0;">Enviar PDF</label>
+          </div>
+          <div id="dossie-arquivo-preenchido" hidden>
+            <div class="ficha-status-row">
+              <div class="label">Arquivo</div>
+              <div class="ficha-info-value" id="dossie-pdf-nome" style="text-align:right;">—</div>
+            </div>
+            <div class="ficha-status-row">
+              <div class="label">Enviado em</div>
+              <div class="ficha-info-value" id="dossie-pdf-data">—</div>
+            </div>
+            <button class="btn-secondary" id="dossie-pdf-ver-btn" style="margin-top:14px;">Visualizar</button>
+            <label class="btn-secondary" for="dossie-pdf-input" style="display:block; text-align:center; cursor:pointer;">Substituir PDF</label>
+            <button class="btn-secondary" id="dossie-pdf-remover-btn" style="color:var(--vinho); border-color:var(--vinho); margin-bottom:0;">Remover PDF</button>
+          </div>
+          <input type="file" accept="application/pdf" id="dossie-pdf-input" hidden>
+          <div class="login-error" id="dossie-pdf-msg"></div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:4px;">Liberação para a Cliente</div>
+          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:12px; line-height:1.5;">Enquanto estiver desligado, a cliente não vê o dossiê nem o PDF, mesmo já enviado.</p>
+          <div class="radio-row" id="dossie-liberar-radio">
+            <div class="radio-opt"><div class="dot-circle"></div>Desligado</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Ligado</div>
+          </div>
+          <div class="ficha-status-row" id="dossie-data-liberacao-row" hidden>
+            <div class="label">Liberado em</div>
+            <div class="ficha-info-value" id="dossie-data-liberacao-valor">—</div>
+          </div>
+        </div>
+
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
+      </div>
+      <div class="bottomnav">
+        <div class="navitem" data-goto="painel" data-nav-label="Painel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>Painel</div>
+        <div class="navitem" data-goto="dashboard" data-nav-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0116 0"/><path d="M12 15.5l3.2-4.2"/><circle cx="12" cy="15.5" r="0.9"/><path d="M6 19.5h12"/></svg>Dashboard</div>
+        <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
+        <div class="navitem" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
+        <div class="navitem active" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= DADOS PARA O DOSSIÊ ================= -->
+  <div class="screen-wrap" id="screen-dados-dossie">
+    <div class="screen-label">Dados para o Dossiê</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+        <div class="logout-btn" data-goto="dossie-individual" title="Voltar" style="left:16px; right:auto;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg></div>
+        
+      </div>
+      <div class="content">
+        <div class="eyebrow" id="dados-dossie-cliente-nome">Cliente</div>
+        <div class="page-title">Dados para o Dossiê</div>
+        <div class="page-sub">Organizados para produção externa</div>
+
+        <button class="btn-primary" id="dados-dossie-copiar-btn">Copiar Dados</button>
+        <div class="login-error" id="dados-dossie-copiar-msg"></div>
+
+        <div id="dados-dossie-foto-wrap" style="margin-bottom:16px;"></div>
+        <div id="dados-dossie-content"></div>
+
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- ================= BRAND SPLASH ================= -->
   <div class="screen-wrap" id="screen-brand">
@@ -4002,6 +4181,10 @@
       selectedClienteUid = null;
       selectedClienteNome = null;
       cachedClientes = null;
+      novoDossieSelectedUid = null;
+      novoDossieSelectedNome = null;
+      novoDossiePreselectUid = null;
+      novoDossiePreselectNome = null;
       if(emailInput) emailInput.value = '';
       if(passwordInput) passwordInput.value = '';
       clearError();
@@ -5542,6 +5725,716 @@
     }
   });
 
+  // ===================================================================
+  // CENTRAL DE DOSSIÊS (Admin) — Fase 3
+  // Um dossiê por cliente em clientes/{uid}/dossie/_principal.
+  // O status "liberado" nunca é definido manualmente: ele é sempre
+  // derivado do controle ON/OFF de liberação. Sempre que o status
+  // efetivo muda, é espelhado (merge) em clientes/{uid}/interno/ficha
+  // no mesmo campo já lido pela Visão Geral desde a Fase 1/2.
+  // ===================================================================
+
+  let novoDossieSelectedUid = null;
+  let novoDossieSelectedNome = null;
+  let novoDossiePreselectUid = null;
+  let novoDossiePreselectNome = null;
+
+  const DOSSIE_PROCESS_LABELS = {
+    nao_iniciado: 'Não iniciado',
+    aguardando_analise: 'Aguardando análise',
+    pronto_producao: 'Pronto para produção',
+    em_producao: 'Em produção',
+    em_revisao: 'Em revisão',
+    finalizado: 'Finalizado',
+    liberado: 'Liberado para cliente'
+  };
+
+  function computeEffectiveDossieStatus(dossieData){
+    if(!dossieData) return 'nao_iniciado';
+    return dossieData.liberado ? 'liberado' : (dossieData.statusProcesso || 'aguardando_analise');
+  }
+
+  async function fetchDossieDoc(uid){
+    try{
+      const snap = await getDoc(doc(db, 'clientes', uid, 'dossie', '_principal'));
+      return snap.exists() ? snap.data() : null;
+    } catch(err){
+      console.error('GD: erro ao carregar dossiê', err);
+      return null;
+    }
+  }
+
+  // ---- Keep the "Dossiê" status shown in Visão Geral (Fase 1) always in sync ----
+
+  async function syncDossieStatusToFicha(uid, status){
+    try{
+      await setDoc(doc(db, 'clientes', uid, 'interno', 'ficha'), {
+        dossieStatus: status,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+    } catch(err){
+      console.error('GD: erro ao sincronizar status do dossiê com a ficha', err);
+    }
+  }
+
+  // ---- Checklist "Dados Disponíveis" — reutilizado no Novo Dossiê e no Dossiê Individual ----
+
+  async function computeChecklist(uid){
+    const checklist = { anamnese: false, fotos: false, analiseProfissional: false, resultadoCromatico: false, fotoDossie: false };
+
+    try{
+      const snap = await getDoc(doc(db, 'clientes', uid, 'anamnese', '_progress'));
+      if(snap.exists()) checklist.anamnese = !!snap.data().finished;
+    } catch(err){ console.error(err); }
+
+    try{
+      const snap = await getDoc(doc(db, 'clientes', uid, 'fotos', '_meta'));
+      if(snap.exists()) checklist.fotos = (snap.data().count || 0) > 0;
+    } catch(err){ console.error(err); }
+
+    try{
+      const snap = await getDoc(doc(db, 'clientes', uid, 'interno', 'analiseProfissional'));
+      if(snap.exists()) checklist.analiseProfissional = hasAnyFilledField(snap.data());
+    } catch(err){ console.error(err); }
+
+    try{
+      const snap = await getDoc(doc(db, 'clientes', uid, 'interno', 'analiseCromatica'));
+      if(snap.exists()) checklist.resultadoCromatico = snap.data().direcionamentoRealizado === 'Sim';
+    } catch(err){ console.error(err); }
+
+    try{
+      const snap = await getDoc(doc(db, 'clientes', uid, 'fotos', '_admin'));
+      if(snap.exists()) checklist.fotoDossie = !!snap.data().escolhidaDossie;
+    } catch(err){ console.error(err); }
+
+    return checklist;
+  }
+
+  function renderChecklistInto(containerEl, checklist){
+    if(!containerEl) return;
+    const items = [
+      { key: 'anamnese', label: 'Anamnese' },
+      { key: 'fotos', label: 'Fotos' },
+      { key: 'analiseProfissional', label: 'Análise profissional' },
+      { key: 'resultadoCromatico', label: 'Resultado cromático' },
+      { key: 'fotoDossie', label: 'Foto para o dossiê' }
+    ];
+    containerEl.innerHTML = items.map(function(it){
+      const ok = !!checklist[it.key];
+      return '<div class="status-item">' +
+        '<div class="status-icon' + (ok ? ' done' : '') + '">' + (ok ? '✓' : '○') + '</div>' +
+        '<div><div class="status-text-title">' + escapeHtml(it.label) + '</div></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // ---- Central de Dossiês: indicadores + lista ----
+
+  async function renderDossiesCentral(){
+    const listEl = document.getElementById('dossies-list');
+    if(!listEl) return;
+
+    listEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Carregando...</p>`;
+
+    cachedClientes = null; // force refresh, same as "Minhas Clientes"
+    const clientes = await fetchAllClientes();
+
+    const linhas = [];
+    for(const cliente of clientes){
+      const dossieData = await fetchDossieDoc(cliente.uid);
+      const status = computeEffectiveDossieStatus(dossieData);
+      let cartela = '';
+      if(status !== 'nao_iniciado'){
+        try{
+          const cromSnap = await getDoc(doc(db, 'clientes', cliente.uid, 'interno', 'analiseCromatica'));
+          if(cromSnap.exists() && cromSnap.data().direcionamentoRealizado === 'Sim'){
+            cartela = cromSnap.data().cartela || '';
+          }
+        } catch(err){ console.error(err); }
+      }
+      linhas.push({
+        uid: cliente.uid,
+        nome: cliente.nome,
+        tipo: dossieData ? (dossieData.tipo || '') : '',
+        cartela: cartela,
+        status: status,
+        hasDossie: !!dossieData
+      });
+    }
+
+    const total = clientes.length;
+    const pendentes = linhas.filter(function(l){ return ['nao_iniciado','aguardando_analise','pronto_producao','em_producao','finalizado'].indexOf(l.status) !== -1; }).length;
+    const emRevisao = linhas.filter(function(l){ return l.status === 'em_revisao'; }).length;
+    const liberados = linhas.filter(function(l){ return l.status === 'liberado'; }).length;
+
+    const totalEl = document.getElementById('dossies-stat-total');
+    const pendentesEl = document.getElementById('dossies-stat-pendentes');
+    const revisaoEl = document.getElementById('dossies-stat-revisao');
+    const liberadosEl = document.getElementById('dossies-stat-liberados');
+    if(totalEl) totalEl.textContent = total;
+    if(pendentesEl) pendentesEl.textContent = pendentes;
+    if(revisaoEl) revisaoEl.textContent = emRevisao;
+    if(liberadosEl) liberadosEl.textContent = liberados;
+
+    if(linhas.length === 0){
+      listEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Nenhuma cliente cadastrada ainda.</p>`;
+      return;
+    }
+
+    listEl.innerHTML = '';
+    linhas.forEach(function(linha){
+      const row = document.createElement('div');
+      row.className = 'client-row selectable';
+      row.setAttribute('data-dossie-cliente-uid', linha.uid);
+      row.setAttribute('data-dossie-cliente-nome', linha.nome);
+      row.setAttribute('data-dossie-exists', linha.hasDossie ? 'true' : 'false');
+
+      const initial = (linha.nome || 'C').trim().charAt(0).toUpperCase();
+      let meta = linha.tipo || 'Nenhum dossiê criado';
+      if(linha.cartela) meta += ' · ' + linha.cartela;
+
+      const tagCls = linha.status === 'liberado' ? 'done' : (linha.status === 'nao_iniciado' ? '' : 'warn');
+
+      row.innerHTML =
+        '<div class="client-avatar">' + escapeHtml(initial) + '</div>' +
+        '<div style="flex:1; min-width:0;">' +
+          '<div class="client-name">' + escapeHtml(linha.nome) + '</div>' +
+          '<div class="client-meta">' + escapeHtml(meta) + '</div>' +
+        '</div>' +
+        '<div class="ficha-status-tag ' + tagCls + '" style="flex-shrink:0;">' + escapeHtml(DOSSIE_PROCESS_LABELS[linha.status] || linha.status) + '</div>';
+
+      listEl.appendChild(row);
+    });
+  }
+
+  document.addEventListener('click', function(e){
+    const row = e.target.closest('#dossies-list .client-row');
+    if(!row) return;
+
+    const uid = row.getAttribute('data-dossie-cliente-uid');
+    const nome = row.getAttribute('data-dossie-cliente-nome');
+    const exists = row.getAttribute('data-dossie-exists') === 'true';
+
+    if(exists){
+      selectedClienteUid = uid;
+      selectedClienteNome = nome;
+      novoDossiePreselectUid = null;
+      novoDossiePreselectNome = null;
+      if(window.__gdGoTo) window.__gdGoTo('dossie-individual', 'fwd');
+    } else {
+      novoDossiePreselectUid = uid;
+      novoDossiePreselectNome = nome;
+      if(window.__gdGoTo) window.__gdGoTo('novo-dossie', 'fwd');
+    }
+  });
+
+  // ---- Novo Dossiê: Etapa 1 (cliente) + Etapa 2 (tipo) + Etapa 3 (checklist) ----
+
+  async function renderNovoDossie(){
+    const listEl = document.getElementById('novo-dossie-clientes-list');
+    const checklistEl = document.getElementById('novo-dossie-checklist');
+    const msgEl = document.getElementById('novo-dossie-msg');
+    if(msgEl) msgEl.textContent = '';
+
+    // Reset tipo selection every time this screen is opened
+    document.querySelectorAll('#novo-dossie-tipo-radio .radio-opt').forEach(function(el){ el.classList.remove('sel'); });
+
+    novoDossieSelectedUid = novoDossiePreselectUid;
+    novoDossieSelectedNome = novoDossiePreselectNome;
+
+    if(!listEl) return;
+
+    cachedClientes = null; // force refresh
+    const clientes = await fetchAllClientes();
+
+    if(clientes.length === 0){
+      listEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Nenhuma cliente cadastrada ainda.</p>`;
+      return;
+    }
+
+    listEl.innerHTML = '';
+    clientes.forEach(function(cliente){
+      const row = document.createElement('div');
+      row.className = 'client-row selectable' + (cliente.uid === novoDossieSelectedUid ? ' sel' : '');
+      row.setAttribute('data-cliente-uid', cliente.uid);
+      row.setAttribute('data-cliente-nome', cliente.nome);
+      const initial = (cliente.nome || 'C').trim().charAt(0).toUpperCase();
+      row.innerHTML =
+        '<div class="client-avatar">' + escapeHtml(initial) + '</div>' +
+        '<div><div class="client-name">' + escapeHtml(cliente.nome) + '</div></div>';
+      listEl.appendChild(row);
+    });
+
+    if(novoDossieSelectedUid){
+      const checklist = await computeChecklist(novoDossieSelectedUid);
+      renderChecklistInto(checklistEl, checklist);
+    } else if(checklistEl){
+      checklistEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:14px; font-style:italic; color:var(--graphite-soft); padding:6px 0;">Selecione uma cliente na Etapa 1.</p>`;
+    }
+  }
+
+  document.addEventListener('click', async function(e){
+    const row = e.target.closest('#novo-dossie-clientes-list .client-row');
+    if(!row) return;
+
+    document.querySelectorAll('#novo-dossie-clientes-list .client-row').forEach(function(r){ r.classList.remove('sel'); });
+    row.classList.add('sel');
+
+    novoDossieSelectedUid = row.getAttribute('data-cliente-uid');
+    novoDossieSelectedNome = row.getAttribute('data-cliente-nome');
+
+    const checklistEl = document.getElementById('novo-dossie-checklist');
+    const checklist = await computeChecklist(novoDossieSelectedUid);
+    renderChecklistInto(checklistEl, checklist);
+  });
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#novo-dossie-criar-btn');
+    if(!btn) return;
+
+    const msgEl = document.getElementById('novo-dossie-msg');
+    if(msgEl){ msgEl.textContent = ''; msgEl.classList.remove('success'); }
+
+    if(!novoDossieSelectedUid){
+      if(msgEl) msgEl.textContent = 'Selecione uma cliente na Etapa 1.';
+      return;
+    }
+
+    const tipoSel = document.querySelector('#novo-dossie-tipo-radio .radio-opt.sel');
+    const tipoTexto = tipoSel ? tipoSel.textContent.trim() : '';
+
+    if(!tipoTexto){
+      if(msgEl) msgEl.textContent = 'Selecione o tipo de dossiê na Etapa 2.';
+      return;
+    }
+
+    btn.classList.add('is-loading');
+    const originalText = btn.textContent;
+    btn.textContent = 'Criando…';
+
+    try{
+      const existing = await fetchDossieDoc(novoDossieSelectedUid);
+
+      if(!existing){
+        const checklist = await computeChecklist(novoDossieSelectedUid);
+        const tudoPronto = checklist.anamnese && checklist.fotos && checklist.analiseProfissional && checklist.resultadoCromatico && checklist.fotoDossie;
+        const nowIso = new Date().toISOString();
+        const statusInicial = tudoPronto ? 'pronto_producao' : 'aguardando_analise';
+
+        await setDoc(doc(db, 'clientes', novoDossieSelectedUid, 'dossie', '_principal'), {
+          tipo: tipoTexto,
+          statusProcesso: statusInicial,
+          liberado: false,
+          dataLiberacao: null,
+          createdAt: nowIso,
+          updatedAt: nowIso
+        }, { merge: true });
+
+        await syncDossieStatusToFicha(novoDossieSelectedUid, statusInicial);
+      }
+
+      selectedClienteUid = novoDossieSelectedUid;
+      selectedClienteNome = novoDossieSelectedNome;
+      novoDossiePreselectUid = null;
+      novoDossiePreselectNome = null;
+
+      if(window.__gdGoTo) window.__gdGoTo('dossie-individual', 'fwd');
+    } catch(err){
+      console.error('GD: erro ao criar dossiê', err);
+      if(msgEl) msgEl.textContent = 'Não foi possível criar o dossiê. Tente novamente.';
+    } finally{
+      btn.classList.remove('is-loading');
+      btn.textContent = originalText;
+    }
+  });
+
+  // ---- Dossiê Individual ----
+
+  async function renderDossieIndividual(){
+    const nomeEl = document.getElementById('dossie-individual-cliente-nome');
+    if(!selectedClienteUid){
+      if(nomeEl) nomeEl.textContent = 'Selecione uma cliente em "Dossiês"';
+      return;
+    }
+    if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
+
+    const dossieData = await fetchDossieDoc(selectedClienteUid);
+
+    document.getElementById('dossie-individual-tipo').textContent = dossieData ? (dossieData.tipo || '—') : 'Dossiê ainda não criado';
+
+    let cartela = '—';
+    try{
+      const cromSnap = await getDoc(doc(db, 'clientes', selectedClienteUid, 'interno', 'analiseCromatica'));
+      if(cromSnap.exists() && cromSnap.data().direcionamentoRealizado === 'Sim' && cromSnap.data().cartela){
+        cartela = cromSnap.data().cartela;
+      }
+    } catch(err){ console.error(err); }
+    document.getElementById('dossie-individual-cartela').textContent = cartela;
+
+    const status = computeEffectiveDossieStatus(dossieData);
+    const statusTagEl = document.getElementById('dossie-individual-status');
+    statusTagEl.textContent = DOSSIE_PROCESS_LABELS[status] || status;
+    statusTagEl.classList.remove('done','warn');
+    if(status === 'liberado') statusTagEl.classList.add('done');
+    else if(status !== 'nao_iniciado') statusTagEl.classList.add('warn');
+
+    const checklist = await computeChecklist(selectedClienteUid);
+    renderChecklistInto(document.getElementById('dossie-individual-checklist'), checklist);
+
+    // Restore "Status do Processo" selection
+    const statusRadioRow = document.getElementById('dossie-status-radio');
+    statusRadioRow.querySelectorAll('.radio-opt').forEach(function(el){ el.classList.remove('sel'); });
+    const statusProcesso = dossieData ? (dossieData.statusProcesso || 'aguardando_analise') : 'aguardando_analise';
+    const statusLabelAlvo = DOSSIE_PROCESS_LABELS[statusProcesso];
+    statusRadioRow.querySelectorAll('.radio-opt').forEach(function(el){
+      if(el.textContent.trim() === statusLabelAlvo) el.classList.add('sel');
+    });
+
+    // Restore liberação Ligado/Desligado
+    const liberarRadioRow = document.getElementById('dossie-liberar-radio');
+    liberarRadioRow.querySelectorAll('.radio-opt').forEach(function(el){ el.classList.remove('sel'); });
+    const liberado = dossieData ? !!dossieData.liberado : false;
+    liberarRadioRow.querySelectorAll('.radio-opt').forEach(function(el){
+      if(el.textContent.trim() === (liberado ? 'Ligado' : 'Desligado')) el.classList.add('sel');
+    });
+
+    const dataLiberacaoRow = document.getElementById('dossie-data-liberacao-row');
+    if(dossieData && dossieData.dataLiberacao){
+      dataLiberacaoRow.hidden = false;
+      document.getElementById('dossie-data-liberacao-valor').textContent = formatFichaDate(dossieData.dataLiberacao);
+    } else {
+      dataLiberacaoRow.hidden = true;
+    }
+
+    // Restore Arquivo Final section
+    const vazioEl = document.getElementById('dossie-arquivo-vazio');
+    const preenchidoEl = document.getElementById('dossie-arquivo-preenchido');
+    if(dossieData && dossieData.pdfUrl){
+      vazioEl.hidden = true;
+      preenchidoEl.hidden = false;
+      document.getElementById('dossie-pdf-nome').textContent = dossieData.pdfNome || 'dossie.pdf';
+      document.getElementById('dossie-pdf-data').textContent = formatFichaDate(dossieData.pdfDataUpload);
+    } else {
+      vazioEl.hidden = false;
+      preenchidoEl.hidden = true;
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    if(e.target.closest('#dossie-individual-ver-dados-btn')){
+      if(window.__gdGoTo) window.__gdGoTo('dados-dossie', 'fwd');
+    }
+  });
+
+  // ---- Salvar Status do Processo ----
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#dossie-salvar-status-btn');
+    if(!btn || !selectedClienteUid) return;
+
+    const sel = document.querySelector('#dossie-status-radio .radio-opt.sel');
+    if(!sel) return;
+
+    const texto = sel.textContent.trim();
+    const statusKey = Object.keys(DOSSIE_PROCESS_LABELS).find(function(k){ return DOSSIE_PROCESS_LABELS[k] === texto; });
+    if(!statusKey) return;
+
+    btn.classList.add('is-loading');
+    const originalText = btn.textContent;
+    btn.textContent = 'Salvando…';
+
+    try{
+      const nowIso = new Date().toISOString();
+      const dossieRef = doc(db, 'clientes', selectedClienteUid, 'dossie', '_principal');
+      await setDoc(dossieRef, { statusProcesso: statusKey, updatedAt: nowIso }, { merge: true });
+
+      const dossieData = await fetchDossieDoc(selectedClienteUid);
+      const effective = computeEffectiveDossieStatus(dossieData);
+      await syncDossieStatusToFicha(selectedClienteUid, effective);
+
+      const statusTagEl = document.getElementById('dossie-individual-status');
+      statusTagEl.textContent = DOSSIE_PROCESS_LABELS[effective] || effective;
+      statusTagEl.classList.remove('done','warn');
+      if(effective === 'liberado') statusTagEl.classList.add('done');
+      else statusTagEl.classList.add('warn');
+    } catch(err){
+      console.error('GD: erro ao salvar status do dossiê', err);
+    } finally{
+      btn.classList.remove('is-loading');
+      btn.textContent = originalText;
+    }
+  });
+
+  // ---- Liberação ON/OFF para a cliente ----
+
+  document.addEventListener('click', async function(e){
+    const radio = e.target.closest('#dossie-liberar-radio .radio-opt');
+    if(!radio || !selectedClienteUid) return;
+
+    const ligar = radio.textContent.trim() === 'Ligado';
+    const nowIso = new Date().toISOString();
+    const dossieRef = doc(db, 'clientes', selectedClienteUid, 'dossie', '_principal');
+
+    try{
+      const payload = { liberado: ligar, updatedAt: nowIso };
+      if(ligar) payload.dataLiberacao = nowIso;
+      await setDoc(dossieRef, payload, { merge: true });
+
+      const dossieData = await fetchDossieDoc(selectedClienteUid);
+      const effective = computeEffectiveDossieStatus(dossieData);
+      await syncDossieStatusToFicha(selectedClienteUid, effective);
+
+      const statusTagEl = document.getElementById('dossie-individual-status');
+      statusTagEl.textContent = DOSSIE_PROCESS_LABELS[effective] || effective;
+      statusTagEl.classList.remove('done','warn');
+      if(effective === 'liberado') statusTagEl.classList.add('done');
+      else statusTagEl.classList.add('warn');
+
+      const dataLiberacaoRow = document.getElementById('dossie-data-liberacao-row');
+      if(dossieData && dossieData.dataLiberacao){
+        dataLiberacaoRow.hidden = false;
+        document.getElementById('dossie-data-liberacao-valor').textContent = formatFichaDate(dossieData.dataLiberacao);
+      }
+    } catch(err){
+      console.error('GD: erro ao atualizar liberação do dossiê', err);
+    }
+  });
+
+  // ---- Upload / Substituição do PDF do dossiê ----
+
+  document.addEventListener('change', async function(e){
+    const input = e.target.closest('#dossie-pdf-input');
+    if(!input || !input.files || !input.files[0] || !selectedClienteUid) return;
+
+    const file = input.files[0];
+    const msgEl = document.getElementById('dossie-pdf-msg');
+    if(msgEl){ msgEl.textContent = 'Enviando PDF…'; msgEl.classList.remove('success'); }
+
+    try{
+      const existing = await fetchDossieDoc(selectedClienteUid);
+      const oldPath = existing ? existing.pdfPath : null;
+
+      const storagePath = 'clientes/' + selectedClienteUid + '/dossie/dossie-' + Date.now() + '.pdf';
+      const fileRef = ref(storage, storagePath);
+      await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(fileRef);
+
+      const nowIso = new Date().toISOString();
+      await setDoc(doc(db, 'clientes', selectedClienteUid, 'dossie', '_principal'), {
+        pdfUrl: url,
+        pdfPath: storagePath,
+        pdfNome: file.name,
+        pdfDataUpload: nowIso,
+        updatedAt: nowIso
+      }, { merge: true });
+
+      // Only remove the old file after the new one is safely saved
+      if(oldPath && oldPath !== storagePath){
+        try{ await deleteObject(ref(storage, oldPath)); } catch(err){ console.error('GD: erro ao remover PDF anterior', err); }
+      }
+
+      document.getElementById('dossie-arquivo-vazio').hidden = true;
+      document.getElementById('dossie-arquivo-preenchido').hidden = false;
+      document.getElementById('dossie-pdf-nome').textContent = file.name;
+      document.getElementById('dossie-pdf-data').textContent = formatFichaDate(nowIso);
+      if(msgEl){ msgEl.classList.add('success'); msgEl.textContent = 'PDF enviado com sucesso.'; setTimeout(function(){ msgEl.textContent=''; msgEl.classList.remove('success'); }, 2500); }
+    } catch(err){
+      console.error('GD: erro ao enviar PDF do dossiê', err);
+      if(msgEl){ msgEl.classList.remove('success'); msgEl.textContent = 'Não foi possível enviar o PDF. Tente novamente.'; }
+    } finally{
+      input.value = '';
+    }
+  });
+
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('#dossie-pdf-ver-btn') || !selectedClienteUid) return;
+    fetchDossieDoc(selectedClienteUid).then(function(d){
+      if(d && d.pdfUrl) window.open(d.pdfUrl, '_blank');
+    });
+  });
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#dossie-pdf-remover-btn');
+    if(!btn || !selectedClienteUid) return;
+
+    if(!confirm('Remover o PDF deste dossiê?')) return;
+
+    try{
+      const existing = await fetchDossieDoc(selectedClienteUid);
+      if(existing && existing.pdfPath){
+        try{ await deleteObject(ref(storage, existing.pdfPath)); } catch(err){ console.error('GD: erro ao remover arquivo do storage', err); }
+      }
+
+      await setDoc(doc(db, 'clientes', selectedClienteUid, 'dossie', '_principal'), {
+        pdfUrl: null,
+        pdfPath: null,
+        pdfNome: null,
+        pdfDataUpload: null,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+
+      document.getElementById('dossie-arquivo-preenchido').hidden = true;
+      document.getElementById('dossie-arquivo-vazio').hidden = false;
+    } catch(err){
+      console.error('GD: erro ao remover PDF', err);
+    }
+  });
+
+  // ---- Ver Dados para o Dossiê ----
+
+  const PROF_DATA_FIELDS = [
+    { field: 'servicoRealizado', label: 'Serviço realizado' },
+    { field: 'estiloPredominante', label: 'Estilo predominante' },
+    { field: 'estiloPredominanteOutro', label: 'Estilo predominante (outro)' },
+    { field: 'estilosComplementares', label: 'Estilos complementares' },
+    { field: 'estilosComplementaresOutro', label: 'Estilos complementares (outro)' },
+    { field: 'objetivoImagem', label: 'Objetivo de imagem identificado' },
+    { field: 'biotipo', label: 'Biotipo / formato corporal' },
+    { field: 'biotipoOutro', label: 'Biotipo (outro)' },
+    { field: 'pontosValorizar', label: 'Pontos a valorizar' },
+    { field: 'pontosNaoDestacar', label: 'Pontos que prefere não destacar' },
+    { field: 'recomendacoesModelagem', label: 'Recomendações de modelagem' },
+    { field: 'recomendacoesTecidos', label: 'Recomendações de tecidos' },
+    { field: 'recomendacoesComprimentos', label: 'Recomendações de comprimentos' },
+    { field: 'recomendacoesAcessorios', label: 'Recomendações de acessórios' },
+    { field: 'observacoesProfissionais', label: 'Observações profissionais' }
+  ];
+
+  const CROM_DATA_FIELDS = [
+    { field: 'direcionamentoRealizado', label: 'Direcionamento realizado' },
+    { field: 'cartela', label: 'Cartela' },
+    { field: 'temperatura', label: 'Temperatura' },
+    { field: 'intensidade', label: 'Intensidade' },
+    { field: 'profundidade', label: 'Profundidade' },
+    { field: 'contrastePessoal', label: 'Contraste pessoal' },
+    { field: 'melhoresNeutros', label: 'Melhores neutros' },
+    { field: 'coresDestaque', label: 'Cores de destaque' },
+    { field: 'metaisRecomendados', label: 'Metais recomendados' },
+    { field: 'direcionamentoMaquiagem', label: 'Direcionamento de maquiagem' },
+    { field: 'direcionamentoCabelo', label: 'Direcionamento de cabelo' },
+    { field: 'observacoesCromaticas', label: 'Observações cromáticas' }
+  ];
+
+  // Builds one section's HTML + plain-text form from a label list + data object.
+  // Returns null when there is no content, so empty sections are simply skipped.
+
+  function buildDadosDossieSection(title, fieldsArr, dataObj){
+    let html = '', text = title + '\n';
+    let hasContent = false;
+
+    fieldsArr.forEach(function(f){
+      const value = dataObj[f.field];
+      if(value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) return;
+      hasContent = true;
+      const displayVal = Array.isArray(value) ? value.join(', ') : value;
+      html += '<div class="anamnese-field"><div class="anamnese-field-label">' + escapeHtml(f.label) + '</div>' +
+        '<div class="anamnese-field-value">' + escapeHtml(displayVal) + '</div></div>';
+      text += '- ' + f.label + ': ' + displayVal + '\n';
+    });
+
+    if(!hasContent) return null;
+    return {
+      html: '<div class="anamnese-section"><div class="anamnese-section-title">' + escapeHtml(title) + '</div>' + html + '</div>',
+      text: text + '\n'
+    };
+  }
+
+  let dadosDossieCopyText = '';
+
+  async function renderDadosDossie(){
+    const nomeEl = document.getElementById('dados-dossie-cliente-nome');
+    const contentEl = document.getElementById('dados-dossie-content');
+    const fotoWrapEl = document.getElementById('dados-dossie-foto-wrap');
+
+    if(!selectedClienteUid){
+      if(nomeEl) nomeEl.textContent = 'Cliente';
+      if(contentEl) contentEl.innerHTML = '';
+      return;
+    }
+    if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
+
+    const stepsData = await fetchAnamneseStepsData(selectedClienteUid);
+
+    let profData = {}, cromData = {};
+    try{
+      const snap = await getDoc(doc(db, 'clientes', selectedClienteUid, 'interno', 'analiseProfissional'));
+      if(snap.exists()) profData = snap.data();
+    } catch(err){ console.error(err); }
+    try{
+      const snap = await getDoc(doc(db, 'clientes', selectedClienteUid, 'interno', 'analiseCromatica'));
+      if(snap.exists()) cromData = snap.data();
+    } catch(err){ console.error(err); }
+
+    let fotoUrl = null;
+    try{
+      const adminFotosSnap = await getDoc(doc(db, 'clientes', selectedClienteUid, 'fotos', '_admin'));
+      const metaSnap = await getDoc(doc(db, 'clientes', selectedClienteUid, 'fotos', '_meta'));
+      const escolhida = adminFotosSnap.exists() ? adminFotosSnap.data().escolhidaDossie : null;
+      const urls = metaSnap.exists() ? (metaSnap.data().urls || {}) : {};
+      if(escolhida && urls[escolhida]){
+        fotoUrl = urls[escolhida].url || urls[escolhida];
+      }
+    } catch(err){ console.error(err); }
+
+    if(fotoWrapEl){
+      fotoWrapEl.innerHTML = fotoUrl
+        ? '<div class="ficha-photo-tile" style="max-width:220px;"><img src="' + escapeHtml(fotoUrl) + '" alt="Foto do dossiê"></div>'
+        : `<p style="font-family:'Cormorant Garamond', serif; font-size:14px; font-style:italic; color:var(--graphite-soft);">Nenhuma foto escolhida para o dossiê ainda.</p>`;
+    }
+
+    const CLIENT_SECTIONS = [
+      { title: 'Cliente', step: 1 },
+      { title: 'Objetivo', step: 2 },
+      { title: 'Rotina', step: 3 },
+      { title: 'Preferências de Estilo', step: 4 },
+      { title: 'Guarda-Roupa', step: 5 },
+      { title: 'Cores (preferências da cliente)', step: 6 },
+      { title: 'Biotipo & Corpo (relato da cliente)', step: 7 },
+      { title: 'Direcionamento Cromático (respostas da cliente)', step: 9 }
+    ];
+
+    let html = '', text = 'DADOS PARA O DOSSIÊ — ' + (selectedClienteNome || 'Cliente') + '\n\n';
+
+    CLIENT_SECTIONS.forEach(function(sec){
+      const stepDef = ANAMNESE_SECTIONS.find(function(s){ return s.step === sec.step; });
+      const data = stepsData[sec.step];
+      if(!stepDef || !data) return;
+      const result = buildDadosDossieSection(sec.title, stepDef.fields, data);
+      if(result){ html += result.html; text += result.text; }
+    });
+
+    const profResult = buildDadosDossieSection('Análise Profissional (Giulia)', PROF_DATA_FIELDS, profData);
+    if(profResult){ html += profResult.html; text += profResult.text; }
+
+    const cromResult = buildDadosDossieSection('Resultado Cromático (Giulia)', CROM_DATA_FIELDS, cromData);
+    if(cromResult){ html += cromResult.html; text += cromResult.text; }
+
+    text += 'Foto para o Dossiê: ' + (fotoUrl ? fotoUrl : 'nenhuma foto escolhida ainda') + '\n';
+
+    if(contentEl){
+      contentEl.innerHTML = html || `<div class="stat-card" style="text-align:center;"><p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">Ainda não há dados suficientes desta cliente.</p></div>`;
+    }
+    dadosDossieCopyText = text;
+  }
+
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('#dados-dossie-copiar-btn');
+    if(!btn) return;
+
+    const msgEl = document.getElementById('dados-dossie-copiar-msg');
+    if(navigator.clipboard && dadosDossieCopyText){
+      navigator.clipboard.writeText(dadosDossieCopyText).then(function(){
+        if(msgEl){
+          msgEl.classList.add('success');
+          msgEl.textContent = 'Dados copiados.';
+          setTimeout(function(){ msgEl.textContent=''; msgEl.classList.remove('success'); }, 2500);
+        }
+      }).catch(function(){
+        if(msgEl){ msgEl.classList.remove('success'); msgEl.textContent = 'Não foi possível copiar.'; }
+      });
+    }
+  });
+
   // ---- Update painel/dashboard summary stats ----
 
   async function refreshConsultantStats(){
@@ -5580,6 +6473,18 @@
       if(screenId === 'ficha-cliente'){
         renderFichaCliente();
       }
+      if(screenId === 'dossies'){
+        renderDossiesCentral();
+      }
+      if(screenId === 'novo-dossie'){
+        renderNovoDossie();
+      }
+      if(screenId === 'dossie-individual'){
+        renderDossieIndividual();
+      }
+      if(screenId === 'dados-dossie'){
+        renderDadosDossie();
+      }
       if(screenId === 'anamnese-completa'){
         renderAnamneseCompleta();
       }
@@ -5601,6 +6506,18 @@
     }
     if(target === 'ficha-cliente'){
       setTimeout(renderFichaCliente, 50);
+    }
+    if(target === 'dossies'){
+      setTimeout(renderDossiesCentral, 50);
+    }
+    if(target === 'novo-dossie'){
+      setTimeout(renderNovoDossie, 50);
+    }
+    if(target === 'dossie-individual'){
+      setTimeout(renderDossieIndividual, 50);
+    }
+    if(target === 'dados-dossie'){
+      setTimeout(renderDadosDossie, 50);
     }
     if(target === 'anamnese-completa'){
       setTimeout(renderAnamneseCompleta, 50);
