@@ -1885,6 +1885,31 @@
     line-height:1.5;
   }
 
+  /* ---- Botão "Gerar PDF" — fica FORA das páginas do dossiê, nunca aparece impresso
+     (classe .no-print, ver @media print mais abaixo). Apenas chama window.print();
+     a própria interface nativa do navegador/SO oferece "Salvar como PDF". ---- */
+  .dossie-mestre-gerar-pdf-wrap{
+    display:flex;
+    justify-content:center;
+    padding:16px 20px 0;
+  }
+
+  .dossie-mestre-gerar-pdf-btn{
+    font-family:'Manrope', sans-serif;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--off-white);
+    background:var(--graphite);
+    border:none;
+    border-radius:999px;
+    padding:12px 28px;
+    cursor:pointer;
+  }
+
+  .dossie-mestre-gerar-pdf-btn:active{ opacity:0.85; }
+
   .dossie-mestre-viewport{
     background:#E7E1D3;
     padding:28px 14px 60px;
@@ -1909,12 +1934,21 @@
     display:flex;
     flex-direction:column;
     break-after:page;
+    page-break-after:always;
+    break-inside:avoid;
+    page-break-inside:avoid;
     /* Fase 6C.6 — nova direção cromática editorial: tokens locais, escopados só ao
        Dossiê Mestre (nunca tocam as variáveis globais do app). */
     --dm-ouro:#B8925A;
     --dm-bg-clara:#F3ECDD;
     --dm-bg-media:#EFE4CC;
     --dm-bg-quase-branco:#FAF8F3;
+  }
+
+  /* A última página não deve forçar uma folha extra em branco depois dela. */
+  .dossie-mestre-page:last-child{
+    break-after:auto;
+    page-break-after:auto;
   }
 
   /* ---- Cabeçalho corrido (número da página + seção corrente) — Modelo de referência ---- */
@@ -2363,12 +2397,19 @@
     margin-bottom:auto;
   }
 
+  /* Fase 6C.10 — bloco de texto principal como composição única: margin-top:auto
+     aqui e no rodapé (mais abaixo) faz o espaço livre da coluna se dividir em DOIS
+     vãos equilibrados (antes deste bloco e antes do rodapé) em vez de um único vazio
+     grande concentrado no fim — dá ritmo editorial sem centralizar mecanicamente. */
+  .dm-capa-texto-principal{
+    margin-top:auto;
+  }
+
   .dm-capa-titulo{
     font-family:'Cormorant Garamond', serif;
     font-size:38px;
     line-height:1.05;
     color:var(--graphite);
-    margin-top:26px;
   }
 
   .dm-capa-titulo em{
@@ -2494,10 +2535,11 @@
 
   /* ---- Encerramento ---- */
   .dossie-mestre-encerramento{
-    justify-content:center;
     align-items:center;
     text-align:center;
   }
+
+  .dm-encerramento-bloco{ flex-shrink:0; }
 
   /* ---- Paleta / cores curadas — círculos agrupados por categoria, com divisórias finas ---- */
   .dm-cor-grupo{ margin-bottom:16px; break-inside:avoid; page-break-inside:avoid; }
@@ -2694,6 +2736,75 @@
     color:var(--graphite-soft);
     text-align:center;
     margin-top:10px;
+  }
+
+  /* =====================================================================
+     IMPRESSÃO / "SALVAR COMO PDF" (Fase 6C.10)
+     Estratégia: reaproveitar o próprio mecanismo de troca de tela do app
+     (.screen-wrap{display:none} / .screen-wrap.active{display:block}) — força
+     TODAS as telas para display:none (removidas do fluxo, sem risco de página
+     em branco por conteúdo invisível ocupando espaço) e reexibe só a tela da
+     prévia do Dossiê Mestre. Muito mais seguro do que visibility:hidden global,
+     que deixaria dezenas de outras telas do app ainda ocupando espaço de layout.
+     ===================================================================== */
+  @media print{
+    @page{
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    html, body{
+      margin:0 !important;
+      padding:0 !important;
+    }
+
+    *{
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* Esconde qualquer outra tela do app (dezenas de telas existem; nenhuma delas
+       deve aparecer nem ocupar espaço na impressão) e mostra só a prévia. */
+    .screen-wrap{ display:none !important; }
+    #screen-dossie-mestre-previa{ display:block !important; }
+
+    /* O "quadro de celular" (largura fixa, overflow:hidden, bordas arredondadas)
+       existe só para a simulação visual em tela — na impressão ele não pode
+       recortar nem estreitar as páginas A4 reais. */
+    #screen-dossie-mestre-previa .phone{
+      all: unset;
+      display:block;
+    }
+    #screen-dossie-mestre-previa .content{
+      all: unset;
+      display:block;
+    }
+
+    /* Salvaguarda explícita: mesmo com a estratégia de display:none/display:block
+       por tela já cobrindo isso, garante por reforço que .screen-label (rótulo da
+       grade de telas) e qualquer .no-print nunca apareçam na impressão. */
+    .screen-label,
+    .no-print{ display:none !important; }
+
+    #dossie-mestre-paginas{
+      display:block !important;
+      width:210mm;
+      background:none !important;
+      padding:0 !important;
+      margin:0 !important;
+      gap:0 !important;
+    }
+
+    .dossie-mestre-page{
+      width:210mm !important;
+      min-height:297mm !important;
+      max-width:none !important;
+      aspect-ratio:unset !important;
+      box-shadow:none !important;
+      margin:0 !important;
+      /* Cada folha visual = exatamente uma página A4; a última não força uma
+         folha extra em branco depois dela (regra :last-child já cobre isso). */
+    }
   }
 
 </style>
@@ -3585,9 +3696,9 @@
   <!-- ================= PRÉVIA DO DOSSIÊ MESTRE (ADMIN) — Fase 6C ================= -->
   <!-- Documento editorial isolado: não reutiliza cards/inputs administrativos. -->
   <div class="screen-wrap" id="screen-dossie-mestre-previa">
-    <div class="screen-label">Prévia do Dossiê Mestre</div>
+    <div class="screen-label no-print">Prévia do Dossiê Mestre</div>
     <div class="phone">
-      <div class="topbar">
+      <div class="topbar no-print">
         <div class="brand brand-centered">
           <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
         </div>
@@ -3595,12 +3706,15 @@
         
       </div>
       <div class="content" style="padding:0;">
-        <div class="dossie-mestre-admin-faixa">
+        <div class="dossie-mestre-admin-faixa no-print">
           <span>← Voltar ao Editor</span>
           <span class="dossie-mestre-admin-faixa-tag">Prévia administrativa — a cliente não vê esta tela</span>
         </div>
-        <div id="dossie-mestre-aviso-incompleto" class="dossie-mestre-admin-aviso" hidden></div>
-        <div id="dossie-mestre-loading" style="text-align:center; padding:60px 20px;">
+        <div id="dossie-mestre-aviso-incompleto" class="dossie-mestre-admin-aviso no-print" hidden></div>
+        <div class="dossie-mestre-gerar-pdf-wrap no-print">
+          <button type="button" class="dossie-mestre-gerar-pdf-btn" data-action="gerar-pdf-dossie">Gerar PDF</button>
+        </div>
+        <div id="dossie-mestre-loading" class="no-print" style="text-align:center; padding:60px 20px;">
           <p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft);">Montando a prévia…</p>
         </div>
         <div class="dossie-mestre-viewport" id="dossie-mestre-paginas"></div>
@@ -5592,6 +5706,16 @@
     if(user){
       refreshClienteProgress();
     }
+  });
+
+  // ---- Gerar PDF (Dossiê Mestre) ----
+  // Apenas window.print(); o navegador/SO oferece "Salvar como PDF" na própria
+  // interface nativa de impressão. Nenhuma biblioteca de conversão é usada.
+  const gerarPdfBtns = document.querySelectorAll('[data-action="gerar-pdf-dossie"]');
+  gerarPdfBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      window.print();
+    });
   });
 
   // ---- Logout ----
@@ -20787,10 +20911,12 @@
     const conteudo =
       '<div class="dm-capa-conteudo">' +
         galhoSvg +
-        '<div class="dm-capa-titulo">Dossiê<br><em>Personalizado</em></div>' +
-        '<div class="dm-capa-desc">Estratégia de imagem feita especialmente para você.</div>' +
-        '<div class="dm-capa-cliente-label">Cliente</div>' +
-        '<div class="dm-capa-cliente-nome">' + escapeHtml(dados.nomeCompleto) + '</div>' +
+        '<div class="dm-capa-texto-principal">' +
+          '<div class="dm-capa-titulo">Dossiê<br><em>Personalizado</em></div>' +
+          '<div class="dm-capa-desc">Estratégia de imagem feita especialmente para você.</div>' +
+          '<div class="dm-capa-cliente-label">Cliente</div>' +
+          '<div class="dm-capa-cliente-nome">' + escapeHtml(dados.nomeCompleto) + '</div>' +
+        '</div>' +
         '<div class="dm-capa-rodape">' +
           '<div class="dm-capa-rodape-selo"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>' +
           '<div class="dm-capa-rodape-frase">Sua melhor<br>versão, todos<br>os dias.</div>' +
@@ -21820,12 +21946,23 @@
   // MODELO — encerramento com espaço negativo generoso e assinatura discreta.
   function dm_buildEncerramento(dados){
     const texto = (dados.editorial.mensagemFinal && dados.editorial.mensagemFinal.trim()) ? dados.editorial.mensagemFinal : DOSSIE_MESTRE_MENSAGEM_FINAL_PADRAO;
-    return [dm_pagina(
+    // Fase 6C.10 — o bloco inteiro (texto + linha + monograma + marca + sub) é
+    // tratado como UMA composição única, deslocada para a região central da página
+    // via dois espaçadores flexíveis assimétricos (0.85 acima / 1.15 abaixo) — dá uma
+    // leve tendência para cima, mais sofisticada que o centro geométrico exato, sem
+    // depender só de justify-content (mais previsível entre navegadores) e sem
+    // adicionar nenhum elemento decorativo novo.
+    const blocoFinal =
       '<div class="dm-texto" style="margin-bottom:24px; max-width:80%;">' + escapeHtml(texto) + '</div>' +
       '<div class="dm-linha-curta centro"></div>' +
       '<img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD" style="width:36px; height:36px; opacity:0.85; margin:0 auto 10px;">' +
       '<div class="dm-capa-marca" style="text-align:center;">Giulia Dantas</div>' +
-      '<div class="dm-capa-sub" style="text-align:center;">Consultoria de Imagem</div>',
+      '<div class="dm-capa-sub" style="text-align:center;">Consultoria de Imagem</div>';
+
+    return [dm_pagina(
+      '<div style="flex:0.85 0 0%;"></div>' +
+      '<div class="dm-encerramento-bloco">' + blocoFinal + '</div>' +
+      '<div style="flex:1.15 0 0%;"></div>',
       { classesExtra: 'dossie-mestre-encerramento' }
     )];
   }
