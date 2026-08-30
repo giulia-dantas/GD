@@ -2399,14 +2399,36 @@
   .dm-capa-foto{
     position:relative;
     overflow:hidden;
+    background:var(--dm-bg-quase-branco);
   }
 
+  /* Fase 6C.8 — ajuste automático por proporção real da imagem (naturalWidth/
+     naturalHeight), decidido em JS após o carregamento (nunca salvo no Firestore).
+     Fallback seguro (antes da classe ser aplicada, ou se a imagem falhar): contido
+     e centralizado — nunca corta a pessoa por padrão. */
   .dm-capa-foto img{
     width:100%;
     height:100%;
-    object-fit:cover;
     display:block;
+    object-fit:contain;
+    object-position:center center;
   }
+
+  .dm-capa-foto img.dm-foto-vertical{
+    object-fit:contain;
+    object-position:center bottom;
+  }
+
+  .dm-capa-foto img.dm-foto-quadrada{
+    object-fit:contain;
+    object-position:center center;
+  }
+
+  .dm-capa-foto img.dm-foto-horizontal{
+    object-fit:cover;
+    object-position:center center;
+  }
+
 
   /* Data de emissão integrada ao fundo claro — linha fina dourada, nunca um bloco
      de cor separado (Fase 6C.7). */
@@ -20674,6 +20696,37 @@
   // fundo majoritariamente claro (quase branco), sem nenhuma faixa/bloco de cor —
   // a data de emissão fica integrada à coluna de texto, separada só por uma linha
   // fina dourada, nunca por uma massa de cor.
+  // Fase 6C.8 — decide, em tempo de renderização (nunca salvo no Firestore), qual
+  // tratamento a foto da capa deve receber, a partir da proporção REAL do arquivo
+  // carregado (naturalWidth/naturalHeight). Nunca distorce (object-fit sempre
+  // preserva a proporção original); o objetivo é só escolher "contain" (mostra a
+  // pessoa inteira) ou "cover" (preenche o quadro) conforme o formato da foto.
+  function dm_aplicarClasseFotoCapa(img){
+    if(!img) return;
+    function aplicar(){
+      img.classList.remove('dm-foto-vertical', 'dm-foto-quadrada', 'dm-foto-horizontal');
+      const w = img.naturalWidth, h = img.naturalHeight;
+      if(!w || !h){
+        // Fallback seguro: sem dimensão conhecida, nunca corta.
+        img.classList.add('dm-foto-quadrada');
+        return;
+      }
+      const proporcao = w / h;
+      if(proporcao < 0.9) img.classList.add('dm-foto-vertical');       // corpo inteiro/retrato alto -> nunca cortar
+      else if(proporcao <= 1.2) img.classList.add('dm-foto-quadrada'); // quadrada/retrato fechado
+      else img.classList.add('dm-foto-horizontal');                    // paisagem -> pode preencher o quadro
+    }
+    // "complete" já cobre o caso de dimensão indisponível (aplicar() já tem seu
+    // próprio fallback seguro para w/h ausentes) — só esperamos o evento "load"
+    // quando a imagem realmente ainda não terminou de carregar.
+    if(img.complete){
+      aplicar();
+    } else {
+      img.addEventListener('load', aplicar);
+      img.addEventListener('error', function(){ img.classList.add('dm-foto-quadrada'); });
+    }
+  }
+
   function dm_buildCapa(dados){
     const fotoUrl = dm_resolverFotoPrincipal(dados);
     const galhoSvg = '<svg class="dm-capa-galho" viewBox="0 0 200 160" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M10 10c30 6 60 24 78 58"/><path d="M28 20c8 10 10 22 6 34M46 32c8 8 12 18 10 30M64 46c7 7 10 16 9 26"/></svg>';
@@ -20700,7 +20753,7 @@
       '</div>';
 
     const ladoFoto = fotoUrl
-      ? '<div class="dm-capa-foto"><img src="' + escapeHtml(fotoUrl) + '" alt=""></div>'
+      ? '<div class="dm-capa-foto"><img data-dm-foto-capa src="' + escapeHtml(fotoUrl) + '" alt=""></div>'
       : '<div class="dm-capa-semfoto"><div style="text-align:center;"><div class="dm-capa-marca" style="font-size:20px;">GD</div><div class="dm-capa-sub" style="margin-top:8px;">Consultoria de Imagem</div></div></div>';
 
     return [dm_pagina(
@@ -21038,10 +21091,25 @@
       '<div class="dm-cor-divisor"></div></div>';
     }
 
+    // Cada grupo é uma unidade editorial indivisível de paginação (Fase 6C.8) — título,
+    // amostras e nomes sempre ficam juntos; se um grupo não couber inteiro na página,
+    // ele vai inteiro para a próxima (nunca uma linha de swatches cortada ao meio).
+    const gruposCor = [
+      grupo('Acromáticos', acromaticosCurados),
+      grupo('Neutros Essenciais', neutros),
+      grupo('Cores Protagonistas', protagonistas),
+      grupo('Cores de Destaque', destaques),
+      grupo('Cores Universais', universaisCurados)
+    ].filter(Boolean);
+
+    if(!gruposCor.length) return null;
+
     const obs = dm_blocosComConteudo([
       { titulo: 'Melhores Neutros — Observação Profissional', valor: dados.crom.melhoresNeutros },
       { titulo: 'Cores de Destaque — Observação Profissional', valor: dados.crom.coresDestaque }
     ]);
+    const itensPaginaveis = gruposCor.slice();
+    if(obs.length) itensPaginaveis.push(dm_renderBlocos(obs));
 
     const temCombinacoesReais = !!(aplicacao.combinacoes && (
       (aplicacao.combinacoes.duasCores || []).length ||
@@ -21052,20 +21120,32 @@
       ? 'Confira, nas próximas páginas, combinações prontas com base na sua cartela.'
       : 'Em breve: sugestões de combinação baseadas na sua cartela.';
 
-    return [dm_pagina(
-      '<div class="dm-eyebrow">Coloração Pessoal</div>' +
-      '<div class="dm-titulo-editorial">Sua <em>Paleta</em></div>' +
-      '<div class="dm-linha-curta"></div>' +
-      grupo('Acromáticos', acromaticosCurados) +
-      grupo('Neutros Essenciais', neutros) +
-      grupo('Cores Protagonistas', protagonistas) +
-      grupo('Cores de Destaque', destaques) +
-      grupo('Cores Universais', universaisCurados) +
-      (obs.length ? dm_renderBlocos(obs) : '') +
-      '<div class="dossie-mestre-nota">Sua cartela digital completa, com 100 cores, está disponível no aplicativo.</div>' +
-      dm_rodapeFaixa('Combinações que funcionam para você', rodapeTexto, '<div class="dm-rodape-faixa-qr" style="opacity:' + (temCombinacoesReais ? '1' : '0.35') + ';">' + dm_icone('paleta') + '</div>'),
-      { numero: true, secao: 'Coloração Pessoal' }
-    )];
+    const secaoRotulo = 'Coloração Pessoal';
+    const rodapeHtml = '<div class="dossie-mestre-nota">Sua cartela digital completa, com 100 cores, está disponível no aplicativo.</div>' +
+      dm_rodapeFaixa('Combinações que funcionam para você', rodapeTexto, '<div class="dm-rodape-faixa-qr" style="opacity:' + (temCombinacoesReais ? '1' : '0.35') + ';">' + dm_icone('paleta') + '</div>');
+
+    const cabecalhoPrincipalHtml = dm_construirCabecalhoNumerado(secaoRotulo) +
+      '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Sua <em>Paleta</em></div><div class="dm-linha-curta"></div>';
+    const cabecalhoContinuacaoTexto = '<div class="dm-titulo-editorial" style="font-size:18px; margin-bottom:6px;">Sua Paleta <span style="font-size:12px; font-style:italic; text-transform:none; letter-spacing:0; color:var(--graphite-soft);">— continuação</span></div><div class="dm-linha-curta" style="margin-top:0;"></div>';
+    const cabecalhoContinuacaoHtml = dm_construirCabecalhoNumerado(secaoRotulo) + cabecalhoContinuacaoTexto;
+
+    // Paginação por ALTURA REAL do DOM (mesma filosofia de Combinações, Fase 6C.7/6C.8):
+    // mede o cabeçalho, o rodapé e cada grupo já renderizados na largura real de uma
+    // página, e só então decide quantos grupos cabem em cada página. Sem medição real
+    // disponível, cai para a distribuição por contagem já validada, como salvaguarda.
+    let paginasDeGrupos = dm_paginarPorAlturaReal(itensPaginaveis, cabecalhoPrincipalHtml, cabecalhoContinuacaoHtml, rodapeHtml);
+    if(!paginasDeGrupos){
+      paginasDeGrupos = dm_distribuirEquilibrado(itensPaginaveis, 3);
+    }
+
+    return paginasDeGrupos.map(function(fatia, i){
+      const continuando = i > 0;
+      const corpo = (continuando
+        ? cabecalhoContinuacaoTexto
+        : '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Sua <em>Paleta</em></div><div class="dm-linha-curta"></div>'
+      ) + fatia.join('') + rodapeHtml;
+      return dm_pagina(corpo, { numero: true, secao: secaoRotulo });
+    });
   }
 
   // ===================================================================
@@ -21763,6 +21843,11 @@
         // páginas já montadas (inclusive as extras de paginação de Vestuário/Acessórios).
         const marcadores = paginasEl.querySelectorAll('[data-dm-numero]');
         marcadores.forEach(function(el, i){ el.textContent = String(i + 1).padStart(2, '0'); });
+
+        // Fase 6C.8: decide o tratamento da foto da capa pela proporção real do
+        // arquivo carregado — nunca antes disso, e nunca distorcendo a imagem.
+        const fotoCapaEl = paginasEl.querySelector('[data-dm-foto-capa]');
+        if(fotoCapaEl) dm_aplicarClasseFotoCapa(fotoCapaEl);
       }
 
       const avisos = dm_calcularAvisosAdministrativos(dados);
