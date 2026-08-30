@@ -4615,14 +4615,14 @@
     // Dossie status — a prévia da análise (analiseLiberada) e o PDF são independentes (Fase 4.1)
     let dossieDataHome = null;
     try{
-      const dossieSnap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_principal'));
+      const dossieSnap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_entrega'));
       if(dossieSnap.exists()) dossieDataHome = dossieSnap.data();
     } catch(err){
       console.error('GD: erro ao carregar status do dossiê', err);
     }
 
     const analiseLiberadaHome = getAnaliseLiberada(dossieDataHome);
-    const pdfDisponivelHome = !!(dossieDataHome && dossieDataHome.pdfUrl);
+    const pdfDisponivelHome = !!(dossieDataHome && dossieDataHome.pdfPath);
 
     const iconDossieEl = iconDossie;
     if(analiseLiberadaHome && pdfDisponivelHome){
@@ -5971,7 +5971,8 @@
 
   // ---- Prévia da análise x Dossiê final em PDF são estados independentes ----
   // analiseLiberada: controla o acesso da cliente aos resultados (prévia).
-  // pdfUrl: controla apenas a disponibilidade do arquivo final.
+  // pdfPath: controla apenas a disponibilidade do arquivo final (a URL de download
+  // nunca é armazenada — veja o upload/handlers de Ver/Baixar PDF).
   // Compatibilidade: registros criados antes desta mudança só têm o campo legado
   // "liberado" (que antigamente misturava as duas coisas) — nesses casos,
   // tratamos "liberado: true" como "analiseLiberada: true" para não quebrar
@@ -5987,14 +5988,36 @@
     return getAnaliseLiberada(dossieData) ? 'liberado' : (dossieData.statusProcesso || 'aguardando_analise');
   }
 
-  async function fetchDossieDoc(uid){
+  // ---- Dossiê agora vive em dois documentos separados ----
+  // _principal: administrativo/privado (status interno do processo, bookkeeping). Só o Admin acessa.
+  // _entrega: o que a própria cliente pode ler (tipo, liberação da prévia, dados do PDF).
+  // fetchDossieDoc() é usado só pelo Admin e mescla os dois para não precisar reescrever
+  // toda a tela individual do dossiê — o lado Cliente lê _entrega diretamente, nunca _principal.
+
+  async function fetchDossiePrincipalDoc(uid){
     try{
       const snap = await getDoc(doc(db, 'clientes', uid, 'dossie', '_principal'));
       return snap.exists() ? snap.data() : null;
     } catch(err){
-      console.error('GD: erro ao carregar dossiê', err);
+      console.error('GD: erro ao carregar dossiê (_principal)', err);
       return null;
     }
+  }
+
+  async function fetchDossieEntregaDoc(uid){
+    try{
+      const snap = await getDoc(doc(db, 'clientes', uid, 'dossie', '_entrega'));
+      return snap.exists() ? snap.data() : null;
+    } catch(err){
+      console.error('GD: erro ao carregar dossiê (_entrega)', err);
+      return null;
+    }
+  }
+
+  async function fetchDossieDoc(uid){
+    const [principal, entrega] = await Promise.all([fetchDossiePrincipalDoc(uid), fetchDossieEntregaDoc(uid)]);
+    if(!principal && !entrega) return null;
+    return Object.assign({}, principal || {}, entrega || {});
   }
 
   // ---- Keep the "Dossiê" status shown in Visão Geral (Fase 1) always in sync ----
@@ -6255,11 +6278,18 @@
         const statusInicial = tudoPronto ? 'pronto_producao' : 'aguardando_analise';
 
         await setDoc(doc(db, 'clientes', novoDossieSelectedUid, 'dossie', '_principal'), {
-          tipo: tipoTexto,
           statusProcesso: statusInicial,
-          liberado: false,
-          dataLiberacao: null,
           createdAt: nowIso,
+          updatedAt: nowIso
+        }, { merge: true });
+
+        await setDoc(doc(db, 'clientes', novoDossieSelectedUid, 'dossie', '_entrega'), {
+          tipo: tipoTexto,
+          analiseLiberada: false,
+          dataLiberacaoAnalise: null,
+          pdfPath: null,
+          pdfNome: null,
+          pdfDataUpload: null,
           updatedAt: nowIso
         }, { merge: true });
 
@@ -6348,7 +6378,7 @@
     // Restore Arquivo Final section
     const vazioEl = document.getElementById('dossie-arquivo-vazio');
     const preenchidoEl = document.getElementById('dossie-arquivo-preenchido');
-    if(dossieData && dossieData.pdfUrl){
+    if(dossieData && dossieData.pdfPath){
       vazioEl.hidden = true;
       preenchidoEl.hidden = false;
       document.getElementById('dossie-pdf-nome').textContent = dossieData.pdfNome || 'dossie.pdf';
@@ -6417,7 +6447,7 @@
 
     const ligar = radio.textContent.trim() === 'Ligado';
     const nowIso = new Date().toISOString();
-    const dossieRef = doc(db, 'clientes', selectedClienteUid, 'dossie', '_principal');
+    const dossieRef = doc(db, 'clientes', selectedClienteUid, 'dossie', '_entrega');
 
     try{
       const payload = { analiseLiberada: ligar, updatedAt: nowIso };
@@ -6487,11 +6517,14 @@
 
       const fileRef = ref(storage, storagePath);
       await uploadBytes(fileRef, file, { contentType: 'application/pdf' });
-      const url = await getDownloadURL(fileRef);
 
+      // Não guardamos mais uma pdfUrl permanente (getDownloadURL) no Firestore: o token
+      // embutido nela funcionaria fora do app e independente da liberação. A partir de
+      // agora, tanto o Admin quanto a Cliente pedem uma URL nova (getDownloadURL) no
+      // momento de abrir o arquivo — e essa chamada É avaliada pelas Storage Rules
+      // (inclusive a condição de analiseLiberada) a cada vez.
       const nowIso = new Date().toISOString();
-      await setDoc(doc(db, 'clientes', selectedClienteUid, 'dossie', '_principal'), {
-        pdfUrl: url,
+      await setDoc(doc(db, 'clientes', selectedClienteUid, 'dossie', '_entrega'), {
         pdfPath: storagePath,
         pdfNome: file.name,
         pdfDataUpload: nowIso,
@@ -6540,8 +6573,14 @@
 
   document.addEventListener('click', function(e){
     if(!e.target.closest('#dossie-pdf-ver-btn') || !selectedClienteUid) return;
-    fetchDossieDoc(selectedClienteUid).then(function(d){
-      if(d && d.pdfUrl) window.open(d.pdfUrl, '_blank');
+    fetchDossieDoc(selectedClienteUid).then(async function(d){
+      if(!d || !d.pdfPath) return;
+      try{
+        const url = await getDownloadURL(ref(storage, d.pdfPath));
+        window.open(url, '_blank');
+      } catch(err){
+        console.error('GD: erro ao gerar link do PDF (Admin)', { code: err && err.code, message: err && err.message, path: d.pdfPath });
+      }
     });
   });
 
@@ -6558,8 +6597,7 @@
       }
 
       // O PDF é independente da liberação da análise: removê-lo nunca altera analiseLiberada.
-      await setDoc(doc(db, 'clientes', selectedClienteUid, 'dossie', '_principal'), {
-        pdfUrl: null,
+      await setDoc(doc(db, 'clientes', selectedClienteUid, 'dossie', '_entrega'), {
         pdfPath: null,
         pdfNome: null,
         pdfDataUpload: null,
@@ -6749,7 +6787,7 @@
 
     let dossieData = null;
     try{
-      const snap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_principal'));
+      const snap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_entrega'));
       if(snap.exists()) dossieData = snap.data();
     } catch(err){
       if(err && err.code === 'permission-denied'){
@@ -6845,11 +6883,11 @@
       cartelaCardEl.hidden = true;
     }
 
-    // ---- Dossiê Personalizado — "Em finalização" ou "Disponível", controlado só pelo pdfUrl ----
+    // ---- Dossiê Personalizado — "Em finalização" ou "Disponível", controlado só pela existência do arquivo (pdfPath) ----
     const statusTagEl = document.getElementById('cliente-dossie-arquivo-status-tag');
     const finalizacaoEl = document.getElementById('cliente-dossie-arquivo-finalizacao');
     const disponivelEl = document.getElementById('cliente-dossie-arquivo-disponivel');
-    const pdfDisponivel = !!(dossieData && dossieData.pdfUrl);
+    const pdfDisponivel = !!(dossieData && dossieData.pdfPath);
 
     if(pdfDisponivel){
       if(statusTagEl){ statusTagEl.textContent = 'Disponível'; statusTagEl.classList.remove('warn'); statusTagEl.classList.add('done'); }
@@ -6871,24 +6909,34 @@
 
     let dossieData = null;
     try{
-      const snap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_principal'));
+      const snap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_entrega'));
       if(snap.exists()) dossieData = snap.data();
     } catch(err){
       if(err && err.code === 'permission-denied'){
-        console.error('GD: PERMISSÃO NEGADA ao ler clientes/' + currentUser.uid + '/dossie/_principal — verifique as regras do Firestore.', err);
+        console.error('GD: PERMISSÃO NEGADA ao ler clientes/' + currentUser.uid + '/dossie/_entrega — verifique as regras do Firestore.', err);
       } else {
         console.error(err);
       }
     }
 
-    if(!dossieData || !dossieData.pdfUrl) return;
+    if(!dossieData || !dossieData.analiseLiberada || !dossieData.pdfPath) return;
+
+    // A URL é sempre pedida na hora (nunca guardada em Firestore): a chamada abaixo passa
+    // pelas Storage Rules a cada clique, então se a liberação for desligada, o acesso
+    // é negado imediatamente — não depende de esconder um link antigo na interface.
+    let url;
+    try{
+      url = await getDownloadURL(ref(storage, dossieData.pdfPath));
+    } catch(err){
+      console.error('GD: erro ao gerar link do PDF', { code: err && err.code, message: err && err.message });
+      return;
+    }
 
     if(verBtn){
-      // Abre o PDF exatamente desta cliente no visualizador do dispositivo (viável dentro da arquitetura atual)
-      window.open(dossieData.pdfUrl, '_blank');
+      window.open(url, '_blank');
     } else if(baixarBtn){
       const a = document.createElement('a');
-      a.href = dossieData.pdfUrl;
+      a.href = url;
       a.download = dossieData.pdfNome || 'dossie.pdf';
       a.target = '_blank';
       a.rel = 'noopener';
@@ -6950,7 +6998,7 @@
     // mesma trava usada em "Seu Dossiê", para nunca expor dados após um OFF do Admin.
     let dossieData = null;
     try{
-      const dossieSnap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_principal'));
+      const dossieSnap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_entrega'));
       if(dossieSnap.exists()) dossieData = dossieSnap.data();
     } catch(err){ console.error('GD: erro ao verificar liberação da cartela', err); }
 
