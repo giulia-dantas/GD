@@ -1898,11 +1898,11 @@
     position:relative;
     background:#FFFFFF;
     width:100%;
-    max-width:640px;
+    max-width:680px;
     aspect-ratio:210 / 297;
-    box-shadow:0 2px 20px rgba(47,47,47,0.10);
+    box-shadow:0 4px 28px rgba(47,47,47,0.13);
     box-sizing:border-box;
-    padding:9% 8%;
+    padding:8.5% 8%;
     font-family:'Manrope', sans-serif;
     color:var(--graphite);
     overflow:visible;
@@ -1911,42 +1911,54 @@
     break-after:page;
   }
 
+  /* Rodapé discreto — mesma linha fina em todas as páginas internas, sem repetir bloco pesado */
   .dossie-mestre-rodape{
     margin-top:auto;
-    padding-top:18px;
+    padding-top:16px;
     display:flex;
-    justify-content:space-between;
+    justify-content:center;
     align-items:center;
-    font-size:8.5px;
-    letter-spacing:0.08em;
+    gap:8px;
+    font-size:7.5px;
+    letter-spacing:0.14em;
     text-transform:uppercase;
     color:var(--graphite-soft);
-    border-top:1px solid rgba(200,164,106,0.25);
+    border-top:1px solid rgba(200,164,106,0.3);
   }
 
   .dossie-mestre-rodape img{
-    width:16px;
-    height:16px;
-    opacity:0.5;
+    width:13px;
+    height:13px;
+    opacity:0.55;
     object-fit:contain;
   }
 
   .dossie-mestre-eyebrow{
     font-family:'Manrope', sans-serif;
     font-size:9.5px;
-    letter-spacing:0.22em;
+    letter-spacing:0.26em;
     text-transform:uppercase;
     color:var(--champagne);
-    margin-bottom:10px;
+    margin-bottom:6px;
   }
 
   .dossie-mestre-titulo{
     font-family:'Cormorant Garamond', serif;
     font-weight:600;
-    font-size:26px;
-    line-height:1.15;
+    font-size:29px;
+    line-height:1.12;
     color:var(--graphite);
     margin-bottom:18px;
+  }
+
+  /* Título-protagonista: usado quando um único nome deve dominar a página (capa, cartela) */
+  .dossie-mestre-titulo-grande{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:44px;
+    line-height:1.02;
+    color:var(--graphite);
+    letter-spacing:0.01em;
   }
 
   .dossie-mestre-subtitulo{
@@ -1958,15 +1970,13 @@
     margin-bottom:16px;
   }
 
-  .dossie-mestre-bloco{
-    margin-bottom:22px;
-  }
+  .dossie-mestre-bloco{ margin-bottom:20px; }
 
   .dossie-mestre-bloco-titulo{
     font-family:'Manrope', sans-serif;
-    font-size:10px;
+    font-size:9.5px;
     font-weight:700;
-    letter-spacing:0.14em;
+    letter-spacing:0.16em;
     text-transform:uppercase;
     color:var(--champagne);
     margin-bottom:8px;
@@ -1974,8 +1984,8 @@
 
   .dossie-mestre-texto{
     font-family:'Manrope', sans-serif;
-    font-size:12.5px;
-    line-height:1.7;
+    font-size:12px;
+    line-height:1.75;
     color:var(--graphite);
     white-space:pre-line;
   }
@@ -1983,73 +1993,230 @@
   .dossie-mestre-divisor{
     height:1px;
     background:linear-gradient(to right, var(--champagne), transparent);
-    margin:18px 0;
+    margin:16px 0;
   }
 
-  /* ---- Capa ---- */
-  .dossie-mestre-capa{
-    justify-content:space-between;
-    align-items:center;
-    text-align:center;
-    padding-top:11%;
-    padding-bottom:9%;
+  /* Traço curto de assinatura, usado sob títulos-protagonista */
+  .dossie-mestre-linha-fina{
+    width:64px;
+    height:1px;
+    background:var(--champagne);
+    margin:14px 0 20px;
   }
 
-  .dossie-mestre-capa-foto{
-    width:58%;
-    aspect-ratio:3/4;
-    border-radius:4px;
+  .dossie-mestre-linha-fina.centro{ margin-left:auto; margin-right:auto; }
+
+  /* Numeração editorial discreta, ao lado de títulos de subseção em módulos com ritmo (Vestuário/Acessórios) */
+  .dossie-mestre-numero{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:13px;
+    color:var(--champagne);
+    margin-right:8px;
+  }
+
+  /* ---- Layout: colunas assimétricas (Modelo C) ---- */
+  .dossie-mestre-coluna2{
+    display:grid;
+    grid-template-columns:1.35fr 1fr;
+    gap:0 7%;
+    flex:1;
+  }
+
+  .dossie-mestre-coluna2.inverso{ grid-template-columns:1fr 1.35fr; }
+
+  .dossie-mestre-coluna2 > div:first-child{ border-right:1px solid rgba(200,164,106,0.28); padding-right:7%; }
+  .dossie-mestre-coluna2.inverso > div:first-child{ border-right:none; padding-right:0; }
+  .dossie-mestre-coluna2.inverso > div:last-child{ border-left:1px solid rgba(200,164,106,0.28); padding-left:7%; }
+
+  /* ---- Layout: quadrantes com linhas divisórias finas (Modelo B) ---- */
+  .dossie-mestre-quadrantes{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border-top:1px solid rgba(200,164,106,0.3);
+    border-left:1px solid rgba(200,164,106,0.3);
+  }
+
+  .dossie-mestre-quadrante{
+    padding:16px 18px;
+    border-right:1px solid rgba(200,164,106,0.3);
+    border-bottom:1px solid rgba(200,164,106,0.3);
+  }
+
+  .dossie-mestre-quadrante.destaque{ background:rgba(200,164,106,0.05); }
+
+  .dossie-mestre-quadrante .dossie-mestre-bloco-titulo{ margin-bottom:6px; }
+
+  /* Grid simples (mantido para compatibilidade de composição em pares) */
+  .dossie-mestre-grid2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px 20px;
+  }
+
+  /* ---- Tags editoriais (estilos complementares) ---- */
+  .dossie-mestre-tags-linha{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-bottom:4px;
+  }
+
+  .dossie-mestre-tag{
+    font-family:'Manrope', sans-serif;
+    font-size:8.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--graphite);
+    border:1px solid rgba(200,164,106,0.55);
+    border-radius:2px;
+    padding:5px 10px;
+  }
+
+  /* ---- Fotos editoriais: sangria e composição lateral ---- */
+  .dossie-mestre-foto-bleed-topo{
+    margin:-8.5% -8% 22px;
+    height:46%;
     overflow:hidden;
-    margin:0 auto 26px;
-    box-shadow:0 6px 24px rgba(47,47,47,0.14);
   }
 
-  .dossie-mestre-capa-foto img{
+  .dossie-mestre-foto-bleed-topo img{
     width:100%;
     height:100%;
     object-fit:cover;
     display:block;
   }
 
+  .dossie-mestre-foto-lateral-wrap{
+    display:flex;
+    gap:6%;
+    flex:1;
+  }
+
+  .dossie-mestre-foto-lateral{
+    width:38%;
+    flex-shrink:0;
+    align-self:stretch;
+    overflow:hidden;
+    position:relative;
+  }
+
+  .dossie-mestre-foto-lateral img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .dossie-mestre-foto-lateral::after{
+    content:'';
+    position:absolute;
+    inset:8px;
+    border:1px solid rgba(247,244,239,0.55);
+    pointer-events:none;
+  }
+
+  /* ---- Capa (Modelo próprio) ---- */
+  .dossie-mestre-capa{ padding:0 !important; }
+
+  .dossie-mestre-capa-v2{
+    position:relative;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .dossie-mestre-capa-v2-foto{
+    height:64%;
+    overflow:hidden;
+    position:relative;
+  }
+
+  .dossie-mestre-capa-v2-foto img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .dossie-mestre-capa-v2-monograma{
+    position:absolute;
+    top:6%;
+    left:8%;
+    width:34px;
+    height:34px;
+    opacity:0.92;
+    object-fit:contain;
+    filter:drop-shadow(0 1px 3px rgba(0,0,0,0.35));
+    z-index:2;
+  }
+
+  .dossie-mestre-capa-v2-painel{
+    position:relative;
+    margin:-13% 8% 0;
+    background:#FFFFFF;
+    padding:26px 24px 24px;
+    box-shadow:0 8px 24px rgba(47,47,47,0.14);
+    text-align:left;
+    z-index:1;
+  }
+
+  .dossie-mestre-capa-v2-painel .dossie-mestre-capa-tipo{ margin-top:0; }
+
+  .dossie-mestre-capa-v2-rodape{
+    margin-top:auto;
+    padding:0 8% 7%;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+  }
+
   .dossie-mestre-capa-marca{
     font-family:'Cormorant Garamond', serif;
-    font-size:15px;
-    letter-spacing:0.16em;
+    font-size:14px;
+    letter-spacing:0.18em;
     text-transform:uppercase;
     color:var(--graphite);
   }
 
   .dossie-mestre-capa-sub{
     font-family:'Manrope', sans-serif;
-    font-size:9.5px;
-    letter-spacing:0.2em;
+    font-size:9px;
+    letter-spacing:0.22em;
     text-transform:uppercase;
     color:var(--champagne);
-    margin-top:4px;
+    margin-top:3px;
   }
 
   .dossie-mestre-capa-tipo{
     font-family:'Manrope', sans-serif;
-    font-size:10px;
-    letter-spacing:0.24em;
+    font-size:9.5px;
+    letter-spacing:0.26em;
     text-transform:uppercase;
     color:var(--graphite-soft);
-    margin-top:30px;
+    margin-top:22px;
   }
 
   .dossie-mestre-capa-nome{
     font-family:'Cormorant Garamond', serif;
     font-weight:600;
-    font-size:30px;
+    font-size:27px;
+    line-height:1.1;
     color:var(--graphite);
-    margin-top:8px;
+    margin-top:6px;
   }
 
-  .dossie-mestre-capa-monograma{
-    width:44px;
-    height:44px;
-    opacity:0.8;
-    object-fit:contain;
+  /* Composição alternativa da capa quando não há Foto Principal */
+  .dossie-mestre-capa-semfoto{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:11% 9%;
+    position:relative;
+    background:
+      linear-gradient(to bottom right, transparent 48%, rgba(200,164,106,0.18) 48.6%, rgba(200,164,106,0.18) 49.4%, transparent 50%),
+      var(--off-white);
   }
 
   /* ---- Encerramento ---- */
@@ -2059,36 +2226,69 @@
     text-align:center;
   }
 
-  /* ---- Estratégia: grid de 2 colunas ---- */
-  .dossie-mestre-grid2{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:16px 20px;
+  /* ---- Paleta / cores curadas — faixas retangulares, não círculos em grade rígida ---- */
+  .dossie-mestre-faixa-linha{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:6px;
   }
 
-  /* ---- Paleta / swatches curados ---- */
-  .dossie-mestre-swatch-grid{
-    display:grid;
-    grid-template-columns:repeat(6, 1fr);
-    gap:10px 8px;
+  .dossie-mestre-faixa-item{
+    text-align:left;
   }
 
-  .dossie-mestre-swatch{ text-align:center; }
+  .dossie-mestre-faixa-retangulo{
+    width:54px;
+    height:38px;
+    border:1px solid rgba(47,47,47,0.08);
+  }
 
-  .dossie-mestre-swatch-circulo{
-    width:100%;
-    aspect-ratio:1/1;
+  .dossie-mestre-faixa-retangulo.grande{
+    width:78px;
+    height:52px;
+  }
+
+  .dossie-mestre-faixa-nome{
+    font-family:'Manrope', sans-serif;
+    font-size:7.5px;
+    color:var(--graphite-soft);
+    margin-top:4px;
+    max-width:78px;
+  }
+
+  /* ---- Metais: círculos maiores e mais espaçados ---- */
+  .dossie-mestre-metal-linha{
+    display:flex;
+    flex-wrap:wrap;
+    gap:22px;
+    margin-bottom:6px;
+  }
+
+  .dossie-mestre-metal-item{ text-align:center; width:58px; }
+
+  .dossie-mestre-metal-circulo{
+    width:58px;
+    height:58px;
     border-radius:50%;
     border:1px solid rgba(47,47,47,0.08);
-    margin-bottom:4px;
+    margin-bottom:6px;
   }
 
-  .dossie-mestre-swatch-nome{
+  .dossie-mestre-metal-nome{
     font-family:'Manrope', sans-serif;
-    font-size:7px;
+    font-size:8px;
     color:var(--graphite-soft);
-    line-height:1.2;
   }
+
+  /* Mantido por compatibilidade de nome de classe onde ainda referenciado */
+  .dossie-mestre-swatch-grid{ display:flex; flex-wrap:wrap; gap:10px; }
+  .dossie-mestre-swatch{ text-align:center; width:44px; }
+  .dossie-mestre-swatch-circulo{
+    width:44px; height:44px; border-radius:50%;
+    border:1px solid rgba(47,47,47,0.08); margin-bottom:4px;
+  }
+  .dossie-mestre-swatch-nome{ font-family:'Manrope', sans-serif; font-size:7px; color:var(--graphite-soft); line-height:1.2; }
 
   /* ---- Checklist de provador ---- */
   .dossie-mestre-checklist-item{
@@ -2106,6 +2306,19 @@
     color:var(--champagne);
     flex-shrink:0;
   }
+
+  /* ---- Guia Rápido: "carteira-resumo" ---- */
+  .dossie-mestre-carteira{
+    border:1px solid var(--champagne);
+    padding:22px 20px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px 18px;
+  }
+
+  .dossie-mestre-carteira-item .dossie-mestre-bloco-titulo{ margin-bottom:4px; }
+
+  .dossie-mestre-carteira-item .dossie-mestre-texto{ font-size:12.5px; }
 
   /* ---- Chamada para a cartela digital no app ---- */
   .dossie-mestre-nota{
@@ -15590,17 +15803,36 @@
     }).join('') + '</div>';
   }
 
+  // Quadrantes com linhas finas — usado em Estratégia e Coloração Pessoal (Modelo B).
+  // "destaqueIndex" marca uma célula com leve realce (ex.: Prioridade).
+  function dm_renderQuadrantes(blocos, destaqueIndex){
+    return '<div class="dossie-mestre-quadrantes">' + blocos.map(function(b, i){
+      return '<div class="dossie-mestre-quadrante' + (i === destaqueIndex ? ' destaque' : '') + '">' +
+        '<div class="dossie-mestre-bloco-titulo">' + escapeHtml(b.titulo) + '</div>' +
+        '<div class="dossie-mestre-texto">' + escapeHtml(b.valor) + '</div>' +
+      '</div>';
+    }).join('') + '</div>';
+  }
+
   // Divide uma lista de blocos em várias páginas quando não cabem confortavelmente
   // em uma só — aproximação determinística por quantidade (não corta parágrafos).
+  // Modelo D: cada subseção ganha um número editorial discreto, criando ritmo de leitura.
   function dm_paginarBlocos(eyebrow, titulo, blocos, maxPorPagina){
     const paginas = [];
     for(let i = 0; i < blocos.length; i += maxPorPagina){
       const fatia = blocos.slice(i, i + maxPorPagina);
       const continuando = i > 0;
+      const corpo = fatia.map(function(b, idx){
+        return '<div class="dossie-mestre-bloco">' +
+          '<div class="dossie-mestre-bloco-titulo"><span class="dossie-mestre-numero">' + String(i + idx + 1).padStart(2, '0') + '</span>' + escapeHtml(b.titulo) + '</div>' +
+          '<div class="dossie-mestre-texto">' + escapeHtml(b.valor) + '</div>' +
+        '</div>';
+      }).join('');
       paginas.push(dm_pagina(
         '<div class="dossie-mestre-eyebrow">' + escapeHtml(eyebrow) + '</div>' +
         '<div class="dossie-mestre-titulo">' + escapeHtml(titulo) + (continuando ? ' (continuação)' : '') + '</div>' +
-        dm_renderBlocos(fatia) +
+        '<div class="dossie-mestre-linha-fina"></div>' +
+        corpo +
         dm_rodape()
       ));
     }
@@ -15610,101 +15842,155 @@
   // ---- Capítulos: cada função retorna um array de páginas (HTML), ou null se o
   // módulo não se aplica / não tem conteúdo suficiente — nunca uma página vazia. ----
 
+  // MODELO CAPA — foto com sangria + painel editorial sobreposto (ou composição
+  // tipográfica com detalhe gráfico dourado quando não há Foto Principal).
   function dm_buildCapa(dados){
     const fotoUrl = dm_resolverFotoPrincipal(dados);
-    const fotoHtml = fotoUrl
-      ? '<div class="dossie-mestre-capa-foto"><img src="' + escapeHtml(fotoUrl) + '" alt=""></div>'
-      : '<div></div>';
+
+    if(fotoUrl){
+      const inner =
+        '<div class="dossie-mestre-capa-v2">' +
+          '<div class="dossie-mestre-capa-v2-foto"><img src="' + escapeHtml(fotoUrl) + '" alt=""></div>' +
+          '<img class="dossie-mestre-capa-v2-monograma" src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD">' +
+          '<div class="dossie-mestre-capa-v2-painel">' +
+            '<div class="dossie-mestre-capa-marca">Giulia Dantas</div>' +
+            '<div class="dossie-mestre-capa-sub">Consultoria de Imagem</div>' +
+            '<div class="dossie-mestre-capa-tipo">Dossiê Personalizado</div>' +
+            '<div class="dossie-mestre-capa-nome">' + escapeHtml(dados.nomeCompleto) + '</div>' +
+          '</div>' +
+        '</div>';
+      return [dm_pagina(inner, 'dossie-mestre-capa')];
+    }
+
+    // Sem foto: composição tipográfica com detalhe geométrico dourado discreto (definido em CSS).
     const inner =
-      '<img class="dossie-mestre-capa-monograma" src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD" style="margin:0 auto;">' +
-      fotoHtml +
-      '<div>' +
-        '<div class="dossie-mestre-capa-marca">Giulia Dantas</div>' +
-        '<div class="dossie-mestre-capa-sub">Consultoria de Imagem</div>' +
-        '<div class="dossie-mestre-capa-tipo">Dossiê Personalizado</div>' +
-        '<div class="dossie-mestre-capa-nome">' + escapeHtml(dados.nomeCompleto) + '</div>' +
+      '<div class="dossie-mestre-capa-semfoto">' +
+        '<img class="dossie-mestre-capa-v2-monograma" src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD" style="position:static; width:38px; height:38px; filter:none; opacity:0.85;">' +
+        '<div>' +
+          '<div class="dossie-mestre-capa-tipo">Dossiê Personalizado</div>' +
+          '<div class="dossie-mestre-titulo-grande" style="margin-top:10px;">' + escapeHtml(dados.nomeCompleto) + '</div>' +
+          '<div class="dossie-mestre-linha-fina"></div>' +
+        '</div>' +
+        '<div>' +
+          '<div class="dossie-mestre-capa-marca">Giulia Dantas</div>' +
+          '<div class="dossie-mestre-capa-sub">Consultoria de Imagem</div>' +
+        '</div>' +
       '</div>';
     return [dm_pagina(inner, 'dossie-mestre-capa')];
   }
 
+  // MODELO — abertura assimétrica: eyebrow + título deslocado, texto em bloco único
+  // com espaço negativo generoso abaixo, monograma discreto no rodapé.
   function dm_buildAbertura(dados){
     const texto = (dados.editorial.boasVindasPersonalizada && dados.editorial.boasVindasPersonalizada.trim())
       ? dados.editorial.boasVindasPersonalizada
       : DOSSIE_MESTRE_BOAS_VINDAS_PADRAO;
     return [dm_pagina(
-      '<div class="dossie-mestre-eyebrow">Bem-vinda</div>' +
-      '<div class="dossie-mestre-titulo">Seu Dossiê Personalizado</div>' +
-      '<div class="dossie-mestre-texto">' + escapeHtml(texto) + '</div>' +
+      '<div style="margin-top:14%;">' +
+        '<div class="dossie-mestre-eyebrow">Bem-vinda</div>' +
+        '<div class="dossie-mestre-titulo" style="max-width:80%;">Seu Dossiê Personalizado</div>' +
+        '<div class="dossie-mestre-linha-fina"></div>' +
+        '<div class="dossie-mestre-texto" style="max-width:88%;">' + escapeHtml(texto) + '</div>' +
+      '</div>' +
       dm_rodape()
     )];
   }
 
+  // MODELO C — duas colunas assimétricas: estilo em destaque à esquerda, blocos à direita.
   function dm_buildPerfilImagem(dados){
     if(!dados.servicos.consultoriaImagem) return null;
     const estilo = dados.prof.estiloPredominante === 'Outro' ? dados.prof.estiloPredominanteOutro : dados.prof.estiloPredominante;
     const complementares = Array.isArray(dados.prof.estilosComplementares) ? dados.prof.estilosComplementares.filter(function(v){ return v !== 'Outro'; }) : [];
     if(dados.prof.estilosComplementaresOutro) complementares.push(dados.prof.estilosComplementaresOutro);
 
-    const blocos = dm_blocosComConteudo([
+    const blocosDireita = dm_blocosComConteudo([
       { titulo: 'Seu momento', valor: dados.editorial.sinteseMomento },
       { titulo: 'Objetivo de imagem', valor: dados.prof.objetivoImagem },
-      { titulo: 'Estilo predominante', valor: estilo },
-      { titulo: 'Estilos complementares', valor: complementares.join(', ') },
       { titulo: 'Parecer profissional', valor: dados.editorial.parecerProfissional }
     ]);
-    if(!blocos.length) return null;
+
+    if(!estilo && !complementares.length && !blocosDireita.length) return null;
+
+    let colunaEsquerda = '<div class="dossie-mestre-eyebrow">Consultoria de Imagem</div><div class="dossie-mestre-titulo" style="margin-bottom:10px;">Seu Perfil de Imagem</div>';
+    if(estilo){
+      colunaEsquerda += '<div class="dossie-mestre-bloco-titulo">Estilo Predominante</div>' +
+        '<div class="dossie-mestre-titulo-grande" style="font-size:28px; margin-bottom:14px;">' + escapeHtml(estilo) + '</div>';
+    }
+    if(complementares.length){
+      colunaEsquerda += '<div class="dossie-mestre-bloco-titulo">Estilos Complementares</div>' +
+        '<div class="dossie-mestre-tags-linha">' + complementares.map(function(c){ return '<div class="dossie-mestre-tag">' + escapeHtml(c) + '</div>'; }).join('') + '</div>';
+    }
+
+    const colunaDireitaHtml = blocosDireita.length ? dm_renderBlocos(blocosDireita) : '';
 
     return [dm_pagina(
-      '<div class="dossie-mestre-eyebrow">Consultoria de Imagem</div>' +
-      '<div class="dossie-mestre-titulo">Seu Perfil de Imagem</div>' +
-      dm_renderBlocos(blocos) +
+      '<div class="dossie-mestre-coluna2">' +
+        '<div>' + colunaEsquerda + '</div>' +
+        '<div>' + colunaDireitaHtml + '</div>' +
+      '</div>' +
       dm_rodape()
     )];
   }
 
+  // MODELO B — quadrantes com linhas finas; "Prioridade" recebe leve realce.
   function dm_buildEstrategia(dados){
     if(!dados.servicos.consultoriaImagem) return null;
     // "pontosNaoDestacar" é apresentado editorialmente como "Equilibrar" — o campo
     // original em interno/analiseProfissional nunca é renomeado nem alterado.
-    const blocos = dm_blocosComConteudo([
+    const todosCampos = [
       { titulo: 'Valorizar', valor: dados.prof.pontosValorizar },
       { titulo: 'Equilibrar', valor: dados.prof.pontosNaoDestacar },
       { titulo: 'Comunicar', valor: dados.editorial.comunicar },
       { titulo: 'Prioridade', valor: dados.editorial.prioridade }
-    ]);
+    ];
+    const blocos = dm_blocosComConteudo(todosCampos);
     if(!blocos.length) return null;
+
+    const indicePrioridade = blocos.findIndex(function(b){ return b.titulo === 'Prioridade'; });
 
     return [dm_pagina(
       '<div class="dossie-mestre-eyebrow">Consultoria de Imagem</div>' +
       '<div class="dossie-mestre-titulo">Sua Estratégia de Imagem</div>' +
-      dm_renderBlocosGrid(blocos) +
+      '<div style="flex:1;">' + dm_renderQuadrantes(blocos, indicePrioridade) + '</div>' +
       dm_rodape()
     )];
   }
 
+  // MODELO A (com foto) / quadrantes (sem foto) — biotipo em destaque tipográfico.
   function dm_buildAnaliseCorporal(dados){
     if(!dados.servicos.consultoriaImagem) return null;
     const biotipo = dados.prof.biotipo === 'Outro' ? dados.prof.biotipoOutro : dados.prof.biotipo;
-    const blocos = dm_blocosComConteudo([
-      { titulo: 'Biotipo', valor: biotipo },
+    const blocosTexto = dm_blocosComConteudo([
       { titulo: 'Proporções observadas', valor: dados.editorial.proporcoesObservadas },
       { titulo: 'Direcionamento corporal', valor: dados.editorial.direcionamentoCorporal }
     ]);
-    if(!blocos.length) return null;
+    if(!biotipo && !blocosTexto.length) return null;
 
-    // Nesta primeira versão, no máximo a própria Foto Principal — nunca a galeria inteira —
-    // e só quando ela pertence à categoria Consultoria de Imagem.
-    let fotoHtml = '';
     const fotoUrl = dm_resolverFotoPrincipal(dados);
-    if(fotoUrl && categorizePhotoSlot(dados.fotoEscolhida) === 'consultoria'){
-      fotoHtml = '<div class="dossie-mestre-capa-foto" style="width:38%; margin:0 0 20px;"><img src="' + escapeHtml(fotoUrl) + '" alt=""></div>';
+    const temFotoAdequada = !!(fotoUrl && categorizePhotoSlot(dados.fotoEscolhida) === 'consultoria');
+
+    const biotipoHtml = biotipo
+      ? '<div class="dossie-mestre-bloco-titulo">Biotipo</div><div class="dossie-mestre-titulo-grande" style="font-size:26px; margin-bottom:16px;">' + escapeHtml(biotipo) + '</div>'
+      : '';
+    const textoHtml = blocosTexto.length ? dm_renderBlocos(blocosTexto) : '';
+
+    if(temFotoAdequada){
+      return [dm_pagina(
+        '<div class="dossie-mestre-eyebrow">Consultoria de Imagem</div>' +
+        '<div class="dossie-mestre-titulo">Sua Análise Corporal</div>' +
+        '<div class="dossie-mestre-foto-lateral-wrap">' +
+          '<div class="dossie-mestre-foto-lateral"><img src="' + escapeHtml(fotoUrl) + '" alt=""></div>' +
+          '<div>' + biotipoHtml + textoHtml + '</div>' +
+        '</div>' +
+        dm_rodape()
+      )];
     }
 
     return [dm_pagina(
       '<div class="dossie-mestre-eyebrow">Consultoria de Imagem</div>' +
       '<div class="dossie-mestre-titulo">Sua Análise Corporal</div>' +
-      fotoHtml +
-      dm_renderBlocos(blocos) +
+      biotipoHtml +
+      textoHtml +
       dm_rodape()
     )];
   }
@@ -15740,6 +16026,7 @@
     return dm_paginarBlocos('Consultoria de Imagem', 'Seus Acessórios', blocos, 4);
   }
 
+  // MODELO — nome da cartela como título-protagonista; quadrantes para os 4 atributos; PIT em faixa.
   function dm_buildColoracaoPessoal(dados){
     if(!dados.servicos.coloracaoPessoal) return null;
     const cartelaInfo = dm_resolverCartela(dados);
@@ -15754,7 +16041,7 @@
 
     let descricaoHtml = '';
     if(cartelaInfo.base && cartelaInfo.base.descricao && cartelaInfo.base.descricao.trim()){
-      descricaoHtml = '<div class="dossie-mestre-bloco"><div class="dossie-mestre-texto">' + escapeHtml(cartelaInfo.base.descricao) + '</div></div>';
+      descricaoHtml = '<div class="dossie-mestre-texto" style="margin-bottom:18px; max-width:90%;">' + escapeHtml(cartelaInfo.base.descricao) + '</div>';
     }
 
     let pitHtml = '';
@@ -15764,35 +16051,50 @@
         { titulo: 'Característica secundária', valor: cartelaInfo.base.pit.secundaria },
         { titulo: 'Característica terciária', valor: cartelaInfo.base.pit.terciaria }
       ]);
-      if(pitBlocos.length) pitHtml = dm_renderBlocos(pitBlocos);
+      if(pitBlocos.length){
+        pitHtml = '<div style="display:grid; grid-template-columns:repeat(' + pitBlocos.length + ', 1fr); gap:16px; margin-top:8px;">' +
+          pitBlocos.map(function(b){
+            return '<div><div class="dossie-mestre-bloco-titulo">' + escapeHtml(b.titulo) + '</div><div class="dossie-mestre-texto">' + escapeHtml(b.valor) + '</div></div>';
+          }).join('') + '</div>';
+      }
     }
 
     if(!blocos.length && !descricaoHtml && !pitHtml) return null;
 
     return [dm_pagina(
       '<div class="dossie-mestre-eyebrow">Coloração Pessoal</div>' +
-      '<div class="dossie-mestre-titulo">Sua Coloração Pessoal</div>' +
-      '<div class="dossie-mestre-subtitulo">' + escapeHtml(cartelaInfo.nome) + '</div>' +
+      '<div class="dossie-mestre-titulo-grande">' + escapeHtml(cartelaInfo.nome) + '</div>' +
+      '<div class="dossie-mestre-linha-fina"></div>' +
       descricaoHtml +
-      (blocos.length ? dm_renderBlocosGrid(blocos) : '') +
+      (blocos.length ? '<div style="flex:1;">' + dm_renderQuadrantes(blocos, -1) + '</div>' : '') +
       pitHtml +
       dm_rodape()
     )];
   }
 
+  // MODELO — bloco didático rótulo curto + texto, um por conceito (nunca ícones genéricos).
   function dm_buildComoUsarCartela(dados){
     if(!dados.servicos.coloracaoPessoal) return null;
     if(!dm_resolverCartela(dados)) return null;
+
+    const rotulos = ['Próximo ao Rosto', 'Partes Inferiores', 'Cores Fora da Cartela', 'Contraste', 'Metais e Acessórios'];
+    const corpo = DOSSIE_MESTRE_COMO_USAR_CARTELA.map(function(paragrafo, i){
+      return '<div class="dossie-mestre-bloco">' +
+        '<div class="dossie-mestre-bloco-titulo">' + escapeHtml(rotulos[i] || '') + '</div>' +
+        '<div class="dossie-mestre-texto">' + escapeHtml(paragrafo) + '</div>' +
+      '</div>';
+    }).join('');
+
     return [dm_pagina(
       '<div class="dossie-mestre-eyebrow">Coloração Pessoal</div>' +
       '<div class="dossie-mestre-titulo">Como Usar Sua Cartela</div>' +
-      DOSSIE_MESTRE_COMO_USAR_CARTELA.map(function(p){
-        return '<div class="dossie-mestre-bloco"><div class="dossie-mestre-texto">' + escapeHtml(p) + '</div></div>';
-      }).join('') +
+      '<div class="dossie-mestre-linha-fina"></div>' +
+      corpo +
       dm_rodape()
     )];
   }
 
+  // MODELO — cartela de moda: faixas retangulares (não círculos em grade rígida), destaques maiores.
   function dm_buildPaleta(dados){
     if(!dados.servicos.coloracaoPessoal) return null;
     const cartelaInfo = dm_resolverCartela(dados);
@@ -15804,11 +16106,11 @@
     const destaques = base.cores.filter(function(c){ return c.destaque === true; }).slice(0, 20);
     if(!neutros.length && !destaques.length) return null;
 
-    function grid(lista){
-      return '<div class="dossie-mestre-swatch-grid">' + lista.map(function(c){
-        return '<div class="dossie-mestre-swatch">' +
-          '<div class="dossie-mestre-swatch-circulo" style="background:' + escapeHtml(c.hex || '#eee') + ';"></div>' +
-          '<div class="dossie-mestre-swatch-nome">' + escapeHtml(c.nome || '') + '</div>' +
+    function faixa(lista, grande){
+      return '<div class="dossie-mestre-faixa-linha">' + lista.map(function(c){
+        return '<div class="dossie-mestre-faixa-item">' +
+          '<div class="dossie-mestre-faixa-retangulo' + (grande ? ' grande' : '') + '" style="background:' + escapeHtml(c.hex || '#eee') + ';"></div>' +
+          '<div class="dossie-mestre-faixa-nome">' + escapeHtml(c.nome || '') + '</div>' +
         '</div>';
       }).join('') + '</div>';
     }
@@ -15818,9 +16120,9 @@
       { titulo: 'Cores de destaque — observação profissional', valor: dados.crom.coresDestaque }
     ]);
 
-    let html = '<div class="dossie-mestre-eyebrow">Coloração Pessoal</div><div class="dossie-mestre-titulo">Sua Paleta</div>';
-    if(neutros.length) html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Neutros Essenciais</div>' + grid(neutros) + '</div>';
-    if(destaques.length) html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Cores Estratégicas</div>' + grid(destaques) + '</div>';
+    let html = '<div class="dossie-mestre-eyebrow">Coloração Pessoal</div><div class="dossie-mestre-titulo">Sua Paleta</div><div class="dossie-mestre-linha-fina"></div>';
+    if(neutros.length) html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Neutros Essenciais</div>' + faixa(neutros, false) + '</div>';
+    if(destaques.length) html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Cores Estratégicas</div>' + faixa(destaques, true) + '</div>';
     if(obs.length) html += dm_renderBlocos(obs);
     html += '<div class="dossie-mestre-nota">Sua cartela digital completa, com 100 cores, está disponível no aplicativo.</div>';
     html += dm_rodape();
@@ -15834,23 +16136,23 @@
     const base = cartelaInfo && cartelaInfo.base;
     if(!base || !Array.isArray(base.metais) || !base.metais.length) return null;
 
-    let html = '<div class="dossie-mestre-eyebrow">Coloração Pessoal</div><div class="dossie-mestre-titulo">Metais Recomendados</div>';
-    html += '<div class="dossie-mestre-swatch-grid">' + base.metais.map(function(m){
-      return '<div class="dossie-mestre-swatch">' +
-        '<div class="dossie-mestre-swatch-circulo" style="background:' + escapeHtml(m.hex || '#eee') + ';"></div>' +
-        '<div class="dossie-mestre-swatch-nome">' + escapeHtml(m.nome || '') + '</div>' +
+    let html = '<div class="dossie-mestre-eyebrow">Coloração Pessoal</div><div class="dossie-mestre-titulo">Metais Recomendados</div><div class="dossie-mestre-linha-fina"></div>';
+    html += '<div class="dossie-mestre-metal-linha">' + base.metais.map(function(m){
+      return '<div class="dossie-mestre-metal-item">' +
+        '<div class="dossie-mestre-metal-circulo" style="background:' + escapeHtml(m.hex || '#eee') + ';"></div>' +
+        '<div class="dossie-mestre-metal-nome">' + escapeHtml(m.nome || '') + '</div>' +
       '</div>';
     }).join('') + '</div>';
 
     if(dados.crom.metaisRecomendados && dados.crom.metaisRecomendados.trim()){
-      html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Orientação Profissional</div><div class="dossie-mestre-texto">' + escapeHtml(dados.crom.metaisRecomendados) + '</div></div>';
+      html += '<div class="dossie-mestre-bloco" style="margin-top:14px;"><div class="dossie-mestre-bloco-titulo">Orientação Profissional</div><div class="dossie-mestre-texto">' + escapeHtml(dados.crom.metaisRecomendados) + '</div></div>';
     }
     html += dm_rodape();
 
     return [dm_pagina(html)];
   }
 
-  // ---- Helper: mini-paleta de amostras (reaproveita o mesmo componente visual de Paleta/Metais) ----
+  // ---- Helper: mini-paleta de amostras (reaproveita o mesmo componente visual de Metais) ----
 
   function dm_renderMiniPaleta(lista){
     return '<div class="dossie-mestre-swatch-grid">' + lista.map(function(c){
@@ -15879,7 +16181,7 @@
 
     if(!subsecoes.length && !temDirecionamento) return null;
 
-    let html = '<div class="dossie-mestre-eyebrow">Beleza</div><div class="dossie-mestre-titulo">Maquiagem</div>';
+    let html = '<div class="dossie-mestre-eyebrow">Beleza</div><div class="dossie-mestre-titulo">Maquiagem</div><div class="dossie-mestre-linha-fina"></div>';
     subsecoes.forEach(function(s){
       html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">' + escapeHtml(s.titulo) + '</div>' + dm_renderMiniPaleta(s.lista) + '</div>';
     });
@@ -15903,7 +16205,7 @@
 
     if(!familias.length && !temDirecionamento) return null;
 
-    let html = '<div class="dossie-mestre-eyebrow">Beleza</div><div class="dossie-mestre-titulo">Cabelo</div>';
+    let html = '<div class="dossie-mestre-eyebrow">Beleza</div><div class="dossie-mestre-titulo">Cabelo</div><div class="dossie-mestre-linha-fina"></div>';
     if(familias.length){
       html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Famílias Recomendadas</div>' + dm_renderMiniPaleta(familias) + '</div>';
     }
@@ -15918,7 +16220,7 @@
   function dm_buildAplicacaoPratica(dados){
     if(!dados.servicos.consultoriaImagem) return null;
 
-    let html = '<div class="dossie-mestre-eyebrow">Consultoria de Imagem</div><div class="dossie-mestre-titulo">Aplicação Prática</div>';
+    let html = '<div class="dossie-mestre-eyebrow">Consultoria de Imagem</div><div class="dossie-mestre-titulo">Aplicação Prática</div><div class="dossie-mestre-linha-fina"></div>';
     let temConteudo = false;
 
     // ---- Armário Estratégico: categorizado quando preenchido; senão, texto geral ----
@@ -15936,7 +16238,7 @@
       temConteudo = true;
       html += '<div class="dossie-mestre-bloco-titulo">Seu Armário Estratégico</div>';
       if(categoriasArmario.length){
-        html += dm_renderBlocos(categoriasArmario);
+        html += dm_renderBlocosGrid(categoriasArmario);
       } else {
         html += '<div class="dossie-mestre-texto" style="margin-bottom:16px;">' + escapeHtml(dados.editorial.armarioEstrategico) + '</div>';
       }
@@ -15956,6 +16258,7 @@
           }
         }
       }
+      html += '<div class="dossie-mestre-divisor"></div>';
     }
 
     // ---- Looks Propostos: numerados quando houver múltiplas linhas ----
@@ -15965,7 +16268,7 @@
       html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Propostas de Looks</div>';
       if(linhas.length > 1){
         html += linhas.map(function(l, i){
-          return '<div class="dossie-mestre-texto" style="margin-bottom:8px;"><strong>Look ' + String(i + 1).padStart(2, '0') + ':</strong> ' + escapeHtml(l) + '</div>';
+          return '<div class="dossie-mestre-texto" style="margin-bottom:8px;"><span class="dossie-mestre-numero">' + String(i + 1).padStart(2, '0') + '</span>' + escapeHtml(l) + '</div>';
         }).join('');
       } else {
         html += '<div class="dossie-mestre-texto">' + escapeHtml(dados.editorial.looksPropostos) + '</div>';
@@ -15983,7 +16286,10 @@
       temConteudo = true;
       html += '<div class="dossie-mestre-bloco-titulo">Plano de Compras</div>';
       if(gruposCompras.length){
-        html += dm_renderBlocos(gruposCompras);
+        html += '<div style="display:grid; grid-template-columns:repeat(' + gruposCompras.length + ', 1fr); gap:16px;">' +
+          gruposCompras.map(function(b){
+            return '<div><div class="dossie-mestre-bloco-titulo" style="font-size:8.5px;">' + escapeHtml(b.titulo) + '</div><div class="dossie-mestre-texto">' + escapeHtml(b.valor) + '</div></div>';
+          }).join('') + '</div>';
       } else {
         html += '<div class="dossie-mestre-texto">' + escapeHtml(dados.editorial.planoCompras) + '</div>';
       }
@@ -16001,6 +16307,7 @@
       '<div class="dossie-mestre-eyebrow">Guia Rápido</div>' +
       '<div class="dossie-mestre-titulo">Checklist de Provador</div>' +
       '<div class="dossie-mestre-subtitulo">Antes de comprar, pergunte-se:</div>' +
+      '<div class="dossie-mestre-linha-fina"></div>' +
       DOSSIE_MESTRE_CHECKLIST_PROVADOR.map(function(p){
         return '<div class="dossie-mestre-checklist-item">' + escapeHtml(p) + '</div>';
       }).join('') +
@@ -16008,6 +16315,7 @@
     )];
   }
 
+  // MODELO — "carteira-resumo" compacta, com borda dourada fina (identidade de cartão editorial).
   function dm_buildGuiaRapido(dados){
     const blocos = [];
 
@@ -16041,26 +16349,36 @@
 
     let obsHtml = '';
     if(dados.editorial.guiaRapido && dados.editorial.guiaRapido.trim()){
-      obsHtml = '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Observação da Consultora</div><div class="dossie-mestre-texto">' + escapeHtml(dados.editorial.guiaRapido) + '</div></div>';
+      obsHtml = '<div class="dossie-mestre-bloco" style="margin-top:18px;"><div class="dossie-mestre-bloco-titulo">Observação da Consultora</div><div class="dossie-mestre-texto">' + escapeHtml(dados.editorial.guiaRapido) + '</div></div>';
     }
 
     if(!blocos.length && !obsHtml) return null;
 
+    const carteiraHtml = blocos.length
+      ? '<div class="dossie-mestre-carteira">' + blocos.map(function(b){
+          return '<div class="dossie-mestre-carteira-item"><div class="dossie-mestre-bloco-titulo">' + escapeHtml(b.titulo) + '</div><div class="dossie-mestre-texto">' + escapeHtml(b.valor) + '</div></div>';
+        }).join('') + '</div>'
+      : '';
+
     return [dm_pagina(
       '<div class="dossie-mestre-eyebrow">Guia Rápido</div>' +
       '<div class="dossie-mestre-titulo">Seu Guia Rápido</div>' +
-      (blocos.length ? dm_renderBlocosGrid(blocos) : '') +
+      '<div class="dossie-mestre-linha-fina"></div>' +
+      carteiraHtml +
       obsHtml +
       dm_rodape()
     )];
   }
 
+  // MODELO — encerramento com espaço negativo generoso e assinatura discreta.
   function dm_buildEncerramento(dados){
     const texto = (dados.editorial.mensagemFinal && dados.editorial.mensagemFinal.trim()) ? dados.editorial.mensagemFinal : DOSSIE_MESTRE_MENSAGEM_FINAL_PADRAO;
     return [dm_pagina(
-      '<div class="dossie-mestre-texto" style="margin-bottom:26px;">' + escapeHtml(texto) + '</div>' +
-      '<img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD" style="width:38px; height:38px; opacity:0.85; margin:0 auto 8px;">' +
-      '<div class="dossie-mestre-capa-marca">Giulia Dantas</div>',
+      '<div class="dossie-mestre-texto" style="margin-bottom:24px; max-width:80%;">' + escapeHtml(texto) + '</div>' +
+      '<div class="dossie-mestre-linha-fina centro"></div>' +
+      '<img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD" style="width:36px; height:36px; opacity:0.85; margin:0 auto 10px;">' +
+      '<div class="dossie-mestre-capa-marca">Giulia Dantas</div>' +
+      '<div class="dossie-mestre-capa-sub">Consultoria de Imagem</div>',
       'dossie-mestre-encerramento'
     )];
   }
