@@ -1914,6 +1914,7 @@
     --dm-ouro:#B8925A;
     --dm-bg-clara:#F3ECDD;
     --dm-bg-media:#EFE4CC;
+    --dm-bg-quase-branco:#FAF8F3;
   }
 
   /* ---- Cabeçalho corrido (número da página + seção corrente) — Modelo de referência ---- */
@@ -2270,8 +2271,8 @@
     display:block;
   }
 
-  /* ---- Capa (Modelo próprio) ---- */
-  .dossie-mestre-capa{ padding:0 !important; background:var(--dm-bg-clara); }
+  /* ---- Capa (Modelo próprio) — Fase 6C.7: majoritariamente clara, sem massas de cor ---- */
+  .dossie-mestre-capa{ padding:0 !important; background:var(--dm-bg-quase-branco); }
 
   .dm-capa-grid{
     position:relative;
@@ -2407,17 +2408,17 @@
     display:block;
   }
 
-  .dm-capa-faixa-data{
-    grid-column:1 / -1;
-    background:var(--dm-bg-media);
-    text-align:center;
-    padding:11px 0;
+  /* Data de emissão integrada ao fundo claro — linha fina dourada, nunca um bloco
+     de cor separado (Fase 6C.7). */
+  .dm-capa-data-linha{
+    margin-top:14px;
+    padding-top:10px;
+    border-top:1px solid rgba(184,146,90,0.4);
     font-family:'Manrope', sans-serif;
-    font-size:9px;
-    letter-spacing:0.24em;
+    font-size:8px;
+    letter-spacing:0.22em;
     text-transform:uppercase;
-    color:var(--graphite);
-    border-top:1px solid var(--dm-ouro);
+    color:var(--graphite-soft);
   }
 
   /* Composição alternativa da capa quando não há Foto Principal */
@@ -2427,8 +2428,8 @@
     align-items:center;
     justify-content:center;
     background:
-      radial-gradient(circle at 30% 30%, rgba(184,146,90,0.10), transparent 55%),
-      var(--dm-bg-clara);
+      radial-gradient(circle at 30% 30%, rgba(184,146,90,0.08), transparent 55%),
+      var(--dm-bg-quase-branco);
   }
 
   /* ---- Encerramento ---- */
@@ -20579,13 +20580,17 @@
   // marcador fica vazio aqui — evita coordenar um contador entre funções que já
   // retornam mais de uma página cada (paginação de Vestuário/Acessórios).
 
+  // Extraído de dm_pagina (Fase 6C.7) para poder ser medido em pixels reais antes de
+  // decidir a paginação de Combinações — o markup é idêntico ao que dm_pagina gera,
+  // então a medição bate exatamente com o que será renderizado de verdade.
+  function dm_construirCabecalhoNumerado(secao){
+    const headerDireita = secao ? ('DOSSIÊ PERSONALIZADO&nbsp;&nbsp;|&nbsp;&nbsp;' + secao.toUpperCase()) : 'DOSSIÊ PERSONALIZADO';
+    return '<div class="dm-cabecalho-linha"><div class="dm-numero-pagina" data-dm-numero></div><div class="dm-header-direita">' + headerDireita + '</div></div><div class="dm-cabecalho-regua"></div>';
+  }
+
   function dm_pagina(corpoHtml, opts){
     opts = opts || {};
-    let cabecalho = '';
-    if(opts.numero){
-      const headerDireita = opts.secao ? ('DOSSIÊ PERSONALIZADO&nbsp;&nbsp;|&nbsp;&nbsp;' + opts.secao.toUpperCase()) : 'DOSSIÊ PERSONALIZADO';
-      cabecalho = '<div class="dm-cabecalho-linha"><div class="dm-numero-pagina" data-dm-numero></div><div class="dm-header-direita">' + headerDireita + '</div></div><div class="dm-cabecalho-regua"></div>';
-    }
+    const cabecalho = opts.numero ? dm_construirCabecalhoNumerado(opts.secao) : '';
     return '<div class="dossie-mestre-page' + (opts.classesExtra ? ' ' + opts.classesExtra : '') + '">' + cabecalho + corpoHtml + '</div>';
   }
 
@@ -20665,10 +20670,17 @@
   // módulo não se aplica / não tem conteúdo suficiente — nunca uma página vazia. ----
 
   // MODELO CAPA — composição assimétrica: coluna de texto + fotografia com presença
-  // editorial (sem retângulo isolado), galho decorativo, selo circular e faixa de rodapé.
+  // editorial (sem retângulo isolado), galho decorativo, selo circular. Fase 6C.7:
+  // fundo majoritariamente claro (quase branco), sem nenhuma faixa/bloco de cor —
+  // a data de emissão fica integrada à coluna de texto, separada só por uma linha
+  // fina dourada, nunca por uma massa de cor.
   function dm_buildCapa(dados){
     const fotoUrl = dm_resolverFotoPrincipal(dados);
     const galhoSvg = '<svg class="dm-capa-galho" viewBox="0 0 200 160" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M10 10c30 6 60 24 78 58"/><path d="M28 20c8 10 10 22 6 34M46 32c8 8 12 18 10 30M64 46c7 7 10 16 9 26"/></svg>';
+
+    const MESES_PT = ['JANEIRO','FEVEREIRO','MARÇO','ABRIL','MAIO','JUNHO','JULHO','AGOSTO','SETEMBRO','OUTUBRO','NOVEMBRO','DEZEMBRO'];
+    const agora = new Date();
+    const dataEmissao = MESES_PT[agora.getMonth()] + ' \u2022 ' + agora.getFullYear();
 
     const conteudo =
       '<div class="dm-capa-conteudo">' +
@@ -20684,19 +20696,15 @@
           '<div class="dm-capa-rodape-selo"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>' +
           '<div class="dm-capa-rodape-frase">Sua melhor<br>versão, todos<br>os dias.</div>' +
         '</div>' +
+        '<div class="dm-capa-data-linha">' + escapeHtml(dataEmissao) + '</div>' +
       '</div>';
 
     const ladoFoto = fotoUrl
       ? '<div class="dm-capa-foto"><img src="' + escapeHtml(fotoUrl) + '" alt=""></div>'
       : '<div class="dm-capa-semfoto"><div style="text-align:center;"><div class="dm-capa-marca" style="font-size:20px;">GD</div><div class="dm-capa-sub" style="margin-top:8px;">Consultoria de Imagem</div></div></div>';
 
-    const MESES_PT = ['JANEIRO','FEVEREIRO','MARÇO','ABRIL','MAIO','JUNHO','JULHO','AGOSTO','SETEMBRO','OUTUBRO','NOVEMBRO','DEZEMBRO'];
-    const agora = new Date();
-    const dataEmissao = MESES_PT[agora.getMonth()] + ' \u2022 ' + agora.getFullYear();
-    const dataFaixa = '<div class="dm-capa-faixa-data">' + escapeHtml(dataEmissao) + '</div>';
-
     return [dm_pagina(
-      '<div class="dm-capa-grid">' + conteudo + ladoFoto + dataFaixa + '</div>',
+      '<div class="dm-capa-grid">' + conteudo + ladoFoto + '</div>',
       { classesExtra: 'dossie-mestre-capa' }
     )];
   }
@@ -21106,7 +21114,7 @@
       return escapeHtml(s.nome) + (algumaProporcaoDefinida ? ' ' + s.proporcao + '%' : '');
     }).join('  &middot;  ') + '</div>';
 
-    const desejoHtml = (mostrarDesejo && combinacao.desejoImagem) ? '<div class="dm-eyebrow" style="margin-bottom:3px;">' + escapeHtml(combinacao.desejoImagem) + '</div>' : '';
+    const desejoHtml = (mostrarDesejo && combinacao.desejoImagem) ? '<div class="dm-eyebrow" style="margin-bottom:3px;">' + escapeHtml(dm_rotuloDesejo(combinacao.desejoImagem)) + '</div>' : '';
     const nomeExibido = mostrarDesejo ? (combinacao.nome || '') : dm_removerPrefixoDesejo(combinacao.nome, combinacao.desejoImagem);
     const tituloHtml = nomeExibido ? '<div class="dossie-mestre-bloco-titulo">' + escapeHtml(nomeExibido) + '</div>' : '';
 
@@ -21119,6 +21127,15 @@
   // Quando o nome é exatamente igual ao desejo (caso comum das combinações de três
   // cores, cujo "nome" é só o próprio desejo), o título fica vazio — a barra e a
   // legenda já contam a história, sem repetir a mesma palavra do cabeçalho da seção.
+  // Rótulo de apresentação para desejos de imagem — o dado interno (desejoImagem)
+  // NUNCA muda ("Artsy" continua "Artsy" em toda a base); apenas a exibição visual
+  // troca "Artsy" por "Criativo" (Fase 6C.7). Qualquer outro desejo é exibido como
+  // já estava, sem alteração.
+  const DM_ROTULO_DESEJO = { 'Artsy': 'Criativo' };
+  function dm_rotuloDesejo(desejo){
+    return DM_ROTULO_DESEJO[desejo] || desejo;
+  }
+
   function dm_removerPrefixoDesejo(nome, desejo){
     if(!nome) return '';
     const nomeAparado = nome.trim();
@@ -21129,12 +21146,11 @@
     return nomeAparado.replace(prefixoRegex, '');
   }
 
-  // Distribui uma lista de itens (unidades editoriais indivisíveis, ex.: seções por
-  // desejo de imagem) em páginas de tamanho equilibrado — nunca um grupo cortado ao
-  // meio, e nunca uma última página com um único item isolado quando uma distribuição
-  // mais uniforme é possível. "maxPorPagina" é a estimativa de quantos itens cabem
-  // confortavelmente numa página; o número real de páginas geradas pode ser menor que
-  // ceil(n/maxPorPagina) sempre que isso resultar em um equilíbrio melhor.
+  // Distribui uma lista de itens por CONTAGEM (unidades editoriais indivisíveis, ex.:
+  // seções por desejo de imagem) — usada apenas como salvaguarda quando a medição
+  // real do DOM (dm_paginarPorAlturaReal, Fase 6C.7) não está disponível no ambiente
+  // atual. Nunca um grupo cortado ao meio; nunca uma última página isolada quando uma
+  // distribuição mais uniforme é possível.
   function dm_distribuirEquilibrado(items, maxPorPagina){
     const n = items.length;
     if(!n) return [];
@@ -21152,13 +21168,116 @@
     return paginas;
   }
 
+  // ---- Paginação por altura real do DOM (Fase 6C.7) ----
+  // Guarda a última medição para fins de relatório/depuração — nunca influencia a
+  // renderização em si, é só um espelho do que foi medido na última chamada.
+  let dmUltimaMedicaoPaginacao = null;
+
+  // Mede, num container invisível anexado ao próprio viewport da prévia (mesma
+  // largura real de uma página), a altura útil disponível de uma página A4 (descontado
+  // o padding interno do .dossie-mestre-page) e devolve um "medidor" reutilizável que
+  // calcula a altura real de qualquer trecho de HTML naquela largura exata. Se o
+  // container da prévia ainda não existir no DOM (ex.: chamada fora do fluxo normal
+  // de renderização), devolve null — quem chamar cai then para a distribuição por
+  // contagem, nunca quebra a montagem do documento.
+  function dm_criarMedidorReal(){
+    if(typeof document === 'undefined') return null;
+    const viewportEl = document.getElementById('dossie-mestre-paginas');
+    if(!viewportEl) return null;
+
+    const referencia = document.createElement('div');
+    referencia.className = 'dossie-mestre-page';
+    referencia.style.cssText = 'position:absolute; visibility:hidden; left:-9999px; top:0; pointer-events:none;';
+    viewportEl.appendChild(referencia);
+    const refRect = referencia.getBoundingClientRect();
+    const refStyle = getComputedStyle(referencia);
+    const padTop = parseFloat(refStyle.paddingTop) || 0;
+    const padBottom = parseFloat(refStyle.paddingBottom) || 0;
+    const padLeft = parseFloat(refStyle.paddingLeft) || 0;
+    const padRight = parseFloat(refStyle.paddingRight) || 0;
+    const alturaUtilTotal = refRect.height - padTop - padBottom;
+    const larguraConteudo = refRect.width - padLeft - padRight;
+    viewportEl.removeChild(referencia);
+
+    if(!alturaUtilTotal || !larguraConteudo) return null;
+
+    const medidor = document.createElement('div');
+    medidor.style.cssText = 'position:absolute; visibility:hidden; left:-9999px; top:0; pointer-events:none; width:' + larguraConteudo + 'px; box-sizing:border-box;';
+    viewportEl.appendChild(medidor);
+
+    return {
+      alturaUtilTotal: alturaUtilTotal,
+      medir: function(html){
+        medidor.innerHTML = html;
+        const altura = medidor.getBoundingClientRect().height;
+        medidor.innerHTML = '';
+        return altura;
+      },
+      destruir: function(){ viewportEl.removeChild(medidor); }
+    };
+  }
+
+  // Empacota uma lista de fragmentos HTML indivisíveis em páginas, respeitando a
+  // altura útil real de uma página A4 já renderizada — nunca divide um item ao meio;
+  // se um único item já não couber sozinho numa página vazia, ele ainda assim é
+  // colocado ali (a página cresce via overflow:visible em vez de cortar conteúdo).
+  // "cabecalhoPrincipal"/"cabecalhoContinuacao"/"rodape" são strings HTML medidas uma
+  // única vez e descontadas da altura disponível de cada página.
+  function dm_paginarPorAlturaReal(itensHtml, cabecalhoPrincipalHtml, cabecalhoContinuacaoHtml, rodapeHtml){
+    const medidor = dm_criarMedidorReal();
+    if(!medidor){
+      dmUltimaMedicaoPaginacao = null;
+      return null; // sinaliza para o chamador usar a salvaguarda por contagem
+    }
+
+    const MARGEM_SEGURANCA = 20;
+    const alturaCabecalhoPrincipal = medidor.medir(cabecalhoPrincipalHtml);
+    const alturaCabecalhoContinuacao = medidor.medir(cabecalhoContinuacaoHtml);
+    const alturaRodape = medidor.medir(rodapeHtml);
+    const alturasItens = itensHtml.map(medidor.medir);
+    medidor.destruir();
+
+    const paginas = [];
+    let paginaAtual = [];
+    let alturaUsada = 0;
+    let alturaDisponivel = medidor.alturaUtilTotal - alturaCabecalhoPrincipal - alturaRodape - MARGEM_SEGURANCA;
+
+    itensHtml.forEach(function(html, i){
+      const alturaItem = alturasItens[i];
+      if(paginaAtual.length > 0 && (alturaUsada + alturaItem) > alturaDisponivel){
+        paginas.push(paginaAtual);
+        paginaAtual = [];
+        alturaUsada = 0;
+        alturaDisponivel = medidor.alturaUtilTotal - alturaCabecalhoContinuacao - alturaRodape - MARGEM_SEGURANCA;
+      }
+      paginaAtual.push(html);
+      alturaUsada += alturaItem;
+    });
+    if(paginaAtual.length) paginas.push(paginaAtual);
+
+    dmUltimaMedicaoPaginacao = {
+      alturaUtilTotal: medidor.alturaUtilTotal,
+      alturaCabecalhoPrincipal: alturaCabecalhoPrincipal,
+      alturaCabecalhoContinuacao: alturaCabecalhoContinuacao,
+      alturaRodape: alturaRodape,
+      alturasItens: alturasItens,
+      distribuicao: paginas.map(function(p){ return p.length; })
+    };
+
+    return paginas;
+  }
 
   // Página(s) "Combinações que Funcionam" — agrupadas por desejo de imagem (Atemporal,
-  // Contemporâneo, Acessível, Artsy, Minimalista), cada uma com identidade editorial
-  // própria (barra de acento + título serifado), não cinco cards repetidos. Paginação
-  // equilibrada via dm_distribuirEquilibrado (nunca corta uma seção, nunca deixa uma
-  // página final isolada e pobre). Só existe quando a cartela da cliente já tiver
-  // combinações reais em APLICACAO_CROMATICA_BASE.
+  // Contemporâneo, Acessível, Artsy [exibido como "Criativo"], Minimalista), cada uma
+  // com identidade editorial própria (barra de acento + título serifado), não cinco
+  // cards repetidos. Paginação por ALTURA REAL do DOM (Fase 6C.7): mede o cabeçalho,
+  // o rodapé e cada seção de desejo já renderizados na largura real de uma página, e
+  // só então decide quantas seções cabem em cada página — nunca corta uma seção ao
+  // meio, nunca deixa uma página vazia ou com um único bloco pequeno isolado quando
+  // ele caberia na anterior. Se a medição real não estiver disponível (ambiente sem
+  // DOM), cai para a distribuição por contagem já validada, como salvaguarda. Só
+  // existe quando a cartela da cliente já tiver combinações reais em
+  // APLICACAO_CROMATICA_BASE.
   function dm_buildCombinacoesCromaticas(dados){
     if(!dados.servicos.coloracaoPessoal) return null;
     const cartelaInfo = dm_resolverCartela(dados);
@@ -21179,27 +21298,32 @@
       const combosDoDesejo = todas.filter(function(c){ return c.desejoImagem === desejo; });
       const htmlCombos = combosDoDesejo.map(function(c){ return dm_renderCombinacaoCromatica(c, cartelaId, false); }).filter(Boolean);
       if(!htmlCombos.length) return null;
-      return '<div class="dm-desejo-secao"><div class="dm-desejo-titulo">' + escapeHtml(desejo) + '</div>' + htmlCombos.join('') + '</div>';
+      return '<div class="dm-desejo-secao"><div class="dm-desejo-titulo">' + escapeHtml(dm_rotuloDesejo(desejo)) + '</div>' + htmlCombos.join('') + '</div>';
     }).filter(Boolean);
 
     if(!secoesDesejo.length) return null;
 
-    // Paginação equilibrada: nunca corta uma seção de desejo ao meio, e distribui
-    // as páginas de forma uniforme (evita uma última página com um único grupo
-    // isolado quando uma divisão mais equilibrada é possível — ex.: 5 grupos vira
-    // 3+2 em duas páginas, não 2+2+1 em três).
-    const paginasDeSecoes = dm_distribuirEquilibrado(secoesDesejo, 3);
+    const secaoRotulo = 'Coloração Pessoal';
+    const cabecalhoPrincipalHtml = dm_construirCabecalhoNumerado(secaoRotulo) +
+      '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Combinações <em>que Funcionam</em></div><div class="dm-intro-texto">Proporções e combinações pensadas especialmente para a sua cartela.</div><div class="dm-linha-curta"></div>';
+    // Continuação discreta (item 11): rótulo pequeno, nada de repetir o título grande.
+    const cabecalhoContinuacaoHtml = dm_construirCabecalhoNumerado(secaoRotulo) +
+      '<div class="dm-titulo-editorial" style="font-size:18px; margin-bottom:6px;">Combinações que Funcionam <span style="font-size:12px; font-style:italic; text-transform:none; letter-spacing:0; color:var(--graphite-soft);">— continuação</span></div><div class="dm-linha-curta" style="margin-top:0;"></div>';
+    const rodapeHtml = dm_rodapeFaixa('Sua cartela completa', 'Explore todas as 100 cores da sua cartela digital no aplicativo Giulia Dantas.');
+
+    let paginasDeSecoes = dm_paginarPorAlturaReal(secoesDesejo, cabecalhoPrincipalHtml, cabecalhoContinuacaoHtml, rodapeHtml);
+    if(!paginasDeSecoes){
+      // Salvaguarda: sem medição real disponível, mantém a distribuição por contagem já validada.
+      paginasDeSecoes = dm_distribuirEquilibrado(secoesDesejo, 3);
+    }
+
     const paginas = paginasDeSecoes.map(function(fatia, i){
       const continuando = i > 0;
-      return dm_pagina(
-        '<div class="dm-eyebrow">Coloração Pessoal</div>' +
-        '<div class="dm-titulo-editorial">Combinações <em>que Funcionam</em>' + (continuando ? ' <span style="font-size:16px;">(continuação)</span>' : '') + '</div>' +
-        (continuando ? '' : '<div class="dm-intro-texto">Proporções e combinações pensadas especialmente para a sua cartela.</div>') +
-        '<div class="dm-linha-curta"></div>' +
-        fatia.join('') +
-        dm_rodapeFaixa('Sua cartela completa', 'Explore todas as 100 cores da sua cartela digital no aplicativo Giulia Dantas.'),
-        { numero: true, secao: 'Coloração Pessoal' }
-      );
+      const corpo = (continuando
+        ? '<div class="dm-titulo-editorial" style="font-size:18px; margin-bottom:6px;">Combinações que Funcionam <span style="font-size:12px; font-style:italic; text-transform:none; letter-spacing:0; color:var(--graphite-soft);">— continuação</span></div><div class="dm-linha-curta" style="margin-top:0;"></div>'
+        : '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Combinações <em>que Funcionam</em></div><div class="dm-intro-texto">Proporções e combinações pensadas especialmente para a sua cartela.</div><div class="dm-linha-curta"></div>'
+      ) + fatia.join('') + rodapeHtml;
+      return dm_pagina(corpo, { numero: true, secao: secaoRotulo });
     });
     return paginas;
   }
