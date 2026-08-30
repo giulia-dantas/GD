@@ -2574,7 +2574,6 @@
           <div id="editor-body-vestuario" hidden>
             <div class="ficha-status-row"><div class="label">Recomendações de modelagem (referência)</div><div class="ficha-info-value" id="editor-ref-recomendacoesModelagem">—</div></div>
             <div class="ficha-status-row"><div class="label">Recomendações de tecidos (referência)</div><div class="ficha-info-value" id="editor-ref-recomendacoesTecidos">—</div></div>
-            <div class="ficha-status-row"><div class="label">Recomendações de acessórios (referência)</div><div class="ficha-info-value" id="editor-ref-recomendacoesAcessorios">—</div></div>
 
             <label class="form-label">Partes superiores</label>
             <textarea class="input-field textarea" data-editor-field="partesSuperiores" placeholder="Escreva livremente..."></textarea>
@@ -2593,6 +2592,44 @@
 
             <button class="btn-secondary" data-editor-save="vestuario" style="margin-bottom:0;">Salvar Vestuário</button>
             <div class="login-error" id="editor-msg-vestuario"></div>
+          </div>
+        </div>
+
+        <!-- ---- ACESSÓRIOS ---- -->
+        <div class="stat-card" id="editor-cap-acessorios" hidden>
+          <div class="mini-row" data-editor-toggle="acessorios" style="cursor:pointer; padding-top:0;">
+            <div>
+              <div class="mini-row-title">Acessórios</div>
+              <div class="mini-row-sub" id="editor-check-acessorios">Incompleto</div>
+            </div>
+            <div class="arrow" id="editor-arrow-acessorios">＋</div>
+          </div>
+          <div id="editor-body-acessorios" hidden>
+            <div class="ficha-status-row"><div class="label">Recomendações de acessórios (referência)</div><div class="ficha-info-value" id="editor-ref-recomendacoesAcessorios">—</div></div>
+
+            <label class="form-label">Bolsas</label>
+            <textarea class="input-field textarea" data-editor-field="acessoriosBolsas" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Calçados</label>
+            <textarea class="input-field textarea" data-editor-field="acessoriosCalcados" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Cintos</label>
+            <textarea class="input-field textarea" data-editor-field="acessoriosCintos" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Joias e Bijuterias</label>
+            <textarea class="input-field textarea" data-editor-field="acessoriosJoias" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Óculos</label>
+            <textarea class="input-field textarea" data-editor-field="acessoriosOculos" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Relógios</label>
+            <textarea class="input-field textarea" data-editor-field="acessoriosRelogios" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Outros acessórios / observações</label>
+            <textarea class="input-field textarea" data-editor-field="acessoriosOutros" placeholder="Escreva livremente..."></textarea>
+
+            <button class="btn-secondary" data-editor-save="acessorios" style="margin-bottom:0;">Salvar Acessórios</button>
+            <div class="login-error" id="editor-msg-acessorios"></div>
           </div>
         </div>
 
@@ -14725,13 +14762,14 @@
     estrategia: ['comunicar', 'prioridade'],
     corporal: ['proporcoesObservadas', 'direcionamentoCorporal'],
     vestuario: ['partesSuperiores', 'partesInferiores', 'vestidosMacacoes', 'terceiraPeca', 'estampas'],
+    acessorios: ['acessoriosBolsas', 'acessoriosCalcados', 'acessoriosCintos', 'acessoriosJoias', 'acessoriosOculos', 'acessoriosRelogios', 'acessoriosOutros'],
     aplicacao: ['armarioEstrategico', 'looksPropostos', 'planoCompras'],
     finalizacao: ['guiaRapido', 'boasVindasPersonalizada', 'mensagemFinal']
   };
 
   // Capítulos que só fazem sentido quando a cliente tem Consultoria de Imagem.
   // "finalizacao" fica sempre visível, independente dos serviços.
-  const EDITOR_CAPITULOS_CONDICIONADOS_CONSULTORIA = ['perfil', 'estrategia', 'corporal', 'vestuario', 'aplicacao'];
+  const EDITOR_CAPITULOS_CONDICIONADOS_CONSULTORIA = ['perfil', 'estrategia', 'corporal', 'vestuario', 'acessorios', 'aplicacao'];
 
   let editorDossieData = {};
   let editorCapitulosAplicaveis = ['finalizacao'];
@@ -14741,6 +14779,7 @@
     estrategia: 'Estratégia',
     corporal: 'Análise Corporal',
     vestuario: 'Vestuário',
+    acessorios: 'Acessórios',
     aplicacao: 'Aplicação Prática',
     finalizacao: 'Finalização'
   };
@@ -14882,7 +14921,7 @@
 
     // ---- Resumo de completude (só os capítulos realmente aplicáveis a esta cliente) ----
     editorCapitulosAplicaveis = temConsultoria
-      ? ['perfil', 'estrategia', 'corporal', 'vestuario', 'aplicacao', 'finalizacao']
+      ? ['perfil', 'estrategia', 'corporal', 'vestuario', 'acessorios', 'aplicacao', 'finalizacao']
       : ['finalizacao'];
     renderEditorChecklistResumo();
 
