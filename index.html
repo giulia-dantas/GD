@@ -7096,7 +7096,17 @@
         throw new Error('Biblioteca de visualização de PDF não carregou');
       }
 
-      const pdf = await window.pdfjsLib.getDocument(url).promise;
+      // O PDF.js, ao receber uma URL diretamente, faz suas próprias requisições HTTP
+      // internas (inclusive com cabeçalho Range para carregamento progressivo). Esse
+      // Range vira uma requisição "não simples" para o navegador, que exige preflight
+      // CORS — e é exatamente aí que o Firebase Storage costuma rejeitar, mesmo quando
+      // um fetch() simples (como o do botão Baixar PDF) funciona normalmente. Por isso,
+      // buscamos os bytes nós mesmos com fetch() comum e entregamos prontos ao PDF.js.
+      const resp = await fetch(url);
+      if(!resp.ok) throw new Error('Falha ao buscar o PDF (HTTP ' + resp.status + ')');
+      const arrayBuffer = await resp.arrayBuffer();
+
+      const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 
       if(loadingEl) loadingEl.hidden = true;
 
@@ -7120,7 +7130,9 @@
         paginasEl.appendChild(canvas);
       }
     } catch(err){
-      console.error('GD: erro ao carregar visualização do dossiê', { code: err && err.code, message: err && err.message });
+      // Log completo para diagnóstico real (não só a mensagem genérica mostrada à cliente).
+      console.error('GD: erro ao carregar visualização do dossiê — DIAGNÓSTICO COMPLETO', err);
+      console.error('GD: erro.name =', err && err.name, '| erro.code =', err && err.code, '| erro.message =', err && err.message);
       if(loadingEl) loadingEl.hidden = true;
       if(erroEl) erroEl.hidden = false;
     }
