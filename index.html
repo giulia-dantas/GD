@@ -2279,7 +2279,45 @@
     flex:1;
     display:grid;
     grid-template-columns:1fr 0.92fr;
+    grid-template-rows:auto 1fr;
     min-height:0;
+  }
+
+  /* Bloco de identidade Giulia Dantas — Fase 6C.9: elemento editorial fixo e
+     padronizado, centralizado no topo da capa, span das duas colunas. Largura
+     ~40% da página (até 320px de referência a ~794px de largura), altura sempre
+     automática, nunca recalculado pela proporção da foto do cliente. */
+  .dm-capa-identidade{
+    grid-column:1 / -1;
+    width:40%;
+    max-width:320px;
+    margin:6% auto 0;
+    text-align:center;
+  }
+
+  .dm-capa-identidade-monograma{
+    width:54px;
+    height:54px;
+    object-fit:contain;
+    display:block;
+    margin:0 auto 8px;
+  }
+
+  .dm-capa-identidade-marca{
+    font-family:'Cormorant Garamond', serif;
+    font-size:17px;
+    font-weight:600;
+    letter-spacing:0.16em;
+    color:var(--graphite);
+  }
+
+  .dm-capa-identidade-sub{
+    font-family:'Manrope', sans-serif;
+    font-size:8.5px;
+    letter-spacing:0.24em;
+    text-transform:uppercase;
+    color:var(--graphite-soft);
+    margin-top:3px;
   }
 
   .dm-capa-galho{
@@ -2295,7 +2333,7 @@
   .dm-capa-conteudo{
     position:relative;
     z-index:1;
-    padding:9% 7% 9% 9%;
+    padding:5% 7% 9% 9%;
     display:flex;
     flex-direction:column;
   }
@@ -20735,12 +20773,20 @@
     const agora = new Date();
     const dataEmissao = MESES_PT[agora.getMonth()] + ' \u2022 ' + agora.getFullYear();
 
+    // Bloco de identidade — GD + Giulia Dantas + Consultoria de Imagem tratados como
+    // UM ÚNICO elemento editorial fixo, centralizado no topo da capa, com largura
+    // padronizada (~40% da página, até 320px de referência a 794px de largura) e
+    // altura sempre automática. Nunca depende da foto nem é recalculado por ela.
+    const identidade =
+      '<div class="dm-capa-identidade">' +
+        '<img class="dm-capa-identidade-monograma" src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD">' +
+        '<div class="dm-capa-identidade-marca">Giulia Dantas</div>' +
+        '<div class="dm-capa-identidade-sub">Consultoria de Imagem</div>' +
+      '</div>';
+
     const conteudo =
       '<div class="dm-capa-conteudo">' +
         galhoSvg +
-        '<img class="dm-capa-monograma" src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD">' +
-        '<div class="dm-capa-marca">Giulia Dantas</div>' +
-        '<div class="dm-capa-sub">Consultoria de Imagem</div>' +
         '<div class="dm-capa-titulo">Dossiê<br><em>Personalizado</em></div>' +
         '<div class="dm-capa-desc">Estratégia de imagem feita especialmente para você.</div>' +
         '<div class="dm-capa-cliente-label">Cliente</div>' +
@@ -20757,7 +20803,7 @@
       : '<div class="dm-capa-semfoto"><div style="text-align:center;"><div class="dm-capa-marca" style="font-size:20px;">GD</div><div class="dm-capa-sub" style="margin-top:8px;">Consultoria de Imagem</div></div></div>';
 
     return [dm_pagina(
-      '<div class="dm-capa-grid">' + conteudo + ladoFoto + '</div>',
+      '<div class="dm-capa-grid">' + identidade + conteudo + ladoFoto + '</div>',
       { classesExtra: 'dossie-mestre-capa' }
     )];
   }
@@ -21265,9 +21311,18 @@
     const viewportEl = document.getElementById('dossie-mestre-paginas');
     if(!viewportEl) return null;
 
+    // Fase 6C.9 — medição em FLUXO NORMAL (nunca position:absolute). Antes, o clone de
+    // referência e o medidor usavam position:absolute+left:-9999px, o que podia fazer
+    // "width:100%" resolver contra um ancestral posicionado diferente do real (caso
+    // #dossie-mestre-paginas não fosse ele mesmo um contexto de posicionamento),
+    // gerando uma largura de medição incorreta e, por consequência, alturas erradas.
+    // Inserindo como filho normal do MESMO container onde as páginas de verdade serão
+    // colocadas, a largura resolvida é garantidamente idêntica à real. A inserção/
+    // remoção acontece de forma síncrona, antes de qualquer pintura do navegador, então
+    // não há flash visual.
     const referencia = document.createElement('div');
     referencia.className = 'dossie-mestre-page';
-    referencia.style.cssText = 'position:absolute; visibility:hidden; left:-9999px; top:0; pointer-events:none;';
+    referencia.style.visibility = 'hidden';
     viewportEl.appendChild(referencia);
     const refRect = referencia.getBoundingClientRect();
     const refStyle = getComputedStyle(referencia);
@@ -21281,8 +21336,20 @@
 
     if(!alturaUtilTotal || !larguraConteudo) return null;
 
+    // Container de medição de fragmentos — mesma largura de conteúdo real E o mesmo
+    // contexto de flex-coluna de .dossie-mestre-page. Isso é essencial: um elemento
+    // bloco comum (não-flex) deixa a margin-bottom do ÚLTIMO filho colapsar para fora do próprio
+    // container, subestimando a altura de qualquer fragmento que termine com margem
+    // (ex.: .dm-cor-grupo, .dm-desejo-secao, .dossie-mestre-bloco). Como na página real
+    // esses elementos são filhos de um flex container (onde margens nunca colapsam),
+    // medir dentro de outro flex container reproduz fielmente o comportamento real.
     const medidor = document.createElement('div');
-    medidor.style.cssText = 'position:absolute; visibility:hidden; left:-9999px; top:0; pointer-events:none; width:' + larguraConteudo + 'px; box-sizing:border-box;';
+    medidor.style.visibility = 'hidden';
+    medidor.style.width = larguraConteudo + 'px';
+    medidor.style.boxSizing = 'border-box';
+    medidor.style.display = 'flex';
+    medidor.style.flexDirection = 'column';
+    medidor.style.fontFamily = "'Manrope', sans-serif";
     viewportEl.appendChild(medidor);
 
     return {
@@ -21310,7 +21377,11 @@
       return null; // sinaliza para o chamador usar a salvaguarda por contagem
     }
 
-    const MARGEM_SEGURANCA = 20;
+    // Margem reduzida de 20px para 10px na Fase 6C.9: com os dois bugs de medição acima
+    // corrigidos (largura e colapso de margem), a altura medida passou a ser mais
+    // confiável, então uma margem de segurança menor já é suficiente e evita quebras
+    // de página prematuras (falsos positivos) quando o conteúdo cabe de verdade.
+    const MARGEM_SEGURANCA = 10;
     const alturaCabecalhoPrincipal = medidor.medir(cabecalhoPrincipalHtml);
     const alturaCabecalhoContinuacao = medidor.medir(cabecalhoContinuacaoHtml);
     const alturaRodape = medidor.medir(rodapeHtml);
@@ -21436,6 +21507,12 @@
       '<div class="dm-cor-divisor"></div></div>';
     }
 
+    // Fase 6C.9.1: revertido para PÁGINA ÚNICA por decisão explícita — esta seção
+    // sempre foi concebida como uma só página, e o conteúdo real cabe nela. Nada de
+    // paginação dinâmica aqui (isso continua reservado para Paleta e Combinações,
+    // onde a quantidade de conteúdo varia muito mais entre cartelas). Se algum dia
+    // um overflow real aparecer, é para ser corrigido como ajuste de layout — nunca
+    // "resolvido" criando uma segunda página automaticamente.
     const corpoGrupos =
       grupo('Cores Base', 'A fundação do seu guarda-roupa — peças que voltam sempre.', capsula.base) +
       grupo('Cores de Apoio', 'Complementam a base e ampliam as combinações possíveis.', capsula.apoio) +
