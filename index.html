@@ -2436,8 +2436,20 @@
 
   .dm-cor-linha{
     display:flex;
-    gap:12px;
+    flex-wrap:wrap;
+    gap:12px 10px;
     margin-bottom:10px;
+  }
+
+  .dm-cor-item{ text-align:center; width:38px; }
+
+  .dm-cor-nome{
+    font-family:'Manrope', sans-serif;
+    font-size:7px;
+    color:var(--graphite-soft);
+    line-height:1.2;
+    margin-top:3px;
+    max-width:44px;
   }
 
   .dm-cor-circulo{
@@ -2451,6 +2463,64 @@
     height:1px;
     background:rgba(150,117,74,0.22);
     margin-bottom:16px;
+  }
+
+  /* ---- Combinações cromáticas (Fase 6C.3) — barra proporcional + legenda ---- */
+  .dm-combinacao-barra{
+    display:flex;
+    height:34px;
+    overflow:hidden;
+    margin-bottom:8px;
+  }
+
+  .dm-combinacao-segmento{ height:100%; }
+
+  .dm-combinacao-legenda{
+    font-family:'Manrope', sans-serif;
+    font-size:9.5px;
+    color:var(--graphite-soft);
+    letter-spacing:0.02em;
+  }
+
+  /* ---- Seções por desejo de imagem (Combinações) — identidade editorial própria,
+     não cinco cards de dashboard: barra de acento fina à esquerda + título serifado. ---- */
+  .dm-desejo-secao{
+    border-left:2px solid #96754A;
+    padding-left:14px;
+    margin-bottom:22px;
+  }
+
+  .dm-desejo-titulo{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:19px;
+    color:var(--graphite);
+    margin-bottom:12px;
+  }
+
+  /* ---- Swatches de beleza — formato "godê" retangular, distinto da paleta de moda ---- */
+  .dm-beleza-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+  .dm-beleza-item{ text-align:center; width:46px; }
+
+  .dm-beleza-swatch{
+    width:46px;
+    height:34px;
+    border-radius:3px;
+    border:1px solid rgba(47,47,47,0.1);
+    margin-bottom:4px;
+  }
+
+  .dm-beleza-nome{
+    font-family:'Manrope', sans-serif;
+    font-size:7.5px;
+    color:var(--graphite-soft);
+    line-height:1.2;
   }
 
   /* Mantido por compatibilidade onde ainda referenciado (mini-paletas de beleza) */
@@ -2473,12 +2543,14 @@
   .dossie-mestre-metal-item{ text-align:center; width:58px; }
 
   .dossie-mestre-metal-circulo{
-    width:58px;
-    height:58px;
+    width:64px;
+    height:64px;
     border-radius:50%;
-    border:1px solid rgba(47,47,47,0.08);
-    margin-bottom:6px;
+    border:1px solid rgba(47,47,47,0.1);
+    box-shadow:inset 0 0 0 3px rgba(255,255,255,0.55), 0 1px 4px rgba(47,47,47,0.12);
+    margin-bottom:7px;
   }
+
 
   .dossie-mestre-metal-nome{
     font-family:'Manrope', sans-serif;
@@ -7270,17 +7342,7 @@
         "nome": "Rosé claro",
         "hex": "#D6A19B"
       }
-    ],
-    "beleza": {
-      "batons": [],
-      "blushes": [],
-      "sombras": [],
-      "delineadores": [],
-      "iluminadores": []
-    },
-    "cabelo": {
-      "familiasRecomendadas": []
-    }
+    ]
   },
   "primavera_quente": {
     "id": "primavera_quente",
@@ -7906,17 +7968,7 @@
         "nome": "Rosé claro",
         "hex": "#D39A8C"
       }
-    ],
-    "beleza": {
-      "batons": [],
-      "blushes": [],
-      "sombras": [],
-      "delineadores": [],
-      "iluminadores": []
-    },
-    "cabelo": {
-      "familiasRecomendadas": []
-    }
+    ]
   },
   "primavera_brilhante": {
     "id": "primavera_brilhante",
@@ -8546,17 +8598,7 @@
         "nome": "Rosé polido",
         "hex": "#D69A8A"
       }
-    ],
-    "beleza": {
-      "batons": [],
-      "blushes": [],
-      "sombras": [],
-      "delineadores": [],
-      "iluminadores": []
-    },
-    "cabelo": {
-      "familiasRecomendadas": []
-    }
+    ]
   },
   "verao_claro": {
     "id": "verao_claro",
@@ -9186,17 +9228,7 @@
         "nome": "Rosé claro",
         "hex": "#CFA4A6"
       }
-    ],
-    "beleza": {
-      "batons": [],
-      "blushes": [],
-      "sombras": [],
-      "delineadores": [],
-      "iluminadores": []
-    },
-    "cabelo": {
-      "familiasRecomendadas": []
-    }
+    ]
   },
   "verao_frio": {
     "id": "verao_frio",
@@ -9822,17 +9854,7 @@
         "nome": "Rosé frio",
         "hex": "#BE9DA8"
       }
-    ],
-    "beleza": {
-      "batons": [],
-      "blushes": [],
-      "sombras": [],
-      "delineadores": [],
-      "iluminadores": []
-    },
-    "cabelo": {
-      "familiasRecomendadas": []
-    }
+    ]
   },
   "verao_suave": {
     "id": "verao_suave",
@@ -10462,17 +10484,7 @@
         "nome": "Rosé fosco",
         "hex": "#BFA0A2"
       }
-    ],
-    "beleza": {
-      "batons": [],
-      "blushes": [],
-      "sombras": [],
-      "delineadores": [],
-      "iluminadores": []
-    },
-    "cabelo": {
-      "familiasRecomendadas": []
-    }
+    ]
   },
   "outono_suave": {
     "id": "outono_suave",
@@ -11102,17 +11114,7 @@
         "nome": "Rosé fosco",
         "hex": "#B98D82"
       }
-    ],
-    "beleza": {
-      "batons": [],
-      "blushes": [],
-      "sombras": [],
-      "delineadores": [],
-      "iluminadores": []
-    },
-    "cabelo": {
-      "familiasRecomendadas": []
-    }
+    ]
   },
   "outono_quente": {
     "id": "outono_quente",
@@ -11742,17 +11744,7 @@
         "nome": "Rosé",
         "hex": "#B77F77"
       }
-    ],
-    "beleza": {
-      "batons": [],
-      "blushes": [],
-      "sombras": [],
-      "delineadores": [],
-      "iluminadores": []
-    },
-    "cabelo": {
-      "familiasRecomendadas": []
-    }
+    ]
   },
   "outono_escuro": {
     "id": "outono_escuro",
@@ -12386,17 +12378,7 @@
         "nome": "Rosé envelhecido",
         "hex": "#9F726E"
       }
-    ],
-    "beleza": {
-      "batons": [],
-      "blushes": [],
-      "sombras": [],
-      "delineadores": [],
-      "iluminadores": []
-    },
-    "cabelo": {
-      "familiasRecomendadas": []
-    }
+    ]
   },
   "inverno_brilhante": {
     "id": "inverno_brilhante",
@@ -13022,17 +13004,7 @@
         "nome": "Rosé polido",
         "hex": "#D09A94"
       }
-    ],
-    "beleza": {
-      "batons": [],
-      "blushes": [],
-      "sombras": [],
-      "delineadores": [],
-      "iluminadores": []
-    },
-    "cabelo": {
-      "familiasRecomendadas": []
-    }
+    ]
   },
   "inverno_frio": {
     "id": "inverno_frio",
@@ -13658,17 +13630,7 @@
         "nome": "Rosé frio",
         "hex": "#B9919E"
       }
-    ],
-    "beleza": {
-      "batons": [],
-      "blushes": [],
-      "sombras": [],
-      "delineadores": [],
-      "iluminadores": []
-    },
-    "cabelo": {
-      "familiasRecomendadas": []
-    }
+    ]
   },
   "inverno_escuro": {
     "id": "inverno_escuro",
@@ -14298,19 +14260,4605 @@
         "nome": "Rosé envelhecido",
         "hex": "#A67A78"
       }
-    ],
-    "beleza": {
-      "batons": [],
-      "blushes": [],
-      "sombras": [],
-      "delineadores": [],
-      "iluminadores": []
-    },
-    "cabelo": {
-      "familiasRecomendadas": []
-    }
+    ]
   }
 };
+
+  // ===================================================================
+  // APLICACAO_CROMATICA_BASE — Fase 6C.3 / decisão de arquitetura 6C.3.1
+  // Regra definitiva: "Qual é a cor da cartela?" -> CARTELAS_BASE (paleta cromática
+  // principal: id, nome, temperatura, intensidade, profundidade, descrição, PIT,
+  // 100 cores, metais). "Como essa cor/cartela é aplicada?" -> APLICACAO_CROMATICA_BASE
+  // (única fonte para acromáticos, neutros/protagonistas/destaque/universais aplicados,
+  // combinações, armário cápsula, beleza, cabelo, e demais conteúdos derivados do uso
+  // da estação). Beleza e cabelo viviam, por engano, também dentro de CARTELAS_BASE
+  // desde a Fase 6C.1 — essa duplicidade foi removida na 6C.3.1; agora só existem aqui.
+  // Hoje 100% vazia: nenhuma cor foi escolhida, nenhuma combinação foi criada. Só
+  // arquitetura, pronta para receber a base oficial que a Giulia vai fornecer.
+  //
+  // IMPORTANTE — por que "corId" aqui é o próprio HEX, e não um novo campo:
+  // as 100 cores de cada cartela em CARTELAS_BASE não têm um campo "id" próprio,
+  // e os NOMES não são únicos dentro de uma cartela (ex.: duas variações de
+  // "Off-White" na mesma cartela). Adicionar um campo "id" a cada uma das 1200
+  // cores seria uma migração de dados fora do escopo desta fase — e o pedido é
+  // explícito para não fazer isso agora. Verificação feita: dentro de CADA
+  // cartela, o HEX é sempre único entre as 100 cores (confirmado nas 12
+  // cartelas). Ou seja, já existe hoje uma chave estável e não-destrutiva:
+  // (cartelaId, hex). "corId" nesta fase é sempre o HEX (sem "#", maiúsculo),
+  // resolvido de volta ao objeto completo da cor via resolverCorPorId() —
+  // nunca duplicamos nome/HEX aqui, só referenciamos.
+  // Fábrica da estrutura vazia (idêntica) de aplicação por cartela — evita repetir
+  // os mesmos 7+2 arrays 12 vezes. Todos os arrays nascem vazios; nada é preenchido aqui.
+  function dm_criarAplicacaoCromaticaVazia(){
+    return {
+      beleza: { base: [], blush: [], batom: [], sombra: [], lapis: [], mascara: [], iluminador: [] },
+      cabelo: { tonalidades: [], observacoes: '' }
+    };
+  }
+
+  const APLICACAO_CROMATICA_BASE = {
+    // Dados oficiais fornecidos externamente (não recalculados, não reinterpretados).
+    primavera_clara: {
+
+  acromaticos: [
+    { corId: "#F3F0EC" },
+    { corId: "#8F775B" }
+  ],
+
+  neutrosEssenciais: [
+    { corId: "#F3F0EC" },
+    { corId: "#EAE5DF" },
+    { corId: "#E0DAD3" },
+    { corId: "#D6CFC7" },
+    { corId: "#CBC4BB" },
+    { corId: "#C0B9B0" },
+    { corId: "#B6AEA4" },
+    { corId: "#AEA396" }
+  ],
+
+  coresProtagonistas: [
+    { corId: "#F3D8D0" },
+    { corId: "#DA7C53" },
+    { corId: "#E59466" },
+    { corId: "#F19F4A" },
+    { corId: "#E3CA7C" },
+    { corId: "#EDDC63" },
+    { corId: "#BBE677" },
+    { corId: "#45C5D9" },
+    { corId: "#EE7993" },
+    { corId: "#DC54B6" }
+  ],
+
+  coresDestaque: [
+    { corId: "#E17938" },
+    { corId: "#E2AC65" },
+    { corId: "#F3D8D0" },
+    { corId: "#DA7C53" },
+    { corId: "#E59466" },
+    { corId: "#EEAB7B" },
+    { corId: "#E88635" },
+    { corId: "#F19F4A" },
+    { corId: "#C0ED4A" },
+    { corId: "#4AEDD1" },
+    { corId: "#EE7993" },
+    { corId: "#CA6CE8" }
+  ],
+
+  coresUniversais: [
+    { nome: "Verde Garrafa", corId: "#47E36F" },
+    { nome: "Verde Esmeralda", corId: "#73DD9A" },
+    { nome: "Azul Petróleo", corId: "#A5D1EB" },
+    { nome: "Turquesa", corId: "#4792E3" },
+    { nome: "Azul Jeans", corId: "#45C5D9" },
+    { nome: "Lilás", corId: "#D295F6" },
+    { nome: "Vermelho Melancia", corId: "#F3D0D6" },
+    { nome: "Rosa Goiaba", corId: "#EE7993" },
+    { nome: "Amêndoa", corId: "#E3BFB6" },
+    { nome: "Fendi", corId: "#C0B9B0" },
+    { nome: "Manteiga", corId: "#D6CFC7" },
+    { nome: "Off-White", corId: "#F3F0EC" }
+  ],
+
+  combinacoes: {
+
+    duasCores: [
+
+      {
+        nome: "Atemporal — Off-White + Camel",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#F3F0EC", proporcao: 65 },
+          { corId: "#D08D48", proporcao: 35 }
+        ]
+      },
+
+      {
+        nome: "Atemporal — Fendi + Azul Jeans",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#C0B9B0", proporcao: 60 },
+          { corId: "#45C5D9", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Turquesa + Pêssego",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#4792E3", proporcao: 55 },
+          { corId: "#F3D8D0", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Verde Maçã + Rosa Goiaba",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#EDF3D0", proporcao: 55 },
+          { corId: "#EE7993", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Manteiga + Salmão",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#F7F0DF", proporcao: 65 },
+          { corId: "#DA7C53", proporcao: 35 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Azul Céu + Rosa Pêssego",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#D0F3EA", proporcao: 60 },
+          { corId: "#F3D0DF", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Canário + Turquesa",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#F5EB78", proporcao: 45 },
+          { corId: "#4792E3", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Tangerina + Pistache",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#E59466", proporcao: 45 },
+          { corId: "#C0ED4A", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Off-White + Areia",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#F3F0EC", proporcao: 60 },
+          { corId: "#CBC4BB", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Marfim + Taupe",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#E0DAD3", proporcao: 60 },
+          { corId: "#AEA396", proporcao: 40 }
+        ]
+      }
+
+    ],
+
+    tresCores: [
+
+      {
+        nome: "Atemporal",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#F3F0EC", proporcao: 40 },
+          { corId: "#C0B9B0", proporcao: 35 },
+          { corId: "#D08D48", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#4792E3", proporcao: 45 },
+          { corId: "#F3D8D0", proporcao: 30 },
+          { corId: "#F3F0EC", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Acessível",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#D0F3EA", proporcao: 45 },
+          { corId: "#F3D0DF", proporcao: 30 },
+          { corId: "#EAE5DF", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Artsy",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#F5EB78", proporcao: 40 },
+          { corId: "#4792E3", proporcao: 35 },
+          { corId: "#EE7993", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Minimalista",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#F3F0EC", proporcao: 55 },
+          { corId: "#CBC4BB", proporcao: 30 },
+          { corId: "#AEA396", proporcao: 15 }
+        ]
+      }
+
+    ],
+
+    proporcionais: []
+  },
+
+  armarioCapsula: {
+
+    base: [
+      { corId: "#F3F0EC" },
+      { corId: "#EAE5DF" },
+      { corId: "#C0B9B0" },
+      { corId: "#CBC4BB" },
+      { corId: "#D08D48" }
+    ],
+
+    apoio: [
+      { corId: "#D0F3EA" },
+      { corId: "#45C5D9" },
+      { corId: "#EDF3D0" },
+      { corId: "#F3D8D0" }
+    ],
+
+    destaque: [
+      { corId: "#E59466" },
+      { corId: "#EE7993" },
+      { corId: "#F5EB78" },
+      { corId: "#4792E3" }
+    ],
+
+    combinacoes: [
+      {
+        cores: ["#F3F0EC", "#D08D48", "#F3D8D0"]
+      },
+      {
+        cores: ["#C0B9B0", "#45C5D9", "#EE7993"]
+      },
+      {
+        cores: ["#EAE5DF", "#EDF3D0", "#E59466"]
+      },
+      {
+        cores: ["#CBC4BB", "#D0F3EA", "#F5EB78"]
+      }
+    ]
+  },
+
+  beleza: {
+
+    base: [
+      {
+        nome: "Bege claro quente",
+        hex: "#E7C8AD"
+      },
+      {
+        nome: "Bege claro dourado",
+        hex: "#DEC09F"
+      },
+      {
+        nome: "Bege pêssego claro",
+        hex: "#E4BDA7"
+      }
+    ],
+
+    blush: [
+      { corId: "#F3D8D0" },
+      { corId: "#DA7C53" },
+      {
+        nome: "Pêssego dourado",
+        hex: "#E3A074"
+      }
+    ],
+
+    batom: [
+      { corId: "#F3D8D0" },
+      { corId: "#E59466" },
+      { corId: "#EE7993" },
+      { corId: "#F08780" },
+      { corId: "#E26064" }
+    ],
+
+    sombra: [
+      { corId: "#EAE5DF" },
+      { corId: "#E3BFB6" },
+      { corId: "#E8B096" },
+      { corId: "#ECDA8F" },
+      { corId: "#73DD9A" },
+      { corId: "#45C5D9" }
+    ],
+
+    lapis: [
+      { corId: "#D08D48" },
+      { corId: "#CF7B5D" },
+      {
+        nome: "Marrom dourado claro",
+        hex: "#A77D5A"
+      }
+    ],
+
+    mascara: [
+      {
+        nome: "Marrom médio",
+        hex: "#725344"
+      },
+      {
+        nome: "Marrom dourado",
+        hex: "#80614B"
+      }
+    ],
+
+    iluminador: [
+      {
+        nome: "Champagne claro",
+        hex: "#E5C98E"
+      },
+      {
+        nome: "Dourado claro luminoso",
+        hex: "#DEBA67"
+      }
+    ]
+  },
+
+  cabelo: {
+
+    tonalidades: [
+      {
+        nome: "Loiro dourado claro",
+        hex: "#C99D63"
+      },
+      {
+        nome: "Loiro mel claro",
+        hex: "#BD8F58"
+      },
+      {
+        nome: "Loiro acobreado claro",
+        hex: "#C27B4E"
+      },
+      {
+        nome: "Castanho claro dourado",
+        hex: "#9B744F"
+      },
+      {
+        nome: "Castanho claro acobreado",
+        hex: "#9A6243"
+      }
+    ],
+
+    observacoes:
+      "Priorizar profundidades claras e fundos quentes, dourados ou levemente avermelhados. A cor pode variar até aproximadamente dois tons acima ou abaixo do natural quando a intenção for preservar o contraste pessoal; mechas e reflexos podem chegar a até quatro tons acima da cor de fundo. Evitar escurecimento excessivo."
+  },
+
+  aplicacao: {
+
+    proximoAoRosto:
+      "A profundidade clara é a prioridade. Próximo ao rosto, prefira cores luminosas, quentes e claras, como pêssego, salmão, coral, amarelos claros, verdes luminosos, turquesas e azuis claros.",
+
+    partesInferiores:
+      "Camel claro, areia, fendi, jeans claro, turquesa mais fechado e neutros médios da cartela funcionam bem como bases, sem criar peso visual excessivo.",
+
+    coresForaDaCartela:
+      "A primeira cartela vizinha para ampliar o repertório é o Verão Claro. Algumas cores podem ser usadas com moderação quando preservarem a profundidade clara. Tons muito escuros são o principal ponto de cautela.",
+
+    contraste:
+      "O contraste pessoal tende a variar de baixíssimo claro a médio. Prefira combinações claras e luminosas, evitando oposição muito pesada entre cores claras e escuras.",
+
+    acessorios:
+      "Metais claros e luminosos funcionam especialmente bem. Dourado claro, rosé claro e prateado claro podem ser usados conforme o direcionamento individual e o contraste da cliente."
+  }
+},
+    // Dados oficiais fornecidos externamente (não recalculados, não reinterpretados).
+    primavera_quente: {
+
+  acromaticos: [
+    { corId: "#F3F0EC" },
+    { corId: "#8F775B" }
+  ],
+
+  neutrosEssenciais: [
+    { corId: "#F3F0EC" },
+    { corId: "#E8E2DD" },
+    { corId: "#DCD5CD" },
+    { corId: "#CFC7BF" },
+    { corId: "#C1BAB2" },
+    { corId: "#B5ACA3" },
+    { corId: "#AB9F91" },
+    { corId: "#A3927E" }
+  ],
+
+  coresProtagonistas: [
+    { corId: "#E07857" },
+    { corId: "#E69263" },
+    { corId: "#D47B40" },
+    { corId: "#F6E565" },
+    { corId: "#EC5921" },
+    { corId: "#E37C50" },
+    { corId: "#F57724" },
+    { corId: "#E0253D" },
+    { corId: "#B4EC21" },
+    { corId: "#1FE251" },
+    { corId: "#2CD7CC" },
+    { corId: "#1591E0" }
+  ],
+
+  coresDestaque: [
+    { corId: "#E07857" },
+    { corId: "#E69263" },
+    { corId: "#D47B40" },
+    { corId: "#FAE76D" },
+    { corId: "#F6E565" },
+    { corId: "#F1E25D" },
+    { corId: "#EC5921" },
+    { corId: "#FA905D" },
+    { corId: "#F57724" },
+    { corId: "#E27F1F" },
+    { corId: "#E0253D" },
+    { corId: "#F23345" },
+    { corId: "#B4EC21" },
+    { corId: "#1FE251" },
+    { corId: "#2CD7CC" }
+  ],
+
+  coresUniversais: [
+    { nome: "Verde Garrafa", corId: "#1FE251" },
+    { nome: "Verde Esmeralda", corId: "#4DD980" },
+    { nome: "Azul Petróleo", corId: "#68B1F3" },
+    { nome: "Turquesa", corId: "#7FA9F9" },
+    { nome: "Azul Jeans", corId: "#95DEF1" },
+    { nome: "Vinho", corId: "#F49881" },
+    { nome: "Lilás", corId: "#B034EF" },
+    { nome: "Rosa Goiaba", corId: "#EA94A1" },
+    { nome: "Amêndoa", corId: "#D9A193" },
+    { nome: "Fendi", corId: "#B5ACA3" },
+    { nome: "Manteiga", corId: "#CFC7BF" },
+    { nome: "Off-White", corId: "#F3F0EC" }
+  ],
+
+  combinacoes: {
+
+    duasCores: [
+
+      {
+        nome: "Atemporal — Off-White + Camel",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#F3F0EC", proporcao: 60 },
+          { corId: "#D47B40", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Atemporal — Fendi + Conhaque",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#B5ACA3", proporcao: 60 },
+          { corId: "#E69263", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Azul Petróleo + Coral",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#68B1F3", proporcao: 55 },
+          { corId: "#ECAAB5", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Verde Esmeralda + Tangerina",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#4DD980", proporcao: 55 },
+          { corId: "#FA905D", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Manteiga + Salmão",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#FCEAB7", proporcao: 65 },
+          { corId: "#E37C50", proporcao: 35 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Marfim + Rosa Antigo",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#DCD5CD", proporcao: 60 },
+          { corId: "#EA7EA1", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Girassol + Azul Aço",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#F6E565", proporcao: 45 },
+          { corId: "#1591E0", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Abóbora + Verde Garrafa",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#F57724", proporcao: 45 },
+          { corId: "#1FE251", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Off-White + Taupe",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#F3F0EC", proporcao: 60 },
+          { corId: "#A3927E", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Areia + Camel",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#C1BAB2", proporcao: 60 },
+          { corId: "#D47B40", proporcao: 40 }
+        ]
+      }
+
+    ],
+
+    tresCores: [
+
+      {
+        nome: "Atemporal",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#F3F0EC", proporcao: 40 },
+          { corId: "#B5ACA3", proporcao: 35 },
+          { corId: "#D47B40", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#68B1F3", proporcao: 45 },
+          { corId: "#ECAAB5", proporcao: 30 },
+          { corId: "#F3F0EC", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Acessível",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#FCEAB7", proporcao: 45 },
+          { corId: "#E37C50", proporcao: 30 },
+          { corId: "#DCD5CD", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Artsy",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#F6E565", proporcao: 40 },
+          { corId: "#1591E0", proporcao: 35 },
+          { corId: "#F57724", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Minimalista",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#F3F0EC", proporcao: 55 },
+          { corId: "#C1BAB2", proporcao: 30 },
+          { corId: "#A3927E", proporcao: 15 }
+        ]
+      }
+
+    ],
+
+    proporcionais: []
+  },
+
+  armarioCapsula: {
+
+    base: [
+      { corId: "#F3F0EC" },
+      { corId: "#E8E2DD" },
+      { corId: "#B5ACA3" },
+      { corId: "#A3927E" },
+      { corId: "#D47B40" }
+    ],
+
+    apoio: [
+      { corId: "#FCEAB7" },
+      { corId: "#ECAAB5" },
+      { corId: "#4DD980" },
+      { corId: "#68B1F3" }
+    ],
+
+    destaque: [
+      { corId: "#FA905D" },
+      { corId: "#F57724" },
+      { corId: "#E0253D" },
+      { corId: "#F6E565" }
+    ],
+
+    combinacoes: [
+      {
+        cores: ["#F3F0EC", "#D47B40", "#E37C50"]
+      },
+      {
+        cores: ["#B5ACA3", "#68B1F3", "#ECAAB5"]
+      },
+      {
+        cores: ["#E8E2DD", "#4DD980", "#FA905D"]
+      },
+      {
+        cores: ["#A3927E", "#FCEAB7", "#E0253D"]
+      }
+    ]
+  },
+
+  beleza: {
+
+    base: [
+      {
+        nome: "Bege quente luminoso",
+        hex: "#E4BE9D"
+      },
+      {
+        nome: "Bege dourado claro",
+        hex: "#D9AF88"
+      },
+      {
+        nome: "Bege pêssego médio-claro",
+        hex: "#DEA887"
+      }
+    ],
+
+    blush: [
+      { corId: "#ECAAB5" },
+      { corId: "#E37C50" },
+      {
+        nome: "Coral pêssego",
+        hex: "#E58D6A"
+      }
+    ],
+
+    batom: [
+      { corId: "#ECAAB5" },
+      { corId: "#E37C50" },
+      { corId: "#FA905D" },
+      { corId: "#E0253D" },
+      { corId: "#F23345" }
+    ],
+
+    sombra: [
+      { corId: "#D9A193" },
+      { corId: "#E69263" },
+      { corId: "#F1E09C" },
+      { corId: "#4DD980" },
+      { corId: "#2CD7CC" },
+      { corId: "#68B1F3" }
+    ],
+
+    lapis: [
+      { corId: "#9A5332" },
+      { corId: "#AB6833" },
+      {
+        nome: "Marrom dourado",
+        hex: "#A66F45"
+      }
+    ],
+
+    mascara: [
+      {
+        nome: "Marrom quente",
+        hex: "#6A4937"
+      },
+      {
+        nome: "Marrom profundo suave",
+        hex: "#554137"
+      }
+    ],
+
+    iluminador: [
+      {
+        nome: "Champagne dourado claro",
+        hex: "#E3C27F"
+      },
+      {
+        nome: "Dourado luminoso",
+        hex: "#D7AE58"
+      }
+    ]
+  },
+
+  cabelo: {
+
+    tonalidades: [
+      {
+        nome: "Loiro dourado",
+        hex: "#C89B5C"
+      },
+      {
+        nome: "Loiro mel",
+        hex: "#B9864D"
+      },
+      {
+        nome: "Loiro acobreado",
+        hex: "#C27545"
+      },
+      {
+        nome: "Castanho claro dourado",
+        hex: "#9A704A"
+      },
+      {
+        nome: "Castanho claro acobreado",
+        hex: "#965D3F"
+      },
+      {
+        nome: "Ruivo dourado",
+        hex: "#B96538"
+      }
+    ],
+
+    observacoes:
+      "A temperatura quente deve permanecer evidente. Priorizar fundos dourados, mel, acobreados ou levemente avermelhados, mantendo luminosidade e evitando escurecimento excessivo ou fundos acinzentados/frios."
+  },
+
+  aplicacao: {
+
+    proximoAoRosto:
+      "A temperatura quente é a prioridade. Próximo ao rosto, prefira dourados, pêssegos, corais, laranjas, amarelos vivos, verdes quentes e azuis luminosos que mantenham sensação de calor.",
+
+    partesInferiores:
+      "Camel, taupe quente, conhaque, jeans claro, petróleo luminoso e neutros quentes funcionam bem como bases sem retirar a vivacidade da cartela.",
+
+    coresForaDaCartela:
+      "A primeira família de empréstimo deve preservar a temperatura quente. Primavera Clara e Primavera Brilhante são as vizinhas naturais; alguns tons do Outono Quente também podem funcionar quando não forem excessivamente escuros ou opacos.",
+
+    contraste:
+      "A intensidade e a profundidade podem variar, mas a composição deve continuar quente e luminosa. Ajuste o contraste ao contraste pessoal da cliente, evitando que tons muito escuros dominem o visual.",
+
+    acessorios:
+      "Dourado claro e rosé claro são escolhas prioritárias. Metais luminosos e quentes funcionam especialmente bem; o acabamento pode variar conforme o estilo individual."
+  }
+},
+    // Dados oficiais fornecidos externamente (não recalculados, não reinterpretados).
+    primavera_brilhante: {
+
+  acromaticos: [
+    { corId: "#F9F7F6" },
+    { corId: "#382F24" }
+  ],
+
+  neutrosEssenciais: [
+    { corId: "#F9F7F6" },
+    { corId: "#E7E1DB" },
+    { corId: "#D3CBC2" },
+    { corId: "#BEB5AA" },
+    { corId: "#A99F93" },
+    { corId: "#95887A" },
+    { corId: "#817261" },
+    { corId: "#6A5C4C" }
+  ],
+
+  coresProtagonistas: [
+    { corId: "#F2DB36" },
+    { corId: "#F8EB4A" },
+    { corId: "#EC753D" },
+    { corId: "#D46121" },
+    { corId: "#E66475" },
+    { corId: "#E02336" },
+    { corId: "#F14B70" },
+    { corId: "#17E94D" },
+    { corId: "#44E17D" },
+    { corId: "#1DBFD8" },
+    { corId: "#177CE9" },
+    { corId: "#9A1DE8" }
+  ],
+
+  coresDestaque: [
+    { corId: "#F2DB36" },
+    { corId: "#F8EB4A" },
+    { corId: "#FDF860" },
+    { corId: "#F88F64" },
+    { corId: "#EC753D" },
+    { corId: "#D46121" },
+    { corId: "#FBA873" },
+    { corId: "#E66475" },
+    { corId: "#E02336" },
+    { corId: "#E9363C" },
+    { corId: "#F14B70" },
+    { corId: "#F71B33" },
+    { corId: "#17E94D" },
+    { corId: "#44E17D" },
+    { corId: "#1BF2CD" },
+    { corId: "#1DBFD8" },
+    { corId: "#177CE9" },
+    { corId: "#9A1DE8" }
+  ],
+
+  coresUniversais: [
+    { nome: "Verde Garrafa", corId: "#17E94D" },
+    { nome: "Verde Esmeralda", corId: "#44E17D" },
+    { nome: "Azul Petróleo", corId: "#76C0EB" },
+    { nome: "Turquesa", corId: "#177CE9" },
+    { nome: "Azul Jeans", corId: "#1DBFD8" },
+    { nome: "Vinho", corId: "#FC8E79" },
+    { nome: "Lilás", corId: "#9A1DE8" },
+    { nome: "Rosa Goiaba", corId: "#F48EA9" },
+    { nome: "Amêndoa", corId: "#DC9C8C" },
+    { nome: "Fendi", corId: "#95887A" },
+    { nome: "Manteiga", corId: "#BEB5AA" },
+    { nome: "Off-White", corId: "#F9F7F6" }
+  ],
+
+  combinacoes: {
+
+    duasCores: [
+
+      {
+        nome: "Atemporal — Branco + Conhaque",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#F9F7F6", proporcao: 60 },
+          { corId: "#DF983B", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Atemporal — Fendi + Azul Jeans",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#95887A", proporcao: 55 },
+          { corId: "#1DBFD8", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Turquesa + Coral",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#177CE9", proporcao: 55 },
+          { corId: "#EFA2AF", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Verde Esmeralda + Rosa Médio",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#44E17D", proporcao: 55 },
+          { corId: "#F14B70", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Manteiga + Tangerina",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#F8EDB6", proporcao: 60 },
+          { corId: "#FBA873", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Azul Pó + Rosa Goiaba",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#48E9DA", proporcao: 55 },
+          { corId: "#F48EA9", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Canário + Azul Royal",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#F8EB4A", proporcao: 45 },
+          { corId: "#7C99F1", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Papaya + Verde Garrafa",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#D46121", proporcao: 45 },
+          { corId: "#17E94D", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Branco + Greige",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#F9F7F6", proporcao: 65 },
+          { corId: "#817261", proporcao: 35 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Marfim + Taupe",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#D3CBC2", proporcao: 60 },
+          { corId: "#6A5C4C", proporcao: 40 }
+        ]
+      }
+
+    ],
+
+    tresCores: [
+
+      {
+        nome: "Atemporal",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#F9F7F6", proporcao: 40 },
+          { corId: "#95887A", proporcao: 35 },
+          { corId: "#DF983B", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#177CE9", proporcao: 45 },
+          { corId: "#EFA2AF", proporcao: 30 },
+          { corId: "#F9F7F6", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Acessível",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#48E9DA", proporcao: 45 },
+          { corId: "#F48EA9", proporcao: 30 },
+          { corId: "#F8EDB6", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Artsy",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#F8EB4A", proporcao: 35 },
+          { corId: "#177CE9", proporcao: 35 },
+          { corId: "#E02336", proporcao: 30 }
+        ]
+      },
+
+      {
+        nome: "Minimalista",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#F9F7F6", proporcao: 55 },
+          { corId: "#A99F93", proporcao: 30 },
+          { corId: "#6A5C4C", proporcao: 15 }
+        ]
+      }
+
+    ],
+
+    proporcionais: []
+  },
+
+  armarioCapsula: {
+
+    base: [
+      { corId: "#F9F7F6" },
+      { corId: "#D3CBC2" },
+      { corId: "#95887A" },
+      { corId: "#817261" },
+      { corId: "#6A5C4C" }
+    ],
+
+    apoio: [
+      { corId: "#48E9DA" },
+      { corId: "#1DBFD8" },
+      { corId: "#44E17D" },
+      { corId: "#EFA2AF" }
+    ],
+
+    destaque: [
+      { corId: "#F8EB4A" },
+      { corId: "#D46121" },
+      { corId: "#E02336" },
+      { corId: "#177CE9" }
+    ],
+
+    combinacoes: [
+      {
+        cores: ["#F9F7F6", "#1DBFD8", "#EFA2AF"]
+      },
+      {
+        cores: ["#D3CBC2", "#44E17D", "#D46121"]
+      },
+      {
+        cores: ["#95887A", "#177CE9", "#F8EB4A"]
+      },
+      {
+        cores: ["#817261", "#48E9DA", "#E02336"]
+      }
+    ]
+  },
+
+  beleza: {
+
+    base: [
+      {
+        nome: "Bege quente luminoso",
+        hex: "#E0B895"
+      },
+      {
+        nome: "Bege dourado claro",
+        hex: "#D6A979"
+      },
+      {
+        nome: "Bege pêssego luminoso",
+        hex: "#DFA58A"
+      }
+    ],
+
+    blush: [
+      { corId: "#EFA2AF" },
+      { corId: "#FBA873" },
+      {
+        nome: "Coral luminoso",
+        hex: "#E97F69"
+      }
+    ],
+
+    batom: [
+      { corId: "#EFA2AF" },
+      { corId: "#F14B70" },
+      { corId: "#F71B33" },
+      { corId: "#E02336" },
+      { corId: "#EC753D" }
+    ],
+
+    sombra: [
+      { corId: "#EED362" },
+      { corId: "#DF983B" },
+      { corId: "#44E17D" },
+      { corId: "#1DBFD8" },
+      { corId: "#177CE9" },
+      { corId: "#9A1DE8" }
+    ],
+
+    lapis: [
+      { corId: "#A36329" },
+      { corId: "#6A5C4C" },
+      { corId: "#177CE9" }
+    ],
+
+    mascara: [
+      {
+        nome: "Marrom profundo quente",
+        hex: "#4E3728"
+      },
+      {
+        nome: "Marrom quase preto",
+        hex: "#342A24"
+      }
+    ],
+
+    iluminador: [
+      {
+        nome: "Champagne dourado luminoso",
+        hex: "#E8C56F"
+      },
+      {
+        nome: "Dourado polido claro",
+        hex: "#DDB447"
+      }
+    ]
+  },
+
+  cabelo: {
+
+    tonalidades: [
+      {
+        nome: "Loiro dourado luminoso",
+        hex: "#C79A55"
+      },
+      {
+        nome: "Loiro mel intenso",
+        hex: "#B98543"
+      },
+      {
+        nome: "Loiro acobreado vivo",
+        hex: "#C66D36"
+      },
+      {
+        nome: "Castanho claro dourado",
+        hex: "#966B3E"
+      },
+      {
+        nome: "Castanho claro acobreado",
+        hex: "#945631"
+      },
+      {
+        nome: "Ruivo cobre luminoso",
+        hex: "#B65A2B"
+      }
+    ],
+
+    observacoes:
+      "A intensidade brilhante é a prioridade. Priorizar cabelos de fundo quente, dourado ou acobreado com aparência limpa e luminosa. Evitar tonalidades excessivamente acinzentadas, opacas ou muito fechadas que reduzam a vivacidade natural da cartela."
+  },
+
+  aplicacao: {
+
+    proximoAoRosto:
+      "A intensidade brilhante é a prioridade. Próximo ao rosto, prefira cores limpas, vivas e luminosas, como turquesa, verdes vivos, amarelos intensos, coral, vermelho, rosa vivo e azul brilhante.",
+
+    partesInferiores:
+      "Neutros médios, camel, greige, azul jeans, azul royal e verdes luminosos podem estruturar o visual sem apagar a intensidade característica da cartela.",
+
+    coresForaDaCartela:
+      "A primeira vizinha para empréstimos é o Inverno Brilhante, especialmente quando a cor mantém alta intensidade. Primavera Quente também pode contribuir com tons quentes e vivos. Cores muito suaves ou acinzentadas são o principal ponto de cautela.",
+
+    contraste:
+      "Contrastes médios a altos funcionam especialmente bem, desde que as cores permaneçam limpas e brilhantes. Evite combinações excessivamente amortecidas.",
+
+    acessorios:
+      "Dourado polido, rosé polido e prateado claro funcionam bem. Acabamentos brilhantes e luminosos dialogam melhor com a intensidade da cartela do que metais muito envelhecidos ou opacos."
+  }
+},
+    // Dados oficiais fornecidos externamente (não recalculados, não reinterpretados).
+    verao_claro: {
+
+  acromaticos: [
+    { corId: "#EBECF0" },
+    { corId: "#788090" }
+  ],
+
+  neutrosEssenciais: [
+    { corId: "#EBECF0" },
+    { corId: "#DEE0E5" },
+    { corId: "#D1D4DA" },
+    { corId: "#C5C8CF" },
+    { corId: "#B9BDC4" },
+    { corId: "#ADB1B8" },
+    { corId: "#A2A5AC" },
+    { corId: "#9499A3" }
+  ],
+
+  coresProtagonistas: [
+    { corId: "#EBDFE6" },
+    { corId: "#F1CBDF" },
+    { corId: "#EEC2D6" },
+    { corId: "#EAB9CD" },
+    { corId: "#DBE3D2" },
+    { corId: "#A5D9A9" },
+    { corId: "#D2E2E3" },
+    { corId: "#B6CED4" },
+    { corId: "#C7DDE6" },
+    { corId: "#D5D2E3" },
+    { corId: "#AFA5D4" }
+  ],
+
+  coresDestaque: [
+    { corId: "#D191B4" },
+    { corId: "#CB8AAA" },
+    { corId: "#C4839F" },
+    { corId: "#BE7D95" },
+    { corId: "#80B761" },
+    { corId: "#69AF82" },
+    { corId: "#62AAB7" },
+    { corId: "#6DB7CE" },
+    { corId: "#519AC7" },
+    { corId: "#6781C3" },
+    { corId: "#8C71CB" },
+    { corId: "#A77CCC" }
+  ],
+
+  coresUniversais: [
+    { nome: "Verde Garrafa", corId: "#AEE2DE" },
+    { nome: "Azul Petróleo", corId: "#A8C4DA" },
+    { nome: "Turquesa", corId: "#BAD1EA" },
+    { nome: "Azul Marinho", corId: "#7587D8" },
+    { nome: "Azul Jeans", corId: "#C7DDE6" },
+    { nome: "Lilás", corId: "#AFA5D4" },
+    { nome: "Vermelho Melancia", corId: "#E3D2D6" },
+    { nome: "Rosa Goiaba", corId: "#C4839F" },
+    { nome: "Amêndoa", corId: "#D1C0BC" },
+    { nome: "Fendi", corId: "#ADB1B8" },
+    { nome: "Manteiga", corId: "#C5C8CF" },
+    { nome: "Branco", corId: "#EBECF0" }
+  ],
+
+  combinacoes: {
+
+    duasCores: [
+
+      {
+        nome: "Atemporal — Branco + Azul Jeans",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#EBECF0", proporcao: 60 },
+          { corId: "#C7DDE6", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Atemporal — Fendi + Lavanda",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#ADB1B8", proporcao: 60 },
+          { corId: "#D5D2E3", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Azul Pó + Rosa Goiaba",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#62AAB7", proporcao: 55 },
+          { corId: "#C4839F", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Azul Pervinca + Menta",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#6DB7CE", proporcao: 55 },
+          { corId: "#DBE3D2", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Rosa Chá + Cinza Pérola",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#EBDFE6", proporcao: 60 },
+          { corId: "#868C99", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Lavanda + Branco",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#D5D2E3", proporcao: 45 },
+          { corId: "#EBECF0", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Azul Aço + Rosa Malva",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#519AC7", proporcao: 55 },
+          { corId: "#EEC2D6", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Ametista + Verde Sálvia",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#A77CCC", proporcao: 45 },
+          { corId: "#69AF82", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Branco + Greige",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#EBECF0", proporcao: 60 },
+          { corId: "#A2A5AC", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Cinza Claro + Taupe",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#DEE0E5", proporcao: 60 },
+          { corId: "#9499A3", proporcao: 40 }
+        ]
+      }
+
+    ],
+
+    tresCores: [
+
+      {
+        nome: "Atemporal",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#EBECF0", proporcao: 45 },
+          { corId: "#C7DDE6", proporcao: 35 },
+          { corId: "#9499A3", proporcao: 20 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#6DB7CE", proporcao: 40 },
+          { corId: "#C4839F", proporcao: 35 },
+          { corId: "#EBECF0", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Acessível",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#EBDFE6", proporcao: 45 },
+          { corId: "#D5D2E3", proporcao: 30 },
+          { corId: "#ADB1B8", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Artsy",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#519AC7", proporcao: 40 },
+          { corId: "#EEC2D6", proporcao: 35 },
+          { corId: "#69AF82", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Minimalista",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#EBECF0", proporcao: 55 },
+          { corId: "#A2A5AC", proporcao: 30 },
+          { corId: "#788090", proporcao: 15 }
+        ]
+      }
+
+    ],
+
+    proporcionais: []
+  },
+
+  armarioCapsula: {
+
+    base: [
+      { corId: "#EBECF0" },
+      { corId: "#DEE0E5" },
+      { corId: "#ADB1B8" },
+      { corId: "#9499A3" },
+      { corId: "#788090" }
+    ],
+
+    apoio: [
+      { corId: "#C7DDE6" },
+      { corId: "#D5D2E3" },
+      { corId: "#DBE3D2" },
+      { corId: "#EBDFE6" }
+    ],
+
+    destaque: [
+      { corId: "#6DB7CE" },
+      { corId: "#C4839F" },
+      { corId: "#519AC7" },
+      { corId: "#A77CCC" }
+    ],
+
+    combinacoes: [
+      {
+        cores: ["#EBECF0", "#C7DDE6", "#C4839F"]
+      },
+      {
+        cores: ["#DEE0E5", "#D5D2E3", "#6DB7CE"]
+      },
+      {
+        cores: ["#ADB1B8", "#DBE3D2", "#519AC7"]
+      },
+      {
+        cores: ["#9499A3", "#EBDFE6", "#A77CCC"]
+      }
+    ]
+  },
+
+  beleza: {
+
+    base: [
+      {
+        nome: "Bege claro neutro-frio",
+        hex: "#D8C2B8"
+      },
+      {
+        nome: "Bege rosado claro",
+        hex: "#D9BBB8"
+      },
+      {
+        nome: "Bege frio claro",
+        hex: "#CDB7B4"
+      }
+    ],
+
+    blush: [
+      { corId: "#EEC2D6" },
+      { corId: "#D191B4" },
+      {
+        nome: "Rosa frio suave",
+        hex: "#CF9AAF"
+      }
+    ],
+
+    batom: [
+      { corId: "#EEC2D6" },
+      { corId: "#D191B4" },
+      { corId: "#C4839F" },
+      { corId: "#BE7D95" },
+      { corId: "#CA697C" }
+    ],
+
+    sombra: [
+      { corId: "#D5D2E3" },
+      { corId: "#AFA5D4" },
+      { corId: "#A2A5AC" },
+      { corId: "#868C99" },
+      { corId: "#D2E2E3" },
+      { corId: "#A8C4DA" }
+    ],
+
+    lapis: [
+      { corId: "#788090" },
+      { corId: "#6B7486" },
+      { corId: "#7587D8" }
+    ],
+
+    mascara: [
+      {
+        nome: "Cinza grafite suave",
+        hex: "#5A5D68"
+      },
+      {
+        nome: "Marrom acinzentado",
+        hex: "#625957"
+      }
+    ],
+
+    iluminador: [
+      {
+        nome: "Pérola fria",
+        hex: "#D8D5D3"
+      },
+      {
+        nome: "Champagne rosé frio",
+        hex: "#D1BAB9"
+      }
+    ]
+  },
+
+  cabelo: {
+
+    tonalidades: [
+      {
+        nome: "Loiro claro acinzentado",
+        hex: "#B9AB99"
+      },
+      {
+        nome: "Loiro bege frio",
+        hex: "#AC9E8E"
+      },
+      {
+        nome: "Loiro escuro acinzentado",
+        hex: "#95897E"
+      },
+      {
+        nome: "Castanho claro frio",
+        hex: "#7C7069"
+      },
+      {
+        nome: "Castanho claro acinzentado",
+        hex: "#716863"
+      }
+    ],
+
+    observacoes:
+      "Priorizar profundidades claras e fundos frios ou acinzentados. Os cabelos do Verão Claro tendem a variar de loiros claros a castanhos claros, mantendo leveza e baixo peso visual. Evitar escurecimento excessivo e fundos intensamente dourados ou acobreados."
+  },
+
+  aplicacao: {
+
+    proximoAoRosto:
+      "A profundidade clara é a prioridade. Próximo ao rosto, prefira rosas frios claros, azuis delicados, lavandas, lilases, verdes suaves, menta e neutros claros frios.",
+
+    partesInferiores:
+      "Cinzas claros e médios, azul jeans claro, azul ardósia, taupe frio e azul marinho suavizado funcionam como boas bases sem criar peso excessivo.",
+
+    coresForaDaCartela:
+      "A primeira cartela vizinha para ampliar o repertório é a Primavera Clara, especialmente em tons que preservem a profundidade clara. Cores muito escuras e pesadas são o principal ponto de cautela.",
+
+    contraste:
+      "O contraste do Verão Claro tende a baixíssimo claro, baixo claro ou médio. Prefira combinações luminosas, delicadas e de contraste baixo a moderado, evitando oposição muito pesada entre claro e escuro.",
+
+    acessorios:
+      "Prateado claro é especialmente harmônico. Dourado claro e rosé claro também podem aparecer quando forem suaves e pouco pesados visualmente, sempre respeitando a avaliação individual."
+  }
+},
+    // Dados oficiais fornecidos externamente (não recalculados, não reinterpretados).
+    verao_frio: {
+
+  acromaticos: [
+    { corId: "#EBECF0" },
+    { corId: "#818997" }
+  ],
+
+  neutrosEssenciais: [
+    { corId: "#EBECF0" },
+    { corId: "#DFE1E6" },
+    { corId: "#D3D6DC" },
+    { corId: "#C8CBD2" },
+    { corId: "#B1B5BD" },
+    { corId: "#A7ABB2" },
+    { corId: "#9BA0A8" },
+    { corId: "#818997" }
+  ],
+
+  coresProtagonistas: [
+    { corId: "#D7B8CA" },
+    { corId: "#D195B5" },
+    { corId: "#D16C9C" },
+    { corId: "#D0ABB4" },
+    { corId: "#ABCED0" },
+    { corId: "#87BECF" },
+    { corId: "#96BACE" },
+    { corId: "#A4BACF" },
+    { corId: "#B1ABD0" },
+    { corId: "#7F98CF" }
+  ],
+
+  coresDestaque: [
+    { corId: "#D16C9C" },
+    { corId: "#D2568E" },
+    { corId: "#AD5277" },
+    { corId: "#C2485F" },
+    { corId: "#4B9D70" },
+    { corId: "#4DAEA6" },
+    { corId: "#5FA7B3" },
+    { corId: "#3196AD" },
+    { corId: "#5DA2D3" },
+    { corId: "#2C59AA" },
+    { corId: "#687CB2" },
+    { corId: "#8953B4" }
+  ],
+
+  coresUniversais: [
+    { nome: "Azul Petróleo", corId: "#5DA2D3" },
+    { nome: "Turquesa", corId: "#A4BACF" },
+    { nome: "Azul Marinho", corId: "#3651AF" },
+    { nome: "Azul Jeans", corId: "#ABCED0" },
+    { nome: "Lilás", corId: "#B1ABD0" },
+    { nome: "Vermelho Melancia", corId: "#D0ABB4" },
+    { nome: "Rosa Goiaba", corId: "#D2568E" },
+    { nome: "Amêndoa", corId: "#BC9E97" },
+    { nome: "Fendi", corId: "#B1B5BD" },
+    { nome: "Manteiga", corId: "#C8CBD2" },
+    { nome: "Off-White", corId: "#EBECF0" }
+  ],
+
+  combinacoes: {
+
+    duasCores: [
+
+      {
+        nome: "Atemporal — Off-White + Azul Marinho",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#EBECF0", proporcao: 60 },
+          { corId: "#3651AF", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Atemporal — Fendi + Lilás",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#B1B5BD", proporcao: 60 },
+          { corId: "#B1ABD0", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Azul Petróleo + Rosa Frio",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#5DA2D3", proporcao: 55 },
+          { corId: "#D7B8CA", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Azul Royal + Rosa Goiaba",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#2C59AA", proporcao: 55 },
+          { corId: "#D2568E", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Rosa Chá + Cinza Pérola",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#D4A7C0", proporcao: 55 },
+          { corId: "#8F949F", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Azul Jeans + Rosa Frio",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#ABCED0", proporcao: 55 },
+          { corId: "#D7B8CA", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Ametista + Turquesa",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#7E4FAE", proporcao: 45 },
+          { corId: "#A4BACF", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Rosa Malva + Azul Royal",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#D16C9C", proporcao: 45 },
+          { corId: "#2C59AA", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Off-White + Greige",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#EBECF0", proporcao: 60 },
+          { corId: "#A7ABB2", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Cinza Médio + Taupe",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#DFE1E6", proporcao: 60 },
+          { corId: "#9BA0A8", proporcao: 40 }
+        ]
+      }
+
+    ],
+
+    tresCores: [
+
+      {
+        nome: "Atemporal",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#EBECF0", proporcao: 45 },
+          { corId: "#B1B5BD", proporcao: 30 },
+          { corId: "#3651AF", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#5DA2D3", proporcao: 40 },
+          { corId: "#D2568E", proporcao: 35 },
+          { corId: "#EBECF0", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Acessível",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#ABCED0", proporcao: 40 },
+          { corId: "#D7B8CA", proporcao: 35 },
+          { corId: "#B1B5BD", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Artsy",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#7E4FAE", proporcao: 35 },
+          { corId: "#A4BACF", proporcao: 35 },
+          { corId: "#D16C9C", proporcao: 30 }
+        ]
+      },
+
+      {
+        nome: "Minimalista",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#EBECF0", proporcao: 55 },
+          { corId: "#A7ABB2", proporcao: 30 },
+          { corId: "#818997", proporcao: 15 }
+        ]
+      }
+
+    ],
+
+    proporcionais: []
+  },
+
+  armarioCapsula: {
+
+    base: [
+      { corId: "#EBECF0" },
+      { corId: "#DFE1E6" },
+      { corId: "#B1B5BD" },
+      { corId: "#9BA0A8" },
+      { corId: "#818997" }
+    ],
+
+    apoio: [
+      { corId: "#ABCED0" },
+      { corId: "#D7B8CA" },
+      { corId: "#B1ABD0" },
+      { corId: "#A4BACF" }
+    ],
+
+    destaque: [
+      { corId: "#D2568E" },
+      { corId: "#5DA2D3" },
+      { corId: "#2C59AA" },
+      { corId: "#8953B4" }
+    ],
+
+    combinacoes: [
+      {
+        cores: ["#EBECF0", "#ABCED0", "#D2568E"]
+      },
+      {
+        cores: ["#DFE1E6", "#B1ABD0", "#5DA2D3"]
+      },
+      {
+        cores: ["#B1B5BD", "#A4BACF", "#8953B4"]
+      },
+      {
+        cores: ["#9BA0A8", "#D7B8CA", "#2C59AA"]
+      }
+    ]
+  },
+
+  beleza: {
+
+    base: [
+      {
+        nome: "Bege frio claro",
+        hex: "#D4C0BA"
+      },
+      {
+        nome: "Bege rosado frio",
+        hex: "#CDB5B4"
+      },
+      {
+        nome: "Bege neutro-frio médio-claro",
+        hex: "#BEAAA7"
+      }
+    ],
+
+    blush: [
+      { corId: "#D7B8CA" },
+      { corId: "#D195B5" },
+      {
+        nome: "Rosa frio médio",
+        hex: "#C889A5"
+      }
+    ],
+
+    batom: [
+      { corId: "#D7B8CA" },
+      { corId: "#D195B5" },
+      { corId: "#D2568E" },
+      { corId: "#AD5277" },
+      { corId: "#C2485F" }
+    ],
+
+    sombra: [
+      { corId: "#B1ABD0" },
+      { corId: "#A7ABB2" },
+      { corId: "#8F949F" },
+      { corId: "#A4BACF" },
+      { corId: "#687CB2" },
+      { corId: "#7E4FAE" }
+    ],
+
+    lapis: [
+      { corId: "#818997" },
+      { corId: "#697284" },
+      { corId: "#3651AF" }
+    ],
+
+    mascara: [
+      {
+        nome: "Grafite frio",
+        hex: "#4F535F"
+      },
+      {
+        nome: "Marrom acinzentado frio",
+        hex: "#5B5354"
+      }
+    ],
+
+    iluminador: [
+      {
+        nome: "Pérola fria",
+        hex: "#D8D7DA"
+      },
+      {
+        nome: "Rosé frio perolado",
+        hex: "#CEB4BD"
+      }
+    ]
+  },
+
+  cabelo: {
+
+    tonalidades: [
+      {
+        nome: "Loiro frio acinzentado",
+        hex: "#A99D92"
+      },
+      {
+        nome: "Loiro escuro acinzentado",
+        hex: "#92867E"
+      },
+      {
+        nome: "Castanho claro frio",
+        hex: "#796E69"
+      },
+      {
+        nome: "Castanho claro acinzentado",
+        hex: "#6C6360"
+      },
+      {
+        nome: "Castanho médio frio",
+        hex: "#5A5351"
+      }
+    ],
+
+    observacoes:
+      "A temperatura fria é a prioridade. Priorizar fundos acinzentados e profundidades claras a médias. Evitar dourados, cobres e tons intensamente quentes. A individualização deve considerar contraste natural e profundidade da cliente."
+  },
+
+  aplicacao: {
+
+    proximoAoRosto:
+      "A temperatura fria é a prioridade. Próximo ao rosto, prefira rosas frios, lilases, lavandas, azuis frios, turquesas suavizados, verdes frios e neutros acinzentados.",
+
+    partesInferiores:
+      "Cinzas médios, azul jeans, azul marinho, azul ardósia e taupes frios funcionam como bases versáteis para peças inferiores e estruturantes.",
+
+    coresForaDaCartela:
+      "As primeiras vizinhas para ampliar o repertório são Verão Claro e Verão Suave. Algumas cores do Inverno Frio também podem funcionar quando não forem escuras ou intensas demais. Evite tons evidentemente quentes.",
+
+    contraste:
+      "O contraste mais comum varia de baixo claro a médio. Prefira composições frias e relativamente suaves, evitando contraste extremo ou cores muito vibrantes dominando o visual.",
+
+    acessorios:
+      "Prateado e rosé frio são as escolhas prioritárias. A Studio recomenda evitar dourado para Verão Frio. Acabamentos claros, foscos ou polidos podem funcionar conforme o estilo individual."
+  }
+},
+    // Dados oficiais fornecidos externamente (não recalculados, não reinterpretados).
+    verao_suave: {
+
+  acromaticos: [
+    { corId: "#EBECF0" },
+    { corId: "#9196A1" }
+  ],
+
+  neutrosEssenciais: [
+    { corId: "#EBECF0" },
+    { corId: "#E0E3E7" },
+    { corId: "#D6D9DF" },
+    { corId: "#CCCFD6" },
+    { corId: "#C2C6CD" },
+    { corId: "#B9BDC4" },
+    { corId: "#AFB3BB" },
+    { corId: "#A6AAB1" }
+  ],
+
+  coresProtagonistas: [
+    { corId: "#D6C6D0" },
+    { corId: "#B37C99" },
+    { corId: "#D8A9BE" },
+    { corId: "#C07D95" },
+    { corId: "#C4CEBA" },
+    { corId: "#84AB8C" },
+    { corId: "#BACDCE" },
+    { corId: "#5F8AA1" },
+    { corId: "#6C8EB4" },
+    { corId: "#BDBACE" },
+    { corId: "#AD9DDC" }
+  ],
+
+  coresDestaque: [
+    { corId: "#B45288" },
+    { corId: "#D582AB" },
+    { corId: "#925971" },
+    { corId: "#A45569" },
+    { corId: "#84AB8C" },
+    { corId: "#51A289" },
+    { corId: "#598087" },
+    { corId: "#5D8899" },
+    { corId: "#6C8EB4" },
+    { corId: "#718FB9" },
+    { corId: "#A587B7" },
+    { corId: "#925384" }
+  ],
+
+  coresUniversais: [
+    { nome: "Verde Garrafa", corId: "#51A289" },
+    { nome: "Verde Esmeralda", corId: "#539285" },
+    { nome: "Azul Petróleo", corId: "#6C8EB4" },
+    { nome: "Turquesa", corId: "#7690BF" },
+    { nome: "Azul Marinho", corId: "#9899DB" },
+    { nome: "Azul Jeans", corId: "#5F8AA1" },
+    { nome: "Lilás", corId: "#AD9DDC" },
+    { nome: "Vermelho Melancia", corId: "#CEBABF" },
+    { nome: "Rosa Goiaba", corId: "#925971" },
+    { nome: "Amêndoa", corId: "#BAA9A5" },
+    { nome: "Fendi", corId: "#B9BDC4" },
+    { nome: "Manteiga", corId: "#CCCFD6" },
+    { nome: "Off-White", corId: "#EBECF0" }
+  ],
+
+  combinacoes: {
+
+    duasCores: [
+
+      {
+        nome: "Atemporal — Off-White + Azul Jeans",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#EBECF0", proporcao: 60 },
+          { corId: "#5F8AA1", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Atemporal — Fendi + Malva",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#B9BDC4", proporcao: 60 },
+          { corId: "#BDBACE", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Azul Petróleo + Rosa Antigo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#6C8EB4", proporcao: 55 },
+          { corId: "#B37C99", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Verde Garrafa + Rosa Malva",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#51A289", proporcao: 55 },
+          { corId: "#D8A9BE", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Rosa Antigo + Greige",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#D6C6D0", proporcao: 55 },
+          { corId: "#AFB3BB", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Menta + Rosa Frio",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#C4CEBA", proporcao: 55 },
+          { corId: "#C07D95", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Azul Petróleo + Malva",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#6C8EB4", proporcao: 55 },
+          { corId: "#A587B7", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Verde Sálvia + Rosa Goiaba",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#84AB8C", proporcao: 55 },
+          { corId: "#925971", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Off-White + Taupe",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#EBECF0", proporcao: 60 },
+          { corId: "#A6AAB1", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Cinza Claro + Greige",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#E0E3E7", proporcao: 60 },
+          { corId: "#AFB3BB", proporcao: 40 }
+        ]
+      }
+
+    ],
+
+    tresCores: [
+
+      {
+        nome: "Atemporal",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#EBECF0", proporcao: 45 },
+          { corId: "#B9BDC4", proporcao: 30 },
+          { corId: "#5F8AA1", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#6C8EB4", proporcao: 40 },
+          { corId: "#B37C99", proporcao: 35 },
+          { corId: "#EBECF0", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Acessível",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#C4CEBA", proporcao: 40 },
+          { corId: "#D8A9BE", proporcao: 35 },
+          { corId: "#AFB3BB", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Artsy",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#51A289", proporcao: 35 },
+          { corId: "#A587B7", proporcao: 35 },
+          { corId: "#925971", proporcao: 30 }
+        ]
+      },
+
+      {
+        nome: "Minimalista",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#EBECF0", proporcao: 55 },
+          { corId: "#AFB3BB", proporcao: 30 },
+          { corId: "#9196A1", proporcao: 15 }
+        ]
+      }
+
+    ],
+
+    proporcionais: []
+  },
+
+  armarioCapsula: {
+
+    base: [
+      { corId: "#EBECF0" },
+      { corId: "#E0E3E7" },
+      { corId: "#B9BDC4" },
+      { corId: "#A6AAB1" },
+      { corId: "#9196A1" }
+    ],
+
+    apoio: [
+      { corId: "#BACDCE" },
+      { corId: "#BDBACE" },
+      { corId: "#C4CEBA" },
+      { corId: "#D6C6D0" }
+    ],
+
+    destaque: [
+      { corId: "#6C8EB4" },
+      { corId: "#925971" },
+      { corId: "#51A289" },
+      { corId: "#A587B7" }
+    ],
+
+    combinacoes: [
+      {
+        cores: ["#EBECF0", "#5F8AA1", "#D6C6D0"]
+      },
+      {
+        cores: ["#E0E3E7", "#BDBACE", "#6C8EB4"]
+      },
+      {
+        cores: ["#B9BDC4", "#C4CEBA", "#925971"]
+      },
+      {
+        cores: ["#A6AAB1", "#51A289", "#A587B7"]
+      }
+    ]
+  },
+
+  beleza: {
+
+    base: [
+      {
+        nome: "Bege frio suave",
+        hex: "#C6B6B2"
+      },
+      {
+        nome: "Bege rosado suave",
+        hex: "#C3ACAC"
+      },
+      {
+        nome: "Bege neutro-frio médio",
+        hex: "#B5A3A1"
+      }
+    ],
+
+    blush: [
+      { corId: "#D8A9BE" },
+      { corId: "#B37C99" },
+      {
+        nome: "Rosa malva suave",
+        hex: "#B8889C"
+      }
+    ],
+
+    batom: [
+      { corId: "#D8A9BE" },
+      { corId: "#B37C99" },
+      { corId: "#925971" },
+      { corId: "#A45569" },
+      { corId: "#B45288" }
+    ],
+
+    sombra: [
+      { corId: "#BDBACE" },
+      { corId: "#AD9DDC" },
+      { corId: "#AFB3BB" },
+      { corId: "#9CA0A9" },
+      { corId: "#BACDCE" },
+      { corId: "#84AB8C" }
+    ],
+
+    lapis: [
+      { corId: "#9196A1" },
+      { corId: "#7A8292" },
+      { corId: "#5F8AA1" }
+    ],
+
+    mascara: [
+      {
+        nome: "Grafite suave",
+        hex: "#5B5D64"
+      },
+      {
+        nome: "Marrom acinzentado suave",
+        hex: "#625A58"
+      }
+    ],
+
+    iluminador: [
+      {
+        nome: "Pérola fosca fria",
+        hex: "#D2CFD0"
+      },
+      {
+        nome: "Rosé frio fosco",
+        hex: "#C5AEB3"
+      }
+    ]
+  },
+
+  cabelo: {
+
+    tonalidades: [
+      {
+        nome: "Loiro escuro acinzentado suave",
+        hex: "#948A82"
+      },
+      {
+        nome: "Loiro bege frio",
+        hex: "#9E938A"
+      },
+      {
+        nome: "Castanho claro acinzentado",
+        hex: "#786F6A"
+      },
+      {
+        nome: "Castanho médio frio",
+        hex: "#625B58"
+      },
+      {
+        nome: "Castanho médio acinzentado",
+        hex: "#585251"
+      }
+    ],
+
+    observacoes:
+      "A suavidade é a prioridade. Priorizar fundos frios, neutros-frios ou acinzentados, com profundidades claras a intermediárias. Evitar reflexos muito dourados, cobres vivos, preto intenso e contrastes excessivos."
+  },
+
+  aplicacao: {
+
+    proximoAoRosto:
+      "A intensidade suave é a prioridade. Próximo ao rosto, prefira rosas malva, azuis acinzentados, verdes suaves, lilases, taupes e neutros frios pouco contrastantes.",
+
+    partesInferiores:
+      "Cinzas médios, taupes frios, azul jeans acinzentado, azul petróleo suave, verde acinzentado e neutros médios funcionam especialmente bem como bases.",
+
+    coresForaDaCartela:
+      "A principal cartela vizinha para empréstimos é o Outono Suave, pois ambas compartilham a suavidade como característica dominante. Verão Frio também pode oferecer alternativas frias, desde que a intensidade continue moderada.",
+
+    contraste:
+      "O contraste tende a baixo-claro, médio para baixo ou médio. Prefira transições suaves entre as cores e evite oposições muito nítidas, preto puro ou combinações excessivamente vibrantes.",
+
+    acessorios:
+      "Prateado fosco e rosé fosco são especialmente harmônicos. Dourado fosco claro pode aparecer de forma discreta quando não estiver excessivamente amarelo ou brilhante."
+  }
+},
+    // Dados oficiais fornecidos externamente (não recalculados, não reinterpretados).
+    outono_suave: {
+
+  acromaticos: [
+    { corId: "#E1D9CF" },
+    { corId: "#564735" }
+  ],
+
+  neutrosEssenciais: [
+    { corId: "#E1D9CF" },
+    { corId: "#D6CCBF" },
+    { corId: "#CABEB1" },
+    { corId: "#BEB1A2" },
+    { corId: "#B1A495" },
+    { corId: "#A49687" },
+    { corId: "#988978" },
+    { corId: "#73614D" }
+  ],
+
+  coresProtagonistas: [
+    { corId: "#B0887B" },
+    { corId: "#B07B93" },
+    { corId: "#A7B07B" },
+    { corId: "#80ABA0" },
+    { corId: "#B7A76B" },
+    { corId: "#AD9E42" },
+    { corId: "#AB646F" },
+    { corId: "#997269" }
+  ],
+
+  coresDestaque: [
+    { corId: "#B0887B" },
+    { corId: "#B07B93" },
+    { corId: "#A7B07B" },
+    { corId: "#80ABA0" },
+    { corId: "#C7713A" },
+    { corId: "#D18A45" },
+    { corId: "#A5506C" },
+    { corId: "#79A752" }
+  ],
+
+  coresUniversais: [
+    { nome: "Verde Garrafa", corId: "#66AC6E" },
+    { nome: "Verde Esmeralda", corId: "#3E9550" },
+    { nome: "Azul Petróleo", corId: "#2F5E80" },
+    { nome: "Turquesa", corId: "#2E4361" },
+    { nome: "Azul Jeans", corId: "#4F838E" },
+    { nome: "Lilás", corId: "#61297C" },
+    { nome: "Vermelho Melancia", corId: "#B07B84" },
+    { nome: "Rosa Goiaba", corId: "#AB646F" },
+    { nome: "Amêndoa", corId: "#997269" },
+    { nome: "Fendi", corId: "#B1A495" },
+    { nome: "Manteiga", corId: "#CABEB1" },
+    { nome: "Off-White", corId: "#E1D9CF" }
+  ],
+
+  combinacoes: {
+
+    duasCores: [
+
+      {
+        nome: "Atemporal — Off-White + Taupe",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#E1D9CF", proporcao: 45 },
+          { corId: "#988978", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Atemporal — Fendi + Chocolate",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#B1A495", proporcao: 60 },
+          { corId: "#7C614D", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Petróleo Suave + Terracota Suave",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#80ABA0", proporcao: 60 },
+          { corId: "#B0887B", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Oliva Suave + Rosa Antigo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#A7B07B", proporcao: 55 },
+          { corId: "#B07B93", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Manteiga + Rosa Goiaba",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#CABEB1", proporcao: 65 },
+          { corId: "#AB646F", proporcao: 35 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Areia + Terracota Suave",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#BEB1A2", proporcao: 65 },
+          { corId: "#B0887B", proporcao: 35 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Ocre + Petróleo Suave",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#B5B253", proporcao: 40 },
+          { corId: "#80ABA0", proporcao: 60 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Tangerina + Oliva Suave",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#C7713A", proporcao: 35 },
+          { corId: "#A7B07B", proporcao: 65 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Greige + Taupe",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#A49687", proporcao: 55 },
+          { corId: "#988978", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Marfim + Chocolate",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#D6CCBF", proporcao: 60 },
+          { corId: "#7C614D", proporcao: 40 }
+        ]
+      }
+
+    ],
+
+    tresCores: [
+
+      {
+        nome: "Atemporal",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#E1D9CF", proporcao: 30 },
+          { corId: "#B1A495", proporcao: 35 },
+          { corId: "#7C614D", proporcao: 35 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#80ABA0", proporcao: 45 },
+          { corId: "#B0887B", proporcao: 30 },
+          { corId: "#E1D9CF", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Acessível",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#CABEB1", proporcao: 50 },
+          { corId: "#AB646F", proporcao: 25 },
+          { corId: "#A49687", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Artsy",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#A7B07B", proporcao: 45 },
+          { corId: "#C7713A", proporcao: 30 },
+          { corId: "#957BB0", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Minimalista",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#988978", proporcao: 50 },
+          { corId: "#B1A495", proporcao: 35 },
+          { corId: "#E1D9CF", proporcao: 15 }
+        ]
+      }
+
+    ],
+
+    proporcionais: []
+  },
+
+  armarioCapsula: {
+
+    base: [
+      { corId: "#E1D9CF" },
+      { corId: "#B1A495" },
+      { corId: "#A49687" },
+      { corId: "#988978" },
+      { corId: "#7C614D" }
+    ],
+
+    apoio: [
+      { corId: "#A7B07B" },
+      { corId: "#80ABA0" },
+      { corId: "#B7A76B" },
+      { corId: "#B0887B" }
+    ],
+
+    destaque: [
+      { corId: "#AB646F" },
+      { corId: "#C7713A" },
+      { corId: "#D18A45" },
+      { corId: "#B07B93" }
+    ],
+
+    combinacoes: [
+      {
+        cores: ["#E1D9CF", "#7C614D", "#B0887B"]
+      },
+      {
+        cores: ["#B1A495", "#80ABA0", "#B07B93"]
+      },
+      {
+        cores: ["#A49687", "#A7B07B", "#C7713A"]
+      },
+      {
+        cores: ["#988978", "#B7A76B", "#AB646F"]
+      }
+    ]
+  },
+
+  beleza: {
+
+    base: [
+      {
+        nome: "Bege suave quente",
+        hex: "#C7A992"
+      },
+      {
+        nome: "Bege dourado suave",
+        hex: "#B89A7F"
+      },
+      {
+        nome: "Bege médio neutro-quente",
+        hex: "#A78973"
+      }
+    ],
+
+    blush: [
+      { corId: "#B0887B" },
+      { corId: "#B07B93" },
+      {
+        nome: "Pêssego suave",
+        hex: "#BE8874"
+      }
+    ],
+
+    batom: [
+      { corId: "#B0887B" },
+      { corId: "#A5506C" },
+      { corId: "#AB646F" },
+      { corId: "#973D37" },
+      { corId: "#997269" }
+    ],
+
+    sombra: [
+      { corId: "#B1A495" },
+      { corId: "#A49687" },
+      { corId: "#988978" },
+      { corId: "#7C614D" },
+      { corId: "#A7B07B" },
+      { corId: "#80ABA0" }
+    ],
+
+    lapis: [
+      { corId: "#7C614D" },
+      { corId: "#73614D" },
+      { corId: "#2F5E80" }
+    ],
+
+    mascara: [
+      {
+        nome: "Marrom quente suave",
+        hex: "#554237"
+      },
+      {
+        nome: "Marrom médio profundo",
+        hex: "#46372F"
+      }
+    ],
+
+    iluminador: [
+      {
+        nome: "Champagne suave",
+        hex: "#C7B087"
+      },
+      {
+        nome: "Dourado fosco suave",
+        hex: "#B9A06A"
+      }
+    ]
+  },
+
+  cabelo: {
+
+    tonalidades: [
+      {
+        nome: "Loiro escuro dourado suave",
+        hex: "#8A7155"
+      },
+      {
+        nome: "Castanho claro dourado",
+        hex: "#7B624A"
+      },
+      {
+        nome: "Castanho claro quente",
+        hex: "#725844"
+      },
+      {
+        nome: "Castanho médio dourado suave",
+        hex: "#664C39"
+      },
+      {
+        nome: "Chocolate suave",
+        hex: "#624739"
+      }
+    ],
+
+    observacoes:
+      "Priorizar fundos dourados suaves e profundidades claras a intermediárias, podendo chegar ao castanho médio. Evitar dourados excessivamente acesos, cobres muito vivos e contrastes fortes. A suavidade deve permanecer como característica dominante."
+  },
+
+  aplicacao: {
+
+    proximoAoRosto:
+      "A suavidade é a prioridade. Próximo ao rosto, prefira tons quentes, amortecidos e pouco contrastantes, como terracota suave, oliva suave, petróleo suave, rosa antigo, taupe, fendi e marrons médios.",
+
+    partesInferiores:
+      "Taupes, greiges, chocolates suaves, oliva, petróleo e marrons médios funcionam muito bem como bases de calças, saias e peças estruturantes.",
+
+    coresForaDaCartela:
+      "A primeira cartela vizinha para ampliar o repertório é o Verão Suave, especialmente em tons de profundidade intermediária e baixa intensidade. Tons muito brilhantes, muito escuros ou excessivamente quentes devem receber mais cautela.",
+
+    contraste:
+      "Priorize contrastes baixos a moderados. A principal característica do Outono Suave é a baixa intensidade, portanto composições excessivamente nítidas ou com oposição muito forte entre claro e escuro tendem a competir com a beleza da cartela.",
+
+    acessorios:
+      "Prefira metais e acabamentos suaves, foscos, escovados ou pouco espelhados. Dourado fosco, rosé fosco e prateado fosco claro funcionam melhor do que superfícies muito brilhantes."
+  }
+},
+    // Dados oficiais fornecidos externamente (não recalculados, não reinterpretados).
+    outono_quente: {
+
+  acromaticos: [
+    { corId: "#DED5CA" },
+    { corId: "#422F20" }
+  ],
+
+  neutrosEssenciais: [
+    { corId: "#DED5CA" },
+    { corId: "#CFC4B6" },
+    { corId: "#BFB2A4" },
+    { corId: "#9D9081" },
+    { corId: "#907F6B" },
+    { corId: "#7F6D59" },
+    { corId: "#47392A" },
+    { corId: "#422F20" }
+  ],
+
+  coresProtagonistas: [
+    { corId: "#BC826F" },
+    { corId: "#C15522" },
+    { corId: "#D78A45" },
+    { corId: "#AC7028" },
+    { corId: "#C9B88C" },
+    { corId: "#C7B923" },
+    { corId: "#AFBC6F" },
+    { corId: "#76B5A5" },
+    { corId: "#D9423F" },
+    { corId: "#DA2C31" }
+  ],
+
+  coresDestaque: [
+    { corId: "#BC826F" },
+    { corId: "#70331C" },
+    { corId: "#C15522" },
+    { corId: "#D78A45" },
+    { corId: "#AC7028" },
+    { corId: "#C7B923" },
+    { corId: "#A3DD40" },
+    { corId: "#76B5A5" },
+    { corId: "#D9423F" },
+    { corId: "#B7293A" }
+  ],
+
+  coresUniversais: [
+    { nome: "Verde Garrafa", corId: "#2EBA47" },
+    { nome: "Verde Esmeralda", corId: "#255933" },
+    { nome: "Azul Petróleo", corId: "#76B5A5" },
+    { nome: "Azul Jeans", corId: "#34738F" },
+    { nome: "Vinho", corId: "#CD5638" },
+    { nome: "Lilás", corId: "#672E81" },
+    { nome: "Vermelho Melancia", corId: "#BC6F7C" },
+    { nome: "Rosa Goiaba", corId: "#DA2C31" },
+    { nome: "Fendi", corId: "#9D9081" },
+    { nome: "Manteiga", corId: "#BFB2A4" },
+    { nome: "Off-White", corId: "#DED5CA" }
+  ],
+
+  combinacoes: {
+
+    duasCores: [
+
+      {
+        nome: "Atemporal — Off-White + Café",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#DED5CA", proporcao: 35 },
+          { corId: "#422F20", proporcao: 65 }
+        ]
+      },
+
+      {
+        nome: "Atemporal — Fendi + Chocolate",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#9D9081", proporcao: 55 },
+          { corId: "#995D33", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Azul Petróleo + Terracota",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#76B5A5", proporcao: 60 },
+          { corId: "#BC826F", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Verde Oliva + Cereja",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#AFBC6F", proporcao: 60 },
+          { corId: "#D9423F", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Manteiga + Papaya",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#BFB2A4", proporcao: 60 },
+          { corId: "#C15522", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Rosa Goiaba + Fendi",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#DA2C31", proporcao: 35 },
+          { corId: "#9D9081", proporcao: 65 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Girassol + Petróleo",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#C7B923", proporcao: 40 },
+          { corId: "#76B5A5", proporcao: 60 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Argila + Verde Garrafa",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#AC7028", proporcao: 45 },
+          { corId: "#2EBA47", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Taupe + Café",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#7F6D59", proporcao: 55 },
+          { corId: "#422F20", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Marfim + Cacau",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#CFC4B6", proporcao: 40 },
+          { corId: "#4C3324", proporcao: 60 }
+        ]
+      }
+
+    ],
+
+    tresCores: [
+
+      {
+        nome: "Atemporal",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#DED5CA", proporcao: 20 },
+          { corId: "#9D9081", proporcao: 30 },
+          { corId: "#422F20", proporcao: 50 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#76B5A5", proporcao: 50 },
+          { corId: "#BC826F", proporcao: 30 },
+          { corId: "#DED5CA", proporcao: 20 }
+        ]
+      },
+
+      {
+        nome: "Acessível",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#BFB2A4", proporcao: 50 },
+          { corId: "#DA2C31", proporcao: 25 },
+          { corId: "#7F6D59", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Artsy",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#2EBA47", proporcao: 45 },
+          { corId: "#AC7028", proporcao: 35 },
+          { corId: "#7A1571", proporcao: 20 }
+        ]
+      },
+
+      {
+        nome: "Minimalista",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#422F20", proporcao: 60 },
+          { corId: "#9D9081", proporcao: 30 },
+          { corId: "#DED5CA", proporcao: 10 }
+        ]
+      }
+
+    ],
+
+    proporcionais: []
+  },
+
+  armarioCapsula: {
+
+    base: [
+      { corId: "#DED5CA" },
+      { corId: "#9D9081" },
+      { corId: "#7F6D59" },
+      { corId: "#995D33" },
+      { corId: "#422F20" }
+    ],
+
+    apoio: [
+      { corId: "#AFBC6F" },
+      { corId: "#76B5A5" },
+      { corId: "#C9B88C" },
+      { corId: "#BC826F" }
+    ],
+
+    destaque: [
+      { corId: "#C15522" },
+      { corId: "#D78A45" },
+      { corId: "#D9423F" },
+      { corId: "#DA2C31" }
+    ],
+
+    combinacoes: [
+      {
+        cores: ["#DED5CA", "#995D33", "#BC826F"]
+      },
+      {
+        cores: ["#9D9081", "#76B5A5", "#D9423F"]
+      },
+      {
+        cores: ["#7F6D59", "#AFBC6F", "#C15522"]
+      },
+      {
+        cores: ["#422F20", "#C9B88C", "#DA2C31"]
+      }
+    ]
+  },
+
+  beleza: {
+
+    base: [
+      {
+        nome: "Bege quente",
+        hex: "#C4A083"
+      },
+      {
+        nome: "Bege dourado",
+        hex: "#B38C69"
+      },
+      {
+        nome: "Caramelo quente",
+        hex: "#9B7252"
+      }
+    ],
+
+    blush: [
+      { corId: "#BC826F" },
+      { corId: "#874B31" },
+      {
+        nome: "Coral queimado",
+        hex: "#B96952"
+      }
+    ],
+
+    batom: [
+      { corId: "#BC826F" },
+      { corId: "#C15522" },
+      { corId: "#D78A45" },
+      { corId: "#9F2D1C" },
+      { corId: "#A44D3C" }
+    ],
+
+    sombra: [
+      { corId: "#9D9081" },
+      { corId: "#7F6D59" },
+      { corId: "#A46C5E" },
+      { corId: "#995D33" },
+      { corId: "#AFBC6F" },
+      { corId: "#76B5A5" }
+    ],
+
+    lapis: [
+      { corId: "#422F20" },
+      { corId: "#4C3324" },
+      { corId: "#76B5A5" }
+    ],
+
+    mascara: [
+      {
+        nome: "Marrom profundo quente",
+        hex: "#35271F"
+      },
+      {
+        nome: "Marrom quase preto",
+        hex: "#29231F"
+      }
+    ],
+
+    iluminador: [
+      {
+        nome: "Champagne dourado",
+        hex: "#D0AF72"
+      },
+      {
+        nome: "Ouro suave",
+        hex: "#BE984E"
+      }
+    ]
+  },
+
+  cabelo: {
+
+    tonalidades: [
+      {
+        nome: "Castanho médio dourado",
+        hex: "#79553A"
+      },
+      {
+        nome: "Castanho quente",
+        hex: "#68442F"
+      },
+      {
+        nome: "Chocolate dourado",
+        hex: "#70482F"
+      },
+      {
+        nome: "Cobre médio",
+        hex: "#8A5031"
+      },
+      {
+        nome: "Ruivo acobreado médio",
+        hex: "#9B5731"
+      },
+      {
+        nome: "Mogno quente",
+        hex: "#713D32"
+      }
+    ],
+
+    observacoes:
+      "A temperatura quente deve permanecer perceptível. Os cabelos desta cartela tendem a apresentar fundos dourados, amarelados ou acobreados e profundidades principalmente médias a escuras. Ao preservar o contraste pessoal, a cor pode variar aproximadamente até dois tons acima ou abaixo do natural; mechas e reflexos podem avançar até quatro tons acima da base, sempre com avaliação individual."
+  },
+
+  aplicacao: {
+
+    proximoAoRosto:
+      "A temperatura quente é a prioridade. Próximo ao rosto, prefira terracotas, corais quentes, dourados, verdes oliva, marrons quentes, petróleo aquecido e vermelhos de fundo quente.",
+
+    partesInferiores:
+      "Marrons, cacau, café, oliva, verde militar, petróleo e neutros quentes são excelentes bases para calças, saias e peças estruturantes.",
+
+    coresForaDaCartela:
+      "As cartelas vizinhas Outono Suave e Outono Escuro são as primeiras referências quando for necessário ampliar o repertório. Alguns tons menos intensos e mais profundos da Primavera Quente também podem funcionar. Cores claramente frias devem receber mais cautela, especialmente próximas ao rosto.",
+
+    contraste:
+      "Como intensidade e profundidade são variáveis no Outono Quente, o contraste deve acompanhar o contraste pessoal da cliente. A temperatura quente permanece o critério prioritário.",
+
+    acessorios:
+      "Prefira metais visualmente quentes. Dourados, cobres e rosés harmonizam especialmente bem, com acabamentos envelhecidos, foscos ou menos espelhados quando desejado."
+  }
+},
+    // Dados oficiais fornecidos externamente (não recalculados, não reinterpretados).
+    outono_escuro: {
+
+  acromaticos: [
+    { corId: "#D9CFC3" },
+    { corId: "#332A1E" }
+  ],
+
+  neutrosEssenciais: [
+    { corId: "#D9CFC3" },
+    { corId: "#CABDAE" },
+    { corId: "#948675" },
+    { corId: "#71614F" },
+    { corId: "#493C2D" },
+    { corId: "#332A1E" },
+    { corId: "#392519" },
+    { corId: "#34251D" }
+  ],
+
+  coresProtagonistas: [
+    { corId: "#AA6852" },
+    { corId: "#744634" },
+    { corId: "#B67324" },
+    { corId: "#AA5261" },
+    { corId: "#7A1A16" },
+    { corId: "#9CAA52" },
+    { corId: "#259539" },
+    { corId: "#5AA390" },
+    { corId: "#B9A46E" }
+  ],
+
+  coresDestaque: [
+    { corId: "#AA6852" },
+    { corId: "#B67324" },
+    { corId: "#C6273D" },
+    { corId: "#AA5261" },
+    { corId: "#9E4452" },
+    { corId: "#8ECB24" },
+    { corId: "#5AA390" },
+    { corId: "#912161" }
+  ],
+
+  coresUniversais: [
+    { nome: "Verde Garrafa", corId: "#259539" },
+    { nome: "Verde Esmeralda", corId: "#193922" },
+    { nome: "Azul Petróleo", corId: "#5AA390" },
+    { nome: "Azul Jeans", corId: "#28586D" },
+    { nome: "Vinho", corId: "#AA5261" },
+    { nome: "Lilás", corId: "#31183A" },
+    { nome: "Rosa Goiaba", corId: "#9E4452" },
+    { nome: "Fendi", corId: "#948675" },
+    { nome: "Manteiga", corId: "#B9AA9A" },
+    { nome: "Off-White", corId: "#D9CFC3" }
+  ],
+
+  combinacoes: {
+
+    duasCores: [
+
+      {
+        nome: "Atemporal — Off-White + Chocolate",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#D9CFC3", proporcao: 35 },
+          { corId: "#392519", proporcao: 65 }
+        ]
+      },
+
+      {
+        nome: "Atemporal — Fendi + Vinho",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#948675", proporcao: 65 },
+          { corId: "#AA5261", proporcao: 35 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Petróleo + Terracota",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#5AA390", proporcao: 65 },
+          { corId: "#AA6852", proporcao: 35 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Verde Militar + Vinho",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#9CAA52", proporcao: 60 },
+          { corId: "#AA5261", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Manteiga + Terracota",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#B9AA9A", proporcao: 60 },
+          { corId: "#AA6852", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Rosa Goiaba + Chocolate",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#9E4452", proporcao: 40 },
+          { corId: "#392519", proporcao: 60 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Mostarda + Petróleo",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#B9A46E", proporcao: 40 },
+          { corId: "#5AA390", proporcao: 60 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Ferrugem + Verde Garrafa",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#B67324", proporcao: 40 },
+          { corId: "#259539", proporcao: 60 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Taupe + Tabaco",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#71614F", proporcao: 55 },
+          { corId: "#34251D", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Marfim + Chocolate",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#CABDAE", proporcao: 40 },
+          { corId: "#392519", proporcao: 60 }
+        ]
+      }
+
+    ],
+
+    tresCores: [
+
+      {
+        nome: "Atemporal",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#D9CFC3", proporcao: 20 },
+          { corId: "#948675", proporcao: 30 },
+          { corId: "#392519", proporcao: 50 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#5AA390", proporcao: 50 },
+          { corId: "#AA6852", proporcao: 30 },
+          { corId: "#D9CFC3", proporcao: 20 }
+        ]
+      },
+
+      {
+        nome: "Acessível",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#B9AA9A", proporcao: 50 },
+          { corId: "#9E4452", proporcao: 30 },
+          { corId: "#71614F", proporcao: 20 }
+        ]
+      },
+
+      {
+        nome: "Artsy",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#259539", proporcao: 50 },
+          { corId: "#B67324", proporcao: 30 },
+          { corId: "#912161", proporcao: 20 }
+        ]
+      },
+
+      {
+        nome: "Minimalista",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#34251D", proporcao: 60 },
+          { corId: "#948675", proporcao: 30 },
+          { corId: "#D9CFC3", proporcao: 10 }
+        ]
+      }
+
+    ],
+
+    proporcionais: []
+  },
+
+  armarioCapsula: {
+
+    base: [
+      { corId: "#D9CFC3" },
+      { corId: "#948675" },
+      { corId: "#71614F" },
+      { corId: "#392519" },
+      { corId: "#34251D" }
+    ],
+
+    apoio: [
+      { corId: "#9CAA52" },
+      { corId: "#5AA390" },
+      { corId: "#AA5261" },
+      { corId: "#B9A46E" }
+    ],
+
+    destaque: [
+      { corId: "#AA6852" },
+      { corId: "#B67324" },
+      { corId: "#C6273D" },
+      { corId: "#9E4452" }
+    ],
+
+    combinacoes: [
+      {
+        cores: ["#D9CFC3", "#392519", "#AA6852"]
+      },
+      {
+        cores: ["#948675", "#5AA390", "#AA5261"]
+      },
+      {
+        cores: ["#71614F", "#9CAA52", "#B67324"]
+      },
+      {
+        cores: ["#34251D", "#B9A46E", "#9E4452"]
+      }
+    ]
+  },
+
+  beleza: {
+
+    base: [
+      {
+        nome: "Bege quente médio",
+        hex: "#B9957D"
+      },
+      {
+        nome: "Bege dourado médio",
+        hex: "#A98263"
+      },
+      {
+        nome: "Caramelo quente",
+        hex: "#956F53"
+      }
+    ],
+
+    blush: [
+      { corId: "#AA6852" },
+      {
+        nome: "Pêssego queimado",
+        hex: "#B86F52"
+      },
+      {
+        nome: "Canela rosada",
+        hex: "#9D5B4D"
+      }
+    ],
+
+    batom: [
+      { corId: "#AA6852" },
+      { corId: "#744634" },
+      { corId: "#AA5261" },
+      { corId: "#7A1A16" },
+      { corId: "#591F18" }
+    ],
+
+    sombra: [
+      { corId: "#948675" },
+      { corId: "#71614F" },
+      { corId: "#86594E" },
+      { corId: "#392519" },
+      { corId: "#9CAA52" },
+      { corId: "#5AA390" }
+    ],
+
+    lapis: [
+      { corId: "#392519" },
+      { corId: "#34251D" },
+      { corId: "#5AA390" }
+    ],
+
+    mascara: [
+      {
+        nome: "Marrom profundo",
+        hex: "#30231D"
+      },
+      {
+        nome: "Preto suave",
+        hex: "#25211E"
+      }
+    ],
+
+    iluminador: [
+      {
+        nome: "Champagne quente",
+        hex: "#C7A774"
+      },
+      {
+        nome: "Dourado envelhecido suave",
+        hex: "#B08B4F"
+      }
+    ]
+  },
+
+  cabelo: {
+
+    tonalidades: [
+      {
+        nome: "Castanho médio dourado",
+        hex: "#6A4932"
+      },
+      {
+        nome: "Castanho escuro quente",
+        hex: "#493126"
+      },
+      {
+        nome: "Chocolate quente",
+        hex: "#5B382A"
+      },
+      {
+        nome: "Castanho acobreado profundo",
+        hex: "#70432E"
+      },
+      {
+        nome: "Mogno quente profundo",
+        hex: "#61352C"
+      }
+    ],
+
+    observacoes:
+      "Priorizar profundidades intermediárias a escuras e fundos quentes, dourados, amarelados ou acobreados. A recomendação final deve respeitar a cor natural, o contraste pessoal e a avaliação individual da cliente. Evitar transformar estas tonalidades em prescrição automática de coloração."
+  },
+
+  aplicacao: {
+
+    proximoAoRosto:
+      "Priorize cores profundas e quentes próximas ao rosto, especialmente petróleo, vinho quente, terracota, verde profundo, chocolate e neutros quentes. A profundidade é a característica dominante da cartela.",
+
+    partesInferiores:
+      "Marrons profundos, tabaco, chocolate, verde militar, petróleo e neutros escuros funcionam especialmente bem como bases de calças, saias e peças estruturantes.",
+
+    coresForaDaCartela:
+      "Quando desejar ampliar o repertório, priorize primeiro cores próximas ao DNA do Outono Escuro. Tons do Inverno Escuro podem funcionar pela profundidade compartilhada e tons do Outono Quente pela temperatura compartilhada. A aplicação próxima ao rosto deve ser avaliada com maior cuidado.",
+
+    contraste:
+      "O Outono Escuro comporta composições de profundidade marcada. A intensidade pode variar, portanto o contraste da combinação deve acompanhar também o contraste pessoal da cliente, evitando uma regra única para todas.",
+
+    acessorios:
+      "Priorize metais e acabamentos coerentes com a profundidade e o calor da cartela. Dourado, cobre, rosé e versões envelhecidas/foscas são especialmente úteis; o prateado pode aparecer com moderação quando tiver acabamento envelhecido."
+  }
+},
+    // Dados oficiais fornecidos externamente (não recalculados, não reinterpretados).
+    inverno_brilhante: {
+
+  acromaticos: [
+    { corId: "#F6F7F8" },
+    { corId: "#0B0C0F" }
+  ],
+
+  neutrosEssenciais: [
+    { corId: "#F6F7F8" },
+    { corId: "#DEE1E6" },
+    { corId: "#C7CBD2" },
+    { corId: "#9BA0A9" },
+    { corId: "#858A94" },
+    { corId: "#70757F" },
+    { corId: "#31353D" },
+    { corId: "#0B0C0F" }
+  ],
+
+  coresProtagonistas: [
+    { corId: "#FA194A" },
+    { corId: "#F40E3A" },
+    { corId: "#FD1890" },
+    { corId: "#F10766" },
+    { corId: "#6FFA19" },
+    { corId: "#4BF40E" },
+    { corId: "#45D7DE" },
+    { corId: "#0A31DF" },
+    { corId: "#0825EC" },
+    { corId: "#5C45DE" },
+    { corId: "#5A02D4" },
+    { corId: "#8415EF" }
+  ],
+
+  coresDestaque: [
+    { corId: "#F3CE3B" },
+    { corId: "#E6DF08" },
+    { corId: "#FA194A" },
+    { corId: "#F40E3A" },
+    { corId: "#DE459E" },
+    { corId: "#FD1890" },
+    { corId: "#FA0D7B" },
+    { corId: "#F10766" },
+    { corId: "#6FFA19" },
+    { corId: "#4BF40E" },
+    { corId: "#02AD3A" },
+    { corId: "#45D7DE" },
+    { corId: "#0F5787" },
+    { corId: "#0F5693" },
+    { corId: "#0F549F" },
+    { corId: "#0A31DF" },
+    { corId: "#0825EC" },
+    { corId: "#5C45DE" },
+    { corId: "#5A02D4" },
+    { corId: "#8415EF" }
+  ],
+
+  coresUniversais: [
+    { nome: "Verde Garrafa", corId: "#0A7351" },
+    { nome: "Verde Esmeralda", corId: "#0B6150" },
+    { nome: "Azul Petróleo", corId: "#0F549F" },
+    { nome: "Turquesa", corId: "#0D4BB8" },
+    { nome: "Azul Marinho", corId: "#1113FB" },
+    { nome: "Azul Jeans", corId: "#0F567C" },
+    { nome: "Vinho", corId: "#73100A" },
+    { nome: "Lilás", corId: "#210774" },
+    { nome: "Rosa Goiaba", corId: "#860F43" },
+    { nome: "Amêndoa", corId: "#C0553A" },
+    { nome: "Manteiga", corId: "#B1B5BE" },
+    { nome: "Branco", corId: "#F6F7F8" }
+  ],
+
+  combinacoes: {
+
+    duasCores: [
+
+      {
+        nome: "Atemporal — Branco + Preto",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#F6F7F8", proporcao: 50 },
+          { corId: "#0B0C0F", proporcao: 50 }
+        ]
+      },
+
+      {
+        nome: "Atemporal — Cinza + Azul Marinho",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#70757F", proporcao: 55 },
+          { corId: "#1113FB", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Azul Royal + Fúcsia",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#0A31DF", proporcao: 55 },
+          { corId: "#DE459E", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Turquesa + Rosa Médio",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#0D4BB8", proporcao: 55 },
+          { corId: "#F10766", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Branco + Rosa Antigo",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#F6F7F8", proporcao: 60 },
+          { corId: "#FD1890", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Lavanda + Azul Royal",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#5C45DE", proporcao: 45 },
+          { corId: "#0A31DF", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Amarelo Vivo + Cobalto",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#F3CE3B", proporcao: 40 },
+          { corId: "#0825EC", proporcao: 60 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Verde Maçã + Fúcsia",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#4BF40E", proporcao: 45 },
+          { corId: "#DE459E", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Branco + Grafite",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#F6F7F8", proporcao: 60 },
+          { corId: "#31353D", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Cinza + Preto",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#858A94", proporcao: 55 },
+          { corId: "#0B0C0F", proporcao: 45 }
+        ]
+      }
+
+    ],
+
+    tresCores: [
+
+      {
+        nome: "Atemporal",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#F6F7F8", proporcao: 45 },
+          { corId: "#70757F", proporcao: 30 },
+          { corId: "#0B0C0F", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#0A31DF", proporcao: 40 },
+          { corId: "#DE459E", proporcao: 35 },
+          { corId: "#F6F7F8", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Acessível",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#5C45DE", proporcao: 40 },
+          { corId: "#FD1890", proporcao: 35 },
+          { corId: "#F6F7F8", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Artsy",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#4BF40E", proporcao: 35 },
+          { corId: "#0825EC", proporcao: 35 },
+          { corId: "#F10766", proporcao: 30 }
+        ]
+      },
+
+      {
+        nome: "Minimalista",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#F6F7F8", proporcao: 50 },
+          { corId: "#31353D", proporcao: 30 },
+          { corId: "#0B0C0F", proporcao: 20 }
+        ]
+      }
+
+    ],
+
+    proporcionais: []
+  },
+
+  armarioCapsula: {
+
+    base: [
+      { corId: "#F6F7F8" },
+      { corId: "#C7CBD2" },
+      { corId: "#858A94" },
+      { corId: "#31353D" },
+      { corId: "#0B0C0F" }
+    ],
+
+    apoio: [
+      { corId: "#0F549F" },
+      { corId: "#5C45DE" },
+      { corId: "#0A7351" },
+      { corId: "#860F43" }
+    ],
+
+    destaque: [
+      { corId: "#FA194A" },
+      { corId: "#F10766" },
+      { corId: "#4BF40E" },
+      { corId: "#0A31DF" }
+    ],
+
+    combinacoes: [
+      {
+        cores: ["#F6F7F8", "#0B0C0F", "#FA194A"]
+      },
+      {
+        cores: ["#C7CBD2", "#0A31DF", "#F10766"]
+      },
+      {
+        cores: ["#858A94", "#0F549F", "#4BF40E"]
+      },
+      {
+        cores: ["#31353D", "#5C45DE", "#DE459E"]
+      }
+    ]
+  },
+
+  beleza: {
+
+    base: [
+      {
+        nome: "Bege frio luminoso",
+        hex: "#D3C1BD"
+      },
+      {
+        nome: "Bege rosado frio",
+        hex: "#CDB4B5"
+      },
+      {
+        nome: "Bege neutro-frio",
+        hex: "#BAAAA8"
+      }
+    ],
+
+    blush: [
+      { corId: "#DE459E" },
+      { corId: "#FD1890" },
+      {
+        nome: "Rosa frio vivo",
+        hex: "#D96894"
+      }
+    ],
+
+    batom: [
+      { corId: "#DE459E" },
+      { corId: "#FD1890" },
+      { corId: "#F10766" },
+      { corId: "#FA194A" },
+      { corId: "#D10B44" }
+    ],
+
+    sombra: [
+      { corId: "#70757F" },
+      { corId: "#31353D" },
+      { corId: "#5C45DE" },
+      { corId: "#0A31DF" },
+      { corId: "#0F549F" },
+      { corId: "#8415EF" }
+    ],
+
+    lapis: [
+      { corId: "#31353D" },
+      { corId: "#0B0C0F" },
+      { corId: "#1113FB" }
+    ],
+
+    mascara: [
+      {
+        nome: "Preto intenso",
+        hex: "#121317"
+      },
+      {
+        nome: "Grafite profundo",
+        hex: "#2B2D34"
+      }
+    ],
+
+    iluminador: [
+      {
+        nome: "Pérola fria luminosa",
+        hex: "#E1E2E5"
+      },
+      {
+        nome: "Prateado perolado",
+        hex: "#C8CDD2"
+      }
+    ]
+  },
+
+  cabelo: {
+
+    tonalidades: [
+      {
+        nome: "Castanho médio frio",
+        hex: "#554C49"
+      },
+      {
+        nome: "Castanho escuro frio",
+        hex: "#3F3836"
+      },
+      {
+        nome: "Castanho escuro acinzentado",
+        hex: "#353130"
+      },
+      {
+        nome: "Preto natural frio",
+        hex: "#242225"
+      },
+      {
+        nome: "Preto azulado suave",
+        hex: "#1E2027"
+      }
+    ],
+
+    observacoes:
+      "A intensidade brilhante é a prioridade. Para preservar o contraste pessoal, a cor do cabelo pode variar aproximadamente até dois tons acima ou abaixo do natural; mechas e reflexos podem chegar a até quatro tons acima da cor de fundo. Priorizar fundos frios, nítidos e pouco dourados."
+  },
+
+  aplicacao: {
+
+    proximoAoRosto:
+      "A intensidade brilhante é a prioridade. Próximo ao rosto, prefira cores nítidas, saturadas e frias, como azul royal, cobalto, fúcsia, magenta, vermelho vivo, verde esmeralda e turquesa.",
+
+    partesInferiores:
+      "Preto, grafite, cinza chumbo, azul marinho, petróleo profundo e neutros escuros funcionam especialmente bem como bases estruturantes.",
+
+    coresForaDaCartela:
+      "A primeira cartela vizinha para ampliar o repertório é a Primavera Brilhante, porque ambas compartilham alta intensidade. Inverno Frio também pode contribuir quando a temperatura fria se mantém evidente. Cores suaves e acinzentadas devem receber maior cautela.",
+
+    contraste:
+      "Contrastes médios a altos são especialmente coerentes com a cartela. Branco e preto podem ser usados juntos, e combinações de cores saturadas funcionam muito bem quando respeitam o contraste pessoal.",
+
+    acessorios:
+      "Acabamentos polidos e luminosos combinam com a intensidade da cartela. Dourado polido e rosé polido estão presentes na base atual; metais brilhantes funcionam melhor do que acabamentos excessivamente opacos ou envelhecidos."
+  }
+},
+    // Dados oficiais fornecidos externamente (não recalculados, não reinterpretados).
+    inverno_frio: {
+
+  acromaticos: [
+    { corId: "#F6F7F8" },
+    { corId: "#1B1D23" }
+  ],
+
+  neutrosEssenciais: [
+    { corId: "#F6F7F8" },
+    { corId: "#CED2D8" },
+    { corId: "#BBBFC7" },
+    { corId: "#969BA4" },
+    { corId: "#848992" },
+    { corId: "#5F646F" },
+    { corId: "#3C414A" },
+    { corId: "#1B1D23" }
+  ],
+
+  coresProtagonistas: [
+    { corId: "#D64569" },
+    { corId: "#F91244" },
+    { corId: "#D64599" },
+    { corId: "#C8206F" },
+    { corId: "#0FE5D3" },
+    { corId: "#45CED6" },
+    { corId: "#27CDEA" },
+    { corId: "#149FEA" },
+    { corId: "#2882CC" },
+    { corId: "#0D3DCA" },
+    { corId: "#5B45D6" },
+    { corId: "#6D20C8" }
+  ],
+
+  coresDestaque: [
+    { corId: "#D64569" },
+    { corId: "#F91244" },
+    { corId: "#ED0D38" },
+    { corId: "#D64599" },
+    { corId: "#C01B77" },
+    { corId: "#C8206F" },
+    { corId: "#D02467" },
+    { corId: "#D72A5F" },
+    { corId: "#0FF840" },
+    { corId: "#02A66A" },
+    { corId: "#0FE5D3" },
+    { corId: "#45CED6" },
+    { corId: "#27CDEA" },
+    { corId: "#149FEA" },
+    { corId: "#2882CC" },
+    { corId: "#106BDA" },
+    { corId: "#0D3DCA" },
+    { corId: "#1E34B0" },
+    { corId: "#5B45D6" },
+    { corId: "#6D20C8" }
+  ],
+
+  coresUniversais: [
+    { nome: "Verde Garrafa", corId: "#0FE5D3" },
+    { nome: "Azul Petróleo", corId: "#2882CC" },
+    { nome: "Turquesa", corId: "#106BDA" },
+    { nome: "Azul Marinho", corId: "#1E34B0" },
+    { nome: "Azul Jeans", corId: "#066D99" },
+    { nome: "Vinho", corId: "#70110C" },
+    { nome: "Lilás", corId: "#411BC0" },
+    { nome: "Rosa Goiaba", corId: "#9B0D4C" },
+    { nome: "Amêndoa", corId: "#B4563E" },
+    { nome: "Fendi", corId: "#969BA4" },
+    { nome: "Manteiga", corId: "#BBBFC7" },
+    { nome: "Off-White", corId: "#F6F7F8" }
+  ],
+
+  combinacoes: {
+
+    duasCores: [
+
+      {
+        nome: "Atemporal — Off-White + Preto",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#F6F7F8", proporcao: 55 },
+          { corId: "#1B1D23", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Atemporal — Cinza + Azul Marinho",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#848992", proporcao: 55 },
+          { corId: "#1E34B0", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Azul Petróleo + Rosa Frio",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#2882CC", proporcao: 55 },
+          { corId: "#D64599", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Cobalto + Carmim",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#0D3DCA", proporcao: 55 },
+          { corId: "#D64569", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Off-White + Rosa Malva",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#F6F7F8", proporcao: 60 },
+          { corId: "#C8206F", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Azul Pervinca + Rosa Frio",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#33ACD4", proporcao: 55 },
+          { corId: "#D02467", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Turquesa + Violeta",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#106BDA", proporcao: 55 },
+          { corId: "#6D20C8", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Verde + Fúcsia",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#0FF840", proporcao: 45 },
+          { corId: "#AE143F", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Off-White + Grafite",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#F6F7F8", proporcao: 60 },
+          { corId: "#2B2F36", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Cinza Médio + Preto",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#4D525C", proporcao: 55 },
+          { corId: "#1B1D23", proporcao: 45 }
+        ]
+      }
+
+    ],
+
+    tresCores: [
+
+      {
+        nome: "Atemporal",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#F6F7F8", proporcao: 45 },
+          { corId: "#848992", proporcao: 30 },
+          { corId: "#1B1D23", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#2882CC", proporcao: 40 },
+          { corId: "#D64599", proporcao: 35 },
+          { corId: "#F6F7F8", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Acessível",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#33ACD4", proporcao: 40 },
+          { corId: "#C8206F", proporcao: 35 },
+          { corId: "#CED2D8", proporcao: 25 }
+        ]
+      },
+
+      {
+        nome: "Artsy",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#0FF840", proporcao: 35 },
+          { corId: "#0D3DCA", proporcao: 35 },
+          { corId: "#D64569", proporcao: 30 }
+        ]
+      },
+
+      {
+        nome: "Minimalista",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#F6F7F8", proporcao: 50 },
+          { corId: "#4D525C", proporcao: 30 },
+          { corId: "#1B1D23", proporcao: 20 }
+        ]
+      }
+
+    ],
+
+    proporcionais: []
+  },
+
+  armarioCapsula: {
+
+    base: [
+      { corId: "#F6F7F8" },
+      { corId: "#CED2D8" },
+      { corId: "#848992" },
+      { corId: "#4D525C" },
+      { corId: "#1B1D23" }
+    ],
+
+    apoio: [
+      { corId: "#066D99" },
+      { corId: "#2882CC" },
+      { corId: "#411BC0" },
+      { corId: "#9B0D4C" }
+    ],
+
+    destaque: [
+      { corId: "#F91244" },
+      { corId: "#D64599" },
+      { corId: "#0FE5D3" },
+      { corId: "#0D3DCA" }
+    ],
+
+    combinacoes: [
+      {
+        cores: ["#F6F7F8", "#1B1D23", "#D64569"]
+      },
+      {
+        cores: ["#CED2D8", "#2882CC", "#D64599"]
+      },
+      {
+        cores: ["#848992", "#0D3DCA", "#0FE5D3"]
+      },
+      {
+        cores: ["#4D525C", "#411BC0", "#D72A5F"]
+      }
+    ]
+  },
+
+  beleza: {
+
+    base: [
+      {
+        nome: "Bege frio",
+        hex: "#CBB9B6"
+      },
+      {
+        nome: "Bege rosado frio",
+        hex: "#C5AFB0"
+      },
+      {
+        nome: "Bege neutro-frio médio",
+        hex: "#B6A3A2"
+      }
+    ],
+
+    blush: [
+      { corId: "#D64599" },
+      { corId: "#D02467" },
+      {
+        nome: "Rosa frio intenso",
+        hex: "#C65D83"
+      }
+    ],
+
+    batom: [
+      { corId: "#D64599" },
+      { corId: "#D02467" },
+      { corId: "#D72A5F" },
+      { corId: "#D64569" },
+      { corId: "#F91244" }
+    ],
+
+    sombra: [
+      { corId: "#848992" },
+      { corId: "#5F646F" },
+      { corId: "#2882CC" },
+      { corId: "#0D3DCA" },
+      { corId: "#5B45D6" },
+      { corId: "#411BC0" }
+    ],
+
+    lapis: [
+      { corId: "#4D525C" },
+      { corId: "#1B1D23" },
+      { corId: "#1E34B0" }
+    ],
+
+    mascara: [
+      {
+        nome: "Preto frio",
+        hex: "#1B1C20"
+      },
+      {
+        nome: "Grafite frio",
+        hex: "#34363D"
+      }
+    ],
+
+    iluminador: [
+      {
+        nome: "Pérola fria",
+        hex: "#DBDCDF"
+      },
+      {
+        nome: "Prateado perolado",
+        hex: "#C5CBD2"
+      }
+    ]
+  },
+
+  cabelo: {
+
+    tonalidades: [
+      {
+        nome: "Castanho médio frio",
+        hex: "#554C49"
+      },
+      {
+        nome: "Castanho escuro acinzentado",
+        hex: "#403A39"
+      },
+      {
+        nome: "Castanho muito escuro frio",
+        hex: "#302C2D"
+      },
+      {
+        nome: "Preto natural",
+        hex: "#222124"
+      },
+      {
+        nome: "Preto azulado",
+        hex: "#1A1D25"
+      }
+    ],
+
+    observacoes:
+      "A temperatura fria é a prioridade. Priorizar fundos frios, neutros-frios ou acinzentados. Evitar reflexos dourados, cobre, mel ou avermelhados quentes. A profundidade final deve respeitar o contraste natural da cliente, sem transformar estas referências em prescrição automática."
+  },
+
+  aplicacao: {
+
+    proximoAoRosto:
+      "A temperatura fria é a prioridade. Próximo ao rosto, prefira azuis frios, cobalto, turquesa frio, rosas azulados, fúcsias, violetas, vermelhos frios e neutros acinzentados.",
+
+    partesInferiores:
+      "Preto, grafite, cinza chumbo, azul marinho, petróleo e outros azuis profundos frios funcionam especialmente bem como bases estruturantes.",
+
+    coresForaDaCartela:
+      "A principal vizinha para ampliar o repertório é o Verão Frio quando a intenção for suavizar a composição. Inverno Brilhante também oferece alternativas quando se deseja maior intensidade. Em ambos os casos, preservar a temperatura fria é mais importante do que copiar profundidade ou intensidade.",
+
+    contraste:
+      "A intensidade e a profundidade podem variar. O contraste deve acompanhar o contraste pessoal da cliente, mas sempre mantendo predominância de temperatura fria e evitando misturas excessivamente quentes ou terrosas.",
+
+    acessorios:
+      "Prateado polido é a escolha prioritária. Rosé frio também funciona. Metais visualmente frios, brancos e luminosos tendem a harmonizar melhor do que dourados amarelados."
+  }
+},
+    // Dados oficiais fornecidos externamente (não recalculados, não reinterpretados).
+    inverno_escuro: {
+
+  acromaticos: [
+    { corId: "#F6F7F8" },
+    { corId: "#0B0C0F" }
+  ],
+
+  neutrosEssenciais: [
+    { corId: "#F6F7F8" },
+    { corId: "#D1D4DB" },
+    { corId: "#9CA1AB" },
+    { corId: "#7B8089" },
+    { corId: "#595E68" },
+    { corId: "#383D46" },
+    { corId: "#292C34" },
+    { corId: "#0B0C0F" }
+  ],
+
+  coresProtagonistas: [
+    { corId: "#CA2F56" },
+    { corId: "#AA021D" },
+    { corId: "#C9112A" },
+    { corId: "#AA1352" },
+    { corId: "#DF0658" },
+    { corId: "#7DCA2F" },
+    { corId: "#075A36" },
+    { corId: "#0E3F74" },
+    { corId: "#0D3B8D" },
+    { corId: "#0A29B4" },
+    { corId: "#472FCA" },
+    { corId: "#6F11C9" }
+  ],
+
+  coresDestaque: [
+    { corId: "#93421C" },
+    { corId: "#C5A41E" },
+    { corId: "#AA021D" },
+    { corId: "#C9112A" },
+    { corId: "#9D1E21" },
+    { corId: "#E10A09" },
+    { corId: "#941408" },
+    { corId: "#B22A18" },
+    { corId: "#7A1946" },
+    { corId: "#AA1352" },
+    { corId: "#DF0658" },
+    { corId: "#911730" },
+    { corId: "#C40D2C" },
+    { corId: "#7DCA2F" },
+    { corId: "#5AE306" },
+    { corId: "#3FCC0C" },
+    { corId: "#0D3B8D" },
+    { corId: "#0C379A" },
+    { corId: "#0B31A7" },
+    { corId: "#0A29B4" },
+    { corId: "#0820C1" },
+    { corId: "#0714CF" },
+    { corId: "#0507DD" },
+    { corId: "#472FCA" },
+    { corId: "#4802AA" },
+    { corId: "#6F11C9" },
+    { corId: "#8C1E9D" },
+    { corId: "#D809E1" },
+    { corId: "#940874" }
+  ],
+
+  coresUniversais: [
+    { nome: "Verde Garrafa", corId: "#084935" },
+    { nome: "Verde Esmeralda", corId: "#0B473B" },
+    { nome: "Azul Petróleo", corId: "#0E3F74" },
+    { nome: "Turquesa", corId: "#0D3B8D" },
+    { nome: "Azul Marinho", corId: "#0507DD" },
+    { nome: "Azul Jeans", corId: "#0D3A51" },
+    { nome: "Vinho", corId: "#490B09" },
+    { nome: "Lilás", corId: "#16054C" },
+    { nome: "Rosa Goiaba", corId: "#DF0658" },
+    { nome: "Amêndoa", corId: "#9A4B37" },
+    { nome: "Fendi", corId: "#9CA1AB" },
+    { nome: "Manteiga", corId: "#BFC3CB" },
+    { nome: "Branco", corId: "#F6F7F8" }
+  ],
+
+  combinacoes: {
+
+    duasCores: [
+
+      {
+        nome: "Atemporal — Branco + Preto",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#F6F7F8", proporcao: 45 },
+          { corId: "#0B0C0F", proporcao: 55 }
+        ]
+      },
+
+      {
+        nome: "Atemporal — Fendi + Vinho",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#9CA1AB", proporcao: 55 },
+          { corId: "#490B09", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Azul Petróleo + Rosa Goiaba",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#0E3F74", proporcao: 55 },
+          { corId: "#DF0658", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo — Azul Royal + Vinho",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#0A29B4", proporcao: 55 },
+          { corId: "#CA2F56", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Cinza + Rosa Malva",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#9CA1AB", proporcao: 60 },
+          { corId: "#AA1352", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Acessível — Azul Marinho + Rosa Vivo",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#0507DD", proporcao: 60 },
+          { corId: "#911730", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Verde Limão + Violeta",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#5AE306", proporcao: 40 },
+          { corId: "#6F11C9", proporcao: 60 }
+        ]
+      },
+
+      {
+        nome: "Artsy — Cobalto + Rosa Goiaba",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#0820C1", proporcao: 55 },
+          { corId: "#DF0658", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Grafite + Preto",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#383D46", proporcao: 55 },
+          { corId: "#0B0C0F", proporcao: 45 }
+        ]
+      },
+
+      {
+        nome: "Minimalista — Taupe + Grafite",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#7B8089", proporcao: 55 },
+          { corId: "#383D46", proporcao: 45 }
+        ]
+      }
+
+    ],
+
+    tresCores: [
+
+      {
+        nome: "Atemporal",
+        desejoImagem: "Atemporal",
+        cores: [
+          { corId: "#F6F7F8", proporcao: 35 },
+          { corId: "#9CA1AB", proporcao: 25 },
+          { corId: "#0B0C0F", proporcao: 40 }
+        ]
+      },
+
+      {
+        nome: "Contemporâneo",
+        desejoImagem: "Contemporâneo",
+        cores: [
+          { corId: "#0E3F74", proporcao: 40 },
+          { corId: "#DF0658", proporcao: 30 },
+          { corId: "#383D46", proporcao: 30 }
+        ]
+      },
+
+      {
+        nome: "Acessível",
+        desejoImagem: "Acessível",
+        cores: [
+          { corId: "#9CA1AB", proporcao: 40 },
+          { corId: "#AA1352", proporcao: 30 },
+          { corId: "#0507DD", proporcao: 30 }
+        ]
+      },
+
+      {
+        nome: "Artsy",
+        desejoImagem: "Artsy",
+        cores: [
+          { corId: "#5AE306", proporcao: 30 },
+          { corId: "#0820C1", proporcao: 40 },
+          { corId: "#DF0658", proporcao: 30 }
+        ]
+      },
+
+      {
+        nome: "Minimalista",
+        desejoImagem: "Minimalista",
+        cores: [
+          { corId: "#0B0C0F", proporcao: 50 },
+          { corId: "#383D46", proporcao: 30 },
+          { corId: "#9CA1AB", proporcao: 20 }
+        ]
+      }
+
+    ],
+
+    proporcionais: []
+  },
+
+  armarioCapsula: {
+
+    base: [
+      { corId: "#F6F7F8" },
+      { corId: "#9CA1AB" },
+      { corId: "#595E68" },
+      { corId: "#383D46" },
+      { corId: "#0B0C0F" }
+    ],
+
+    apoio: [
+      { corId: "#490B09" },
+      { corId: "#084935" },
+      { corId: "#0E3F74" },
+      { corId: "#16054C" }
+    ],
+
+    destaque: [
+      { corId: "#DF0658" },
+      { corId: "#C9112A" },
+      { corId: "#0A29B4" },
+      { corId: "#6F11C9" }
+    ],
+
+    combinacoes: [
+      {
+        cores: ["#F6F7F8", "#0B0C0F", "#CA2F56"]
+      },
+      {
+        cores: ["#9CA1AB", "#0E3F74", "#DF0658"]
+      },
+      {
+        cores: ["#595E68", "#084935", "#0A29B4"]
+      },
+      {
+        cores: ["#383D46", "#16054C", "#C9112A"]
+      }
+    ]
+  },
+
+  beleza: {
+
+    base: [
+      {
+        nome: "Bege frio profundo",
+        hex: "#B6A4A1"
+      },
+      {
+        nome: "Bege rosado frio",
+        hex: "#AF979A"
+      },
+      {
+        nome: "Bege neutro-frio médio",
+        hex: "#A08F8F"
+      }
+    ],
+
+    blush: [
+      { corId: "#AA1352" },
+      { corId: "#7A1946" },
+      {
+        nome: "Rosa vinho frio",
+        hex: "#A44E6A"
+      }
+    ],
+
+    batom: [
+      { corId: "#CA2F56" },
+      { corId: "#AA1352" },
+      { corId: "#DF0658" },
+      { corId: "#C40D2C" },
+      { corId: "#490B09" }
+    ],
+
+    sombra: [
+      { corId: "#7B8089" },
+      { corId: "#595E68" },
+      { corId: "#383D46" },
+      { corId: "#0E3F74" },
+      { corId: "#16054C" },
+      { corId: "#472FCA" }
+    ],
+
+    lapis: [
+      { corId: "#383D46" },
+      { corId: "#0B0C0F" },
+      { corId: "#0507DD" }
+    ],
+
+    mascara: [
+      {
+        nome: "Preto profundo",
+        hex: "#15171B"
+      },
+      {
+        nome: "Grafite muito escuro",
+        hex: "#292B31"
+      }
+    ],
+
+    iluminador: [
+      {
+        nome: "Pérola fria profunda",
+        hex: "#C9C9CD"
+      },
+      {
+        nome: "Prateado frio",
+        hex: "#B8BEC5"
+      }
+    ]
+  },
+
+  cabelo: {
+
+    tonalidades: [
+      {
+        nome: "Castanho escuro frio",
+        hex: "#423A38"
+      },
+      {
+        nome: "Castanho muito escuro acinzentado",
+        hex: "#332E2D"
+      },
+      {
+        nome: "Chocolate frio profundo",
+        hex: "#392F2D"
+      },
+      {
+        nome: "Preto natural",
+        hex: "#211F22"
+      },
+      {
+        nome: "Preto azulado",
+        hex: "#171A22"
+      }
+    ],
+
+    observacoes:
+      "A profundidade escura é a prioridade. Priorizar cabelos escuros, frios ou neutros-frios, com fundos acinzentados e profundos. Evitar clareamentos excessivos, dourados muito aparentes ou cobres vivos. A recomendação final deve respeitar o contraste natural e a análise individual da cliente."
+  },
+
+  aplicacao: {
+
+    proximoAoRosto:
+      "A profundidade escura é a prioridade. Próximo ao rosto, prefira vinho, bordô, vermelho profundo, rosa intenso frio, verde garrafa, azul petróleo, azul marinho, cobalto, violeta e neutros escuros frios.",
+
+    partesInferiores:
+      "Preto, grafite, cinza chumbo, azul marinho, petróleo, verde profundo e vinho são excelentes bases para calças, saias, casacos e peças estruturantes.",
+
+    coresForaDaCartela:
+      "A primeira cartela vizinha para ampliar o repertório é o Outono Escuro, pela profundidade compartilhada. Inverno Frio também pode contribuir com tons frios. Ao usar empréstimos, a profundidade deve continuar predominante e os tons excessivamente claros ou quentes devem receber maior cautela.",
+
+    contraste:
+      "O Inverno Escuro comporta contraste médio a alto e grande profundidade. A intensidade pode variar, mas a composição deve manter peso visual, definição e contraste compatíveis com a cliente.",
+
+    acessorios:
+      "Prateado é especialmente harmônico. Dourado envelhecido e rosé envelhecido também podem funcionar quando tiverem acabamento profundo e pouco amarelo. Metais muito claros e delicados podem perder força diante da profundidade da cartela."
+  }
+}
+  };
+
+  // Resolve um corId (=HEX, com ou sem "#", case-insensitive) de volta ao objeto
+  // completo da cor {nome, hex, familia, destaque} dentro de uma cartela específica
+  // da CARTELAS_BASE. Nunca inventa, nunca escolhe — só procura o que já existe.
+  function resolverCorPorId(cartelaId, corId){
+    const base = CARTELAS_BASE[cartelaId];
+    if(!base || !Array.isArray(base.cores) || !corId) return null;
+    const alvo = String(corId).replace('#', '').toUpperCase();
+    return base.cores.find(function(c){
+      return c.hex && String(c.hex).replace('#', '').toUpperCase() === alvo;
+    }) || null;
+  }
+
 
   // ---- Normaliza o nome de exibição de uma cartela para o slug usado como cartelaId ----
   // Usada como fallback de compatibilidade: análises salvas antes da Fase 5B só têm
@@ -16337,20 +20885,50 @@
   }
 
   // MODELO — didático, rótulo curto + texto (não ícones genéricos repetidos).
+  // Prefere o texto real da cartela (APLICACAO_CROMATICA_BASE[cartelaId].aplicacao),
+  // campo a campo; onde não houver texto oficial para aquela cartela específica,
+  // cai no parágrafo institucional genérico correspondente — nunca inventa nada novo.
   function dm_buildComoUsarCartela(dados){
     if(!dados.servicos.coloracaoPessoal) return null;
-    if(!dm_resolverCartela(dados)) return null;
+    const cartelaInfo = dm_resolverCartela(dados);
+    if(!cartelaInfo) return null;
 
-    const rotulos = ['Próximo ao Rosto', 'Partes Inferiores', 'Cores Fora da Cartela', 'Contraste', 'Metais e Acessórios'];
-    const corpo = DOSSIE_MESTRE_COMO_USAR_CARTELA.map(function(paragrafo, i){
-      return '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">' + escapeHtml(rotulos[i] || '') + '</div><div class="dm-texto">' + escapeHtml(paragrafo) + '</div></div>';
-    }).join('');
+    const cartelaId = cartelaInfo.base && cartelaInfo.base.id;
+    const aplicacaoOficial = (cartelaId && APLICACAO_CROMATICA_BASE[cartelaId] && APLICACAO_CROMATICA_BASE[cartelaId].aplicacao) || {};
+
+    const secoes = [
+      { rotulo: 'Próximo ao Rosto', chave: 'proximoAoRosto' },
+      { rotulo: 'Partes Inferiores', chave: 'partesInferiores' },
+      { rotulo: 'Cores Fora da Cartela', chave: 'coresForaDaCartela' },
+      { rotulo: 'Contraste', chave: 'contraste' },
+      { rotulo: 'Metais e Acessórios', chave: 'acessorios' }
+    ].map(function(s, i){
+      const textoOficial = aplicacaoOficial[s.chave];
+      return { rotulo: s.rotulo, texto: (textoOficial && textoOficial.trim()) ? textoOficial : DOSSIE_MESTRE_COMO_USAR_CARTELA[i] };
+    });
+
+    // Hierarquia editorial: "Próximo ao Rosto" (o critério mais importante da cartela)
+    // ganha destaque em bloco próprio; os quatro seguintes formam um grid 2x2 —
+    // nunca cinco caixas idênticas em sequência vertical.
+    const destaque = secoes[0];
+    const restantes = secoes.slice(1);
+
+    const blocoDestaque =
+      '<div class="dm-box-destaque" style="margin-bottom:20px;">' +
+        '<div class="dm-box-destaque-label">' + escapeHtml(destaque.rotulo) + '</div>' +
+        '<div class="dm-texto">' + escapeHtml(destaque.texto) + '</div>' +
+      '</div>';
+
+    const gridRestante = '<div class="dossie-mestre-grid2">' + restantes.map(function(s){
+      return '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">' + escapeHtml(s.rotulo) + '</div><div class="dm-texto">' + escapeHtml(s.texto) + '</div></div>';
+    }).join('') + '</div>';
 
     return [dm_pagina(
       '<div class="dm-eyebrow">Coloração Pessoal</div>' +
       '<div class="dm-titulo-editorial">Como Usar <em>Sua Cartela</em></div>' +
       '<div class="dm-linha-curta"></div>' +
-      corpo +
+      blocoDestaque +
+      gridRestante +
       dm_rodapeFaixa('Sua cartela completa', 'Explore todas as 100 cores da sua cartela digital no aplicativo Giulia Dantas.', '<div class="dm-rodape-faixa-qr">' + dm_icone('paleta') + '</div>'),
       { numero: true, secao: 'Coloração Pessoal' }
     )];
@@ -16364,22 +20942,49 @@
     const base = cartelaInfo && cartelaInfo.base;
     if(!base || !Array.isArray(base.cores) || !base.cores.length) return null;
 
-    // Seleção sempre determinística (ordem oficial da própria CARTELAS_BASE), nunca aleatória.
-    const neutros = base.cores.filter(function(c){ return c.familia === 'neutros'; }).slice(0, 6);
-    const destaques = base.cores.filter(function(c){ return c.destaque === true; }).slice(0, 6);
-    // "Protagonistas": até 6 cores que não são neutros nem já estão nos destaques —
-    // mesma fonte de dados (base.cores), apenas outro recorte determinístico por ordem.
-    const usadas = {};
-    neutros.concat(destaques).forEach(function(c){ usadas[c.nome] = true; });
-    const protagonistas = base.cores.filter(function(c){ return c.familia !== 'neutros' && !usadas[c.nome]; }).slice(0, 6);
+    const cartelaId = base.id;
+    const aplicacao = (cartelaId && APLICACAO_CROMATICA_BASE[cartelaId]) || {};
 
-    if(!neutros.length && !destaques.length && !protagonistas.length) return null;
+    // Resolve uma lista curada de {corId} (ou {nome, corId}) contra a cartela real.
+    function resolverListaCurada(lista){
+      if(!Array.isArray(lista) || !lista.length) return null;
+      const resolvidas = lista.map(function(item){
+        const cor = resolverCorPorId(cartelaId, item && item.corId);
+        if(!cor) return null;
+        return { nome: (item && item.nome) || cor.nome, hex: cor.hex };
+      }).filter(Boolean);
+      return resolvidas.length ? resolvidas : null;
+    }
+
+    // Prioridade: seleção curada oficial (APLICACAO_CROMATICA_BASE) quando existir para
+    // esta cartela; senão, a seleção determinística já existente (nunca aleatória).
+    const acromaticosCurados = resolverListaCurada(aplicacao.acromaticos);
+    const neutrosCurados = resolverListaCurada(aplicacao.neutrosEssenciais);
+    const protagonistasCurados = resolverListaCurada(aplicacao.coresProtagonistas);
+    const destaquesCurados = resolverListaCurada(aplicacao.coresDestaque);
+    const universaisCurados = resolverListaCurada(aplicacao.coresUniversais);
+
+    let neutros, destaques, protagonistas;
+    if(neutrosCurados || protagonistasCurados || destaquesCurados){
+      neutros = neutrosCurados || [];
+      destaques = destaquesCurados || [];
+      protagonistas = protagonistasCurados || [];
+    } else {
+      // Seleção sempre determinística (ordem oficial da própria CARTELAS_BASE), nunca aleatória.
+      neutros = base.cores.filter(function(c){ return c.familia === 'neutros'; }).slice(0, 6);
+      destaques = base.cores.filter(function(c){ return c.destaque === true; }).slice(0, 6);
+      const usadas = {};
+      neutros.concat(destaques).forEach(function(c){ usadas[c.nome] = true; });
+      protagonistas = base.cores.filter(function(c){ return c.familia !== 'neutros' && !usadas[c.nome]; }).slice(0, 6);
+    }
+
+    if(!neutros.length && !destaques.length && !protagonistas.length && !acromaticosCurados && !universaisCurados) return null;
 
     function grupo(titulo, lista){
-      if(!lista.length) return '';
+      if(!lista || !lista.length) return '';
       return '<div class="dm-cor-grupo"><div class="dm-cor-grupo-titulo">' + escapeHtml(titulo) + '</div>' +
         '<div class="dm-cor-linha">' + lista.map(function(c){
-          return '<div class="dm-cor-circulo" style="background:' + escapeHtml(c.hex || '#eee') + ';"></div>';
+          return '<div class="dm-cor-item"><div class="dm-cor-circulo" style="background:' + escapeHtml(c.hex || '#eee') + ';"></div><div class="dm-cor-nome">' + escapeHtml(c.nome || '') + '</div></div>';
         }).join('') + '</div>' +
       '<div class="dm-cor-divisor"></div></div>';
     }
@@ -16389,16 +20994,173 @@
       { titulo: 'Cores de Destaque — Observação Profissional', valor: dados.crom.coresDestaque }
     ]);
 
+    const temCombinacoesReais = !!(aplicacao.combinacoes && (
+      (aplicacao.combinacoes.duasCores || []).length ||
+      (aplicacao.combinacoes.tresCores || []).length ||
+      (aplicacao.combinacoes.proporcionais || []).length
+    ));
+    const rodapeTexto = temCombinacoesReais
+      ? 'Confira, nas próximas páginas, combinações prontas com base na sua cartela.'
+      : 'Em breve: sugestões de combinação baseadas na sua cartela.';
+
     return [dm_pagina(
       '<div class="dm-eyebrow">Coloração Pessoal</div>' +
       '<div class="dm-titulo-editorial">Sua <em>Paleta</em></div>' +
       '<div class="dm-linha-curta"></div>' +
+      grupo('Acromáticos', acromaticosCurados) +
       grupo('Neutros Essenciais', neutros) +
       grupo('Cores Protagonistas', protagonistas) +
       grupo('Cores de Destaque', destaques) +
+      grupo('Cores Universais', universaisCurados) +
       (obs.length ? dm_renderBlocos(obs) : '') +
       '<div class="dossie-mestre-nota">Sua cartela digital completa, com 100 cores, está disponível no aplicativo.</div>' +
-      dm_rodapeFaixa('Combinações que funcionam para você', 'Em breve: sugestões de combinação baseadas na sua cartela.', '<div class="dm-rodape-faixa-qr" style="opacity:0.35;">' + dm_icone('paleta') + '</div>'),
+      dm_rodapeFaixa('Combinações que funcionam para você', rodapeTexto, '<div class="dm-rodape-faixa-qr" style="opacity:' + (temCombinacoesReais ? '1' : '0.35') + ';">' + dm_icone('paleta') + '</div>'),
+      { numero: true, secao: 'Coloração Pessoal' }
+    )];
+  }
+
+  // ===================================================================
+  // COMBINAÇÕES CROMÁTICAS E ARMÁRIO CÁPSULA — Fase 6C.3
+  // Componentes de RENDERIZAÇÃO, prontos para uso — mas hoje retornam sempre null
+  // porque APLICACAO_CROMATICA_BASE está 100% vazia (nenhuma combinação, nenhuma
+  // seleção de armário cápsula foi definida). Nenhuma cor é escolhida aqui: tudo
+  // que aparece vem exclusivamente do que estiver preenchido em
+  // APLICACAO_CROMATICA_BASE[cartelaId], resolvido via resolverCorPorId().
+  // ===================================================================
+
+  // Renderiza uma única combinação como barra proporcional (largura = "proporcao")
+  // + legenda com nome e porcentagem. Nunca mostra HEX. Ignora silenciosamente
+  // qualquer corId que não resolva para uma cor real da cartela.
+  // Renderiza uma combinação cromática. Aceita dois formatos, ambos já usados na
+  // base oficial: itens {corId, proporcao} (barra proporcional, ex.: combinacoes.duasCores/
+  // tresCores) ou itens como string de HEX puro sem proporção definida (ex.:
+  // armarioCapsula.combinacoes) — nesse caso, larguras iguais, sem inventar proporção.
+  // "mostrarDesejo=false" omite o rótulo do desejo quando ele já é o título da seção
+  // que agrupa a combinação (evita repetir a mesma palavra várias vezes na página).
+  function dm_renderCombinacaoCromatica(combinacao, cartelaId, mostrarDesejo){
+    if(!combinacao || !Array.isArray(combinacao.cores) || !combinacao.cores.length) return '';
+    if(mostrarDesejo === undefined) mostrarDesejo = true;
+
+    const segmentos = combinacao.cores.map(function(item){
+      const corId = (typeof item === 'string') ? item : (item && item.corId);
+      const cor = resolverCorPorId(cartelaId, corId);
+      if(!cor) return null;
+      const proporcaoDefinida = (typeof item === 'object' && item && item.proporcao > 0) ? item.proporcao : null;
+      return { nome: cor.nome, hex: cor.hex, proporcao: proporcaoDefinida, temProporcao: !!proporcaoDefinida };
+    }).filter(Boolean);
+    if(!segmentos.length) return '';
+
+    // Se nenhum item trouxe proporção, distribui em partes iguais só para desenhar a
+    // barra (não é uma proporção "inventada" da combinação — é só o desenho neutro).
+    const algumaProporcaoDefinida = segmentos.some(function(s){ return s.temProporcao; });
+    if(!algumaProporcaoDefinida){
+      segmentos.forEach(function(s){ s.proporcao = Math.round(100 / segmentos.length); });
+    }
+
+    const barra = '<div class="dm-combinacao-barra">' + segmentos.map(function(s){
+      return '<div class="dm-combinacao-segmento" style="flex:' + s.proporcao + ' 0 0%; background:' + escapeHtml(s.hex) + ';"></div>';
+    }).join('') + '</div>';
+
+    const legenda = '<div class="dm-combinacao-legenda">' + segmentos.map(function(s){
+      return escapeHtml(s.nome) + (algumaProporcaoDefinida ? ' ' + s.proporcao + '%' : '');
+    }).join('  &middot;  ') + '</div>';
+
+    const desejoHtml = (mostrarDesejo && combinacao.desejoImagem) ? '<div class="dm-eyebrow" style="margin-bottom:3px;">' + escapeHtml(combinacao.desejoImagem) + '</div>' : '';
+    const tituloHtml = combinacao.nome ? '<div class="dossie-mestre-bloco-titulo">' + escapeHtml(combinacao.nome) + '</div>' : '';
+
+    return '<div class="dossie-mestre-bloco">' + desejoHtml + tituloHtml + barra + legenda + '</div>';
+  }
+
+  // Página(s) "Combinações que Funcionam" — agrupadas por desejo de imagem (Atemporal,
+  // Contemporâneo, Acessível, Artsy, Minimalista), cada uma com identidade editorial
+  // própria (barra de acento + título serifado), não cinco cards repetidos. Paginação
+  // por grupos de desejo (2 por página) para nunca cortar conteúdo. Só existe quando a
+  // cartela da cliente já tiver combinações reais em APLICACAO_CROMATICA_BASE.
+  function dm_buildCombinacoesCromaticas(dados){
+    if(!dados.servicos.coloracaoPessoal) return null;
+    const cartelaInfo = dm_resolverCartela(dados);
+    const cartelaId = cartelaInfo && cartelaInfo.base && cartelaInfo.base.id;
+    if(!cartelaId) return null;
+
+    const aplicacao = APLICACAO_CROMATICA_BASE[cartelaId];
+    const combinacoesDef = aplicacao && aplicacao.combinacoes;
+    if(!combinacoesDef) return null;
+
+    const ORDEM_DESEJOS = ['Atemporal', 'Contemporâneo', 'Acessível', 'Artsy', 'Minimalista'];
+    const todas = [].concat(combinacoesDef.duasCores || [], combinacoesDef.tresCores || [], combinacoesDef.proporcionais || []);
+    if(!todas.length) return null;
+
+    // Agrupa mantendo a ordem editorial fixa dos cinco desejos — nunca a ordem de
+    // inserção crua dos dados, para dar ritmo consistente entre cartelas diferentes.
+    const secoesDesejo = ORDEM_DESEJOS.map(function(desejo){
+      const combosDoDesejo = todas.filter(function(c){ return c.desejoImagem === desejo; });
+      const htmlCombos = combosDoDesejo.map(function(c){ return dm_renderCombinacaoCromatica(c, cartelaId, false); }).filter(Boolean);
+      if(!htmlCombos.length) return null;
+      return '<div class="dm-desejo-secao"><div class="dm-desejo-titulo">' + escapeHtml(desejo) + '</div>' + htmlCombos.join('') + '</div>';
+    }).filter(Boolean);
+
+    if(!secoesDesejo.length) return null;
+
+    // Paginação: 2 grupos de desejo por página — evita overflow e nunca corta uma seção ao meio.
+    const paginas = [];
+    for(let i = 0; i < secoesDesejo.length; i += 2){
+      const fatia = secoesDesejo.slice(i, i + 2);
+      const continuando = i > 0;
+      paginas.push(dm_pagina(
+        '<div class="dm-eyebrow">Coloração Pessoal</div>' +
+        '<div class="dm-titulo-editorial">Combinações <em>que Funcionam</em>' + (continuando ? ' <span style="font-size:16px;">(continuação)</span>' : '') + '</div>' +
+        (continuando ? '' : '<div class="dm-intro-texto">Proporções e combinações pensadas especialmente para a sua cartela.</div>') +
+        '<div class="dm-linha-curta"></div>' +
+        fatia.join('') +
+        dm_rodapeFaixa('Sua cartela completa', 'Explore todas as 100 cores da sua cartela digital no aplicativo Giulia Dantas.'),
+        { numero: true, secao: 'Coloração Pessoal' }
+      ));
+    }
+    return paginas;
+  }
+
+  // Página "Armário Cápsula" — seleção cromática coordenada (base/apoio/destaque)
+  // + combinações próprias do armário. Hoje: sempre null (nenhuma seleção definida).
+  function dm_buildArmarioCapsuloCromatico(dados){
+    if(!dados.servicos.coloracaoPessoal) return null;
+    const cartelaInfo = dm_resolverCartela(dados);
+    const cartelaId = cartelaInfo && cartelaInfo.base && cartelaInfo.base.id;
+    if(!cartelaId) return null;
+
+    const aplicacao = APLICACAO_CROMATICA_BASE[cartelaId];
+    const capsula = aplicacao && aplicacao.armarioCapsula;
+    if(!capsula) return null;
+
+    function grupo(titulo, lista){
+      if(!Array.isArray(lista) || !lista.length) return '';
+      const resolvidas = lista.map(function(item){
+        const corId = (item && typeof item === 'object') ? item.corId : item;
+        return resolverCorPorId(cartelaId, corId);
+      }).filter(Boolean);
+      if(!resolvidas.length) return '';
+      return '<div class="dm-cor-grupo"><div class="dm-cor-grupo-titulo">' + escapeHtml(titulo) + '</div>' +
+        '<div class="dm-cor-linha">' + resolvidas.map(function(c){ return '<div class="dm-cor-item"><div class="dm-cor-circulo" style="background:' + escapeHtml(c.hex) + ';"></div><div class="dm-cor-nome">' + escapeHtml(c.nome || '') + '</div></div>'; }).join('') + '</div>' +
+      '<div class="dm-cor-divisor"></div></div>';
+    }
+
+    const corpoGrupos = grupo('Cores Base', capsula.base) + grupo('Cores de Apoio', capsula.apoio) + grupo('Cores de Destaque', capsula.destaque);
+    const combosResolvidos = Array.isArray(capsula.combinacoes)
+      ? capsula.combinacoes.map(function(c){ return dm_renderCombinacaoCromatica(c, cartelaId); }).filter(Boolean)
+      : [];
+    const combinacoesHtml = combosResolvidos.length
+      ? '<div class="dossie-mestre-bloco-titulo" style="margin-top:6px;">Combinações Coordenadas</div>' + combosResolvidos.join('')
+      : '';
+
+    if(!corpoGrupos && !combinacoesHtml) return null;
+
+    return [dm_pagina(
+      '<div class="dm-eyebrow">Coloração Pessoal</div>' +
+      '<div class="dm-titulo-editorial">Armário <em>Cápsula</em></div>' +
+      '<div class="dm-intro-texto">Uma seleção cromática coordenada, pensada para facilitar a construção de looks no dia a dia.</div>' +
+      '<div class="dm-linha-curta"></div>' +
+      corpoGrupos +
+      combinacoesHtml +
+      dm_rodapeFaixa('Vestir com intenção', 'Peças nessas cores combinam entre si com naturalidade.'),
       { numero: true, secao: 'Coloração Pessoal' }
     )];
   }
@@ -16426,29 +21188,52 @@
     return [dm_pagina(html, { numero: true, secao: 'Coloração Pessoal' })];
   }
 
-  // ---- Helper: mini-paleta de amostras (usada nas paletas de Beleza) ----
+  // ---- Helper: mini-paleta de amostras — formato "godê" retangular, diferenciando
+  // visualmente a paleta de beleza (maquiagem/cabelo) da paleta de moda (círculos). ----
 
   function dm_renderMiniPaleta(lista){
-    return '<div class="dossie-mestre-swatch-grid">' + lista.map(function(c){
-      return '<div class="dossie-mestre-swatch">' +
-        '<div class="dossie-mestre-swatch-circulo" style="background:' + escapeHtml(c.hex || '#eee') + ';"></div>' +
-        '<div class="dossie-mestre-swatch-nome">' + escapeHtml(c.nome || '') + '</div>' +
+    return '<div class="dm-beleza-grid">' + lista.map(function(c){
+      return '<div class="dm-beleza-item">' +
+        '<div class="dm-beleza-swatch" style="background:' + escapeHtml(c.hex || '#eee') + ';"></div>' +
+        '<div class="dm-beleza-nome">' + escapeHtml(c.nome || '') + '</div>' +
       '</div>';
     }).join('') + '</div>';
   }
 
+  // Normaliza um item de aplicação cromática para {nome, hex}: aceita tanto uma
+  // referência {corId} (resolvida contra a cartela, nunca duplicando HEX) quanto,
+  // se algum dia necessário, um item já com {nome, hex} próprios (ex.: um tom de
+  // batom que não corresponde a nenhuma das 100 cores da cartela).
+  function dm_normalizarItemAplicado(item, cartelaId){
+    if(!item) return null;
+    if(item.corId){
+      const resolvido = resolverCorPorId(cartelaId, item.corId);
+      return resolvido ? { nome: resolvido.nome, hex: resolvido.hex } : null;
+    }
+    if(item.hex) return { nome: item.nome || '', hex: item.hex };
+    return null;
+  }
+
+  // MODELO — Maquiagem: fonte única APLICACAO_CROMATICA_BASE[cartelaId].beleza
+  // (sem fallback para CARTELAS_BASE — essa estrutura foi removida de lá na Fase 6C.3.1).
   function dm_buildMaquiagem(dados){
     if(!dados.servicos.maquiagem) return null;
 
     const cartelaInfo = dm_resolverCartela(dados);
-    const beleza = (cartelaInfo && cartelaInfo.base && cartelaInfo.base.beleza) || {};
+    const cartelaId = cartelaInfo && cartelaInfo.base && cartelaInfo.base.id;
+    const beleza = (cartelaId && APLICACAO_CROMATICA_BASE[cartelaId] && APLICACAO_CROMATICA_BASE[cartelaId].beleza) || {};
+
     const subsecoes = [
-      { icone: 'batom', titulo: 'Batons', lista: beleza.batons },
-      { icone: 'gota', titulo: 'Blushes', lista: beleza.blushes },
-      { icone: 'gota', titulo: 'Sombras', lista: beleza.sombras },
-      { icone: 'tesoura', titulo: 'Delineadores e Lápis', lista: beleza.delineadores },
-      { icone: 'gota', titulo: 'Iluminadores', lista: beleza.iluminadores }
-    ].filter(function(s){ return Array.isArray(s.lista) && s.lista.length > 0; });
+      { icone: 'gota', titulo: 'Base', lista: beleza.base },
+      { icone: 'gota', titulo: 'Blush', lista: beleza.blush },
+      { icone: 'batom', titulo: 'Batom', lista: beleza.batom },
+      { icone: 'gota', titulo: 'Sombra', lista: beleza.sombra },
+      { icone: 'tesoura', titulo: 'Lápis', lista: beleza.lapis },
+      { icone: 'gota', titulo: 'Máscara', lista: beleza.mascara },
+      { icone: 'gota', titulo: 'Iluminador', lista: beleza.iluminador }
+    ]
+      .map(function(s){ return { icone: s.icone, titulo: s.titulo, lista: (Array.isArray(s.lista) ? s.lista : []).map(function(it){ return dm_normalizarItemAplicado(it, cartelaId); }).filter(Boolean) }; })
+      .filter(function(s){ return s.lista.length > 0; });
 
     const direcionamento = dados.crom.direcionamentoMaquiagem;
     const temDirecionamento = !!(direcionamento && direcionamento.trim());
@@ -16467,29 +21252,41 @@
     return [dm_pagina(html, { numero: true, secao: 'Beleza' })];
   }
 
+  // MODELO — Cabelo: fonte única APLICACAO_CROMATICA_BASE[cartelaId].cabelo
+  // (sem fallback para CARTELAS_BASE — essa estrutura foi removida de lá na Fase 6C.3.1).
   function dm_buildCabelo(dados){
     if(!dados.servicos.cabelo) return null;
 
     const cartelaInfo = dm_resolverCartela(dados);
-    const cabeloBase = (cartelaInfo && cartelaInfo.base && cartelaInfo.base.cabelo) || {};
-    const familias = Array.isArray(cabeloBase.familiasRecomendadas) ? cabeloBase.familiasRecomendadas : [];
+    const cartelaId = cartelaInfo && cartelaInfo.base && cartelaInfo.base.id;
+    const cabeloAplicado = (cartelaId && APLICACAO_CROMATICA_BASE[cartelaId] && APLICACAO_CROMATICA_BASE[cartelaId].cabelo) || {};
+    const tonalidades = (Array.isArray(cabeloAplicado.tonalidades) ? cabeloAplicado.tonalidades : [])
+      .map(function(it){ return dm_normalizarItemAplicado(it, cartelaId); })
+      .filter(Boolean);
+
+    const observacoesBase = cabeloAplicado.observacoes;
+    const temObservacoesBase = !!(observacoesBase && observacoesBase.trim());
 
     const direcionamento = dados.crom.direcionamentoCabelo;
     const temDirecionamento = !!(direcionamento && direcionamento.trim());
 
-    if(!familias.length && !temDirecionamento) return null;
+    if(!tonalidades.length && !temObservacoesBase && !temDirecionamento) return null;
 
     let html = '<div class="dm-eyebrow">Beleza</div><div class="dm-titulo-editorial">Cabelo</div><div class="dm-linha-curta"></div>';
-    if(familias.length){
-      html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Famílias Recomendadas</div>' + dm_renderMiniPaleta(familias) + '</div>';
+    if(tonalidades.length){
+      html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Tonalidades Harmônicas à Sua Cartela</div>' + dm_renderMiniPaleta(tonalidades) + '</div>';
+    }
+    if(temObservacoesBase){
+      html += dm_itemIcone('folha', 'Observações da Cartela', observacoesBase);
     }
     if(temDirecionamento){
       html += dm_itemIcone('tesoura', 'Direcionamento Profissional', direcionamento);
     }
-    html += dm_rodapeFaixa('Coloração capilar', 'Famílias de tom pensadas para valorizar seu subtom de pele e olhos.');
+    html += dm_rodapeFaixa('Coloração capilar', 'Tonalidades pensadas para valorizar seu subtom de pele e olhos.');
 
     return [dm_pagina(html, { numero: true, secao: 'Beleza' })];
   }
+
 
   // MODELO — "Guarda-Roupa Estratégico": seções visualmente distintas, sem inventar peças.
   function dm_buildAplicacaoPratica(dados){
@@ -16658,23 +21455,26 @@
 
     if(dados.servicos.maquiagem){
       const cartelaInfo = dm_resolverCartela(dados);
-      const beleza = (cartelaInfo && cartelaInfo.base && cartelaInfo.base.beleza) || {};
-      const temPaletaBeleza = ['batons', 'blushes', 'sombras', 'delineadores', 'iluminadores'].some(function(k){
+      const cartelaId = cartelaInfo && cartelaInfo.base && cartelaInfo.base.id;
+      const beleza = (cartelaId && APLICACAO_CROMATICA_BASE[cartelaId] && APLICACAO_CROMATICA_BASE[cartelaId].beleza) || {};
+      const temPaletaBeleza = ['base', 'blush', 'batom', 'sombra', 'lapis', 'mascara', 'iluminador'].some(function(k){
         return Array.isArray(beleza[k]) && beleza[k].length > 0;
       });
       const temDirecionamento = !!(dados.crom.direcionamentoMaquiagem && dados.crom.direcionamentoMaquiagem.trim());
       if(!temPaletaBeleza && !temDirecionamento){
-        avisos.push('Módulo Maquiagem contratado, mas sem paleta de beleza da cartela nem direcionamento preenchido.');
+        avisos.push('Módulo Maquiagem contratado, mas sem paleta de beleza aplicada (APLICACAO_CROMATICA_BASE) nem direcionamento preenchido.');
       }
     }
 
     if(dados.servicos.cabelo){
       const cartelaInfo = dm_resolverCartela(dados);
-      const cabeloBase = (cartelaInfo && cartelaInfo.base && cartelaInfo.base.cabelo) || {};
-      const temFamilias = Array.isArray(cabeloBase.familiasRecomendadas) && cabeloBase.familiasRecomendadas.length > 0;
+      const cartelaId = cartelaInfo && cartelaInfo.base && cartelaInfo.base.id;
+      const cabeloAplicado = (cartelaId && APLICACAO_CROMATICA_BASE[cartelaId] && APLICACAO_CROMATICA_BASE[cartelaId].cabelo) || {};
+      const temTonalidades = Array.isArray(cabeloAplicado.tonalidades) && cabeloAplicado.tonalidades.length > 0;
+      const temObservacoesBase = !!(cabeloAplicado.observacoes && cabeloAplicado.observacoes.trim());
       const temDirecionamento = !!(dados.crom.direcionamentoCabelo && dados.crom.direcionamentoCabelo.trim());
-      if(!temFamilias && !temDirecionamento){
-        avisos.push('Módulo Cabelo contratado, mas sem paleta de famílias da cartela nem direcionamento preenchido.');
+      if(!temTonalidades && !temObservacoesBase && !temDirecionamento){
+        avisos.push('Módulo Cabelo contratado, mas sem tonalidades aplicadas (APLICACAO_CROMATICA_BASE) nem direcionamento preenchido.');
       }
     }
 
@@ -16721,6 +21521,8 @@
       push(dm_buildColoracaoPessoal(dados));
       push(dm_buildComoUsarCartela(dados));
       push(dm_buildPaleta(dados));
+      push(dm_buildCombinacoesCromaticas(dados));
+      push(dm_buildArmarioCapsuloCromatico(dados));
       push(dm_buildMetais(dados));
       push(dm_buildMaquiagem(dados));
       push(dm_buildCabelo(dados));
