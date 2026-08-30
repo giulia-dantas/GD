@@ -1457,6 +1457,21 @@
   .ficha-tab-content{ display:none; }
   .ficha-tab-content.active{ display:block; }
 
+  .ficha-tabs-scroll{
+    overflow-x:auto;
+    flex-wrap:nowrap;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding-bottom:2px;
+  }
+
+  .ficha-tabs-scroll::-webkit-scrollbar{ display:none; }
+
+  .ficha-tabs-scroll .pill{
+    flex-shrink:0;
+    white-space:nowrap;
+  }
+
   .ficha-info-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -3159,10 +3174,11 @@
         <div class="page-title" id="ficha-cliente-nome">Selecione uma cliente</div>
         <div class="page-sub">Visão geral, anamnese e fotos</div>
 
-        <div class="pill-row" style="margin-bottom:20px;">
+        <div class="pill-row ficha-tabs-scroll" style="margin-bottom:20px;">
           <div class="pill active" data-ficha-tab="visao">Visão Geral</div>
           <div class="pill" data-ficha-tab="anamnese">Anamnese</div>
           <div class="pill" data-ficha-tab="fotos">Fotos</div>
+          <div class="pill" data-ficha-tab="analise">Análise</div>
         </div>
 
         <!-- ---- ABA: VISÃO GERAL ---- -->
@@ -3260,6 +3276,171 @@
             <div class="ficha-photo-category-sub">Imagem para a composição visual do material final. Toque na estrela de qualquer foto para marcá-la como escolhida.</div>
             <div class="ficha-photo-grid" id="ficha-fotos-dossie"></div>
           </div>
+        </div>
+
+        <!-- ---- ABA: ANÁLISE PROFISSIONAL ---- -->
+        <div class="ficha-tab-content" id="ficha-tab-analise">
+
+          <div class="stat-card" id="analise-profissional-fields">
+            <div class="stat-label" style="margin-bottom:14px;">Consultoria de Imagem</div>
+
+            <label class="form-label">Serviço realizado</label>
+            <div class="radio-row" data-field="servicoRealizado">
+              <div class="radio-opt"><div class="dot-circle"></div>Consultoria de Imagem</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Direcionamento Cromático</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Consultoria de Imagem + Direcionamento Cromático</div>
+            </div>
+
+            <label class="form-label">Estilo predominante</label>
+            <div class="radio-row" data-field="estiloPredominante">
+              <div class="radio-opt"><div class="dot-circle"></div>Natural</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Básico</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Casual</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Elegante</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Clássico</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Contemporâneo</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Moderno</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Romântico</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Criativo</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Sexy</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Esportivo</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Exótico</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Outro</div>
+            </div>
+            <input class="input-field outro-input" type="text" data-field="estiloPredominanteOutro" id="outro-estiloPredominante" placeholder="Descreva o estilo predominante" style="display:none; margin-top:-6px;">
+
+            <label class="form-label">Estilos complementares</label>
+            <div class="chip-row" data-field="estilosComplementares">
+              <div class="chip">Natural</div>
+              <div class="chip">Básico</div>
+              <div class="chip">Casual</div>
+              <div class="chip">Elegante</div>
+              <div class="chip">Clássico</div>
+              <div class="chip">Contemporâneo</div>
+              <div class="chip">Moderno</div>
+              <div class="chip">Romântico</div>
+              <div class="chip">Criativo</div>
+              <div class="chip">Sexy</div>
+              <div class="chip">Esportivo</div>
+              <div class="chip">Exótico</div>
+              <div class="chip">Outro</div>
+            </div>
+            <input class="input-field outro-input" type="text" data-field="estilosComplementaresOutro" id="outro-estilosComplementares" placeholder="Outro estilo complementar" style="display:none; margin-top:-6px;">
+
+            <label class="form-label">Objetivo de imagem identificado</label>
+            <textarea class="input-field textarea" data-field="objetivoImagem" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Biotipo / formato corporal</label>
+            <div class="radio-row" data-field="biotipo">
+              <div class="radio-opt"><div class="dot-circle"></div>Ampulheta</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Triângulo</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Triângulo Invertido</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Retângulo</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Oval</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Outro</div>
+            </div>
+            <input class="input-field outro-input" type="text" data-field="biotipoOutro" id="outro-biotipo" placeholder="Descreva o biotipo" style="display:none; margin-top:-6px;">
+
+            <label class="form-label">Pontos a valorizar</label>
+            <textarea class="input-field textarea" data-field="pontosValorizar" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Pontos que a cliente prefere não destacar</label>
+            <textarea class="input-field textarea" data-field="pontosNaoDestacar" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Recomendações de modelagem</label>
+            <textarea class="input-field textarea" data-field="recomendacoesModelagem" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Recomendações de tecidos</label>
+            <textarea class="input-field textarea" data-field="recomendacoesTecidos" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Recomendações de comprimentos</label>
+            <textarea class="input-field textarea" data-field="recomendacoesComprimentos" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Recomendações de acessórios</label>
+            <textarea class="input-field textarea" data-field="recomendacoesAcessorios" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Observações profissionais</label>
+            <textarea class="input-field textarea" data-field="observacoesProfissionais" placeholder="Escreva livremente..." style="min-height:130px;"></textarea>
+          </div>
+
+          <div class="stat-card" id="analise-cromatico-fields">
+            <div class="stat-label" style="margin-bottom:14px;">Direcionamento Cromático</div>
+
+            <label class="form-label">Direcionamento cromático realizado?</label>
+            <div class="radio-row" data-field="direcionamentoRealizado" id="analise-cromatico-realizado-radio">
+              <div class="radio-opt"><div class="dot-circle"></div>Sim</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Não</div>
+            </div>
+
+            <div id="analise-cromatico-campos" style="display:none;">
+              <label class="form-label">Cartela</label>
+              <div class="radio-row" data-field="cartela">
+                <div class="radio-opt"><div class="dot-circle"></div>Primavera Clara</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Primavera Quente</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Primavera Brilhante</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Verão Claro</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Verão Frio</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Verão Suave</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Outono Suave</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Outono Quente</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Outono Profundo</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Inverno Brilhante</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Inverno Frio</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Inverno Profundo</div>
+              </div>
+
+              <label class="form-label">Temperatura</label>
+              <div class="radio-row" data-field="temperatura">
+                <div class="radio-opt"><div class="dot-circle"></div>Quente</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Fria</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Neutra-quente</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Neutra-fria</div>
+              </div>
+
+              <label class="form-label">Intensidade</label>
+              <div class="radio-row" data-field="intensidade">
+                <div class="radio-opt"><div class="dot-circle"></div>Suave</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Média</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Brilhante</div>
+              </div>
+
+              <label class="form-label">Profundidade</label>
+              <div class="radio-row" data-field="profundidade">
+                <div class="radio-opt"><div class="dot-circle"></div>Clara</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Média</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Escura</div>
+              </div>
+
+              <label class="form-label">Contraste pessoal</label>
+              <div class="radio-row" data-field="contrastePessoal">
+                <div class="radio-opt"><div class="dot-circle"></div>Baixo</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Médio</div>
+                <div class="radio-opt"><div class="dot-circle"></div>Alto</div>
+              </div>
+
+              <label class="form-label">Melhores neutros</label>
+              <textarea class="input-field textarea" data-field="melhoresNeutros" placeholder="Escreva livremente..."></textarea>
+
+              <label class="form-label">Cores de destaque</label>
+              <textarea class="input-field textarea" data-field="coresDestaque" placeholder="Escreva livremente..."></textarea>
+
+              <label class="form-label">Metais recomendados</label>
+              <textarea class="input-field textarea" data-field="metaisRecomendados" placeholder="Escreva livremente..."></textarea>
+
+              <label class="form-label">Direcionamento de maquiagem</label>
+              <textarea class="input-field textarea" data-field="direcionamentoMaquiagem" placeholder="Escreva livremente..."></textarea>
+
+              <label class="form-label">Direcionamento de cabelo</label>
+              <textarea class="input-field textarea" data-field="direcionamentoCabelo" placeholder="Escreva livremente..."></textarea>
+
+              <label class="form-label">Observações cromáticas</label>
+              <textarea class="input-field textarea" data-field="observacoesCromaticas" placeholder="Escreva livremente..." style="min-height:110px;"></textarea>
+            </div>
+          </div>
+
+          <div class="login-error" id="ficha-analise-msg"></div>
+          <button class="btn-secondary" id="ficha-salvar-analise-btn">Salvar Análise</button>
+          <button class="btn-primary" id="ficha-concluir-analise-btn">Marcar Análise como Concluída</button>
         </div>
 
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
@@ -4990,6 +5171,202 @@
     } catch(err){ return '—'; }
   }
 
+  // ===================================================================
+  // ANÁLISE PROFISSIONAL + DIRECIONAMENTO CROMÁTICO (Admin) — Fase 2
+  // Dados exclusivos da Giulia, nunca lidos nas telas da cliente.
+  // Guardados em dois documentos irmãos de clientes/{uid}/interno/ficha
+  // (analiseProfissional e analiseCromatica), para que salvar uma
+  // seção nunca sobrescreva a outra nem as observações internas da Fase 1.
+  // ===================================================================
+
+  // ---- Base das 12 cartelas cromáticas ----
+  // Estrutura apenas: nenhuma cor, neutro ou destaque é inventado aqui.
+  // Os códigos oficiais serão preenchidos posteriormente pela Giulia.
+  const CARTELAS_BASE = [
+    'Primavera Clara', 'Primavera Quente', 'Primavera Brilhante',
+    'Verão Claro', 'Verão Frio', 'Verão Suave',
+    'Outono Suave', 'Outono Quente', 'Outono Profundo',
+    'Inverno Brilhante', 'Inverno Frio', 'Inverno Profundo'
+  ].reduce(function(acc, nome){
+    acc[nome] = {
+      nome: nome,
+      temperatura: '',
+      intensidade: '',
+      profundidade: '',
+      cores: [],
+      neutros: [],
+      destaques: []
+    };
+    return acc;
+  }, {});
+
+  // ---- Read every [data-field] element inside a container into a plain object ----
+  // Reuses the same getFieldValue() already used by the anamnese forms, so
+  // inputs, textareas, chip-rows and radio-rows are all handled consistently.
+
+  function getContainerFieldsData(container){
+    const data = {};
+    if(!container) return data;
+    container.querySelectorAll('[data-field]').forEach(function(el){
+      const field = el.getAttribute('data-field');
+      if(data.hasOwnProperty(field)) return;
+      data[field] = getFieldValue(container, field);
+    });
+    return data;
+  }
+
+  function hasAnyFilledField(dataObj){
+    return Object.keys(dataObj).some(function(k){
+      if(k === 'updatedAt') return false;
+      const v = dataObj[k];
+      if(Array.isArray(v)) return v.length > 0;
+      return v !== undefined && v !== null && v !== '';
+    });
+  }
+
+  // ---- Toggle visibility of the cromático fields based on "Direcionamento realizado?" ----
+
+  document.addEventListener('click', function(e){
+    const radio = e.target.closest('#analise-cromatico-realizado-radio .radio-opt');
+    if(!radio) return;
+    const campos = document.getElementById('analise-cromatico-campos');
+    if(campos) campos.style.display = (radio.textContent.trim() === 'Sim') ? '' : 'none';
+  });
+
+  // ---- Load saved Análise Profissional + Cromática for the selected client ----
+
+  async function loadAnaliseProfissionalCromatica(uid){
+    const profContainer = document.getElementById('analise-profissional-fields');
+    const cromContainer = document.getElementById('analise-cromatico-fields');
+    const cromCampos = document.getElementById('analise-cromatico-campos');
+
+    // Reset the shared form controls first, so a client's data never bleeds
+    // into the next client's ficha within the same session.
+    [profContainer, cromContainer].forEach(function(container){
+      if(!container) return;
+      container.querySelectorAll('input.input-field, textarea.input-field').forEach(function(el){ el.value = ''; });
+      container.querySelectorAll('.chip.sel, .radio-opt.sel').forEach(function(el){ el.classList.remove('sel'); });
+      container.querySelectorAll('.outro-input').forEach(function(el){ el.style.display = 'none'; });
+    });
+    if(cromCampos) cromCampos.style.display = 'none';
+
+    let profData = {}, cromData = {};
+
+    try{
+      const profRef = doc(db, 'clientes', uid, 'interno', 'analiseProfissional');
+      const profSnap = await getDoc(profRef);
+      if(profSnap.exists()) profData = profSnap.data();
+    } catch(err){ console.error('GD: erro ao carregar análise profissional', err); }
+
+    try{
+      const cromRef = doc(db, 'clientes', uid, 'interno', 'analiseCromatica');
+      const cromSnap = await getDoc(cromRef);
+      if(cromSnap.exists()) cromData = cromSnap.data();
+    } catch(err){ console.error('GD: erro ao carregar análise cromática', err); }
+
+    if(profContainer){
+      profContainer.querySelectorAll('[data-field]').forEach(function(el){
+        const field = el.getAttribute('data-field');
+        if(field in profData) setFieldValue(profContainer, field, profData[field]);
+      });
+
+      const outroEstilo = document.getElementById('outro-estiloPredominante');
+      if(outroEstilo && profData.estiloPredominante === 'Outro') outroEstilo.style.display = '';
+
+      const outroComplementares = document.getElementById('outro-estilosComplementares');
+      if(outroComplementares && Array.isArray(profData.estilosComplementares) && profData.estilosComplementares.indexOf('Outro') !== -1){
+        outroComplementares.style.display = '';
+      }
+
+      const outroBiotipo = document.getElementById('outro-biotipo');
+      if(outroBiotipo && profData.biotipo === 'Outro') outroBiotipo.style.display = '';
+    }
+
+    if(cromContainer){
+      cromContainer.querySelectorAll('[data-field]').forEach(function(el){
+        const field = el.getAttribute('data-field');
+        if(field in cromData) setFieldValue(cromContainer, field, cromData[field]);
+      });
+      if(cromCampos) cromCampos.style.display = (cromData.direcionamentoRealizado === 'Sim') ? '' : 'none';
+    }
+  }
+
+  // ---- Save Análise Profissional + Cromática, and update the status shown in Visão Geral ----
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#ficha-salvar-analise-btn, #ficha-concluir-analise-btn');
+    if(!btn || !selectedClienteUid) return;
+
+    const isConcluir = btn.id === 'ficha-concluir-analise-btn';
+    const msgEl = document.getElementById('ficha-analise-msg');
+    const originalText = btn.textContent;
+
+    btn.classList.add('is-loading');
+    btn.textContent = isConcluir ? 'Concluindo…' : 'Salvando…';
+
+    try{
+      const profContainer = document.getElementById('analise-profissional-fields');
+      const cromContainer = document.getElementById('analise-cromatico-fields');
+
+      const profData = getContainerFieldsData(profContainer);
+      const cromData = getContainerFieldsData(cromContainer);
+
+      const nowIso = new Date().toISOString();
+      profData.updatedAt = nowIso;
+      cromData.updatedAt = nowIso;
+
+      const profRef = doc(db, 'clientes', selectedClienteUid, 'interno', 'analiseProfissional');
+      const cromRef = doc(db, 'clientes', selectedClienteUid, 'interno', 'analiseCromatica');
+      const fichaRef = doc(db, 'clientes', selectedClienteUid, 'interno', 'ficha');
+
+      // merge:true everywhere: never destructive, never touches observacoesInternas
+      // or any field outside of what this form owns.
+      await setDoc(profRef, profData, { merge: true });
+      await setDoc(cromRef, cromData, { merge: true });
+
+      let novoStatus;
+      if(isConcluir){
+        novoStatus = 'concluida';
+      } else {
+        let statusAtual = 'nao_iniciada';
+        try{
+          const fichaSnap = await getDoc(fichaRef);
+          if(fichaSnap.exists()) statusAtual = fichaSnap.data().analiseProfissionalStatus || 'nao_iniciada';
+        } catch(err){ console.error(err); }
+
+        const preenchida = hasAnyFilledField(profData) || hasAnyFilledField(cromData);
+        novoStatus = (statusAtual === 'concluida') ? 'concluida' : (preenchida ? 'em_andamento' : 'nao_iniciada');
+      }
+
+      await setDoc(fichaRef, { analiseProfissionalStatus: novoStatus, updatedAt: nowIso }, { merge: true });
+
+      if(novoStatus === 'concluida'){
+        setFichaStatusTag('ficha-status-analise', 'Concluída', 'done');
+      } else if(novoStatus === 'em_andamento'){
+        setFichaStatusTag('ficha-status-analise', 'Em andamento', 'warn');
+      } else {
+        setFichaStatusTag('ficha-status-analise', 'Não iniciada', null);
+      }
+      const ultimaEl = document.getElementById('ficha-ultima-atualizacao');
+      if(ultimaEl) ultimaEl.textContent = formatFichaDate(nowIso);
+
+      if(msgEl){
+        msgEl.classList.add('success');
+        msgEl.textContent = isConcluir ? 'Análise marcada como concluída.' : 'Análise salva com sucesso.';
+        setTimeout(function(){ msgEl.textContent = ''; msgEl.classList.remove('success'); }, 2500);
+      }
+    } catch(err){
+      console.error('GD: erro ao salvar análise', err);
+      if(msgEl){
+        msgEl.classList.remove('success');
+        msgEl.textContent = 'Não foi possível salvar. Tente novamente.';
+      }
+    } finally{
+      btn.classList.remove('is-loading');
+      btn.textContent = originalText;
+    }
+  });
+
   // ---- Main render for the Ficha da Cliente screen ----
 
   async function renderFichaCliente(){
@@ -5120,6 +5497,9 @@
 
     // ---- Aba Fotos ----
     await renderFichaFotosTab(selectedClienteUid);
+
+    // ---- Aba Análise Profissional + Cromática ----
+    await loadAnaliseProfissionalCromatica(selectedClienteUid);
   }
 
   // ---- Salvar Observações Internas ----
