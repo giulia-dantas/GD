@@ -6554,7 +6554,13 @@
       const oldPath = existing ? existing.pdfPath : null;
 
       const fileRef = ref(storage, storagePath);
-      await uploadBytes(fileRef, file, { contentType: 'application/pdf' });
+      // contentDisposition: 'inline' garante que "Ver Dossiê" abra o PDF no visualizador
+      // do navegador (inclusive Chrome/Android) em vez de baixar automaticamente. O botão
+      // "Baixar PDF" força o download por conta própria (via blob), independente disso.
+      await uploadBytes(fileRef, file, {
+        contentType: 'application/pdf',
+        contentDisposition: 'inline; filename="' + file.name.replace(/"/g, '') + '"'
+      });
 
       // Não guardamos mais uma pdfUrl permanente (getDownloadURL) no Firestore: o token
       // embutido nela funcionaria fora do app e independente da liberação. A partir de
@@ -6971,16 +6977,38 @@
     }
 
     if(verBtn){
+      // Visualização: abre a URL diretamente. Com contentDisposition: inline (definido no
+      // upload), o navegador mostra o PDF em vez de baixar.
       window.open(url, '_blank');
     } else if(baixarBtn){
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = dossieData.pdfNome || 'dossie.pdf';
-      a.target = '_blank';
-      a.rel = 'noopener';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+      // Download real: a URL é de outra origem (firebasestorage.googleapis.com), e o
+      // atributo "download" de um <a> não é respeitado pelo navegador para links
+      // cross-origin — por isso, antes, os dois botões acabavam se comportando igual.
+      // Baixando o arquivo como blob (mesma origem da página) o atributo "download"
+      // passa a funcionar de verdade, inclusive no Chrome/Android.
+      const originalBaixarText = baixarBtn.textContent;
+      baixarBtn.textContent = 'Baixando…';
+      try{
+        const resp = await fetch(url);
+        if(!resp.ok) throw new Error('Falha ao baixar arquivo (HTTP ' + resp.status + ')');
+        const blob = await resp.blob();
+        const blobUrl = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = dossieData.pdfNome || 'dossie.pdf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(function(){ URL.revokeObjectURL(blobUrl); }, 10000);
+      } catch(err){
+        console.error('GD: erro ao baixar PDF (fetch/blob)', { code: err && err.code, message: err && err.message });
+        // Se algo impedir o download forçado (ex.: navegador bloqueando fetch cross-origin),
+        // ainda oferece o arquivo abrindo-o em nova aba para a cliente salvar manualmente.
+        window.open(url, '_blank');
+      } finally{
+        baixarBtn.textContent = originalBaixarText;
+      }
     }
   });
 
