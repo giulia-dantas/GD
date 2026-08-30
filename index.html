@@ -2341,7 +2341,8 @@
         <div class="stat-card">
           <div class="stat-label" style="margin-bottom:4px;">Dados Disponíveis</div>
           <div id="dossie-individual-checklist"></div>
-          <button class="btn-secondary" id="dossie-individual-ver-dados-btn" style="margin-top:14px; margin-bottom:0;">Ver Dados para o Dossiê</button>
+          <button class="btn-secondary" id="dossie-individual-ver-dados-btn" style="margin-top:14px;">Ver Dados para o Dossiê</button>
+          <button class="btn-secondary" data-goto="editor-dossie" style="margin-bottom:0;">Editor do Dossiê</button>
         </div>
 
         <div class="stat-card">
@@ -2448,6 +2449,206 @@
           <div class="stat-label" style="margin-bottom:4px;">Fotos para Análise</div>
           <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:12px; line-height:1.5;">A foto com estrela dourada é a Foto Principal do Dossiê.</p>
           <div id="dados-dossie-fotos-analise"></div>
+        </div>
+
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= EDITOR DO DOSSIÊ (ADMIN) — Fase 6B ================= -->
+  <div class="screen-wrap" id="screen-editor-dossie">
+    <div class="screen-label">Editor do Dossiê</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+        <div class="logout-btn" data-goto="dossie-individual" title="Voltar" style="left:16px; right:auto;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg></div>
+        
+      </div>
+      <div class="content">
+        <div class="eyebrow" id="editor-dossie-cliente-nome">Cliente</div>
+        <div class="page-title">Editor do Dossiê</div>
+        <div class="page-sub">Conteúdo editorial para o futuro Dossiê Mestre</div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:10px;">Status Editorial</div>
+          <div class="radio-row" id="editor-status-radio">
+            <div class="radio-opt"><div class="dot-circle"></div>Rascunho</div>
+            <div class="radio-opt"><div class="dot-circle"></div>Pronto para Prévia</div>
+          </div>
+          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:12px; line-height:1.5;">Em revisão, aprovado e PDF gerado serão habilitados nas próximas fases.</p>
+          <button class="btn-secondary" id="editor-salvar-status-btn" style="margin-bottom:0;">Salvar Status</button>
+          <div class="login-error" id="editor-status-msg"></div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label" style="margin-bottom:4px;">Completude por Capítulo</div>
+          <div id="editor-checklist"></div>
+        </div>
+
+        <p id="editor-sem-capitulos" hidden style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Nenhum capítulo de imagem se aplica a esta cliente com os serviços atuais. Ajuste em Serviços da Cliente, na Ficha da Cliente, se necessário.</p>
+
+        <!-- ---- PERFIL DE IMAGEM ---- -->
+        <div class="stat-card" id="editor-cap-perfil" hidden>
+          <div class="mini-row" data-editor-toggle="perfil" style="cursor:pointer; padding-top:0;">
+            <div>
+              <div class="mini-row-title">Perfil de Imagem</div>
+              <div class="mini-row-sub" id="editor-check-perfil">Incompleto</div>
+            </div>
+            <div class="arrow" id="editor-arrow-perfil">＋</div>
+          </div>
+          <div id="editor-body-perfil" hidden>
+            <div class="ficha-status-row"><div class="label">Objetivo de imagem (referência)</div><div class="ficha-info-value" id="editor-ref-objetivoImagem">—</div></div>
+            <div class="ficha-status-row"><div class="label">Estilo predominante (referência)</div><div class="ficha-info-value" id="editor-ref-estiloPredominante">—</div></div>
+            <div class="ficha-status-row"><div class="label">Estilos complementares (referência)</div><div class="ficha-info-value" id="editor-ref-estilosComplementares">—</div></div>
+
+            <label class="form-label">Síntese do momento</label>
+            <textarea class="input-field textarea" data-editor-field="sinteseMomento" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Parecer profissional</label>
+            <textarea class="input-field textarea" data-editor-field="parecerProfissional" placeholder="Escreva livremente..." style="min-height:110px;"></textarea>
+
+            <button class="btn-secondary" data-editor-save="perfil" style="margin-bottom:0;">Salvar Perfil de Imagem</button>
+            <div class="login-error" id="editor-msg-perfil"></div>
+          </div>
+        </div>
+
+        <!-- ---- ESTRATÉGIA ---- -->
+        <div class="stat-card" id="editor-cap-estrategia" hidden>
+          <div class="mini-row" data-editor-toggle="estrategia" style="cursor:pointer; padding-top:0;">
+            <div>
+              <div class="mini-row-title">Estratégia</div>
+              <div class="mini-row-sub" id="editor-check-estrategia">Incompleto</div>
+            </div>
+            <div class="arrow" id="editor-arrow-estrategia">＋</div>
+          </div>
+          <div id="editor-body-estrategia" hidden>
+            <div class="ficha-status-row"><div class="label">Pontos a valorizar (referência)</div><div class="ficha-info-value" id="editor-ref-pontosValorizar">—</div></div>
+            <div class="ficha-status-row"><div class="label">Pontos a não destacar (referência)</div><div class="ficha-info-value" id="editor-ref-pontosNaoDestacar">—</div></div>
+
+            <label class="form-label">O que comunicar através da imagem</label>
+            <textarea class="input-field textarea" data-editor-field="comunicar" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Prioridade</label>
+            <textarea class="input-field textarea" data-editor-field="prioridade" placeholder="Escreva livremente..."></textarea>
+
+            <button class="btn-secondary" data-editor-save="estrategia" style="margin-bottom:0;">Salvar Estratégia</button>
+            <div class="login-error" id="editor-msg-estrategia"></div>
+          </div>
+        </div>
+
+        <!-- ---- ANÁLISE CORPORAL ---- -->
+        <div class="stat-card" id="editor-cap-corporal" hidden>
+          <div class="mini-row" data-editor-toggle="corporal" style="cursor:pointer; padding-top:0;">
+            <div>
+              <div class="mini-row-title">Análise Corporal</div>
+              <div class="mini-row-sub" id="editor-check-corporal">Incompleto</div>
+            </div>
+            <div class="arrow" id="editor-arrow-corporal">＋</div>
+          </div>
+          <div id="editor-body-corporal" hidden>
+            <div class="ficha-status-row"><div class="label">Biotipo (referência)</div><div class="ficha-info-value" id="editor-ref-biotipo">—</div></div>
+
+            <label class="form-label">Proporções observadas</label>
+            <textarea class="input-field textarea" data-editor-field="proporcoesObservadas" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Direcionamento corporal</label>
+            <textarea class="input-field textarea" data-editor-field="direcionamentoCorporal" placeholder="Escreva livremente..."></textarea>
+
+            <button class="btn-secondary" data-editor-save="corporal" style="margin-bottom:0;">Salvar Análise Corporal</button>
+            <div class="login-error" id="editor-msg-corporal"></div>
+          </div>
+        </div>
+
+        <!-- ---- VESTUÁRIO ---- -->
+        <div class="stat-card" id="editor-cap-vestuario" hidden>
+          <div class="mini-row" data-editor-toggle="vestuario" style="cursor:pointer; padding-top:0;">
+            <div>
+              <div class="mini-row-title">Vestuário</div>
+              <div class="mini-row-sub" id="editor-check-vestuario">Incompleto</div>
+            </div>
+            <div class="arrow" id="editor-arrow-vestuario">＋</div>
+          </div>
+          <div id="editor-body-vestuario" hidden>
+            <div class="ficha-status-row"><div class="label">Recomendações de modelagem (referência)</div><div class="ficha-info-value" id="editor-ref-recomendacoesModelagem">—</div></div>
+            <div class="ficha-status-row"><div class="label">Recomendações de tecidos (referência)</div><div class="ficha-info-value" id="editor-ref-recomendacoesTecidos">—</div></div>
+            <div class="ficha-status-row"><div class="label">Recomendações de acessórios (referência)</div><div class="ficha-info-value" id="editor-ref-recomendacoesAcessorios">—</div></div>
+
+            <label class="form-label">Partes superiores</label>
+            <textarea class="input-field textarea" data-editor-field="partesSuperiores" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Partes inferiores</label>
+            <textarea class="input-field textarea" data-editor-field="partesInferiores" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Vestidos / Macacões</label>
+            <textarea class="input-field textarea" data-editor-field="vestidosMacacoes" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Terceira peça</label>
+            <textarea class="input-field textarea" data-editor-field="terceiraPeca" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Estampas</label>
+            <textarea class="input-field textarea" data-editor-field="estampas" placeholder="Escreva livremente..."></textarea>
+
+            <button class="btn-secondary" data-editor-save="vestuario" style="margin-bottom:0;">Salvar Vestuário</button>
+            <div class="login-error" id="editor-msg-vestuario"></div>
+          </div>
+        </div>
+
+        <!-- ---- APLICAÇÃO PRÁTICA ---- -->
+        <div class="stat-card" id="editor-cap-aplicacao" hidden>
+          <div class="mini-row" data-editor-toggle="aplicacao" style="cursor:pointer; padding-top:0;">
+            <div>
+              <div class="mini-row-title">Aplicação Prática</div>
+              <div class="mini-row-sub" id="editor-check-aplicacao">Incompleto</div>
+            </div>
+            <div class="arrow" id="editor-arrow-aplicacao">＋</div>
+          </div>
+          <div id="editor-body-aplicacao" hidden>
+            <div class="ficha-status-row"><div class="label">Guarda-roupa hoje (relato da cliente)</div><div class="ficha-info-value" id="editor-ref-guardaRoupaRepresenta">—</div></div>
+            <div class="ficha-status-row"><div class="label">Peças mais utilizadas (relato da cliente)</div><div class="ficha-info-value" id="editor-ref-pecasMaisUtilizadas">—</div></div>
+            <div class="ficha-status-row"><div class="label">Preferência de compra (relato da cliente)</div><div class="ficha-info-value" id="editor-ref-preferenciaCompra">—</div></div>
+
+            <label class="form-label">Armário estratégico</label>
+            <textarea class="input-field textarea" data-editor-field="armarioEstrategico" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Looks propostos</label>
+            <textarea class="input-field textarea" data-editor-field="looksPropostos" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Plano de compras</label>
+            <textarea class="input-field textarea" data-editor-field="planoCompras" placeholder="Escreva livremente..."></textarea>
+
+            <button class="btn-secondary" data-editor-save="aplicacao" style="margin-bottom:0;">Salvar Aplicação Prática</button>
+            <div class="login-error" id="editor-msg-aplicacao"></div>
+          </div>
+        </div>
+
+        <!-- ---- FINALIZAÇÃO ---- -->
+        <div class="stat-card" id="editor-cap-finalizacao">
+          <div class="mini-row" data-editor-toggle="finalizacao" style="cursor:pointer; padding-top:0;">
+            <div>
+              <div class="mini-row-title">Finalização</div>
+              <div class="mini-row-sub" id="editor-check-finalizacao">Incompleto</div>
+            </div>
+            <div class="arrow" id="editor-arrow-finalizacao">＋</div>
+          </div>
+          <div id="editor-body-finalizacao" hidden>
+            <label class="form-label">Guia rápido (observações adicionais)</label>
+            <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-6px; margin-bottom:10px; line-height:1.5;">Estilo, biotipo, cartela, contraste, metais e prioridade serão reunidos automaticamente numa fase futura — use este campo só para observações complementares.</p>
+            <textarea class="input-field textarea" data-editor-field="guiaRapido" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Boas-vindas personalizada (opcional)</label>
+            <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-6px; margin-bottom:10px; line-height:1.5;">Se deixar em branco, o futuro PDF usará o texto institucional padrão.</p>
+            <textarea class="input-field textarea" data-editor-field="boasVindasPersonalizada" placeholder="Escreva livremente..."></textarea>
+
+            <label class="form-label">Mensagem final (opcional)</label>
+            <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-6px; margin-bottom:10px; line-height:1.5;">Se deixar em branco, o futuro PDF usará uma mensagem institucional padrão.</p>
+            <textarea class="input-field textarea" data-editor-field="mensagemFinal" placeholder="Escreva livremente..."></textarea>
+
+            <button class="btn-secondary" data-editor-save="finalizacao" style="margin-bottom:0;">Salvar Finalização</button>
+            <div class="login-error" id="editor-msg-finalizacao"></div>
+          </div>
         </div>
 
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
@@ -3655,6 +3856,39 @@
               <div class="label">Dossiê</div>
               <div class="ficha-status-tag" id="ficha-status-dossie">—</div>
             </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-label" style="margin-bottom:4px;">Serviços da Cliente</div>
+            <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:14px; line-height:1.5;">Define quais módulos pertencem a esta cliente — usado pelo Editor do Dossiê e por futuras entregas.</p>
+            <div class="login-error" id="ficha-servicos-sugestao-msg"></div>
+
+            <label class="form-label" style="margin-top:0;">Consultoria de Imagem</label>
+            <div class="radio-row" data-field="consultoriaImagem" id="servico-consultoria-radio">
+              <div class="radio-opt"><div class="dot-circle"></div>Desligado</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Ligado</div>
+            </div>
+
+            <label class="form-label">Coloração Pessoal</label>
+            <div class="radio-row" data-field="coloracaoPessoal" id="servico-coloracao-radio">
+              <div class="radio-opt"><div class="dot-circle"></div>Desligado</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Ligado</div>
+            </div>
+
+            <label class="form-label">Maquiagem</label>
+            <div class="radio-row" data-field="maquiagem" id="servico-maquiagem-radio">
+              <div class="radio-opt"><div class="dot-circle"></div>Desligado</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Ligado</div>
+            </div>
+
+            <label class="form-label">Cabelo</label>
+            <div class="radio-row" data-field="cabelo" id="servico-cabelo-radio">
+              <div class="radio-opt"><div class="dot-circle"></div>Desligado</div>
+              <div class="radio-opt"><div class="dot-circle"></div>Ligado</div>
+            </div>
+
+            <button class="btn-secondary" id="ficha-salvar-servicos-btn" style="margin-top:4px; margin-bottom:0;">Salvar Serviços</button>
+            <div class="login-error" id="ficha-servicos-msg"></div>
           </div>
 
           <div class="stat-card">
@@ -13449,6 +13683,106 @@
 
   // ---- Main render for the Ficha da Cliente screen ----
 
+  // ===================================================================
+  // FONTE ÚNICA DE SERVIÇOS DA CLIENTE (Fase 6B)
+  // clientes/{uid}/interno/servicos — documento novo, admin-only, independente
+  // de dossie/_entrega.tipo, analiseProfissional.servicoRealizado e
+  // analiseCromatica.direcionamentoRealizado (que continuam existindo, intactos,
+  // só por compatibilidade — nunca mais usados como fonte de verdade).
+  // ===================================================================
+
+  const SERVICOS_CAMPOS = ['consultoriaImagem', 'coloracaoPessoal', 'maquiagem', 'cabelo'];
+
+  function restaurarServicoRadio(campo, valor){
+    const row = document.getElementById('servico-' + (campo === 'consultoriaImagem' ? 'consultoria' : campo === 'coloracaoPessoal' ? 'coloracao' : campo) + '-radio');
+    if(!row) return;
+    row.querySelectorAll('.radio-opt').forEach(function(el){
+      el.classList.toggle('sel', el.textContent.trim() === (valor ? 'Ligado' : 'Desligado'));
+    });
+  }
+
+  function lerServicoRadio(campo){
+    const row = document.getElementById('servico-' + (campo === 'consultoriaImagem' ? 'consultoria' : campo === 'coloracaoPessoal' ? 'coloracao' : campo) + '-radio');
+    if(!row) return false;
+    const sel = row.querySelector('.radio-opt.sel');
+    return !!sel && sel.textContent.trim() === 'Ligado';
+  }
+
+  async function renderFichaServicos(uid){
+    const sugestaoMsgEl = document.getElementById('ficha-servicos-sugestao-msg');
+    const servicosMsgEl = document.getElementById('ficha-servicos-msg');
+    if(servicosMsgEl){ servicosMsgEl.textContent = ''; servicosMsgEl.classList.remove('success'); }
+    if(sugestaoMsgEl){ sugestaoMsgEl.textContent = ''; sugestaoMsgEl.classList.remove('success'); }
+
+    let servicosData = null;
+    try{
+      const snap = await getDoc(doc(db, 'clientes', uid, 'interno', 'servicos'));
+      if(snap.exists()) servicosData = snap.data();
+    } catch(err){ console.error('GD: erro ao carregar serviços da cliente', err); }
+
+    if(servicosData){
+      SERVICOS_CAMPOS.forEach(function(campo){
+        restaurarServicoRadio(campo, !!servicosData[campo]);
+      });
+      return;
+    }
+
+    // Ainda não existe interno/servicos: sugere valores a partir dos sinais antigos,
+    // só como ponto de partida — nada é salvo até a Giulia clicar em "Salvar Serviços".
+    let servicoRealizado = '', direcionamentoRealizado = '';
+    try{
+      const profSnap = await getDoc(doc(db, 'clientes', uid, 'interno', 'analiseProfissional'));
+      if(profSnap.exists()) servicoRealizado = profSnap.data().servicoRealizado || '';
+    } catch(err){ console.error(err); }
+    try{
+      const cromSnap = await getDoc(doc(db, 'clientes', uid, 'interno', 'analiseCromatica'));
+      if(cromSnap.exists()) direcionamentoRealizado = cromSnap.data().direcionamentoRealizado || '';
+    } catch(err){ console.error(err); }
+
+    const sugestaoConsultoria = servicoRealizado.indexOf('Consultoria de Imagem') !== -1;
+    const sugestaoColoracao = servicoRealizado.indexOf('Direcionamento Cromático') !== -1 || direcionamentoRealizado === 'Sim';
+
+    restaurarServicoRadio('consultoriaImagem', sugestaoConsultoria);
+    restaurarServicoRadio('coloracaoPessoal', sugestaoColoracao);
+    restaurarServicoRadio('maquiagem', false);
+    restaurarServicoRadio('cabelo', false);
+
+    if((sugestaoConsultoria || sugestaoColoracao) && sugestaoMsgEl){
+      sugestaoMsgEl.textContent = 'Sugestão baseada nos dados existentes desta cliente — revise e clique em Salvar Serviços.';
+    }
+  }
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#ficha-salvar-servicos-btn');
+    if(!btn || !selectedClienteUid) return;
+
+    const msgEl = document.getElementById('ficha-servicos-msg');
+    const sugestaoMsgEl = document.getElementById('ficha-servicos-sugestao-msg');
+    const originalText = btn.textContent;
+    btn.classList.add('is-loading');
+    btn.textContent = 'Salvando…';
+
+    try{
+      const payload = { updatedAt: new Date().toISOString() };
+      SERVICOS_CAMPOS.forEach(function(campo){ payload[campo] = lerServicoRadio(campo); });
+
+      await setDoc(doc(db, 'clientes', selectedClienteUid, 'interno', 'servicos'), payload, { merge: true });
+
+      if(sugestaoMsgEl) sugestaoMsgEl.textContent = '';
+      if(msgEl){
+        msgEl.classList.add('success');
+        msgEl.textContent = 'Serviços salvos.';
+        setTimeout(function(){ msgEl.textContent = ''; msgEl.classList.remove('success'); }, 2500);
+      }
+    } catch(err){
+      console.error('GD: erro ao salvar serviços da cliente', err);
+      if(msgEl){ msgEl.classList.remove('success'); msgEl.textContent = 'Não foi possível salvar. Tente novamente.'; }
+    } finally{
+      btn.classList.remove('is-loading');
+      btn.textContent = originalText;
+    }
+  });
+
   async function renderFichaCliente(){
     const nomeEl = document.getElementById('ficha-cliente-nome');
 
@@ -13580,6 +13914,9 @@
 
     // ---- Aba Análise Profissional + Cromática ----
     await loadAnaliseProfissionalCromatica(selectedClienteUid);
+
+    // ---- Serviços da Cliente (fonte única — Fase 6B) ----
+    await renderFichaServicos(selectedClienteUid);
   }
 
   // ---- Salvar Observações Internas ----
@@ -14374,6 +14711,274 @@
     }
   });
 
+  // ===================================================================
+  // EDITOR DO DOSSIÊ (Admin) — Fase 6B
+  // Grava exclusivamente em clientes/{uid}/interno/dossieEditorial (admin-only).
+  // Nunca duplica dados de anamnese/analiseProfissional/analiseCromatica/CARTELAS_BASE —
+  // esses só são LIDOS como blocos de referência somente leitura dentro de cada capítulo.
+  // ===================================================================
+
+  // Campos novos de cada capítulo (usados para ler o formulário, salvar e calcular completude).
+  // Os campos de referência (só leitura) NÃO entram aqui — nunca são salvos em dossieEditorial.
+  const EDITOR_CAPITULOS = {
+    perfil: ['sinteseMomento', 'parecerProfissional'],
+    estrategia: ['comunicar', 'prioridade'],
+    corporal: ['proporcoesObservadas', 'direcionamentoCorporal'],
+    vestuario: ['partesSuperiores', 'partesInferiores', 'vestidosMacacoes', 'terceiraPeca', 'estampas'],
+    aplicacao: ['armarioEstrategico', 'looksPropostos', 'planoCompras'],
+    finalizacao: ['guiaRapido', 'boasVindasPersonalizada', 'mensagemFinal']
+  };
+
+  // Capítulos que só fazem sentido quando a cliente tem Consultoria de Imagem.
+  // "finalizacao" fica sempre visível, independente dos serviços.
+  const EDITOR_CAPITULOS_CONDICIONADOS_CONSULTORIA = ['perfil', 'estrategia', 'corporal', 'vestuario', 'aplicacao'];
+
+  let editorDossieData = {};
+  let editorCapitulosAplicaveis = ['finalizacao'];
+
+  const EDITOR_CAPITULO_LABELS = {
+    perfil: 'Perfil de Imagem',
+    estrategia: 'Estratégia',
+    corporal: 'Análise Corporal',
+    vestuario: 'Vestuário',
+    aplicacao: 'Aplicação Prática',
+    finalizacao: 'Finalização'
+  };
+
+  function renderEditorChecklistResumo(){
+    const checklistEl = document.getElementById('editor-checklist');
+    if(!checklistEl) return;
+    checklistEl.innerHTML = editorCapitulosAplicaveis.map(function(cap){
+      const completo = EDITOR_CAPITULOS[cap].some(function(campo){
+        return !!(editorDossieData[campo] && String(editorDossieData[campo]).trim());
+      });
+      return '<div class="status-item">' +
+        '<div class="status-icon' + (completo ? ' done' : '') + '">' + (completo ? '✓' : '○') + '</div>' +
+        '<div><div class="status-text-title">' + escapeHtml(EDITOR_CAPITULO_LABELS[cap]) + '</div></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function editorLerCampo(nomeCampo){
+    const el = document.querySelector('[data-editor-field="' + nomeCampo + '"]');
+    return el ? (el.value || '') : '';
+  }
+
+  function editorSetarCampo(nomeCampo, valor){
+    const el = document.querySelector('[data-editor-field="' + nomeCampo + '"]');
+    if(el) el.value = valor || '';
+  }
+
+  function editorSetarReferencia(idSufixo, valor){
+    const el = document.getElementById('editor-ref-' + idSufixo);
+    if(el) el.textContent = (valor && String(valor).trim()) ? valor : '—';
+  }
+
+  function editorAtualizarChecklistCapitulo(capitulo){
+    const labelEl = document.getElementById('editor-check-' + capitulo);
+    if(!labelEl) return;
+    const completo = EDITOR_CAPITULOS[capitulo].some(function(campo){
+      return !!(editorDossieData[campo] && String(editorDossieData[campo]).trim());
+    });
+    labelEl.textContent = completo ? 'Completo' : 'Incompleto';
+    labelEl.style.color = completo ? 'var(--olive)' : '';
+  }
+
+  // ---- Accordion: expandir/recolher cada capítulo ----
+
+  document.addEventListener('click', function(e){
+    const toggle = e.target.closest('#screen-editor-dossie [data-editor-toggle]');
+    if(!toggle) return;
+    const capitulo = toggle.getAttribute('data-editor-toggle');
+    const bodyEl = document.getElementById('editor-body-' + capitulo);
+    const arrowEl = document.getElementById('editor-arrow-' + capitulo);
+    if(!bodyEl) return;
+    const abrir = bodyEl.hidden;
+    bodyEl.hidden = !abrir;
+    if(arrowEl) arrowEl.textContent = abrir ? '−' : '＋';
+  });
+
+  async function renderEditorDossie(){
+    const nomeEl = document.getElementById('editor-dossie-cliente-nome');
+    if(!selectedClienteUid){
+      if(nomeEl) nomeEl.textContent = 'Selecione uma cliente em "Dossiês"';
+      return;
+    }
+    if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
+
+    // Recolhe todos os capítulos e limpa mensagens ao reabrir a tela
+    Object.keys(EDITOR_CAPITULOS).forEach(function(cap){
+      const bodyEl = document.getElementById('editor-body-' + cap);
+      const arrowEl = document.getElementById('editor-arrow-' + cap);
+      const msgEl = document.getElementById('editor-msg-' + cap);
+      if(bodyEl) bodyEl.hidden = true;
+      if(arrowEl) arrowEl.textContent = '＋';
+      if(msgEl){ msgEl.textContent = ''; msgEl.classList.remove('success'); }
+    });
+    const statusMsgEl = document.getElementById('editor-status-msg');
+    if(statusMsgEl){ statusMsgEl.textContent = ''; statusMsgEl.classList.remove('success'); }
+
+    // ---- Serviços da cliente: decide quais capítulos aparecem ----
+    let servicos = {};
+    try{
+      const snap = await getDoc(doc(db, 'clientes', selectedClienteUid, 'interno', 'servicos'));
+      if(snap.exists()) servicos = snap.data();
+    } catch(err){ console.error('GD: erro ao carregar serviços para o editor', err); }
+
+    const temConsultoria = !!servicos.consultoriaImagem;
+    EDITOR_CAPITULOS_CONDICIONADOS_CONSULTORIA.forEach(function(cap){
+      const cardEl = document.getElementById('editor-cap-' + cap);
+      if(cardEl) cardEl.hidden = !temConsultoria;
+    });
+    const semCapitulosEl = document.getElementById('editor-sem-capitulos');
+    if(semCapitulosEl) semCapitulosEl.hidden = temConsultoria;
+
+    // ---- Dados de referência (somente leitura, nunca copiados para dossieEditorial) ----
+    let profData = {}, cromData = {}, stepsData = {};
+    if(temConsultoria){
+      try{
+        const profSnap = await getDoc(doc(db, 'clientes', selectedClienteUid, 'interno', 'analiseProfissional'));
+        if(profSnap.exists()) profData = profSnap.data();
+      } catch(err){ console.error(err); }
+      try{
+        stepsData = await fetchAnamneseStepsData(selectedClienteUid);
+      } catch(err){ console.error(err); }
+
+      const estilo = profData.estiloPredominante === 'Outro' ? profData.estiloPredominanteOutro : profData.estiloPredominante;
+      const complementares = Array.isArray(profData.estilosComplementares) ? profData.estilosComplementares.filter(function(v){ return v !== 'Outro'; }) : [];
+      if(profData.estilosComplementaresOutro) complementares.push(profData.estilosComplementaresOutro);
+      const biotipo = profData.biotipo === 'Outro' ? profData.biotipoOutro : profData.biotipo;
+
+      editorSetarReferencia('objetivoImagem', profData.objetivoImagem);
+      editorSetarReferencia('estiloPredominante', estilo);
+      editorSetarReferencia('estilosComplementares', complementares.join(', '));
+      editorSetarReferencia('pontosValorizar', profData.pontosValorizar);
+      editorSetarReferencia('pontosNaoDestacar', profData.pontosNaoDestacar);
+      editorSetarReferencia('biotipo', biotipo);
+      editorSetarReferencia('recomendacoesModelagem', profData.recomendacoesModelagem);
+      editorSetarReferencia('recomendacoesTecidos', profData.recomendacoesTecidos);
+      editorSetarReferencia('recomendacoesAcessorios', profData.recomendacoesAcessorios);
+
+      const step5 = stepsData[5] || {};
+      const step8 = stepsData[8] || {};
+      editorSetarReferencia('guardaRoupaRepresenta', step5.guardaRoupaRepresenta);
+      editorSetarReferencia('pecasMaisUtilizadas', step5.pecasMaisUtilizadas);
+      editorSetarReferencia('preferenciaCompra', step8.preferenciaCompra);
+    }
+
+    // ---- Conteúdo já salvo em dossieEditorial ----
+    editorDossieData = {};
+    try{
+      const snap = await getDoc(doc(db, 'clientes', selectedClienteUid, 'interno', 'dossieEditorial'));
+      if(snap.exists()) editorDossieData = snap.data();
+    } catch(err){ console.error('GD: erro ao carregar editor do dossiê', err); }
+
+    Object.keys(EDITOR_CAPITULOS).forEach(function(cap){
+      EDITOR_CAPITULOS[cap].forEach(function(campo){
+        editorSetarCampo(campo, editorDossieData[campo] || '');
+      });
+      editorAtualizarChecklistCapitulo(cap);
+    });
+
+    // ---- Resumo de completude (só os capítulos realmente aplicáveis a esta cliente) ----
+    editorCapitulosAplicaveis = temConsultoria
+      ? ['perfil', 'estrategia', 'corporal', 'vestuario', 'aplicacao', 'finalizacao']
+      : ['finalizacao'];
+    renderEditorChecklistResumo();
+
+    // ---- Status editorial (só Rascunho / Pronto para Prévia são acionáveis nesta fase) ----
+    const statusAtual = editorDossieData.statusEditorial || 'rascunho';
+    const statusRadioRow = document.getElementById('editor-status-radio');
+    if(statusRadioRow){
+      const labelAlvo = statusAtual === 'pronto_para_previa' ? 'Pronto para Prévia' : 'Rascunho';
+      statusRadioRow.querySelectorAll('.radio-opt').forEach(function(el){
+        el.classList.toggle('sel', el.textContent.trim() === labelAlvo);
+      });
+    }
+  }
+
+  // ---- Salvar cada capítulo independentemente (merge:true — nunca sobrescreve outro capítulo) ----
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('[data-editor-save]');
+    if(!btn || !selectedClienteUid) return;
+
+    const capitulo = btn.getAttribute('data-editor-save');
+    const campos = EDITOR_CAPITULOS[capitulo];
+    if(!campos) return;
+
+    const msgEl = document.getElementById('editor-msg-' + capitulo);
+    const originalText = btn.textContent;
+    btn.classList.add('is-loading');
+    btn.textContent = 'Salvando…';
+
+    try{
+      const payload = { updatedAt: new Date().toISOString(), updatedBy: 'consultora' };
+      campos.forEach(function(campo){
+        payload[campo] = editorLerCampo(campo);
+        editorDossieData[campo] = payload[campo];
+      });
+
+      await setDoc(doc(db, 'clientes', selectedClienteUid, 'interno', 'dossieEditorial'), payload, { merge: true });
+
+      editorAtualizarChecklistCapitulo(capitulo);
+      renderEditorChecklistResumo();
+
+      if(msgEl){
+        msgEl.classList.add('success');
+        msgEl.textContent = 'Salvo.';
+        setTimeout(function(){ msgEl.textContent = ''; msgEl.classList.remove('success'); }, 2200);
+      }
+    } catch(err){
+      console.error('GD: erro ao salvar capítulo do editor', capitulo, err);
+      if(msgEl){ msgEl.classList.remove('success'); msgEl.textContent = 'Não foi possível salvar. Tente novamente.'; }
+    } finally{
+      btn.classList.remove('is-loading');
+      btn.textContent = originalText;
+    }
+  });
+
+  // ---- Salvar Status Editorial (campo próprio, nunca mexe em dossie/_principal.statusProcesso) ----
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#editor-salvar-status-btn');
+    if(!btn || !selectedClienteUid) return;
+
+    const sel = document.querySelector('#editor-status-radio .radio-opt.sel');
+    const msgEl = document.getElementById('editor-status-msg');
+    if(!sel){
+      if(msgEl) msgEl.textContent = 'Selecione um status.';
+      return;
+    }
+
+    const novoStatus = sel.textContent.trim() === 'Pronto para Prévia' ? 'pronto_para_previa' : 'rascunho';
+    const originalText = btn.textContent;
+    btn.classList.add('is-loading');
+    btn.textContent = 'Salvando…';
+
+    try{
+      await setDoc(doc(db, 'clientes', selectedClienteUid, 'interno', 'dossieEditorial'), {
+        statusEditorial: novoStatus,
+        updatedAt: new Date().toISOString(),
+        updatedBy: 'consultora'
+      }, { merge: true });
+
+      editorDossieData.statusEditorial = novoStatus;
+
+      if(msgEl){
+        msgEl.classList.add('success');
+        msgEl.textContent = 'Status salvo.';
+        setTimeout(function(){ msgEl.textContent = ''; msgEl.classList.remove('success'); }, 2200);
+      }
+    } catch(err){
+      console.error('GD: erro ao salvar status editorial', err);
+      if(msgEl){ msgEl.classList.remove('success'); msgEl.textContent = 'Não foi possível salvar. Tente novamente.'; }
+    } finally{
+      btn.classList.remove('is-loading');
+      btn.textContent = originalText;
+    }
+  });
+
   // ---- Ver Dados para o Dossiê ----
 
   const PROF_DATA_FIELDS = [
@@ -14949,6 +15554,9 @@
       if(screenId === 'dados-dossie'){
         renderDadosDossie();
       }
+      if(screenId === 'editor-dossie'){
+        renderEditorDossie();
+      }
       if(screenId === 'cliente-dossie'){
         renderClienteDossie();
       }
@@ -14988,6 +15596,9 @@
     }
     if(target === 'dados-dossie'){
       setTimeout(renderDadosDossie, 50);
+    }
+    if(target === 'editor-dossie'){
+      setTimeout(renderEditorDossie, 50);
     }
     if(target === 'cliente-dossie'){
       setTimeout(renderClienteDossie, 50);
