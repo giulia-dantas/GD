@@ -1886,7 +1886,7 @@
   }
 
   .dossie-mestre-viewport{
-    background:#DDD6C8;
+    background:#E7E1D3;
     padding:28px 14px 60px;
     display:flex;
     flex-direction:column;
@@ -1909,6 +1909,11 @@
     display:flex;
     flex-direction:column;
     break-after:page;
+    /* Fase 6C.6 — nova direção cromática editorial: tokens locais, escopados só ao
+       Dossiê Mestre (nunca tocam as variáveis globais do app). */
+    --dm-ouro:#B8925A;
+    --dm-bg-clara:#F3ECDD;
+    --dm-bg-media:#EFE4CC;
   }
 
   /* ---- Cabeçalho corrido (número da página + seção corrente) — Modelo de referência ---- */
@@ -1922,8 +1927,9 @@
   .dm-numero-pagina{
     width:25px;
     height:25px;
-    background:#96754A;
-    color:#FBF9F5;
+    background:var(--dm-bg-media);
+    color:var(--graphite);
+    border:1px solid var(--dm-ouro);
     font-family:'Manrope', sans-serif;
     font-size:10.5px;
     font-weight:700;
@@ -1944,7 +1950,7 @@
 
   .dm-cabecalho-regua{
     height:1px;
-    background:rgba(150,117,74,0.28);
+    background:rgba(184,146,90,0.28);
     margin-bottom:22px;
   }
 
@@ -1961,7 +1967,7 @@
   .dm-titulo-editorial em{
     font-style:italic;
     font-weight:500;
-    color:#96754A;
+    color:var(--dm-ouro);
   }
 
   .dm-titulo-protagonista{
@@ -1987,14 +1993,14 @@
     font-weight:700;
     letter-spacing:0.2em;
     text-transform:uppercase;
-    color:#96754A;
+    color:var(--dm-ouro);
     margin-bottom:6px;
   }
 
   .dm-linha-curta{
     width:46px;
     height:1px;
-    background:#96754A;
+    background:var(--dm-ouro);
     margin:12px 0 18px;
   }
 
@@ -2008,7 +2014,7 @@
     white-space:pre-line;
   }
 
-  .dossie-mestre-bloco{ margin-bottom:18px; }
+  .dossie-mestre-bloco{ margin-bottom:18px; break-inside:avoid; page-break-inside:avoid; }
 
   .dossie-mestre-bloco-titulo{
     font-family:'Manrope', sans-serif;
@@ -2016,7 +2022,7 @@
     font-weight:700;
     letter-spacing:0.12em;
     text-transform:uppercase;
-    color:#96754A;
+    color:var(--dm-ouro);
     margin-bottom:7px;
   }
 
@@ -2032,14 +2038,14 @@
     width:34px;
     height:34px;
     border-radius:50%;
-    background:rgba(150,117,74,0.12);
+    background:rgba(184,146,90,0.12);
     display:flex;
     align-items:center;
     justify-content:center;
     flex-shrink:0;
   }
 
-  .dm-icone-circulo svg{ width:16px; height:16px; color:#96754A; }
+  .dm-icone-circulo svg{ width:16px; height:16px; color:var(--dm-ouro); }
 
   .dm-item-icone-corpo{ padding-top:2px; }
 
@@ -2049,7 +2055,7 @@
     font-weight:700;
     letter-spacing:0.1em;
     text-transform:uppercase;
-    color:#96754A;
+    color:var(--dm-ouro);
     margin-bottom:3px;
   }
 
@@ -2062,17 +2068,19 @@
 
   /* ---- Box de destaque (citação / direcionamento) ---- */
   .dm-box-destaque{
-    background:#F1ECE2;
+    background:var(--dm-bg-clara);
     padding:22px 20px;
     display:flex;
     flex-direction:column;
+    break-inside:avoid;
+    page-break-inside:avoid;
   }
 
   .dm-aspas{
     font-family:'Cormorant Garamond', serif;
     font-size:34px;
     line-height:0.6;
-    color:#96754A;
+    color:var(--dm-ouro);
     margin-bottom:10px;
   }
 
@@ -2091,7 +2099,7 @@
     font-style:italic;
     font-weight:600;
     font-size:19px;
-    color:#96754A;
+    color:var(--dm-ouro);
     margin-top:14px;
   }
 
@@ -2108,7 +2116,7 @@
   .dm-rodape-faixa{
     margin:auto -8% -7% -8%;
     padding:16px 8%;
-    background:#EFE9DD;
+    background:var(--dm-bg-clara);
     display:flex;
     align-items:center;
     gap:14px;
@@ -2144,14 +2152,14 @@
   .dm-rodape-faixa-qr{
     width:52px;
     height:52px;
-    border:1.5px solid rgba(150,117,74,0.5);
+    border:1.5px solid rgba(184,146,90,0.5);
     flex-shrink:0;
     display:flex;
     align-items:center;
     justify-content:center;
   }
 
-  .dm-rodape-faixa-qr svg{ width:24px; height:24px; color:#96754A; }
+  .dm-rodape-faixa-qr svg{ width:24px; height:24px; color:var(--dm-ouro); }
 
   /* ---- Layout: colunas assimétricas (Modelo C) ---- */
   .dossie-mestre-coluna2{
@@ -2167,17 +2175,17 @@
   .dossie-mestre-quadrantes{
     display:grid;
     grid-template-columns:1fr 1fr;
-    border-top:1px solid rgba(150,117,74,0.28);
-    border-left:1px solid rgba(150,117,74,0.28);
+    border-top:1px solid rgba(184,146,90,0.28);
+    border-left:1px solid rgba(184,146,90,0.28);
   }
 
   .dossie-mestre-quadrante{
     padding:16px 18px;
-    border-right:1px solid rgba(150,117,74,0.28);
-    border-bottom:1px solid rgba(150,117,74,0.28);
+    border-right:1px solid rgba(184,146,90,0.28);
+    border-bottom:1px solid rgba(184,146,90,0.28);
   }
 
-  .dossie-mestre-quadrante.destaque{ background:rgba(150,117,74,0.06); }
+  .dossie-mestre-quadrante.destaque{ background:rgba(184,146,90,0.06); }
 
   /* Grid simples (composição em pares) */
   .dossie-mestre-grid2{
@@ -2200,26 +2208,32 @@
     letter-spacing:0.08em;
     text-transform:uppercase;
     color:var(--graphite);
-    border:1px solid rgba(150,117,74,0.5);
+    border:1px solid rgba(184,146,90,0.5);
     border-radius:2px;
     padding:5px 10px;
   }
 
   /* ---- Tabela de características (linha rótulo/valor) ---- */
-  .dm-tabela{ background:#F1ECE2; padding:16px 18px; }
+  .dm-tabela{ background:var(--dm-bg-clara); padding:16px 18px; break-inside:avoid; page-break-inside:avoid; }
 
   .dm-tabela-linha{
-    display:flex;
-    justify-content:space-between;
-    padding:7px 0;
-    border-bottom:1px solid rgba(150,117,74,0.2);
+    display:grid;
+    grid-template-columns:minmax(78px, auto) 1fr;
+    column-gap:16px;
+    align-items:baseline;
+    padding:8px 0;
+    border-bottom:1px solid rgba(184,146,90,0.25);
     font-family:'Manrope', sans-serif;
-    font-size:11px;
   }
 
   .dm-tabela-linha:last-child{ border-bottom:none; }
-  .dm-tabela-rotulo{ color:var(--graphite-soft); }
-  .dm-tabela-valor{ color:var(--graphite); font-weight:700; }
+  .dm-tabela-rotulo{
+    color:var(--graphite-soft);
+    font-size:9.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+  .dm-tabela-valor{ color:var(--graphite); font-weight:700; font-size:13px; text-align:right; }
 
   /* ---- Fotos editoriais ---- */
   .dossie-mestre-foto-lateral-wrap{
@@ -2257,7 +2271,7 @@
   }
 
   /* ---- Capa (Modelo próprio) ---- */
-  .dossie-mestre-capa{ padding:0 !important; background:#E4DCC9; }
+  .dossie-mestre-capa{ padding:0 !important; background:var(--dm-bg-clara); }
 
   .dm-capa-grid{
     position:relative;
@@ -2321,7 +2335,7 @@
   .dm-capa-titulo em{
     font-style:italic;
     font-weight:500;
-    color:#96754A;
+    color:var(--dm-ouro);
     display:block;
   }
 
@@ -2339,7 +2353,7 @@
     font-size:8.5px;
     letter-spacing:0.2em;
     text-transform:uppercase;
-    color:#96754A;
+    color:var(--dm-ouro);
     margin-top:22px;
   }
 
@@ -2395,14 +2409,15 @@
 
   .dm-capa-faixa-data{
     grid-column:1 / -1;
-    background:#C9BB9C;
+    background:var(--dm-bg-media);
     text-align:center;
     padding:11px 0;
     font-family:'Manrope', sans-serif;
     font-size:9px;
     letter-spacing:0.24em;
     text-transform:uppercase;
-    color:#FBF9F5;
+    color:var(--graphite);
+    border-top:1px solid var(--dm-ouro);
   }
 
   /* Composição alternativa da capa quando não há Foto Principal */
@@ -2412,8 +2427,8 @@
     align-items:center;
     justify-content:center;
     background:
-      radial-gradient(circle at 30% 30%, rgba(150,117,74,0.10), transparent 55%),
-      #E4DCC9;
+      radial-gradient(circle at 30% 30%, rgba(184,146,90,0.10), transparent 55%),
+      var(--dm-bg-clara);
   }
 
   /* ---- Encerramento ---- */
@@ -2424,7 +2439,7 @@
   }
 
   /* ---- Paleta / cores curadas — círculos agrupados por categoria, com divisórias finas ---- */
-  .dm-cor-grupo{ margin-bottom:16px; }
+  .dm-cor-grupo{ margin-bottom:16px; break-inside:avoid; page-break-inside:avoid; }
 
   .dm-cor-grupo-titulo{
     font-family:'Manrope', sans-serif;
@@ -2461,8 +2476,30 @@
 
   .dm-cor-divisor{
     height:1px;
-    background:rgba(150,117,74,0.22);
+    background:rgba(184,146,90,0.22);
     margin-bottom:16px;
+  }
+
+  /* ---- Armário Cápsula: trilho contínuo Base -> Apoio -> Destaque (hierarquia por
+     layout, sem setas) + legenda institucional curta por etapa ---- */
+  .dm-capsula-fluxo{
+    border-left:2px solid var(--dm-ouro);
+    padding-left:16px;
+    margin-bottom:8px;
+  }
+
+  .dm-capsula-legenda{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:11px;
+    color:var(--graphite-soft);
+    margin:-4px 0 10px;
+  }
+
+  .dm-divisor-suave{
+    height:1px;
+    background:rgba(184,146,90,0.22);
+    margin:6px 0 16px;
   }
 
   /* ---- Combinações cromáticas (Fase 6C.3) — barra proporcional + legenda ---- */
@@ -2485,9 +2522,11 @@
   /* ---- Seções por desejo de imagem (Combinações) — identidade editorial própria,
      não cinco cards de dashboard: barra de acento fina à esquerda + título serifado. ---- */
   .dm-desejo-secao{
-    border-left:2px solid #96754A;
+    border-left:2px solid var(--dm-ouro);
     padding-left:14px;
     margin-bottom:22px;
+    break-inside:avoid;
+    page-break-inside:avoid;
   }
 
   .dm-desejo-titulo{
@@ -2571,17 +2610,19 @@
 
   .dossie-mestre-checklist-item::before{
     content:'—';
-    color:#96754A;
+    color:var(--dm-ouro);
     flex-shrink:0;
   }
 
   /* ---- Guia Rápido: "carteira-resumo" ---- */
   .dossie-mestre-carteira{
-    border:1px solid rgba(150,117,74,0.5);
+    border:1px solid rgba(184,146,90,0.5);
     padding:20px 18px;
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:14px 18px;
+    break-inside:avoid;
+    page-break-inside:avoid;
   }
 
   /* ---- Chamada para a cartela digital no app ---- */
@@ -20874,7 +20915,7 @@
       : tabelaHtml;
 
     return [dm_pagina(
-      '<div class="dossie-mestre-coluna2" style="flex:1; grid-template-columns:1.15fr 0.85fr 1fr;">' +
+      '<div class="dossie-mestre-coluna2" style="flex:1; grid-template-columns:1fr 1.05fr 0.95fr; gap:0 5%;">' +
         '<div>' + colunaTexto + '</div>' +
         '<div>' + colunaFoto + '</div>' +
         '<div>' + resumoPaletaHtml + '</div>' +
@@ -21066,16 +21107,58 @@
     }).join('  &middot;  ') + '</div>';
 
     const desejoHtml = (mostrarDesejo && combinacao.desejoImagem) ? '<div class="dm-eyebrow" style="margin-bottom:3px;">' + escapeHtml(combinacao.desejoImagem) + '</div>' : '';
-    const tituloHtml = combinacao.nome ? '<div class="dossie-mestre-bloco-titulo">' + escapeHtml(combinacao.nome) + '</div>' : '';
+    const nomeExibido = mostrarDesejo ? (combinacao.nome || '') : dm_removerPrefixoDesejo(combinacao.nome, combinacao.desejoImagem);
+    const tituloHtml = nomeExibido ? '<div class="dossie-mestre-bloco-titulo">' + escapeHtml(nomeExibido) + '</div>' : '';
 
     return '<div class="dossie-mestre-bloco">' + desejoHtml + tituloHtml + barra + legenda + '</div>';
   }
 
+  // Remove, apenas na exibição, a repetição do desejo já indicado no título da seção
+  // (ex.: "Atemporal — Off-White + Chocolate" -> "Off-White + Chocolate"). Nunca altera
+  // o dado armazenado — é só uma transformação de string no momento de renderizar.
+  // Quando o nome é exatamente igual ao desejo (caso comum das combinações de três
+  // cores, cujo "nome" é só o próprio desejo), o título fica vazio — a barra e a
+  // legenda já contam a história, sem repetir a mesma palavra do cabeçalho da seção.
+  function dm_removerPrefixoDesejo(nome, desejo){
+    if(!nome) return '';
+    const nomeAparado = nome.trim();
+    if(!desejo) return nomeAparado;
+    if(nomeAparado.toLowerCase() === desejo.toLowerCase()) return '';
+    const desejoEscapado = desejo.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const prefixoRegex = new RegExp('^' + desejoEscapado + '\\s*[—\\-:]+\\s*', 'i');
+    return nomeAparado.replace(prefixoRegex, '');
+  }
+
+  // Distribui uma lista de itens (unidades editoriais indivisíveis, ex.: seções por
+  // desejo de imagem) em páginas de tamanho equilibrado — nunca um grupo cortado ao
+  // meio, e nunca uma última página com um único item isolado quando uma distribuição
+  // mais uniforme é possível. "maxPorPagina" é a estimativa de quantos itens cabem
+  // confortavelmente numa página; o número real de páginas geradas pode ser menor que
+  // ceil(n/maxPorPagina) sempre que isso resultar em um equilíbrio melhor.
+  function dm_distribuirEquilibrado(items, maxPorPagina){
+    const n = items.length;
+    if(!n) return [];
+    const numPaginas = Math.max(1, Math.ceil(n / maxPorPagina));
+    const tamanhoBase = Math.floor(n / numPaginas);
+    let resto = n % numPaginas;
+    const paginas = [];
+    let idx = 0;
+    for(let p = 0; p < numPaginas; p++){
+      const tamanho = tamanhoBase + (resto > 0 ? 1 : 0);
+      if(resto > 0) resto--;
+      paginas.push(items.slice(idx, idx + tamanho));
+      idx += tamanho;
+    }
+    return paginas;
+  }
+
+
   // Página(s) "Combinações que Funcionam" — agrupadas por desejo de imagem (Atemporal,
   // Contemporâneo, Acessível, Artsy, Minimalista), cada uma com identidade editorial
   // própria (barra de acento + título serifado), não cinco cards repetidos. Paginação
-  // por grupos de desejo (2 por página) para nunca cortar conteúdo. Só existe quando a
-  // cartela da cliente já tiver combinações reais em APLICACAO_CROMATICA_BASE.
+  // equilibrada via dm_distribuirEquilibrado (nunca corta uma seção, nunca deixa uma
+  // página final isolada e pobre). Só existe quando a cartela da cliente já tiver
+  // combinações reais em APLICACAO_CROMATICA_BASE.
   function dm_buildCombinacoesCromaticas(dados){
     if(!dados.servicos.coloracaoPessoal) return null;
     const cartelaInfo = dm_resolverCartela(dados);
@@ -21101,12 +21184,14 @@
 
     if(!secoesDesejo.length) return null;
 
-    // Paginação: 2 grupos de desejo por página — evita overflow e nunca corta uma seção ao meio.
-    const paginas = [];
-    for(let i = 0; i < secoesDesejo.length; i += 2){
-      const fatia = secoesDesejo.slice(i, i + 2);
+    // Paginação equilibrada: nunca corta uma seção de desejo ao meio, e distribui
+    // as páginas de forma uniforme (evita uma última página com um único grupo
+    // isolado quando uma divisão mais equilibrada é possível — ex.: 5 grupos vira
+    // 3+2 em duas páginas, não 2+2+1 em três).
+    const paginasDeSecoes = dm_distribuirEquilibrado(secoesDesejo, 3);
+    const paginas = paginasDeSecoes.map(function(fatia, i){
       const continuando = i > 0;
-      paginas.push(dm_pagina(
+      return dm_pagina(
         '<div class="dm-eyebrow">Coloração Pessoal</div>' +
         '<div class="dm-titulo-editorial">Combinações <em>que Funcionam</em>' + (continuando ? ' <span style="font-size:16px;">(continuação)</span>' : '') + '</div>' +
         (continuando ? '' : '<div class="dm-intro-texto">Proporções e combinações pensadas especialmente para a sua cartela.</div>') +
@@ -21114,8 +21199,8 @@
         fatia.join('') +
         dm_rodapeFaixa('Sua cartela completa', 'Explore todas as 100 cores da sua cartela digital no aplicativo Giulia Dantas.'),
         { numero: true, secao: 'Coloração Pessoal' }
-      ));
-    }
+      );
+    });
     return paginas;
   }
 
@@ -21131,7 +21216,10 @@
     const capsula = aplicacao && aplicacao.armarioCapsula;
     if(!capsula) return null;
 
-    function grupo(titulo, lista){
+    // Legenda institucional curta por etapa — deixa a hierarquia BASE → APOIO →
+    // DESTAQUE explícita pelo layout (trilho contínuo + legenda), sem inventar
+    // nenhuma recomendação cromática nova.
+    function grupo(titulo, legenda, lista){
       if(!Array.isArray(lista) || !lista.length) return '';
       const resolvidas = lista.map(function(item){
         const corId = (item && typeof item === 'object') ? item.corId : item;
@@ -21139,16 +21227,21 @@
       }).filter(Boolean);
       if(!resolvidas.length) return '';
       return '<div class="dm-cor-grupo"><div class="dm-cor-grupo-titulo">' + escapeHtml(titulo) + '</div>' +
+        '<div class="dm-capsula-legenda">' + escapeHtml(legenda) + '</div>' +
         '<div class="dm-cor-linha">' + resolvidas.map(function(c){ return '<div class="dm-cor-item"><div class="dm-cor-circulo" style="background:' + escapeHtml(c.hex) + ';"></div><div class="dm-cor-nome">' + escapeHtml(c.nome || '') + '</div></div>'; }).join('') + '</div>' +
       '<div class="dm-cor-divisor"></div></div>';
     }
 
-    const corpoGrupos = grupo('Cores Base', capsula.base) + grupo('Cores de Apoio', capsula.apoio) + grupo('Cores de Destaque', capsula.destaque);
+    const corpoGrupos =
+      grupo('Cores Base', 'A fundação do seu guarda-roupa — peças que voltam sempre.', capsula.base) +
+      grupo('Cores de Apoio', 'Complementam a base e ampliam as combinações possíveis.', capsula.apoio) +
+      grupo('Cores de Destaque', 'Dão personalidade e ponto focal aos looks.', capsula.destaque);
+
     const combosResolvidos = Array.isArray(capsula.combinacoes)
       ? capsula.combinacoes.map(function(c){ return dm_renderCombinacaoCromatica(c, cartelaId); }).filter(Boolean)
       : [];
     const combinacoesHtml = combosResolvidos.length
-      ? '<div class="dossie-mestre-bloco-titulo" style="margin-top:6px;">Combinações Coordenadas</div>' + combosResolvidos.join('')
+      ? '<div class="dossie-mestre-bloco-titulo" style="margin-top:6px;">Coordenações Possíveis</div>' + combosResolvidos.join('')
       : '';
 
     if(!corpoGrupos && !combinacoesHtml) return null;
@@ -21158,7 +21251,7 @@
       '<div class="dm-titulo-editorial">Armário <em>Cápsula</em></div>' +
       '<div class="dm-intro-texto">Uma seleção cromática coordenada, pensada para facilitar a construção de looks no dia a dia.</div>' +
       '<div class="dm-linha-curta"></div>' +
-      corpoGrupos +
+      (corpoGrupos ? '<div class="dm-capsula-fluxo">' + corpoGrupos + '</div>' : '') +
       combinacoesHtml +
       dm_rodapeFaixa('Vestir com intenção', 'Peças nessas cores combinam entre si com naturalidade.'),
       { numero: true, secao: 'Coloração Pessoal' }
@@ -21166,6 +21259,12 @@
   }
 
   // MODELO — representação gráfica das famílias metálicas via CSS (sem fotos externas).
+  // IMPORTANTE (Fase 6C.6): a base hoje não distingue tecnicamente qual metal listado
+  // é "principal" — analiseCromatica.metaisRecomendados é um texto livre da Giulia,
+  // separado dos metais estruturados da cartela, sem nenhum vínculo de dado entre os
+  // dois. Por isso o texto livre é apresentado como observação individual à parte,
+  // claramente separada dos metais da cartela — nunca como se ordenasse ou
+  // classificasse os metais mostrados acima. Nenhuma dedução foi feita.
   function dm_buildMetais(dados){
     if(!dados.servicos.coloracaoPessoal) return null;
     const cartelaInfo = dm_resolverCartela(dados);
@@ -21173,6 +21272,7 @@
     if(!base || !Array.isArray(base.metais) || !base.metais.length) return null;
 
     let html = '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Metais <em>Recomendados</em></div><div class="dm-linha-curta"></div>';
+    html += '<div class="dm-intro-texto">Estas são as famílias metálicas harmônicas à sua cartela.</div>';
     html += '<div class="dossie-mestre-metal-linha">' + base.metais.map(function(m){
       return '<div class="dossie-mestre-metal-item">' +
         '<div class="dossie-mestre-metal-circulo" style="background:linear-gradient(135deg, ' + escapeHtml(m.hex || '#ccc') + ' 0%, #fff 45%, ' + escapeHtml(m.hex || '#ccc') + ' 100%);"></div>' +
@@ -21181,7 +21281,8 @@
     }).join('') + '</div>';
 
     if(dados.crom.metaisRecomendados && dados.crom.metaisRecomendados.trim()){
-      html += '<div class="dossie-mestre-bloco" style="margin-top:16px;"><div class="dossie-mestre-bloco-titulo">Orientação Profissional</div><div class="dm-texto">' + escapeHtml(dados.crom.metaisRecomendados) + '</div></div>';
+      html += '<div class="dm-divisor-suave"></div>';
+      html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Observação Individual da Consultora</div><div class="dm-texto">' + escapeHtml(dados.crom.metaisRecomendados) + '</div></div>';
     }
     html += dm_rodapeFaixa('Como escolher', 'Metais com reflexo semelhante ao da sua pele criam harmonia natural com sua coloração.');
 
