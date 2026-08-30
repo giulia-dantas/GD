@@ -6639,7 +6639,13 @@
     try{
       const snap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_principal'));
       if(snap.exists()) dossieData = snap.data();
-    } catch(err){ console.error('GD: erro ao carregar dossiê da cliente', err); }
+    } catch(err){
+      if(err && err.code === 'permission-denied'){
+        console.error('GD: PERMISSÃO NEGADA ao ler clientes/' + currentUser.uid + '/dossie/_principal — verifique as regras do Firestore para esta subcoleção (a cliente precisa poder ler seu próprio documento "dossie").', err);
+      } else {
+        console.error('GD: erro ao carregar dossiê da cliente', err);
+      }
+    }
 
     const liberado = !!(dossieData && dossieData.liberado && dossieData.pdfUrl);
 
@@ -6662,7 +6668,13 @@
     try{
       const cromSnap = await getDoc(doc(db, 'clientes', currentUser.uid, 'interno', 'analiseCromatica'));
       if(cromSnap.exists()) cromData = cromSnap.data();
-    } catch(err){ console.error('GD: erro ao carregar resultado cromático', err); }
+    } catch(err){
+      if(err && err.code === 'permission-denied'){
+        console.error('GD: PERMISSÃO NEGADA ao ler clientes/' + currentUser.uid + '/interno/analiseCromatica — verifique as regras do Firestore para esta subcoleção.', err);
+      } else {
+        console.error('GD: erro ao carregar resultado cromático', err);
+      }
+    }
 
     if(cromData.direcionamentoRealizado === 'Sim' && cromData.cartela){
       if(cartelaCardEl) cartelaCardEl.hidden = false;
@@ -6685,7 +6697,13 @@
     try{
       const snap = await getDoc(doc(db, 'clientes', currentUser.uid, 'dossie', '_principal'));
       if(snap.exists()) dossieData = snap.data();
-    } catch(err){ console.error(err); }
+    } catch(err){
+      if(err && err.code === 'permission-denied'){
+        console.error('GD: PERMISSÃO NEGADA ao ler clientes/' + currentUser.uid + '/dossie/_principal — verifique as regras do Firestore.', err);
+      } else {
+        console.error(err);
+      }
+    }
 
     if(!dossieData || !dossieData.liberado || !dossieData.pdfUrl) return;
 
@@ -6756,7 +6774,13 @@
     try{
       const snap = await getDoc(doc(db, 'clientes', currentUser.uid, 'interno', 'analiseCromatica'));
       if(snap.exists()) cromData = snap.data();
-    } catch(err){ console.error('GD: erro ao carregar cartela da cliente', err); }
+    } catch(err){
+      if(err && err.code === 'permission-denied'){
+        console.error('GD: PERMISSÃO NEGADA ao ler clientes/' + currentUser.uid + '/interno/analiseCromatica — verifique as regras do Firestore para esta subcoleção.', err);
+      } else {
+        console.error('GD: erro ao carregar cartela da cliente', err);
+      }
+    }
 
     const nomeCartela = (cromData.direcionamentoRealizado === 'Sim' && cromData.cartela) ? cromData.cartela : null;
 
