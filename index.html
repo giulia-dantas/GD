@@ -5534,7 +5534,9 @@
     ref,
     uploadBytes,
     getDownloadURL,
-    deleteObject
+    deleteObject,
+    getBytes,
+    getMetadata
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js";
   import {
     getFunctions,
@@ -5742,16 +5744,17 @@
     }
   });
 
-  // ---- Baixar HTML do Dossiê (Fase 6C.16) ----
-  // A responsabilidade de gerar PDF saiu do app. Em vez disso, este botão gera um
-  // arquivo HTML autossuficiente a partir do MESMO DOM final já renderizado na
-  // prévia (nunca uma segunda implementação/template do dossiê) — clona o
-  // container, incorpora imagens como Data URL (com fallback gracioso para a URL
-  // original se a conversão falhar), copia o <style> inteiro do app (prioridade:
-  // fidelidade visual, não "otimização") e inclui os mesmos links de fonte do
-  // Google Fonts. Nenhum window.print(), nenhum jsPDF, nenhum html2canvas — só
-  // HTML + CSS + imagens embutidas, prontos para abrir offline (file://) ou
-  // enviar para outra ferramenta converter em PDF depois.
+  // ---- Baixar HTML do Dossiê (Fase 6C.17 — verdadeiramente autossuficiente) ----
+  // A responsabilidade de gerar PDF saiu do app. Este botão gera um arquivo HTML
+  // autossuficiente a partir do MESMO DOM final já renderizado na prévia (nunca
+  // uma segunda implementação/template do dossiê) — clona o container, incorpora
+  // TODAS as imagens como Data URL (com duas estratégias de conversão, nunca
+  // silenciosamente deixando uma URL externa em recurso essencial), embute as
+  // fontes Google Fonts como @font-face em Data URL, copia o <style> inteiro do
+  // app (fidelidade visual, não "otimização"), e valida programaticamente que
+  // nenhuma referência externa essencial sobrou antes de liberar o download.
+  // A conversão acontece SÓ na cópia de exportação — a tela normal do app nunca
+  // é alterada. Nenhum window.print(), nenhum jsPDF, nenhum html2canvas.
 
   function dm_sanitizarNomeArquivo(nome){
     return (nome || 'Cliente')
@@ -5761,26 +5764,101 @@
       .replace(/\s+/g, '-') || 'Cliente';
   }
 
-  // Converte a URL de uma imagem em Data URL (base64) para o arquivo exportado
-  // não depender de nenhuma rede/estado do app depois de baixado. Se a imagem já
-  // for Data URL, retorna como está; se a conversão falhar (ex.: CORS bloqueado),
-  // devolve null — quem chamar mantém a URL original como salvaguarda (a imagem
-  // ainda funciona ao abrir o arquivo, desde que haja internet).
+  function dm_blobParaDataUrl(blob){
+    return new Promise(function(resolve, reject){
+      const reader = new FileReader();
+      reader.onload = function(){ resolve(reader.result); };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  // Converte a URL de uma imagem em Data URL (base64), com DUAS estratégias:
+  // 1) fetch() direto — funciona para a maioria dos assets estáticos (ex.: GitHub
+  //    Pages, que normalmente libera CORS para arquivos públicos).
+  // 2) SDK do Firebase Storage (getBytes + getMetadata) — usado especificamente
+  //    quando a URL é do Firebase Storage e o fetch() direto falha (o bloqueio de
+  //    CORS reportado no teste real). O SDK já está configurado/autenticado pelo
+  //    próprio app, contornando exatamente essa limitação.
+  // Retorna null SOMENTE se ambas as estratégias falharem — quem chamar trata
+  // isso como falha real (nunca mantém a URL externa silenciosamente).
   async function dm_converterImagemParaDataUrl(url){
     if(!url || url.indexOf('data:') === 0) return url || null;
+
     try{
       const resp = await fetch(url, { mode: 'cors' });
-      const blob = await resp.blob();
-      return await new Promise(function(resolve, reject){
-        const reader = new FileReader();
-        reader.onload = function(){ resolve(reader.result); };
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
+      if(resp.ok){
+        const blob = await resp.blob();
+        return await dm_blobParaDataUrl(blob);
+      }
     } catch(err){
-      console.warn('GD: não foi possível incorporar a imagem como Data URL (mantendo URL original):', url, err);
+      console.warn('GD: fetch() direto falhou para', url, '— tentando via SDK do Firebase Storage se aplicável.', err);
+    }
+
+    if(url.indexOf('firebasestorage.googleapis.com') !== -1 || url.indexOf('firebasestorage.app') !== -1){
+      try{
+        const fileRef = ref(storage, url);
+        const bytes = await getBytes(fileRef);
+        let contentType = 'application/octet-stream';
+        try{
+          const meta = await getMetadata(fileRef);
+          if(meta && meta.contentType) contentType = meta.contentType;
+        } catch(e){ /* segue com o tipo genérico */ }
+        const blob = new Blob([bytes], { type: contentType });
+        return await dm_blobParaDataUrl(blob);
+      } catch(err){
+        console.warn('GD: falha ao incorporar via SDK do Firebase Storage:', url, err);
+      }
+    }
+
+    return null;
+  }
+
+  // Busca o CSS do Google Fonts (Cormorant Garamond + Manrope) e embute cada
+  // arquivo de fonte referenciado como Data URL diretamente no @font-face —
+  // o HTML exportado deixa de depender de fonts.googleapis.com/gstatic.com.
+  // Retorna null se a busca do CSS falhar por completo (sem internet no momento
+  // da exportação, por exemplo) — quem chamar trata isso como falha real.
+  async function dm_incorporarFontesComoDataUrl(){
+    const CSS_URL = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700&display=swap";
+    let cssTexto;
+    try{
+      const resp = await fetch(CSS_URL);
+      cssTexto = await resp.text();
+    } catch(err){
+      console.warn('GD: não foi possível buscar o CSS do Google Fonts', err);
       return null;
     }
+
+    const regexUrl = /url\((https:\/\/fonts\.gstatic\.com\/[^)]+)\)/g;
+    const urls = [];
+    let m;
+    while((m = regexUrl.exec(cssTexto))){ if(urls.indexOf(m[1]) === -1) urls.push(m[1]); }
+
+    for(let i = 0; i < urls.length; i++){
+      const fontUrl = urls[i];
+      try{
+        const resp = await fetch(fontUrl);
+        const blob = await resp.blob();
+        const dataUrl = await dm_blobParaDataUrl(blob);
+        cssTexto = cssTexto.split(fontUrl).join(dataUrl);
+      } catch(err){
+        console.warn('GD: falha ao incorporar arquivo de fonte', fontUrl, err);
+        return null; // uma fonte essencial não incorporada = falha real, não parcial
+      }
+    }
+    return cssTexto;
+  }
+
+  // Validação final: garante que nenhuma referência externa essencial sobrou no
+  // HTML montado. Nunca libera o download silenciosamente se algo escapou.
+  function dm_validarHtmlAutossuficiente(html){
+    const problemas = [];
+    if(/src=["']https?:\/\//i.test(html)) problemas.push('imagem(ns) ainda apontando para URL externa (src="http...")');
+    if(/src=["']blob:/i.test(html)) problemas.push('imagem(ns) ainda apontando para blob: temporário');
+    if(/url\(\s*["']?https?:\/\//i.test(html)) problemas.push('referência externa dentro de url(...) no CSS');
+    if(/<link[^>]+rel=["']stylesheet["'][^>]+href=["']https?:\/\//i.test(html)) problemas.push('folha de estilo externa (<link rel="stylesheet" href="http...">)');
+    return problemas;
   }
 
   async function dm_baixarHtmlDossie(){
@@ -5799,15 +5877,19 @@
       // Clona o DOM final já renderizado (capa + fluxo) — nenhuma reconstrução,
       // nenhum novo template. #dossie-mestre-paginas não contém nenhum elemento
       // administrativo (faixa, botões, avisos ficam fora dele, como irmãos), então
-      // não há nada exclusivamente administrativo a remover do clone.
+      // não há nada exclusivamente administrativo a remover do clone. A conversão
+      // abaixo acontece só nesta cópia — a tela normal do app não é tocada.
       const clone = paginasEl.cloneNode(true);
 
       // Incorpora cada imagem do clone como Data URL — com cache para não repetir
       // a mesma conversão (ex.: o monograma GD aparece várias vezes: capa, rodapé,
       // divisórias, encerramento). Preserva 100% da lógica visual (proporção,
-      // enquadramento, object-fit, classes) — só troca a origem do arquivo.
+      // enquadramento, object-fit, classes) — só troca a origem do arquivo. Se
+      // QUALQUER imagem falhar nas duas estratégias, a exportação é interrompida
+      // com um erro específico — nunca um HTML incompleto silencioso.
       const imgs = Array.prototype.slice.call(clone.querySelectorAll('img'));
       const cacheDataUrl = {};
+      const falhas = [];
       for(let i = 0; i < imgs.length; i++){
         const img = imgs[i];
         const src = img.getAttribute('src');
@@ -5815,9 +5897,21 @@
         if(!(src in cacheDataUrl)){
           cacheDataUrl[src] = await dm_converterImagemParaDataUrl(src);
         }
-        if(cacheDataUrl[src]) img.setAttribute('src', cacheDataUrl[src]);
-        // Se a conversão falhou, a URL original permanece — a imagem ainda
-        // funciona ao abrir o arquivo, desde que haja internet.
+        if(cacheDataUrl[src]){
+          img.setAttribute('src', cacheDataUrl[src]);
+        } else if(falhas.indexOf(src) === -1){
+          falhas.push(src);
+        }
+      }
+      if(falhas.length){
+        throw new Error('Não foi possível incorporar ' + falhas.length + ' imagem(ns) ao arquivo (ex.: ' + falhas[0] + '). Verifique sua conexão e tente novamente.');
+      }
+
+      // Fontes Google Fonts embutidas como Data URL — sem isso, o HTML não seria
+      // realmente independente de internet (mesmo com as imagens resolvidas).
+      const cssFontesEmbutido = await dm_incorporarFontesComoDataUrl();
+      if(!cssFontesEmbutido){
+        throw new Error('Não foi possível incorporar as fontes (Cormorant Garamond / Manrope) ao arquivo. Verifique sua conexão e tente novamente.');
       }
 
       // Mesmo CSS do app, cópia literal — inclui exatamente as regras que já
@@ -5834,10 +5928,7 @@
         '<meta charset="UTF-8">\n' +
         '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
         '<title>Dossiê — ' + escapeHtml(nomeCliente) + '</title>\n' +
-        '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
-        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
-        '<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">\n' +
-        '<style>\n' + cssOriginal + '\n' +
+        '<style>\n' + cssFontesEmbutido + '\n' + cssOriginal + '\n' +
         // Layout-base real do dossiê — nenhuma folha A4, nenhum @page, nenhuma
         // quebra de página artificial. Apenas remove o "quadro de celular" da
         // prévia (largura fixa/overflow do wrapper mobile), que existe só para a
@@ -5847,6 +5938,11 @@
         '</style>\n</head>\n<body>\n' +
         clone.outerHTML +
         '\n</body>\n</html>';
+
+      const problemas = dm_validarHtmlAutossuficiente(htmlFinal);
+      if(problemas.length){
+        throw new Error('O arquivo não ficou totalmente autossuficiente: ' + problemas.join('; ') + '.');
+      }
 
       const blob = new Blob([htmlFinal], { type: 'text/html;charset=utf-8' });
       const url = URL.createObjectURL(blob);
@@ -5859,7 +5955,7 @@
       URL.revokeObjectURL(url);
     } catch(err){
       console.error('GD: erro ao preparar o HTML do Dossiê Mestre', err);
-      alert('Não foi possível preparar o arquivo do dossiê. Tente novamente.');
+      alert((err && err.message) ? err.message : 'Não foi possível preparar o arquivo do dossiê. Tente novamente.');
     } finally{
       if(btn){ btn.textContent = textoOriginalBtn || 'Baixar HTML do Dossiê'; btn.disabled = false; }
     }
