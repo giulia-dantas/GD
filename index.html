@@ -5988,6 +5988,92 @@
     return null;
   }
 
+  // ---- Otimização de imagens para o HTML exportado (Fase 6C.19) ----
+  // Aplicada SOMENTE na cópia usada para exportação (dentro de dm_baixarHtmlDossie)
+  // — nunca na tela do app, nunca nos arquivos originais do Firebase Storage.
+  // Reduz o PESO da Data URL (dimensão + recompressão), nunca a aparência: nunca
+  // faz upscale, nunca corta, nunca distorce, preserva PNG quando há transparência
+  // real (checagem pixel a pixel do canal alfa, não apenas pela extensão do arquivo).
+  const DM_EXPORT_LARGURA_MAXIMA = 1600;
+  const DM_EXPORT_JPEG_QUALIDADE = 0.88;
+
+  // Verifica transparência REAL (não apenas "é PNG") lendo o canal alfa de cada
+  // pixel já desenhado no canvas. Se a leitura falhar por qualquer motivo, assume
+  // que pode haver transparência e preserva PNG — mais seguro do que arriscar
+  // perder o alfa de uma imagem que realmente precisa dele.
+  function dm_canvasTemTransparenciaReal(canvas, ctx){
+    try{
+      const dados = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      for(let i = 3; i < dados.length; i += 4){
+        if(dados[i] < 255) return true;
+      }
+      return false;
+    } catch(err){
+      return true;
+    }
+  }
+
+  // Recebe uma Data URL já resolvida (saída de dm_converterImagemParaDataUrl) e
+  // devolve uma versão redimensionada/recomprimida quando fizer sentido — nunca
+  // interrompe a exportação: qualquer falha aqui devolve a Data URL original
+  // intacta (a imagem nunca some, o método atual continua sendo o resultado).
+  // Retorna { dataUrl, redimensionada, formato } para permitir relatar estatísticas.
+  async function dm_otimizarImagemParaExportacao(dataUrlOriginal, opcoes){
+    opcoes = opcoes || {};
+    const larguraMaxima = opcoes.larguraMaxima || DM_EXPORT_LARGURA_MAXIMA;
+    const qualidade = opcoes.qualidade || DM_EXPORT_JPEG_QUALIDADE;
+
+    if(!dataUrlOriginal || dataUrlOriginal.indexOf('data:') !== 0){
+      return { dataUrl: dataUrlOriginal, redimensionada: false, formato: null };
+    }
+
+    return new Promise(function(resolve){
+      const img = new Image();
+      img.onload = function(){
+        try{
+          const largOriginal = img.naturalWidth || img.width;
+          const altOriginal = img.naturalHeight || img.height;
+          if(!largOriginal || !altOriginal){
+            resolve({ dataUrl: dataUrlOriginal, redimensionada: false, formato: null });
+            return;
+          }
+
+          // Nunca upscale — só reduz quando a imagem original é maior que o limite.
+          const escala = largOriginal > larguraMaxima ? (larguraMaxima / largOriginal) : 1;
+          const largFinal = Math.round(largOriginal * escala);
+          const altFinal = Math.round(altOriginal * escala);
+
+          const canvas = document.createElement('canvas');
+          canvas.width = largFinal;
+          canvas.height = altFinal;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, largFinal, altFinal);
+
+          const eraPng = dataUrlOriginal.indexOf('data:image/png') === 0;
+          const temTransparencia = eraPng && dm_canvasTemTransparenciaReal(canvas, ctx);
+
+          const dataUrlFinal = temTransparencia
+            ? canvas.toDataURL('image/png')
+            : canvas.toDataURL('image/jpeg', qualidade);
+
+          resolve({
+            dataUrl: dataUrlFinal || dataUrlOriginal,
+            redimensionada: escala < 1,
+            formato: temTransparencia ? 'png' : 'jpeg'
+          });
+        } catch(err){
+          console.warn('GD: falha ao otimizar imagem para exportação (mantendo a versão já incorporada)', err);
+          resolve({ dataUrl: dataUrlOriginal, redimensionada: false, formato: null });
+        }
+      };
+      img.onerror = function(){
+        console.warn('GD: falha ao carregar imagem para otimização (mantendo a versão já incorporada)');
+        resolve({ dataUrl: dataUrlOriginal, redimensionada: false, formato: null });
+      };
+      img.src = dataUrlOriginal;
+    });
+  }
+
   // Busca o CSS do Google Fonts (Cormorant Garamond + Manrope) e embute cada
   // arquivo de fonte referenciado como Data URL diretamente no @font-face —
   // o HTML exportado deixa de depender de fonts.googleapis.com/gstatic.com.
@@ -6059,17 +6145,34 @@
       // a mesma conversão (ex.: o monograma GD aparece várias vezes: capa, rodapé,
       // divisórias, encerramento). Preserva 100% da lógica visual (proporção,
       // enquadramento, object-fit, classes) — só troca a origem do arquivo. Se
-      // QUALQUER imagem falhar nas duas estratégias, a exportação é interrompida
-      // com um erro específico — nunca um HTML incompleto silencioso.
+      // QUALQUER imagem falhar nas duas estratégias de incorporação, a exportação
+      // é interrompida com um erro específico — nunca um HTML incompleto silencioso.
+      // Fase 6C.19: depois de resolvida a Data URL "bruta", cada imagem passa por
+      // dm_otimizarImagemParaExportacao (resize + recompressão) para reduzir o
+      // peso final do HTML — se ISSO falhar, cai de volta na versão bruta (que já
+      // funciona), nunca interrompe a exportação por causa só da otimização.
       const imgs = Array.prototype.slice.call(clone.querySelectorAll('img'));
       const cacheDataUrl = {};
       const falhas = [];
+      const estatisticasOtimizacao = { processadas: 0, redimensionadas: 0, png: 0, jpeg: 0, bytesAntes: 0, bytesDepois: 0 };
       for(let i = 0; i < imgs.length; i++){
         const img = imgs[i];
         const src = img.getAttribute('src');
         if(!src) continue;
         if(!(src in cacheDataUrl)){
-          cacheDataUrl[src] = await dm_converterImagemParaDataUrl(src);
+          const bruto = await dm_converterImagemParaDataUrl(src);
+          if(bruto){
+            const otimizado = await dm_otimizarImagemParaExportacao(bruto);
+            cacheDataUrl[src] = otimizado.dataUrl;
+            estatisticasOtimizacao.processadas++;
+            if(otimizado.redimensionada) estatisticasOtimizacao.redimensionadas++;
+            if(otimizado.formato === 'png') estatisticasOtimizacao.png++;
+            if(otimizado.formato === 'jpeg') estatisticasOtimizacao.jpeg++;
+            estatisticasOtimizacao.bytesAntes += bruto.length;
+            estatisticasOtimizacao.bytesDepois += otimizado.dataUrl.length;
+          } else {
+            cacheDataUrl[src] = null;
+          }
         }
         if(cacheDataUrl[src]){
           img.setAttribute('src', cacheDataUrl[src]);
@@ -6080,6 +6183,7 @@
       if(falhas.length){
         throw new Error('Não foi possível incorporar ' + falhas.length + ' imagem(ns) ao arquivo (ex.: ' + falhas[0] + '). Verifique sua conexão e tente novamente.');
       }
+      console.log('GD: otimização de imagens do HTML exportado —', estatisticasOtimizacao.processadas, 'imagem(ns) processada(s),', estatisticasOtimizacao.redimensionadas, 'redimensionada(s),', estatisticasOtimizacao.png, 'preservada(s) como PNG (transparência real),', estatisticasOtimizacao.jpeg, 'convertida(s)/recomprimida(s) em JPEG. Peso aproximado das Data URLs: antes ~' + (estatisticasOtimizacao.bytesAntes / 1024 / 1024).toFixed(2) + ' MB, depois ~' + (estatisticasOtimizacao.bytesDepois / 1024 / 1024).toFixed(2) + ' MB.');
 
       // Fontes Google Fonts embutidas como Data URL — sem isso, o HTML não seria
       // realmente independente de internet (mesmo com as imagens resolvidas).
