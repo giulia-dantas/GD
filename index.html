@@ -412,6 +412,90 @@
     margin-bottom:16px;
   }
 
+  /* ---- Editor do Dossiê — "Artes do Dossiê" (upload de imagens por categoria) ---- */
+  .editor-artes-categoria{
+    margin-bottom:22px;
+    padding-bottom:18px;
+    border-bottom:var(--hairline);
+  }
+
+  .editor-artes-categoria-titulo{
+    font-family:'Manrope', sans-serif;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:0.04em;
+    color:var(--graphite);
+    margin-bottom:10px;
+  }
+
+  .editor-artes-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:10px;
+  }
+
+  .editor-artes-item{
+    position:relative;
+    width:calc(33.333% - 7px);
+    min-width:84px;
+    border:var(--hairline);
+    border-radius:8px;
+    overflow:hidden;
+    background:#fff;
+  }
+
+  .editor-artes-item img{
+    display:block;
+    width:100%;
+    height:84px;
+    object-fit:cover;
+  }
+
+  .editor-artes-item-count{
+    font-family:'Manrope', sans-serif;
+    font-size:9px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--graphite-soft);
+    text-align:center;
+    padding:4px 2px 2px;
+  }
+
+  .editor-artes-item-actions{
+    display:flex;
+    border-top:var(--hairline);
+  }
+
+  .editor-artes-mini-btn{
+    flex:1;
+    background:none;
+    border:none;
+    font-family:'Manrope', sans-serif;
+    font-size:9px;
+    letter-spacing:0.03em;
+    color:var(--graphite-soft);
+    padding:6px 2px;
+    cursor:pointer;
+  }
+
+  .editor-artes-mini-btn:first-child{ border-right:var(--hairline); }
+  .editor-artes-mini-btn:active{ opacity:0.6; }
+
+  .editor-artes-add-btn:disabled{
+    opacity:0.4;
+    cursor:not-allowed;
+  }
+
+  /* ---- Posicionamento Cromático — categoria de imagem única (máx. 1); mostra
+     um status textual em vez do contador "X de 3" usado pelas demais. ---- */
+  .editor-artes-status{
+    font-family:'Manrope', sans-serif;
+    font-size:11px;
+    color:var(--graphite-soft);
+    margin-bottom:10px;
+  }
+
   .stat-label{
     font-size:11px;
     letter-spacing:0.14em;
@@ -423,6 +507,7 @@
   .stat-value{
     font-family:'Cormorant Garamond', serif;
     font-size:42px;
+
     font-weight:500;
     margin-bottom:10px;
   }
@@ -2625,6 +2710,24 @@
   /* ---- Paleta / cores curadas — círculos agrupados por categoria, com divisórias finas ---- */
   .dm-cor-grupo{ margin-bottom:16px; break-inside:avoid; page-break-inside:avoid; }
 
+  /* ---- Artes do Dossiê — galeria de imagens complementares por categoria ----
+     Sempre em coluna única (uma abaixo da outra): as artes podem conter textos e
+     detalhes pequenos, então a prioridade é legibilidade, nunca miniaturas lado a
+     lado. width:100%/height:auto preserva a proporção original da imagem — nunca
+     distorce, nunca corta. Sem altura fixa. */
+  .dm-galeria-artes{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin-top:14px;
+  }
+
+  .dm-galeria-artes-item img{
+    display:block;
+    width:100%;
+    height:auto;
+  }
+
   .dm-cor-grupo-titulo{
     font-family:'Manrope', sans-serif;
     font-size:10.5px;
@@ -3692,6 +3795,77 @@
 
             <button class="btn-secondary" data-editor-save="aplicacao" style="margin-bottom:0;">Salvar Aplicação Prática</button>
             <div class="login-error" id="editor-msg-aplicacao"></div>
+          </div>
+        </div>
+
+        <!-- ---- ARTES DO DOSSIÊ ---- -->
+        <div class="stat-card" id="editor-cap-artes">
+          <div class="mini-row" data-editor-toggle="artes" style="cursor:pointer; padding-top:0;">
+            <div>
+              <div class="mini-row-title">Artes do Dossiê</div>
+              <div class="mini-row-sub" id="editor-check-artes">Opcional</div>
+            </div>
+            <div class="arrow" id="editor-arrow-artes">＋</div>
+          </div>
+          <div id="editor-body-artes" hidden>
+            <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:14px; line-height:1.5;">Imagens complementares (até 3 por categoria) que aparecem automaticamente na seção correspondente do Dossiê Mestre. Nenhuma é obrigatória.</p>
+
+            <div class="editor-artes-categoria" data-artes-categoria="armario">
+              <div class="editor-artes-categoria-titulo">Armário / Peças-Chave</div>
+              <div class="editor-artes-grid" data-artes-grid="armario"></div>
+              <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="armario" style="margin-bottom:0;">+ Adicionar imagem</button>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="armario" style="display:none;">
+              <div class="login-error" data-artes-msg="armario"></div>
+            </div>
+
+            <div class="editor-artes-categoria" data-artes-categoria="looks">
+              <div class="editor-artes-categoria-titulo">Looks / Coordenações</div>
+              <div class="editor-artes-grid" data-artes-grid="looks"></div>
+              <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="looks" style="margin-bottom:0;">+ Adicionar imagem</button>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="looks" style="display:none;">
+              <div class="login-error" data-artes-msg="looks"></div>
+            </div>
+
+            <div class="editor-artes-categoria" data-artes-categoria="modelagens">
+              <div class="editor-artes-categoria-titulo">Modelagens Recomendadas</div>
+              <div class="editor-artes-grid" data-artes-grid="modelagens"></div>
+              <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="modelagens" style="margin-bottom:0;">+ Adicionar imagem</button>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="modelagens" style="display:none;">
+              <div class="login-error" data-artes-msg="modelagens"></div>
+            </div>
+
+            <div class="editor-artes-categoria" data-artes-categoria="acessorios">
+              <div class="editor-artes-categoria-titulo">Acessórios</div>
+              <div class="editor-artes-grid" data-artes-grid="acessorios"></div>
+              <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="acessorios" style="margin-bottom:0;">+ Adicionar imagem</button>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="acessorios" style="display:none;">
+              <div class="login-error" data-artes-msg="acessorios"></div>
+            </div>
+
+            <div class="editor-artes-categoria" data-artes-categoria="cabelo">
+              <div class="editor-artes-categoria-titulo">Cabelo</div>
+              <div class="editor-artes-grid" data-artes-grid="cabelo"></div>
+              <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="cabelo" style="margin-bottom:0;">+ Adicionar imagem</button>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="cabelo" style="display:none;">
+              <div class="login-error" data-artes-msg="cabelo"></div>
+            </div>
+
+            <div class="editor-artes-categoria" data-artes-categoria="maquiagem">
+              <div class="editor-artes-categoria-titulo">Maquiagem</div>
+              <div class="editor-artes-grid" data-artes-grid="maquiagem"></div>
+              <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="maquiagem" style="margin-bottom:0;">+ Adicionar imagem</button>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="maquiagem" style="display:none;">
+              <div class="login-error" data-artes-msg="maquiagem"></div>
+            </div>
+
+            <div class="editor-artes-categoria" data-artes-categoria="posicionamentoCromatico" style="margin-bottom:0;">
+              <div class="editor-artes-categoria-titulo">Posicionamento Cromático</div>
+              <div class="editor-artes-grid" data-artes-grid="posicionamentoCromatico"></div>
+              <div class="editor-artes-status" data-artes-status="posicionamentoCromatico">Nenhuma imagem</div>
+              <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="posicionamentoCromatico" style="margin-bottom:0;">+ Adicionar imagem</button>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="posicionamentoCromatico" style="display:none;">
+              <div class="login-error" data-artes-msg="posicionamentoCromatico"></div>
+            </div>
           </div>
         </div>
 
@@ -20698,6 +20872,173 @@
     if(el) el.textContent = (valor && String(valor).trim()) ? valor : '—';
   }
 
+  // ---- Artes do Dossiê (imagens complementares por categoria, 0 a 3 cada) ----
+  // Persistidas dentro do MESMO documento clientes/{uid}/interno/dossieEditorial,
+  // como um campo aninhado "artesDossie" — nenhum documento novo, seguindo o
+  // padrão já existente (um único documento admin-only, merge:true por seção).
+  // Upload segue exatamente o mesmo mecanismo já usado para fotos (uploadBytes +
+  // getDownloadURL), apenas em clientes/{uid}/artesDossie/{categoria}/ em vez de
+  // clientes/{uid}/fotos/ — reaproveita a infraestrutura, não cria uma nova.
+  const ARTES_DOSSIE_CATEGORIAS = ['armario', 'looks', 'modelagens', 'acessorios', 'cabelo', 'maquiagem', 'posicionamentoCromatico'];
+  const ARTES_DOSSIE_MAX = 3;
+  // "posicionamentoCromatico" é a única categoria de imagem ÚNICA (máx. 1) — as
+  // 6 categorias originais continuam usando ARTES_DOSSIE_MAX (3) normalmente,
+  // sem nenhuma mudança de comportamento para elas.
+  const ARTES_DOSSIE_MAX_POR_CATEGORIA = { posicionamentoCromatico: 1 };
+  function editorArtesMaxDaCategoria(cat){
+    return ARTES_DOSSIE_MAX_POR_CATEGORIA[cat] || ARTES_DOSSIE_MAX;
+  }
+  let editorArtesData = { armario: [], looks: [], modelagens: [], acessorios: [], cabelo: [], maquiagem: [], posicionamentoCromatico: [] };
+
+  // Clientes antigos sem "artesDossie" (ou com alguma categoria ausente/malformada)
+  // são tratados como arrays vazios — nunca um erro, nunca migração manual.
+  function editorArtesNormalizar(bruto){
+    const out = {};
+    ARTES_DOSSIE_CATEGORIAS.forEach(function(cat){
+      out[cat] = Array.isArray(bruto && bruto[cat]) ? bruto[cat].slice(0, editorArtesMaxDaCategoria(cat)) : [];
+    });
+    return out;
+  }
+
+  function editorArtesRenderCategoria(cat){
+    const grid = document.querySelector('[data-artes-grid="' + cat + '"]');
+    const addBtn = document.querySelector('[data-artes-add="' + cat + '"]');
+    const statusEl = document.querySelector('[data-artes-status="' + cat + '"]');
+    if(!grid) return;
+    const lista = editorArtesData[cat] || [];
+    const max = editorArtesMaxDaCategoria(cat);
+    grid.innerHTML = lista.map(function(item, idx){
+      // Categorias de imagem única (max===1, ex.: Posicionamento Cromático) não
+      // mostram o contador "X de 3" — só as 6 categorias originais mostram.
+      const contadorHtml = max > 1 ? '<div class="editor-artes-item-count">' + (idx + 1) + ' de ' + max + '</div>' : '';
+      return '<div class="editor-artes-item">' +
+        '<img src="' + escapeHtml(item.url) + '" alt="">' +
+        contadorHtml +
+        '<div class="editor-artes-item-actions">' +
+          '<button type="button" class="editor-artes-mini-btn" data-artes-replace="' + cat + ':' + idx + '">Substituir</button>' +
+          '<button type="button" class="editor-artes-mini-btn" data-artes-remove="' + cat + ':' + idx + '">Remover</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    if(addBtn) addBtn.disabled = lista.length >= max;
+    if(statusEl) statusEl.textContent = lista.length ? 'Imagem adicionada.' : 'Nenhuma imagem';
+  }
+
+  function editorArtesRenderTudo(){
+    ARTES_DOSSIE_CATEGORIAS.forEach(editorArtesRenderCategoria);
+  }
+
+  async function editorArtesPersistir(){
+    if(!selectedClienteUid) return;
+    await setDoc(doc(db, 'clientes', selectedClienteUid, 'interno', 'dossieEditorial'), {
+      artesDossie: editorArtesData,
+      updatedAt: new Date().toISOString(),
+      updatedBy: 'consultora'
+    }, { merge: true });
+    editorDossieData.artesDossie = editorArtesData;
+  }
+
+  async function editorArtesRemover(cat, idx){
+    if(!selectedClienteUid || !editorArtesData[cat] || !editorArtesData[cat][idx]) return;
+    const item = editorArtesData[cat][idx];
+    editorArtesData[cat].splice(idx, 1);
+    editorArtesRenderCategoria(cat);
+    try{
+      await editorArtesPersistir();
+    } catch(err){
+      console.error('GD: erro ao remover arte do dossiê', err);
+    }
+    // Some o arquivo do Storage só depois do cadastro já ter sido atualizado —
+    // se a remoção do arquivo falhar, a referência já não existe mais de qualquer forma.
+    if(item.path){
+      try{ await deleteObject(ref(storage, item.path)); } catch(err){ console.warn('GD: falha ao remover arquivo de arte do Storage', err); }
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    const addBtn = e.target.closest('[data-artes-add]');
+    if(addBtn){
+      const cat = addBtn.getAttribute('data-artes-add');
+      if((editorArtesData[cat] || []).length >= editorArtesMaxDaCategoria(cat)) return;
+      const input = document.querySelector('[data-artes-input="' + cat + '"]');
+      if(input){
+        input.setAttribute('data-artes-modo', 'add');
+        input.removeAttribute('data-artes-replace-idx');
+        input.click();
+      }
+      return;
+    }
+    const replaceBtn = e.target.closest('[data-artes-replace]');
+    if(replaceBtn){
+      const partes = replaceBtn.getAttribute('data-artes-replace').split(':');
+      const input = document.querySelector('[data-artes-input="' + partes[0] + '"]');
+      if(input){
+        input.setAttribute('data-artes-modo', 'replace');
+        input.setAttribute('data-artes-replace-idx', partes[1]);
+        input.click();
+      }
+      return;
+    }
+    const removeBtn = e.target.closest('[data-artes-remove]');
+    if(removeBtn){
+      const partes = removeBtn.getAttribute('data-artes-remove').split(':');
+      editorArtesRemover(partes[0], parseInt(partes[1], 10));
+      return;
+    }
+  });
+
+  document.addEventListener('change', function(e){
+    const input = e.target.closest('[data-artes-input]');
+    if(!input || !input.files || !input.files[0] || !selectedClienteUid) return;
+
+    const cat = input.getAttribute('data-artes-input');
+    const modo = input.getAttribute('data-artes-modo') || 'add';
+    const idxSubstituir = input.getAttribute('data-artes-replace-idx');
+    const file = input.files[0];
+    const msgEl = document.querySelector('[data-artes-msg="' + cat + '"]');
+
+    if(modo === 'add' && (editorArtesData[cat] || []).length >= editorArtesMaxDaCategoria(cat)){
+      input.value = '';
+      return;
+    }
+
+    if(msgEl){ msgEl.classList.remove('success'); msgEl.textContent = 'Enviando…'; }
+
+    const nomeSanitizado = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const storagePath = 'clientes/' + selectedClienteUid + '/artesDossie/' + cat + '/' + Date.now() + '-' + nomeSanitizado;
+    const fileRef = ref(storage, storagePath);
+
+    uploadBytes(fileRef, file)
+      .then(function(){ return getDownloadURL(fileRef); })
+      .then(async function(url){
+        const novoItem = { url: url, path: storagePath };
+        let itemAntigo = null;
+        if(modo === 'replace' && idxSubstituir !== null && editorArtesData[cat][parseInt(idxSubstituir, 10)]){
+          const idx = parseInt(idxSubstituir, 10);
+          itemAntigo = editorArtesData[cat][idx];
+          editorArtesData[cat][idx] = novoItem;
+        } else {
+          if(!editorArtesData[cat]) editorArtesData[cat] = [];
+          editorArtesData[cat].push(novoItem);
+        }
+        editorArtesRenderCategoria(cat);
+        await editorArtesPersistir();
+        if(itemAntigo && itemAntigo.path && itemAntigo.path !== storagePath){
+          try{ await deleteObject(ref(storage, itemAntigo.path)); } catch(err){ console.warn('GD: falha ao remover arquivo antigo de arte do Storage', err); }
+        }
+        if(msgEl){
+          msgEl.classList.add('success');
+          msgEl.textContent = 'Salvo.';
+          setTimeout(function(){ msgEl.textContent = ''; msgEl.classList.remove('success'); }, 2000);
+        }
+      })
+      .catch(function(err){
+        console.error('GD: erro ao enviar arte do dossiê', err);
+        if(msgEl){ msgEl.classList.remove('success'); msgEl.textContent = 'Não foi possível enviar. Tente novamente.'; }
+      })
+      .finally(function(){ input.value = ''; });
+  });
+
   function editorAtualizarChecklistCapitulo(capitulo){
     const labelEl = document.getElementById('editor-check-' + capitulo);
     if(!labelEl) return;
@@ -20730,14 +21071,18 @@
     }
     if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
 
-    // Recolhe todos os capítulos e limpa mensagens ao reabrir a tela
-    Object.keys(EDITOR_CAPITULOS).forEach(function(cap){
+    // Recolhe todos os capítulos e limpa mensagens ao reabrir a tela ("artes" não
+    // está em EDITOR_CAPITULOS — é tratado à parte, mesmo padrão de recolhimento).
+    Object.keys(EDITOR_CAPITULOS).concat(['artes']).forEach(function(cap){
       const bodyEl = document.getElementById('editor-body-' + cap);
       const arrowEl = document.getElementById('editor-arrow-' + cap);
       const msgEl = document.getElementById('editor-msg-' + cap);
       if(bodyEl) bodyEl.hidden = true;
       if(arrowEl) arrowEl.textContent = '＋';
       if(msgEl){ msgEl.textContent = ''; msgEl.classList.remove('success'); }
+    });
+    document.querySelectorAll('#screen-editor-dossie [data-artes-msg]').forEach(function(msgEl){
+      msgEl.textContent = ''; msgEl.classList.remove('success');
     });
     const statusMsgEl = document.getElementById('editor-status-msg');
     if(statusMsgEl){ statusMsgEl.textContent = ''; statusMsgEl.classList.remove('success'); }
@@ -20803,6 +21148,11 @@
       });
       editorAtualizarChecklistCapitulo(cap);
     });
+
+    // ---- Artes do Dossiê (imagens por categoria) — clientes antigos sem o campo
+    // caem no normalizador, que devolve arrays vazios para todas as categorias.
+    editorArtesData = editorArtesNormalizar(editorDossieData.artesDossie);
+    editorArtesRenderTudo();
 
     // ---- Resumo de completude (só os capítulos realmente aplicáveis a esta cliente) ----
     editorCapitulosAplicaveis = temConsultoria
@@ -20964,6 +21314,19 @@
     try{ const s = await getDoc(doc(db, 'clientes', uid, 'fotos', '_admin')); dados.fotoEscolhida = s.exists() ? (s.data().escolhidaDossie || null) : null; }
     catch(err){ console.error(err); dados.fotoEscolhida = null; }
 
+    // Artes do Dossiê (Fase 6C.18) — imagens complementares por categoria, enviadas
+    // pela consultora no Editor. Compatibilidade com clientes antigos: ausência do
+    // documento (ou de qualquer categoria dentro dele) sempre vira array vazio,
+    // nunca erro.
+    dados.artes = { armario: [], looks: [], modelagens: [], acessorios: [], cabelo: [], maquiagem: [] };
+    try{
+      const s = await getDoc(doc(db, 'clientes', uid, 'interno', 'artesDossie'));
+      if(s.exists()){
+        const d = s.data();
+        ARTES_DOSSIE_CATEGORIAS.forEach(function(cat){ dados.artes[cat] = Array.isArray(d[cat]) ? d[cat] : []; });
+      }
+    } catch(err){ console.error(err); }
+
     return dados;
   }
 
@@ -21088,7 +21451,9 @@
   // Fase 6C.15 — documento contínuo: todos os itens seguem juntos no mesmo bloco,
   // sem paginação, sem "continuação". "maxPorPagina" deixou de ser usado (mantido
   // como parâmetro por compatibilidade de chamada, sem efeito).
-  function dm_paginarBlocos(secao, titulo, tituloItalico, blocos, maxPorPagina, icones){
+  // "extraHtml" (opcional) é inserido ao final do corpo — usado pelas Artes do
+  // Dossiê (galeria de imagens complementares) sem duplicar esta função.
+  function dm_paginarBlocos(secao, titulo, tituloItalico, blocos, maxPorPagina, icones, extraHtml){
     const corpo = blocos.map(function(b, idx){
       const iconeKey = (icones && icones[idx]) || 'cabide';
       return dm_itemIcone(iconeKey, b.titulo, b.valor);
@@ -21096,9 +21461,23 @@
     return [dm_pagina(
       '<div class="dm-titulo-editorial">' + escapeHtml(titulo) + ' <em>' + escapeHtml(tituloItalico) + '</em></div>' +
       '<div class="dm-linha-curta"></div>' +
-      corpo,
+      corpo +
+      (extraHtml || ''),
       { secao: secao }
     )];
+  }
+
+  // Galeria de "Artes do Dossiê" — imagens complementares enviadas pela consultora
+  // (0 a 3 por categoria). SEMPRE em coluna única (uma abaixo da outra): essas artes
+  // podem conter textos e detalhes pequenos, então a prioridade é legibilidade, nunca
+  // miniaturas lado a lado. width:100%/height:auto preserva a proporção original —
+  // nunca distorce, nunca corta. Retorna '' se a lista estiver vazia (nenhum espaço
+  // reservado, nenhum placeholder).
+  function dm_renderGaleriaArtes(lista){
+    if(!Array.isArray(lista) || !lista.length) return '';
+    return '<div class="dm-galeria-artes">' + lista.slice(0, 3).map(function(item){
+      return '<div class="dm-galeria-artes-item"><img src="' + escapeHtml(item && item.url) + '" alt=""></div>';
+    }).join('') + '</div>';
   }
 
   // ---- Capítulos: cada função retorna um array de páginas (HTML), ou null se o
@@ -21341,8 +21720,11 @@
       { titulo: 'Terceira Peça', valor: dados.editorial.terceiraPeca },
       { titulo: 'Estampas', valor: dados.editorial.estampas }
     ]);
-    if(!blocos.length) return null;
-    return dm_paginarBlocos('Consultoria de Imagem', 'Seu', 'Vestuário', blocos, 4, ['cabide', 'tesoura', 'cabide', 'cabide', 'cabide', 'cabide', 'estrela']);
+    // Artes do Dossiê — "Modelagens Recomendadas" ilustra esta seção; aparece
+    // mesmo se nenhum campo de texto acima estiver preenchido.
+    const galeriaModelagens = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.modelagens);
+    if(!blocos.length && !galeriaModelagens) return null;
+    return dm_paginarBlocos('Consultoria de Imagem', 'Seu', 'Vestuário', blocos, 4, ['cabide', 'tesoura', 'cabide', 'cabide', 'cabide', 'cabide', 'estrela'], galeriaModelagens);
   }
 
   function dm_buildAcessorios(dados){
@@ -21357,8 +21739,11 @@
       { titulo: 'Relógios', valor: dados.editorial.acessoriosRelogios },
       { titulo: 'Outras Observações', valor: dados.editorial.acessoriosOutros }
     ]);
-    if(!blocos.length) return null;
-    return dm_paginarBlocos('Consultoria de Imagem', 'Seus', 'Acessórios', blocos, 4, ['estrela', 'bolsa', 'cabide', 'cabide', 'estrela', 'estrela', 'estrela', 'estrela']);
+    // Artes do Dossiê — "Acessórios" ilustra esta seção; aparece mesmo se nenhum
+    // campo de texto acima estiver preenchido.
+    const galeriaAcessorios = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.acessorios);
+    if(!blocos.length && !galeriaAcessorios) return null;
+    return dm_paginarBlocos('Consultoria de Imagem', 'Seus', 'Acessórios', blocos, 4, ['estrela', 'bolsa', 'cabide', 'cabide', 'estrela', 'estrela', 'estrela', 'estrela'], galeriaAcessorios);
   }
 
   // MODELO — página integrada de Coloração Pessoal (nome da estação + foto + tabela + resumo da paleta).
@@ -21377,7 +21762,15 @@
     const base = cartelaInfo.base;
     const descricao = (base && base.descricao && base.descricao.trim()) ? base.descricao : '';
 
-    if(!caracteristicas.length && !descricao) return null;
+    // Artes do Dossiê — "Posicionamento Cromático" (arte externa com círculo
+    // cromático + foto + "você está aqui" + cartela/temperatura/profundidade/
+    // intensidade/contraste). Categoria de imagem única (máx. 1). Entra logo
+    // após o resumo/estação e antes da apresentação detalhada da cartela/paleta
+    // (que continua em capítulos próprios: Como Usar Sua Cartela, Paleta,
+    // Combinações...) — sem criar uma seção isolada nova.
+    const galeriaPosicionamento = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.posicionamentoCromatico);
+
+    if(!caracteristicas.length && !descricao && !galeriaPosicionamento) return null;
 
     const fotoUrl = dm_resolverFotoPrincipal(dados);
     const temFoto = !!fotoUrl;
@@ -21418,6 +21811,7 @@
         '<div>' + colunaFoto + '</div>' +
         '<div>' + resumoPaletaHtml + '</div>' +
       '</div>' +
+      galeriaPosicionamento +
       dm_rodapeFaixa('Como usar suas cores', 'As cores da sua cartela podem ser usadas próximas ao rosto ou em peças principais para transmitir harmonia.'),
       { numero: true, secao: 'Coloração Pessoal' }
     )];
@@ -21845,7 +22239,11 @@
     const direcionamento = dados.crom.direcionamentoMaquiagem;
     const temDirecionamento = !!(direcionamento && direcionamento.trim());
 
-    if(!subsecoes.length && !temDirecionamento) return null;
+    // Artes do Dossiê — "Maquiagem" ilustra esta seção; aparece mesmo se não
+    // houver dados cromáticos de maquiagem preenchidos para esta cartela.
+    const galeriaMaquiagem = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.maquiagem);
+
+    if(!subsecoes.length && !temDirecionamento && !galeriaMaquiagem) return null;
 
     let html = '<div class="dm-eyebrow">Beleza</div><div class="dm-titulo-editorial">Maquiagem</div><div class="dm-linha-curta"></div>';
     subsecoes.forEach(function(s){
@@ -21854,6 +22252,7 @@
     if(temDirecionamento){
       html += dm_itemIcone('batom', 'Direcionamento Profissional', direcionamento);
     }
+    html += galeriaMaquiagem;
     html += dm_rodapeFaixa('Beleza que combina com você', 'Tons pensados para harmonizar com sua coloração pessoal e sua rotina.');
 
     return [dm_pagina(html, { numero: true, secao: 'Beleza' })];
@@ -21877,7 +22276,11 @@
     const direcionamento = dados.crom.direcionamentoCabelo;
     const temDirecionamento = !!(direcionamento && direcionamento.trim());
 
-    if(!tonalidades.length && !temObservacoesBase && !temDirecionamento) return null;
+    // Artes do Dossiê — "Cabelo" ilustra esta seção; aparece mesmo se não houver
+    // dados cromáticos de cabelo preenchidos para esta cartela.
+    const galeriaCabelo = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.cabelo);
+
+    if(!tonalidades.length && !temObservacoesBase && !temDirecionamento && !galeriaCabelo) return null;
 
     let html = '<div class="dm-eyebrow">Beleza</div><div class="dm-titulo-editorial">Cabelo</div><div class="dm-linha-curta"></div>';
     if(tonalidades.length){
@@ -21889,6 +22292,7 @@
     if(temDirecionamento){
       html += dm_itemIcone('tesoura', 'Direcionamento Profissional', direcionamento);
     }
+    html += galeriaCabelo;
     html += dm_rodapeFaixa('Coloração capilar', 'Tonalidades pensadas para valorizar seu subtom de pele e olhos.');
 
     return [dm_pagina(html, { numero: true, secao: 'Beleza' })];
@@ -21912,13 +22316,16 @@
       { titulo: 'Bolsas', valor: dados.editorial.armarioBolsas },
       { titulo: 'Acessórios', valor: dados.editorial.armarioAcessorios }
     ]);
+    // Artes do Dossiê — "Armário / Peças-Chave" ilustra esta seção; garante que
+    // "Peças-Chave" apareça mesmo sem nenhum campo de texto preenchido.
+    const galeriaArmario = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.armario);
 
-    if(categoriasArmario.length || (dados.editorial.armarioEstrategico && dados.editorial.armarioEstrategico.trim())){
+    if(categoriasArmario.length || (dados.editorial.armarioEstrategico && dados.editorial.armarioEstrategico.trim()) || galeriaArmario){
       temConteudo = true;
       html += '<div class="dm-box-destaque-label" style="margin-bottom:10px;">Peças-Chave</div>';
       if(categoriasArmario.length){
         html += dm_renderBlocosGrid(categoriasArmario);
-      } else {
+      } else if(dados.editorial.armarioEstrategico && dados.editorial.armarioEstrategico.trim()){
         html += '<div class="dm-texto" style="margin-bottom:16px;">' + escapeHtml(dados.editorial.armarioEstrategico) + '</div>';
       }
 
@@ -21937,21 +22344,29 @@
           }
         }
       }
+      html += galeriaArmario;
       html += '<div class="dm-linha-curta"></div>';
     }
 
     // ---- Looks Propostos: numerados quando houver múltiplas linhas ----
-    if(dados.editorial.looksPropostos && dados.editorial.looksPropostos.trim()){
+    // Artes do Dossiê — "Looks / Coordenações" ilustra esta seção; garante que
+    // "Looks Propostos" apareça mesmo sem o campo de texto preenchido.
+    const galeriaLooks = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.looks);
+    const temTextoLooks = !!(dados.editorial.looksPropostos && dados.editorial.looksPropostos.trim());
+    if(temTextoLooks || galeriaLooks){
       temConteudo = true;
-      const linhas = dados.editorial.looksPropostos.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
       html += '<div class="dm-box-destaque-label" style="margin-bottom:10px;">Looks Propostos</div>';
-      if(linhas.length > 1){
-        html += linhas.map(function(l, i){
-          return dm_itemIcone('cabide', 'Look ' + String(i + 1).padStart(2, '0'), l);
-        }).join('');
-      } else {
-        html += '<div class="dm-texto" style="margin-bottom:10px;">' + escapeHtml(dados.editorial.looksPropostos) + '</div>';
+      if(temTextoLooks){
+        const linhas = dados.editorial.looksPropostos.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l; });
+        if(linhas.length > 1){
+          html += linhas.map(function(l, i){
+            return dm_itemIcone('cabide', 'Look ' + String(i + 1).padStart(2, '0'), l);
+          }).join('');
+        } else {
+          html += '<div class="dm-texto" style="margin-bottom:10px;">' + escapeHtml(dados.editorial.looksPropostos) + '</div>';
+        }
       }
+      html += galeriaLooks;
     }
 
     // ---- Plano de Compras: 3 grupos quando preenchidos; senão, texto geral ----
