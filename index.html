@@ -467,6 +467,11 @@
     border-top:var(--hairline);
   }
 
+  .editor-artes-item-mover{
+    display:flex;
+    border-top:var(--hairline);
+  }
+
   .editor-artes-mini-btn{
     flex:1;
     background:none;
@@ -3858,13 +3863,22 @@
               <div class="login-error" data-artes-msg="maquiagem"></div>
             </div>
 
-            <div class="editor-artes-categoria" data-artes-categoria="posicionamentoCromatico" style="margin-bottom:0;">
+            <div class="editor-artes-categoria" data-artes-categoria="posicionamentoCromatico">
               <div class="editor-artes-categoria-titulo">Posicionamento Cromático</div>
               <div class="editor-artes-grid" data-artes-grid="posicionamentoCromatico"></div>
               <div class="editor-artes-status" data-artes-status="posicionamentoCromatico">Nenhuma imagem</div>
               <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="posicionamentoCromatico" style="margin-bottom:0;">+ Adicionar imagem</button>
               <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="posicionamentoCromatico" style="display:none;">
               <div class="login-error" data-artes-msg="posicionamentoCromatico"></div>
+            </div>
+
+            <div class="editor-artes-categoria" data-artes-categoria="paletaOficial" style="margin-bottom:0;">
+              <div class="editor-artes-categoria-titulo">Paleta Oficial de 100 Cores</div>
+              <div class="editor-artes-grid" data-artes-grid="paletaOficial"></div>
+              <div class="editor-artes-status" data-artes-status="paletaOficial">Nenhuma imagem</div>
+              <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="paletaOficial" style="margin-bottom:0;">+ Adicionar imagem</button>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="paletaOficial" style="display:none;">
+              <div class="login-error" data-artes-msg="paletaOficial"></div>
             </div>
           </div>
         </div>
@@ -21048,16 +21062,16 @@
   // Upload segue exatamente o mesmo mecanismo já usado para fotos (uploadBytes +
   // getDownloadURL), apenas em clientes/{uid}/artesDossie/{categoria}/ em vez de
   // clientes/{uid}/fotos/ — reaproveita a infraestrutura, não cria uma nova.
-  const ARTES_DOSSIE_CATEGORIAS = ['armario', 'looks', 'modelagens', 'acessorios', 'cabelo', 'maquiagem', 'posicionamentoCromatico'];
+  const ARTES_DOSSIE_CATEGORIAS = ['armario', 'looks', 'modelagens', 'acessorios', 'cabelo', 'maquiagem', 'posicionamentoCromatico', 'paletaOficial'];
   const ARTES_DOSSIE_MAX = 3;
   // "posicionamentoCromatico" é a única categoria de imagem ÚNICA (máx. 1) — as
   // 6 categorias originais continuam usando ARTES_DOSSIE_MAX (3) normalmente,
   // sem nenhuma mudança de comportamento para elas.
-  const ARTES_DOSSIE_MAX_POR_CATEGORIA = { posicionamentoCromatico: 1 };
+  const ARTES_DOSSIE_MAX_POR_CATEGORIA = { posicionamentoCromatico: 1, paletaOficial: 1 };
   function editorArtesMaxDaCategoria(cat){
     return ARTES_DOSSIE_MAX_POR_CATEGORIA[cat] || ARTES_DOSSIE_MAX;
   }
-  let editorArtesData = { armario: [], looks: [], modelagens: [], acessorios: [], cabelo: [], maquiagem: [], posicionamentoCromatico: [] };
+  let editorArtesData = { armario: [], looks: [], modelagens: [], acessorios: [], cabelo: [], maquiagem: [], posicionamentoCromatico: [], paletaOficial: [] };
 
   // Clientes antigos sem "artesDossie" (ou com alguma categoria ausente/malformada)
   // são tratados como arrays vazios — nunca um erro, nunca migração manual.
@@ -21080,9 +21094,18 @@
       // Categorias de imagem única (max===1, ex.: Posicionamento Cromático) não
       // mostram o contador "X de 3" — só as 6 categorias originais mostram.
       const contadorHtml = max > 1 ? '<div class="editor-artes-item-count">' + (idx + 1) + ' de ' + max + '</div>' : '';
+      // Setas de reordenação — só fazem sentido com 2+ imagens na categoria. A
+      // ordem aqui é a MESMA ordem em que as imagens entram no Dossiê Mestre.
+      const moverHtml = (lista.length > 1)
+        ? '<div class="editor-artes-item-mover">' +
+            '<button type="button" class="editor-artes-mini-btn" data-artes-mover="' + cat + ':' + idx + ':-1"' + (idx === 0 ? ' disabled' : '') + '>◀ Mover</button>' +
+            '<button type="button" class="editor-artes-mini-btn" data-artes-mover="' + cat + ':' + idx + ':1"' + (idx === lista.length - 1 ? ' disabled' : '') + '>Mover ▶</button>' +
+          '</div>'
+        : '';
       return '<div class="editor-artes-item">' +
         '<img src="' + escapeHtml(item.url) + '" alt="">' +
         contadorHtml +
+        moverHtml +
         '<div class="editor-artes-item-actions">' +
           '<button type="button" class="editor-artes-mini-btn" data-artes-replace="' + cat + ':' + idx + '">Substituir</button>' +
           '<button type="button" class="editor-artes-mini-btn" data-artes-remove="' + cat + ':' + idx + '">Remover</button>' +
@@ -21091,6 +21114,26 @@
     }).join('');
     if(addBtn) addBtn.disabled = lista.length >= max;
     if(statusEl) statusEl.textContent = lista.length ? 'Imagem adicionada.' : 'Nenhuma imagem';
+  }
+
+  // Troca a posição de uma imagem com sua vizinha (direcao: -1 = esquerda/antes,
+  // 1 = direita/depois) — a ordem salva aqui é a MESMA usada para montar a
+  // galeria no Dossiê Mestre (dm_renderGaleriaArtes lê o array na ordem em que
+  // está salvo, sem reordenar nada por conta própria).
+  async function editorArtesMover(cat, idx, direcao){
+    const lista = editorArtesData[cat];
+    if(!lista) return;
+    const novoIdx = idx + direcao;
+    if(novoIdx < 0 || novoIdx >= lista.length) return;
+    const tmp = lista[idx];
+    lista[idx] = lista[novoIdx];
+    lista[novoIdx] = tmp;
+    editorArtesRenderCategoria(cat);
+    try{
+      await editorArtesPersistir();
+    } catch(err){
+      console.error('GD: erro ao reordenar arte do dossiê', err);
+    }
   }
 
   function editorArtesRenderTudo(){
@@ -21152,6 +21195,12 @@
     if(removeBtn){
       const partes = removeBtn.getAttribute('data-artes-remove').split(':');
       editorArtesRemover(partes[0], parseInt(partes[1], 10));
+      return;
+    }
+    const moverBtn = e.target.closest('[data-artes-mover]');
+    if(moverBtn){
+      const partes = moverBtn.getAttribute('data-artes-mover').split(':');
+      editorArtesMover(partes[0], parseInt(partes[1], 10), parseInt(partes[2], 10));
       return;
     }
   });
@@ -21916,6 +21965,20 @@
   }
 
   // MODELO — página integrada de Coloração Pessoal (nome da estação + foto + tabela + resumo da paleta).
+  // Artes do Dossiê — "Paleta Oficial de 100 Cores": arte externa mostrando a
+  // cartela física/oficial completa. Categoria de imagem única (máx. 1), igual
+  // ao Posicionamento Cromático. Entra no fluxo logo depois de "Sua Paleta"
+  // (CSS) e antes de "Combinações que Funcionam" — nunca cria seção isolada se
+  // não houver imagem enviada.
+  function dm_buildPaletaOficialArte(dados){
+    const galeria = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.paletaOficial);
+    if(!galeria) return null;
+    return [dm_pagina(
+      '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Paleta <em>Oficial</em></div><div class="dm-linha-curta"></div>' + galeria,
+      { secao: 'Coloração Pessoal' }
+    )];
+  }
+
   function dm_buildColoracaoPessoal(dados){
     if(!dados.servicos.coloracaoPessoal) return null;
     const cartelaInfo = dm_resolverCartela(dados);
@@ -22506,9 +22569,13 @@
           const neutrosApoio = baseApoio.cores.filter(function(c){ return c.familia === 'neutros'; }).slice(0, 6);
           const destaquesApoio = baseApoio.cores.filter(function(c){ return c.destaque === true; }).slice(0, 6);
           if(neutrosApoio.length || destaquesApoio.length){
+            // Fase 6C.24 — cada bolinha de apoio da cartela (Peças-Chave) agora mostra
+            // o NOME da cor embaixo, no mesmo padrão já usado em Sua Paleta/Combinações
+            // (.dm-cor-item + .dm-cor-circulo + .dm-cor-nome). Nas 12 cartelas: o nome
+            // vem sempre de CARTELAS_BASE, nunca inventado.
             html += '<div class="dm-cor-linha" style="margin-top:6px;">';
-            if(neutrosApoio.length) html += neutrosApoio.map(function(c){ return '<div class="dm-cor-circulo" style="width:26px; height:26px; background:' + escapeHtml(c.hex || '#eee') + ';"></div>'; }).join('');
-            if(destaquesApoio.length) html += destaquesApoio.map(function(c){ return '<div class="dm-cor-circulo" style="width:26px; height:26px; background:' + escapeHtml(c.hex || '#eee') + ';"></div>'; }).join('');
+            if(neutrosApoio.length) html += neutrosApoio.map(function(c){ return '<div class="dm-cor-item" style="width:32px;"><div class="dm-cor-circulo" style="width:26px; height:26px; background:' + escapeHtml(c.hex || '#eee') + ';"></div><div class="dm-cor-nome">' + escapeHtml(c.nome || '') + '</div></div>'; }).join('');
+            if(destaquesApoio.length) html += destaquesApoio.map(function(c){ return '<div class="dm-cor-item" style="width:32px;"><div class="dm-cor-circulo" style="width:26px; height:26px; background:' + escapeHtml(c.hex || '#eee') + ';"></div><div class="dm-cor-nome">' + escapeHtml(c.nome || '') + '</div></div>'; }).join('');
             html += '</div>';
           }
         }
@@ -22731,7 +22798,7 @@
 
       pushFluxo(dm_buildAbertura(dados));
       grupoCapitulo([dm_buildPerfilImagem, dm_buildEstrategia, dm_buildAnaliseCorporal, dm_buildVestuario, dm_buildAcessorios]);
-      grupoCapitulo([dm_buildColoracaoPessoal, dm_buildComoUsarCartela, dm_buildPaleta, dm_buildCombinacoesCromaticas, dm_buildArmarioCapsuloCromatico, dm_buildMetais]);
+      grupoCapitulo([dm_buildColoracaoPessoal, dm_buildComoUsarCartela, dm_buildPaleta, dm_buildPaletaOficialArte, dm_buildCombinacoesCromaticas, dm_buildArmarioCapsuloCromatico, dm_buildMetais]);
       grupoCapitulo([dm_buildMaquiagem, dm_buildCabelo]);
       grupoCapitulo([dm_buildAplicacaoPratica]);
       grupoCapitulo([dm_buildChecklistProvador, dm_buildGuiaRapido]);
