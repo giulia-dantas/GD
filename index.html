@@ -22178,6 +22178,7 @@
     // próprio capítulo "Sua Paleta", logo depois das 100 cores e ANTES do rodapé
     // de transição para Combinações — nunca depois dele (senão apareceria como um
     // capítulo à parte, já depois do teaser "Combinações que Funcionam").
+    const arteEstacaoPaleta = dm_renderArteEstacaoOnline('paleta', cartelaId, 'Paleta Oficial — ' + (base.nome || ''));
     const galeriaPaletaOficial = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.paletaOficial);
     const rodapeHtml = '<div class="dossie-mestre-nota">Sua cartela digital completa, com 100 cores, está disponível no aplicativo.</div>' +
       dm_rodapeFaixa('Combinações que funcionam para você', rodapeTexto, '<div class="dm-rodape-faixa-qr" style="opacity:' + (temCombinacoesReais ? '1' : '0.35') + ';">' + dm_icone('paleta') + '</div>');
@@ -22188,6 +22189,7 @@
     return [dm_pagina(
       '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Sua <em>Paleta</em></div><div class="dm-linha-curta"></div>' +
       itensPaginaveis.join('') +
+      arteEstacaoPaleta +
       galeriaPaletaOficial +
       rodapeHtml,
       { secao: secaoRotulo }
@@ -22291,11 +22293,9 @@
 
     const aplicacao = APLICACAO_CROMATICA_BASE[cartelaId];
     const combinacoesDef = aplicacao && aplicacao.combinacoes;
-    if(!combinacoesDef) return null;
 
     const ORDEM_DESEJOS = ['Atemporal', 'Contemporâneo', 'Acessível', 'Artsy', 'Minimalista'];
-    const todas = [].concat(combinacoesDef.duasCores || [], combinacoesDef.tresCores || [], combinacoesDef.proporcionais || []);
-    if(!todas.length) return null;
+    const todas = combinacoesDef ? [].concat(combinacoesDef.duasCores || [], combinacoesDef.tresCores || [], combinacoesDef.proporcionais || []) : [];
 
     // Agrupa mantendo a ordem editorial fixa dos cinco desejos — nunca a ordem de
     // inserção crua dos dados, para dar ritmo consistente entre cartelas diferentes.
@@ -22306,7 +22306,15 @@
       return '<div class="dm-desejo-secao"><div class="dm-desejo-titulo">' + escapeHtml(dm_rotuloDesejo(desejo)) + '</div>' + htmlCombos.join('') + '</div>';
     }).filter(Boolean);
 
-    if(!secoesDesejo.length) return null;
+    // Fase 6C.28 — imagem automática por estação (pasta combinacoes/). Diferente de
+    // Paleta/Maquiagem/Cabelo/Looks, este card NUNCA teve uma galeria manual nem
+    // conteúdo próprio enquanto APLICACAO_CROMATICA_BASE[cartelaId].combinacoes
+    // estivesse vazio (era sempre null). Por isso, aqui a imagem sozinha passa a
+    // sustentar o card quando não houver combinações estruturadas cadastradas —
+    // ainda assim nunca inventa combinação nenhuma, só exibe a arte publicada.
+    const arteEstacaoCombinacoes = dm_renderArteEstacaoOnline('combinacoes', cartelaId, 'Combinações que Funcionam — ' + (cartelaInfo.nome || ''));
+
+    if(!secoesDesejo.length && !arteEstacaoCombinacoes) return null;
 
     const secaoRotulo = 'Coloração Pessoal';
     const rodapeHtml = dm_rodapeFaixa('Sua cartela completa', 'Explore todas as 100 cores da sua cartela digital no aplicativo Giulia Dantas.');
@@ -22316,6 +22324,7 @@
     // sem paginação, sem "continuação", sem medição de altura de folha.
     return [dm_pagina(
       '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Combinações <em>que Funcionam</em></div><div class="dm-intro-texto">Proporções e combinações pensadas especialmente para a sua cartela.</div><div class="dm-linha-curta"></div>' +
+      arteEstacaoCombinacoes +
       secoesDesejo.join('') +
       rodapeHtml,
       { secao: secaoRotulo }
@@ -22395,6 +22404,23 @@
   // (não por metal individual) — mesmo slug já usado em toda a cartela
   // (outono_escuro.jpg, verao_claro.jpg, etc.).
   const DM_METAIS_IMG_BASE = 'https://giulia-dantas.github.io/GD/';
+
+  // Fase 6C.28 — mesmo padrão do Metais (Fase 6C.27), estendido para 5 novas pastas
+  // de arte por estação, hospedadas no GitHub Pages, na raiz do mesmo repositório:
+  // paleta/, maquiagem/, cabelo/, combinacoes/, looks/ (Metais continua na raiz, sem
+  // subpasta, como referência de padrão — não foi tocado).
+  // IMPORTANTE: isto é ADITIVO. Não substitui nem remove o sistema de "Artes do
+  // Dossiê" (upload manual por cliente, editorial.artesDossie.*) — a imagem
+  // automática por estação aparece ANTES da galeria manual daquela cliente, quando
+  // ela existir; se a arte daquela estação ainda não foi publicada no GitHub, o
+  // onerror apenas oculta a tag <img> (display:none) — nunca aparece ícone de
+  // imagem quebrada, e o resto do card (dados estruturados + galeria manual)
+  // continua funcionando normalmente.
+  function dm_renderArteEstacaoOnline(pasta, cartelaId, altLabel){
+    if(!cartelaId) return '';
+    const url = DM_METAIS_IMG_BASE + pasta + '/' + cartelaId + '.jpg';
+    return '<img src="' + escapeHtml(url) + '" alt="' + escapeHtml(altLabel || '') + '" style="width:100%; height:auto; display:block; margin-bottom:14px; border-radius:4px;" onerror="this.style.display=\'none\';">';
+  }
 
   function dm_buildMetais(dados){
     if(!dados.servicos.coloracaoPessoal) return null;
@@ -22483,6 +22509,7 @@
     // Artes do Dossiê — "Maquiagem" ilustra esta seção; aparece mesmo se não
     // houver dados cromáticos de maquiagem preenchidos para esta cartela.
     const galeriaMaquiagem = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.maquiagem);
+    const arteEstacaoMaquiagem = dm_renderArteEstacaoOnline('maquiagem', cartelaId, 'Maquiagem — ' + (cartelaInfo && cartelaInfo.nome || ''));
 
     if(!subsecoes.length && !temDirecionamento && !galeriaMaquiagem) return null;
 
@@ -22493,6 +22520,7 @@
     if(temDirecionamento){
       html += dm_itemIcone('batom', 'Direcionamento Profissional', direcionamento);
     }
+    html += arteEstacaoMaquiagem;
     html += galeriaMaquiagem;
     html += dm_rodapeFaixa('Beleza que combina com você', 'Tons pensados para harmonizar com sua coloração pessoal e sua rotina.');
 
@@ -22520,6 +22548,7 @@
     // Artes do Dossiê — "Cabelo" ilustra esta seção; aparece mesmo se não houver
     // dados cromáticos de cabelo preenchidos para esta cartela.
     const galeriaCabelo = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.cabelo);
+    const arteEstacaoCabelo = dm_renderArteEstacaoOnline('cabelo', cartelaId, 'Cabelo — ' + (cartelaInfo && cartelaInfo.nome || ''));
 
     if(!tonalidades.length && !temObservacoesBase && !temDirecionamento && !galeriaCabelo) return null;
 
@@ -22533,6 +22562,7 @@
     if(temDirecionamento){
       html += dm_itemIcone('tesoura', 'Direcionamento Profissional', direcionamento);
     }
+    html += arteEstacaoCabelo;
     html += galeriaCabelo;
     html += dm_rodapeFaixa('Coloração capilar', 'Tonalidades pensadas para valorizar seu subtom de pele e olhos.');
 
@@ -22597,8 +22627,14 @@
     // Artes do Dossiê — "Looks / Coordenações" ilustra esta seção; garante que
     // "Looks Propostos" apareça mesmo sem o campo de texto preenchido.
     const galeriaLooks = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.looks);
+    // Imagem automática por estação (pasta looks/) — só faz sentido quando a
+    // cliente tem Coloração Pessoal ativa, mesma condição já usada acima para o
+    // apoio visual da cartela em Peças-Chave. Se não houver cartela, retorna vazio.
+    const cartelaInfoLooks = dados.servicos.coloracaoPessoal ? dm_resolverCartela(dados) : null;
+    const cartelaIdLooks = cartelaInfoLooks && cartelaInfoLooks.base && cartelaInfoLooks.base.id;
+    const arteEstacaoLooks = dm_renderArteEstacaoOnline('looks', cartelaIdLooks, 'Looks — ' + (cartelaInfoLooks && cartelaInfoLooks.nome || ''));
     const temTextoLooks = !!(dados.editorial.looksPropostos && dados.editorial.looksPropostos.trim());
-    if(temTextoLooks || galeriaLooks){
+    if(temTextoLooks || galeriaLooks || arteEstacaoLooks){
       temConteudo = true;
       html += '<div class="dm-box-destaque-label" style="margin-bottom:10px;">Looks Propostos</div>';
       if(temTextoLooks){
@@ -22611,6 +22647,7 @@
           html += '<div class="dm-texto" style="margin-bottom:10px;">' + escapeHtml(dados.editorial.looksPropostos) + '</div>';
         }
       }
+      html += arteEstacaoLooks;
       html += galeriaLooks;
     }
 
