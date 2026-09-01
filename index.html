@@ -21965,20 +21965,6 @@
   }
 
   // MODELO — página integrada de Coloração Pessoal (nome da estação + foto + tabela + resumo da paleta).
-  // Artes do Dossiê — "Paleta Oficial de 100 Cores": arte externa mostrando a
-  // cartela física/oficial completa. Categoria de imagem única (máx. 1), igual
-  // ao Posicionamento Cromático. Entra no fluxo logo depois de "Sua Paleta"
-  // (CSS) e antes de "Combinações que Funcionam" — nunca cria seção isolada se
-  // não houver imagem enviada.
-  function dm_buildPaletaOficialArte(dados){
-    const galeria = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.paletaOficial);
-    if(!galeria) return null;
-    return [dm_pagina(
-      '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Paleta <em>Oficial</em></div><div class="dm-linha-curta"></div>' + galeria,
-      { secao: 'Coloração Pessoal' }
-    )];
-  }
-
   function dm_buildColoracaoPessoal(dados){
     if(!dados.servicos.coloracaoPessoal) return null;
     const cartelaInfo = dm_resolverCartela(dados);
@@ -22188,6 +22174,11 @@
       : 'Em breve: sugestões de combinação baseadas na sua cartela.';
 
     const secaoRotulo = 'Coloração Pessoal';
+    // Fase 6C.25 — a arte "Paleta Oficial" (Artes do Dossiê) entra AQUI, dentro do
+    // próprio capítulo "Sua Paleta", logo depois das 100 cores e ANTES do rodapé
+    // de transição para Combinações — nunca depois dele (senão apareceria como um
+    // capítulo à parte, já depois do teaser "Combinações que Funcionam").
+    const galeriaPaletaOficial = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.paletaOficial);
     const rodapeHtml = '<div class="dossie-mestre-nota">Sua cartela digital completa, com 100 cores, está disponível no aplicativo.</div>' +
       dm_rodapeFaixa('Combinações que funcionam para você', rodapeTexto, '<div class="dm-rodape-faixa-qr" style="opacity:' + (temCombinacoesReais ? '1' : '0.35') + ';">' + dm_icone('paleta') + '</div>');
 
@@ -22197,6 +22188,7 @@
     return [dm_pagina(
       '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Sua <em>Paleta</em></div><div class="dm-linha-curta"></div>' +
       itensPaginaveis.join('') +
+      galeriaPaletaOficial +
       rodapeHtml,
       { secao: secaoRotulo }
     )];
@@ -22397,20 +22389,36 @@
   // dois. Por isso o texto livre é apresentado como observação individual à parte,
   // claramente separada dos metais da cartela — nunca como se ordenasse ou
   // classificasse os metais mostrados acima. Nenhuma dedução foi feita.
+  // Base do GitHub Pages onde a arte de metais de cada estação fica hospedada —
+  // arquivo estático, igual ao monograma GD, nunca passa por upload no Firebase
+  // Storage. Uma arte POR CARTELA (não por metal individual) — mesmo slug já
+  // usado em toda a cartela (outono_escuro, verao_claro, etc.).
+  const DM_METAIS_IMG_BASE = 'https://giulia-dantas.github.io/GD/metais/';
+
   function dm_buildMetais(dados){
     if(!dados.servicos.coloracaoPessoal) return null;
     const cartelaInfo = dm_resolverCartela(dados);
     const base = cartelaInfo && cartelaInfo.base;
     if(!base || !Array.isArray(base.metais) || !base.metais.length) return null;
 
-    let html = '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Metais <em>Recomendados</em></div><div class="dm-linha-curta"></div>';
-    html += '<div class="dm-intro-texto">Estas são as famílias metálicas harmônicas à sua cartela.</div>';
-    html += '<div class="dossie-mestre-metal-linha">' + base.metais.map(function(m){
+    const urlArte = DM_METAIS_IMG_BASE + (base.id || '') + '.jpg';
+
+    // Fase 6C.27 — a arte externa (uma por estação, já com título, os metais
+    // recomendados, fotos e descrições prontos) substitui os círculos em
+    // degradê. Se a arte daquela estação ainda não tiver sido publicada no
+    // GitHub, o onerror troca automaticamente para os círculos (comportamento
+    // anterior) — nunca quebra o dossiê nem aparece um ícone de imagem quebrada.
+    const fallbackHtml = '<div class="dossie-mestre-metal-linha" style="display:none;">' + base.metais.map(function(m){
+      const corFallback = escapeHtml(m.hex || '#ccc');
       return '<div class="dossie-mestre-metal-item">' +
-        '<div class="dossie-mestre-metal-circulo" style="background:linear-gradient(135deg, ' + escapeHtml(m.hex || '#ccc') + ' 0%, #fff 45%, ' + escapeHtml(m.hex || '#ccc') + ' 100%);"></div>' +
+        '<div class="dossie-mestre-metal-circulo" style="background:linear-gradient(135deg, ' + corFallback + ' 0%, #fff 45%, ' + corFallback + ' 100%);"></div>' +
         '<div class="dossie-mestre-metal-nome">' + escapeHtml(m.nome || '') + '</div>' +
       '</div>';
     }).join('') + '</div>';
+
+    let html = '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Metais <em>Recomendados</em></div><div class="dm-linha-curta"></div>';
+    html += '<img src="' + escapeHtml(urlArte) + '" alt="Metais recomendados — ' + escapeHtml(base.nome || '') + '" style="width:100%; height:auto; display:block; margin-bottom:14px; border-radius:4px;" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">';
+    html += fallbackHtml;
 
     if(dados.crom.metaisRecomendados && dados.crom.metaisRecomendados.trim()){
       html += '<div class="dm-divisor-suave"></div>';
@@ -22798,7 +22806,7 @@
 
       pushFluxo(dm_buildAbertura(dados));
       grupoCapitulo([dm_buildPerfilImagem, dm_buildEstrategia, dm_buildAnaliseCorporal, dm_buildVestuario, dm_buildAcessorios]);
-      grupoCapitulo([dm_buildColoracaoPessoal, dm_buildComoUsarCartela, dm_buildPaleta, dm_buildPaletaOficialArte, dm_buildCombinacoesCromaticas, dm_buildArmarioCapsuloCromatico, dm_buildMetais]);
+      grupoCapitulo([dm_buildColoracaoPessoal, dm_buildComoUsarCartela, dm_buildPaleta, dm_buildCombinacoesCromaticas, dm_buildArmarioCapsuloCromatico, dm_buildMetais]);
       grupoCapitulo([dm_buildMaquiagem, dm_buildCabelo]);
       grupoCapitulo([dm_buildAplicacaoPratica]);
       grupoCapitulo([dm_buildChecklistProvador, dm_buildGuiaRapido]);
