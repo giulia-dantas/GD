@@ -22390,10 +22390,11 @@
   // claramente separada dos metais da cartela — nunca como se ordenasse ou
   // classificasse os metais mostrados acima. Nenhuma dedução foi feita.
   // Base do GitHub Pages onde a arte de metais de cada estação fica hospedada —
-  // arquivo estático, igual ao monograma GD, nunca passa por upload no Firebase
-  // Storage. Uma arte POR CARTELA (não por metal individual) — mesmo slug já
-  // usado em toda a cartela (outono_escuro, verao_claro, etc.).
-  const DM_METAIS_IMG_BASE = 'https://giulia-dantas.github.io/GD/metais/';
+  // arquivo estático na RAIZ do repositório (mesmo lugar do monograma GD, sem
+  // subpasta), nunca passa por upload no Firebase Storage. Uma arte POR CARTELA
+  // (não por metal individual) — mesmo slug já usado em toda a cartela
+  // (outono_escuro.jpg, verao_claro.jpg, etc.).
+  const DM_METAIS_IMG_BASE = 'https://giulia-dantas.github.io/GD/';
 
   function dm_buildMetais(dados){
     if(!dados.servicos.coloracaoPessoal) return null;
