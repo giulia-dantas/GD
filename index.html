@@ -20438,42 +20438,53 @@
 
   document.addEventListener('click', async function(e){
     const btn = e.target.closest('#aco-entry-btn');
-    if(!btn || !selectedClienteUid) return;
-
-    acoUid = selectedClienteUid;
-    acoClienteNome = selectedClienteNome;
-    acoDados = await acoCarregarDados(acoUid);
-
-    const fotos = await acoCarregarFotosCromaticas(acoUid);
-    acoUi = acoUiPadrao();
-    acoUi.fotosCandidatas = fotos.candidatas;
-
-    if(!acoDados.fotoUrl && fotos.sugerida){
-      const entry = fotos.candidatas.filter(function(c){ return c.slotId === fotos.sugerida; })[0];
-      if(entry){ acoDados.fotoSlotId = entry.slotId; acoDados.fotoUrl = entry.url; }
+    if(!btn) return;
+    if(!selectedClienteUid){
+      alert('Nenhuma cliente selecionada. Volte para "Minhas Clientes" e abra a ficha novamente antes de tocar neste botão.');
+      return;
     }
 
-    // Retoma exatamente de onde parou: pula para a primeira etapa incompleta.
-    if(acoDados.fotoValidada){
-      if(!acoDados.contraste.classificacao){
-        acoUi.screen = 'contraste';
-      } else {
-        const bateriaIncompleta = ACO_BATERIA_ORDEM.filter(function(cat){
-          return acoDados[ACO_CHAVE_POR_CATEGORIA[cat]].respostas.some(function(r){ return r.escolha === null; });
-        })[0];
-        if(bateriaIncompleta){
-          acoUi.screen = 'bateria';
-          acoUi.bateria = bateriaIncompleta;
-          acoUi.indice = acoDados[ACO_CHAVE_POR_CATEGORIA[bateriaIncompleta]].respostas.filter(function(r){ return r.escolha !== null; }).length;
+    try{
+      acoUid = selectedClienteUid;
+      acoClienteNome = selectedClienteNome;
+      acoDados = await acoCarregarDados(acoUid);
+
+      const fotos = await acoCarregarFotosCromaticas(acoUid);
+      acoUi = acoUiPadrao();
+      acoUi.fotosCandidatas = fotos.candidatas;
+
+      if(!acoDados.fotoUrl && fotos.sugerida){
+        const entry = fotos.candidatas.filter(function(c){ return c.slotId === fotos.sugerida; })[0];
+        if(entry){ acoDados.fotoSlotId = entry.slotId; acoDados.fotoUrl = entry.url; }
+      }
+
+      // Retoma exatamente de onde parou: pula para a primeira etapa incompleta.
+      if(acoDados.fotoValidada){
+        if(!acoDados.contraste.classificacao){
+          acoUi.screen = 'contraste';
         } else {
-          acoUi.screen = 'resultados';
+          const bateriaIncompleta = ACO_BATERIA_ORDEM.filter(function(cat){
+            return acoDados[ACO_CHAVE_POR_CATEGORIA[cat]].respostas.some(function(r){ return r.escolha === null; });
+          })[0];
+          if(bateriaIncompleta){
+            acoUi.screen = 'bateria';
+            acoUi.bateria = bateriaIncompleta;
+            acoUi.indice = acoDados[ACO_CHAVE_POR_CATEGORIA[bateriaIncompleta]].respostas.filter(function(r){ return r.escolha !== null; }).length;
+          } else {
+            acoUi.screen = 'resultados';
+          }
         }
       }
-    }
 
-    document.getElementById('aco-cliente-nome').textContent = acoClienteNome || 'Cliente';
-    goTo('analise-cromatica-online');
-    acoRender();
+      const nomeEl = document.getElementById('aco-cliente-nome');
+      if(nomeEl) nomeEl.textContent = acoClienteNome || 'Cliente';
+
+      goTo('analise-cromatica-online');
+      acoRender();
+    } catch(err){
+      console.error('GD: erro ao abrir análise cromática online', err);
+      alert('Não foi possível abrir a Análise Cromática Online.\n\nDetalhe técnico: ' + (err && err.message ? err.message : String(err)));
+    }
   });
 
   // ---- Barra de progresso (Contraste / Temperatura / Profundidade / Intensidade / Resultado) ----
