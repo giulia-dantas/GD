@@ -2952,7 +2952,7 @@
 
 /* ===== Análise Cromática Online (ACO) — Fase 7.1 ===== */
 .aco-progress{ display:flex; gap:6px; margin-bottom:18px; flex-wrap:wrap; }
-.aco-progress-step{ flex:1 1 30%; min-width:0; text-align:center; font-size:9px; letter-spacing:0.01em; text-transform:uppercase; color:var(--graphite-soft); padding-bottom:8px; border-bottom:3px solid rgba(200,164,106,0.25); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.aco-progress-step{ flex:1 1 30%; min-width:0; text-align:center; font-size:9px; letter-spacing:0.01em; text-transform:uppercase; color:var(--graphite-soft); padding-bottom:8px; border-bottom:3px solid rgba(200,164,106,0.25); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; }
 .aco-progress-step.done{ color:var(--champagne); border-bottom-color:var(--champagne); }
 .aco-progress-step.current{ color:var(--graphite); border-bottom-color:var(--graphite); font-weight:700; }
 
@@ -20523,9 +20523,27 @@
     const idxAtual = ordemIds.indexOf(atual);
     el.innerHTML = etapas.map(function(et, i){
       const cls = i < idxAtual ? 'done' : (i === idxAtual ? 'current' : '');
-      return '<div class="aco-progress-step ' + cls + '">' + escapeHtml(et.label) + '</div>';
+      return '<div class="aco-progress-step ' + cls + '" data-aco-ir-etapa="' + et.id + '">' + escapeHtml(et.label) + '</div>';
     }).join('');
   }
+
+  // Ir direto para qualquer etapa (tocando na barra de progresso) — permite
+  // revisar/corrigir Foto, Contraste ou qualquer bateria antes de concluir,
+  // sem apagar nada do que já foi respondido nas demais etapas.
+  document.addEventListener('click', function(e){
+    const stepEl = e.target.closest('[data-aco-ir-etapa]');
+    if(!stepEl || !acoUid || !acoDados) return;
+    const etapaId = stepEl.getAttribute('data-aco-ir-etapa');
+    if(etapaId === 'foto' || etapaId === 'contraste' || etapaId === 'resultados'){
+      acoUi.screen = etapaId;
+    } else {
+      acoUi.screen = 'bateria';
+      acoUi.bateria = etapaId;
+      acoUi.indice = 0;
+      acoUi.ladoAtivo = 'A';
+    }
+    acoRender();
+  });
 
   function acoRender(){
     acoRenderProgresso();
@@ -21012,9 +21030,13 @@
           alert('Não foi possível concluir a análise agora. Verifique sua conexão com a internet e tente de novo — suas respostas continuam salvas até aqui, só a conclusão não foi registrada.');
           return;
         }
-        acoAtualizarStatusEntrada(acoUid).then(function(){
-          if(window.__gdGoTo) window.__gdGoTo('ficha-cliente', 'back');
-        });
+        // Atualização do status do card na Ficha é "melhor esforço": nunca deve
+        // travar a navegação de volta, mesmo se essa parte específica falhar.
+        acoAtualizarStatusEntrada(acoUid).catch(function(err){ console.error('GD: erro ao atualizar status de entrada', err); });
+        if(window.__gdGoTo) window.__gdGoTo('ficha-cliente', 'back');
+      }).catch(function(err){
+        console.error('GD: erro inesperado ao concluir análise cromática online', err);
+        alert('Ocorreu um erro inesperado ao concluir a análise.\n\nDetalhe técnico: ' + (err && err.message ? err.message : String(err)));
       });
     }
   });
