@@ -20479,7 +20479,7 @@
       const nomeEl = document.getElementById('aco-cliente-nome');
       if(nomeEl) nomeEl.textContent = acoClienteNome || 'Cliente';
 
-      goTo('analise-cromatica-online');
+      if(window.__gdGoTo) window.__gdGoTo('analise-cromatica-online');
       acoRender();
     } catch(err){
       console.error('GD: erro ao abrir análise cromática online', err);
@@ -20990,7 +20990,7 @@
       Object.assign(acoDados, patch);
       setDoc(acoDocRef(acoUid), Object.assign({}, acoDados, { updatedAt: new Date().toISOString() }), { merge: true })
         .then(function(){ return acoAtualizarStatusEntrada(acoUid); })
-        .then(function(){ goTo('ficha-cliente', 'back'); })
+        .then(function(){ if(window.__gdGoTo) window.__gdGoTo('ficha-cliente', 'back'); })
         .catch(function(err){ console.error('GD: erro ao concluir análise cromática online', err); });
     }
   });
