@@ -20419,7 +20419,13 @@
       .map(function(slotId){ return { slotId: slotId, url: urls[slotId].url }; });
 
     const escolhidaEhCromatica = !!(escolhida && escolhida.indexOf('cromatico-') === 0 && urls[escolhida]);
-    return { candidatas: candidatas, sugerida: escolhidaEhCromatica ? escolhida : (candidatas[0] ? candidatas[0].slotId : null) };
+    // Nunca "adivinha" a foto pegando a primeira da lista — os slots
+    // cromatico-* podem incluir fotos de textura de pele/cabelo, detalhes,
+    // etc., que não servem para o teste de drapes. Só sugerimos
+    // automaticamente quando já existe uma escolha explícita da profissional
+    // (a mesma foto usada como capa do dossiê); caso contrário, devolvemos
+    // null e a tela de Foto mostra a grade de miniaturas para escolha manual.
+    return { candidatas: candidatas, sugerida: escolhidaEhCromatica ? escolhida : null };
   }
 
   // ---- Entrada do módulo (botão na aba Análise da Ficha) ----
@@ -20718,6 +20724,9 @@
         acoDados.fotoSlotId = entry.slotId;
         acoDados.fotoUrl = entry.url;
         acoDados.fotoValidada = false;
+        acoUi.zoom = { scale: 1, x: 0, y: 0 };
+        acoUi.guia = false;
+        acoUi.pbAtivo = false;
         acoRender();
       }
       return;
