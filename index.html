@@ -20391,12 +20391,24 @@
     return 'nao_iniciada';
   }
 
+  let acoAvisoErroMostrado = false;
+  function acoAvisarErroSalvar(){
+    if(acoAvisoErroMostrado) return;
+    acoAvisoErroMostrado = true;
+    alert('As respostas desta análise não estão sendo salvas no momento (falha de conexão ou de permissão no banco de dados). Você pode continuar respondendo, mas avise o suporte técnico se isto persistir — o progresso pode não ficar guardado.');
+  }
+
   async function acoSalvar(patch){
     Object.assign(acoDados, patch);
     acoDados.status = acoStatusCalculado();
     try{
       await setDoc(acoDocRef(acoUid), Object.assign({}, acoDados, { updatedAt: new Date().toISOString() }), { merge: true });
-    } catch(err){ console.error('GD: erro ao salvar análise cromática online', err); }
+      return true;
+    } catch(err){
+      console.error('GD: erro ao salvar análise cromática online', err);
+      acoAvisarErroSalvar();
+      return false;
+    }
   }
 
   // ---- Fonte da foto: reaproveita fotos/_meta (urls) e fotos/_admin (escolhidaDossie) ----
@@ -20738,7 +20750,8 @@
     }
 
     if(e.target.closest('#aco-foto-ok-btn') && acoUid){
-      acoSalvar({ fotoValidada: true, fotoSlotId: acoDados.fotoSlotId, fotoUrl: acoDados.fotoUrl }).then(function(){
+      acoSalvar({ fotoValidada: true, fotoSlotId: acoDados.fotoSlotId, fotoUrl: acoDados.fotoUrl }).then(function(sucesso){
+        if(!sucesso) return; // acoSalvar já avisou o problema
         acoUi.screen = 'contraste';
         acoRender();
       });
@@ -20799,7 +20812,8 @@
     if(e.target.closest('#aco-contraste-proximo-btn') && !e.target.closest('#aco-contraste-proximo-btn').disabled){
       const obsEl = document.getElementById('aco-contraste-obs');
       acoDados.contraste.observacoes = obsEl ? obsEl.value : '';
-      acoSalvar({ contraste: acoDados.contraste }).then(function(){
+      acoSalvar({ contraste: acoDados.contraste }).then(function(sucesso){
+        if(!sucesso) return; // acoSalvar já avisou o problema
         acoUi.screen = 'bateria';
         acoUi.bateria = 'temperature';
         acoUi.indice = 0;
@@ -20991,16 +21005,17 @@
       const obsEl = document.getElementById('aco-resultado-obs');
       const patch = {
         observacoesResultado: obsEl ? obsEl.value : '',
-        temperatura: acoDados.temperatura,
-        profundidade: acoDados.profundidade,
-        intensidade: acoDados.intensidade,
         status: 'finalizada'
       };
-      Object.assign(acoDados, patch);
-      setDoc(acoDocRef(acoUid), Object.assign({}, acoDados, { updatedAt: new Date().toISOString() }), { merge: true })
-        .then(function(){ return acoAtualizarStatusEntrada(acoUid); })
-        .then(function(){ if(window.__gdGoTo) window.__gdGoTo('ficha-cliente', 'back'); })
-        .catch(function(err){ console.error('GD: erro ao concluir análise cromática online', err); });
+      acoSalvar(patch).then(function(sucesso){
+        if(!sucesso){
+          alert('Não foi possível concluir a análise agora. Verifique sua conexão com a internet e tente de novo — suas respostas continuam salvas até aqui, só a conclusão não foi registrada.');
+          return;
+        }
+        acoAtualizarStatusEntrada(acoUid).then(function(){
+          if(window.__gdGoTo) window.__gdGoTo('ficha-cliente', 'back');
+        });
+      });
     }
   });
 
