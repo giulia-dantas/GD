@@ -2949,6 +2949,48 @@
      paddings, gaps ou proporções internas das páginas.
      ===================================================================== */
 
+
+/* ===== Análise Cromática Online (ACO) — Fase 7.1 ===== */
+.aco-progress{ display:flex; gap:6px; margin-bottom:18px; flex-wrap:wrap; }
+.aco-progress-step{ flex:1; min-width:56px; text-align:center; font-size:10px; letter-spacing:0.04em; text-transform:uppercase; color:var(--graphite-soft); padding-bottom:8px; border-bottom:3px solid rgba(200,164,106,0.25); }
+.aco-progress-step.done{ color:var(--champagne); border-bottom-color:var(--champagne); }
+.aco-progress-step.current{ color:var(--graphite); border-bottom-color:var(--graphite); font-weight:700; }
+
+.aco-stage{ position:relative; width:100%; aspect-ratio:3/4; max-height:60vh; border-radius:var(--radius); overflow:hidden; background:#e8e4dc; margin-bottom:16px; }
+.aco-stage img.aco-foto{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; transition:none; }
+.aco-stage img.aco-foto.pb{ filter:grayscale(100%); }
+.aco-drape{ position:absolute; left:0; right:0; bottom:0; height:38%; border-top-left-radius:60% 30%; border-top-right-radius:60% 30%; box-shadow:0 -6px 18px rgba(0,0,0,0.18) inset; }
+.aco-guia{ position:absolute; inset:8% 22% 30% 22%; border:1.5px dashed rgba(255,255,255,0.85); border-radius:50%; pointer-events:none; }
+
+.aco-ab-row{ display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:14px; }
+.aco-ab-btn{ width:52px; height:52px; border-radius:50%; border:1.5px solid rgba(200,164,106,0.5); background:var(--card); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond', serif; font-size:20px; font-weight:600; color:var(--graphite); }
+.aco-ab-btn.active{ background:var(--champagne); color:#fff; border-color:var(--champagne); }
+.aco-trocar-btn{ padding:10px 20px; border-radius:24px; border:none; background:var(--graphite); color:#fff; font-size:13px; letter-spacing:0.03em; font-weight:600; }
+
+.aco-pergunta{ text-align:center; font-family:'Cormorant Garamond', serif; font-size:19px; margin:14px 0 10px; color:var(--graphite); }
+.aco-opcoes-row{ display:flex; gap:8px; margin-bottom:16px; }
+.aco-opcao-btn{ flex:1; padding:12px 6px; border-radius:12px; border:1.5px solid rgba(200,164,106,0.35); background:var(--card); font-size:13px; font-weight:600; color:var(--graphite); text-align:center; }
+.aco-opcao-btn.sel{ background:var(--champagne); color:#fff; border-color:var(--champagne); }
+
+.aco-nav-row{ display:flex; gap:10px; margin-top:6px; }
+.aco-nav-row button{ flex:1; }
+.aco-mini-toggle-row{ display:flex; gap:8px; margin-bottom:14px; }
+.aco-mini-toggle{ flex:1; padding:8px; border-radius:10px; border:1px solid rgba(200,164,106,0.35); background:var(--card); font-size:12px; font-weight:600; text-align:center; color:var(--graphite-soft); }
+.aco-mini-toggle.sel{ background:var(--graphite); color:#fff; border-color:var(--graphite); }
+.aco-checklist-item{ display:flex; align-items:flex-start; gap:10px; padding:10px 0; border-bottom:1px solid rgba(200,164,106,0.18); font-size:14px; }
+.aco-checklist-item input{ margin-top:3px; }
+.aco-resultado-linha{ display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(200,164,106,0.18); font-size:14px; }
+.aco-resultado-linha b{ color:var(--champagne); }
+.aco-photo-pick-tile{ width:64px; height:64px; border-radius:10px; overflow:hidden; border:2px solid transparent; }
+.aco-photo-pick-tile.sel{ border-color:var(--champagne); }
+.aco-photo-pick-tile img{ width:100%; height:100%; object-fit:cover; }
+
+.aco-stage-row{ display:flex; gap:8px; margin-bottom:16px; }
+.aco-stage-row .aco-stage{ flex:1; margin-bottom:0; }
+.aco-stage-label{ position:absolute; top:8px; left:8px; z-index:2; width:24px; height:24px; border-radius:50%; background:rgba(0,0,0,0.45); color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+.aco-zoom-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+.aco-zoom-btn{ flex:1; min-width:44px; padding:8px 4px; border-radius:8px; border:1px solid rgba(200,164,106,0.35); background:var(--card); font-size:13px; font-weight:600; color:var(--graphite); }
+.aco-zoom-btn:disabled{ opacity:0.4; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -5382,6 +5424,13 @@
             </div>
           </div>
 
+          <div class="stat-card" id="aco-entry-card">
+            <div class="stat-label" style="margin-bottom:10px;">Análise Cromática Online</div>
+            <div class="page-sub" style="margin-bottom:14px;">Motor de drapes digitais A/B — triagem assistida, decisão sempre da profissional.</div>
+            <div class="ficha-status-tag" id="aco-entry-status">Não iniciada</div>
+            <button class="btn-primary" id="aco-entry-btn" style="margin-top:12px;">Análise Cromática Online</button>
+          </div>
+
           <div class="login-error" id="ficha-analise-msg"></div>
           <button class="btn-secondary" id="ficha-salvar-analise-btn">Salvar Análise</button>
           <button class="btn-primary" id="ficha-concluir-analise-btn">Marcar Análise como Concluída</button>
@@ -5465,6 +5514,32 @@
         <div class="navitem" data-goto="agenda" data-nav-label="Agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 9.5h16"/><path d="M8.5 3.5v3M15.5 3.5v3"/><circle cx="9" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="0.7" fill="currentColor" stroke="none"/><circle cx="15" cy="14" r="0.7" fill="currentColor" stroke="none"/></svg>Agenda</div>
         <div class="navitem active" data-goto="clientes" data-nav-label="Clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.3"/><path d="M5.5 19.5c0-3.6 2.9-6.2 6.5-6.2s6.5 2.6 6.5 6.2"/><path d="M9.2 6.4c.7-.7 1.7-1.1 2.8-1.1"/></svg>Clientes</div>
         <div class="navitem" data-goto="dossies" data-nav-label="Dossiês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.2c-1.6-1.1-3.6-1.5-5.5-1.2-.7.1-1.2.7-1.2 1.4v11.4c0 .8.8 1.4 1.6 1.2 1.7-.4 3.6-.1 5.1 1 1.5-1.1 3.4-1.4 5.1-1 .8.2 1.6-.4 1.6-1.2V6.4c0-.7-.5-1.3-1.2-1.4-1.9-.3-3.9.1-5.5 1.2z"/><path d="M12 6.2v12.6"/></svg>Dossiês</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ANÁLISE CROMÁTICA ONLINE (ACO) — Fase 7.1, Prompt 1/4 ================= -->
+  <!-- Sem IA. Toda percepção visual é da profissional. O sistema só automatiza a
+       apresentação dos drapes, registra escolhas e organiza resultados. -->
+  <div class="screen-wrap" id="screen-analise-cromatica-online">
+    <div class="screen-label">Painel — Análise Cromática Online</div>
+    <div class="phone">
+      <div class="topbar">
+        <div class="brand brand-centered">
+          <img class="brand-signature brand-signature-lg" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        </div>
+        <div class="logout-btn" data-goto="ficha-cliente" title="Voltar" style="left:16px; right:auto;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg></div>
+      </div>
+      <div class="content">
+        <div class="eyebrow" id="aco-cliente-nome">Cliente</div>
+        <div class="page-title">Análise Cromática <em>Online</em></div>
+        <div class="page-sub">Drapes digitais — decisão sempre da profissional</div>
+
+        <div class="aco-progress" id="aco-progress"></div>
+
+        <div id="aco-root"><!-- renderizado dinamicamente por aco_render() --></div>
+
+        <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
     </div>
   </div>
@@ -20196,7 +20271,718 @@
 
     // ---- Serviços da Cliente (fonte única — Fase 6B) ----
     await renderFichaServicos(selectedClienteUid);
+
+    // ---- Análise Cromática Online — status do card de entrada ----
+    await acoAtualizarStatusEntrada(selectedClienteUid);
   }
+
+  // ===================================================================
+  // ANÁLISE CROMÁTICA ONLINE — Prompt 1/4
+  // Módulo isolado, documento próprio (interno/analiseCromaticaOnline),
+  // nunca escreve em interno/analiseCromatica (campo manual de cartela
+  // existente) nem em nenhuma outra coleção. Sem IA, sem análise automática
+  // de rosto/pele/olhos/cabelo — toda percepção é da consultora. A foto
+  // reutiliza os slots "cromatico-*" já existentes em fotos/_meta e a
+  // escolha em fotos/_admin.escolhidaDossie (mesma fonte do dossiê).
+  // ===================================================================
+
+  // Biblioteca V1 — 18 pares HEX fornecidos, centralizados, nunca espalhados
+  // pelo HTML. Os "significado" internos nunca são exibidos durante o teste.
+  const COLOR_ANALYSIS_TESTS_V1 = {
+    temperature: [
+      { id: 'T01', categoria: 'temperature', corA: '#D94A38', corB: '#C93655', significadoA: 'quente', significadoB: 'frio' },
+      { id: 'T02', categoria: 'temperature', corA: '#E76F51', corB: '#D94F70', significadoA: 'quente', significadoB: 'frio' },
+      { id: 'T03', categoria: 'temperature', corA: '#E9A17B', corB: '#D88FA5', significadoA: 'quente', significadoB: 'frio' },
+      { id: 'T04', categoria: 'temperature', corA: '#8A8F45', corB: '#3F7568', significadoA: 'quente', significadoB: 'frio' },
+      { id: 'T05', categoria: 'temperature', corA: '#2A9D8F', corB: '#4776B4', significadoA: 'quente', significadoB: 'frio' },
+      { id: 'T06', categoria: 'temperature', corA: '#C6A06A', corB: '#929CAA', significadoA: 'quente', significadoB: 'frio' }
+    ],
+    depth: [
+      { id: 'P01', categoria: 'depth', corA: '#A9C7DF', corB: '#294C6B', significadoA: 'claro', significadoB: 'profundo' },
+      { id: 'P02', categoria: 'depth', corA: '#B5C9A8', corB: '#40583E', significadoA: 'claro', significadoB: 'profundo' },
+      { id: 'P03', categoria: 'depth', corA: '#E3B2BC', corB: '#8C4559', significadoA: 'claro', significadoB: 'profundo' },
+      { id: 'P04', categoria: 'depth', corA: '#C9B9D5', corB: '#59445F', significadoA: 'claro', significadoB: 'profundo' },
+      { id: 'P05', categoria: 'depth', corA: '#DCC9AB', corB: '#604A38', significadoA: 'claro', significadoB: 'profundo' },
+      { id: 'P06', categoria: 'depth', corA: '#C5C8CA', corB: '#4B5055', significadoA: 'claro', significadoB: 'profundo' }
+    ],
+    chroma: [
+      { id: 'I01', categoria: 'chroma', corA: '#2878C7', corB: '#718DA5', significadoA: 'brilhante', significadoB: 'suave' },
+      { id: 'I02', categoria: 'chroma', corA: '#26A269', corB: '#718D78', significadoA: 'brilhante', significadoB: 'suave' },
+      { id: 'I03', categoria: 'chroma', corA: '#EB5A46', corB: '#B97870', significadoA: 'brilhante', significadoB: 'suave' },
+      { id: 'I04', categoria: 'chroma', corA: '#D83C75', corB: '#A86F82', significadoA: 'brilhante', significadoB: 'suave' },
+      { id: 'I05', categoria: 'chroma', corA: '#00A6A6', corB: '#638F8D', significadoA: 'brilhante', significadoB: 'suave' },
+      { id: 'I06', categoria: 'chroma', corA: '#7D55C7', corB: '#81758E', significadoA: 'brilhante', significadoB: 'suave' }
+    ]
+  };
+
+  const ACO_BATERIA_ORDEM = ['temperature', 'depth', 'chroma'];
+  const ACO_BATERIA_LABEL = { temperature: 'Temperatura', depth: 'Profundidade', chroma: 'Intensidade' };
+  const ACO_CLASSIFICACOES_PROFISSIONAIS = {
+    temperature: ['Quente', 'Neutra', 'Fria', 'Inconclusiva'],
+    depth: ['Clara', 'Média', 'Profunda', 'Inconclusiva'],
+    chroma: ['Brilhante', 'Intermediária', 'Suave', 'Inconclusiva']
+  };
+
+  function acoRespostasVazias(categoria){
+    return COLOR_ANALYSIS_TESTS_V1[categoria].map(function(t){ return { id: t.id, escolha: null }; });
+  }
+
+  function acoDadosPadrao(){
+    return {
+      status: 'nao_iniciada',
+      fotoSlotId: null,
+      fotoUrl: null,
+      fotoValidada: false,
+      contraste: { classificacao: null, observacoes: '' },
+      temperatura: { respostas: acoRespostasVazias('temperature'), classificacaoProfissional: null },
+      profundidade: { respostas: acoRespostasVazias('depth'), classificacaoProfissional: null },
+      intensidade: { respostas: acoRespostasVazias('chroma'), classificacaoProfissional: null },
+      observacoesResultado: ''
+    };
+  }
+
+  const ACO_CHAVE_POR_CATEGORIA = { temperature: 'temperatura', depth: 'profundidade', chroma: 'intensidade' };
+
+  function acoUiPadrao(){
+    return { screen: 'foto', bateria: null, indice: 0, ladoAtivo: 'A', fotosCandidatas: [],
+      zoom: { scale: 1, x: 0, y: 0 }, guia: false, pbAtivo: false,
+      modoComparacao: 'alternancia', ajustarEnquadramento: false };
+  }
+
+  let acoUid = null;
+  let acoClienteNome = '';
+  let acoDados = null;
+  let acoUi = acoUiPadrao();
+
+  function acoDocRef(uid){
+    return doc(db, 'clientes', uid, 'interno', 'analiseCromaticaOnline');
+  }
+
+  async function acoCarregarDados(uid){
+    try{
+      const snap = await getDoc(acoDocRef(uid));
+      if(snap.exists()){
+        // merge raso sobre o padrão, para tolerar documentos de versões futuras
+        // (Prompt 2/3/4) sem perder campos que esta fase ainda não conhece.
+        const padrao = acoDadosPadrao();
+        const salvo = snap.data();
+        return Object.assign(padrao, salvo, {
+          contraste: Object.assign(padrao.contraste, salvo.contraste || {}),
+          temperatura: Object.assign(padrao.temperatura, salvo.temperatura || {}),
+          profundidade: Object.assign(padrao.profundidade, salvo.profundidade || {}),
+          intensidade: Object.assign(padrao.intensidade, salvo.intensidade || {})
+        });
+      }
+    } catch(err){ console.error('GD: erro ao carregar análise cromática online', err); }
+    return acoDadosPadrao();
+  }
+
+  function acoStatusCalculado(){
+    const d = acoDados;
+    const baterias = ['temperatura', 'profundidade', 'intensidade'];
+    const todasRespondidas = baterias.every(function(k){
+      return d[k].respostas.every(function(r){ return r.escolha !== null; });
+    });
+    if(d.status === 'finalizada') return 'finalizada';
+    if(todasRespondidas && d.contraste.classificacao) return 'aguardando_validacao';
+    if(d.fotoValidada || d.contraste.classificacao || baterias.some(function(k){ return d[k].respostas.some(function(r){ return r.escolha !== null; }); })){
+      return 'em_andamento';
+    }
+    return 'nao_iniciada';
+  }
+
+  async function acoSalvar(patch){
+    Object.assign(acoDados, patch);
+    acoDados.status = acoStatusCalculado();
+    try{
+      await setDoc(acoDocRef(acoUid), Object.assign({}, acoDados, { updatedAt: new Date().toISOString() }), { merge: true });
+    } catch(err){ console.error('GD: erro ao salvar análise cromática online', err); }
+  }
+
+  // ---- Fonte da foto: reaproveita fotos/_meta (urls) e fotos/_admin (escolhidaDossie) ----
+  // já usados pelo resto da ficha e pelo dossiê — nunca um upload paralelo.
+
+  async function acoCarregarFotosCromaticas(uid){
+    let urls = {}, escolhida = null;
+    try{
+      const metaSnap = await getDoc(doc(db, 'clientes', uid, 'fotos', '_meta'));
+      if(metaSnap.exists()) urls = metaSnap.data().urls || {};
+    } catch(err){ console.error(err); }
+    try{
+      const adminSnap = await getDoc(doc(db, 'clientes', uid, 'fotos', '_admin'));
+      if(adminSnap.exists()) escolhida = adminSnap.data().escolhidaDossie || null;
+    } catch(err){ console.error(err); }
+
+    const candidatas = Object.keys(urls)
+      .filter(function(slotId){ return slotId.indexOf('cromatico-') === 0 && urls[slotId] && urls[slotId].url; })
+      .sort()
+      .map(function(slotId){ return { slotId: slotId, url: urls[slotId].url }; });
+
+    const escolhidaEhCromatica = !!(escolhida && escolhida.indexOf('cromatico-') === 0 && urls[escolhida]);
+    return { candidatas: candidatas, sugerida: escolhidaEhCromatica ? escolhida : (candidatas[0] ? candidatas[0].slotId : null) };
+  }
+
+  // ---- Entrada do módulo (botão na aba Análise da Ficha) ----
+
+  async function acoAtualizarStatusEntrada(uid){
+    const tagEl = document.getElementById('aco-entry-status');
+    if(!tagEl) return;
+    try{
+      const snap = await getDoc(acoDocRef(uid));
+      const status = snap.exists() ? (snap.data().status || 'nao_iniciada') : 'nao_iniciada';
+      const LABELS = { nao_iniciada: 'Não iniciada', em_andamento: 'Em andamento', aguardando_validacao: 'Aguardando validação', finalizada: 'Finalizada' };
+      tagEl.textContent = LABELS[status] || 'Não iniciada';
+      tagEl.className = 'ficha-status-tag' + (status === 'finalizada' ? ' done' : (status === 'nao_iniciada' ? '' : ' warn'));
+    } catch(err){ console.error(err); }
+  }
+
+  document.addEventListener('click', async function(e){
+    const btn = e.target.closest('#aco-entry-btn');
+    if(!btn || !selectedClienteUid) return;
+
+    acoUid = selectedClienteUid;
+    acoClienteNome = selectedClienteNome;
+    acoDados = await acoCarregarDados(acoUid);
+
+    const fotos = await acoCarregarFotosCromaticas(acoUid);
+    acoUi = acoUiPadrao();
+    acoUi.fotosCandidatas = fotos.candidatas;
+
+    if(!acoDados.fotoUrl && fotos.sugerida){
+      const entry = fotos.candidatas.filter(function(c){ return c.slotId === fotos.sugerida; })[0];
+      if(entry){ acoDados.fotoSlotId = entry.slotId; acoDados.fotoUrl = entry.url; }
+    }
+
+    // Retoma exatamente de onde parou: pula para a primeira etapa incompleta.
+    if(acoDados.fotoValidada){
+      if(!acoDados.contraste.classificacao){
+        acoUi.screen = 'contraste';
+      } else {
+        const bateriaIncompleta = ACO_BATERIA_ORDEM.filter(function(cat){
+          return acoDados[ACO_CHAVE_POR_CATEGORIA[cat]].respostas.some(function(r){ return r.escolha === null; });
+        })[0];
+        if(bateriaIncompleta){
+          acoUi.screen = 'bateria';
+          acoUi.bateria = bateriaIncompleta;
+          acoUi.indice = acoDados[ACO_CHAVE_POR_CATEGORIA[bateriaIncompleta]].respostas.filter(function(r){ return r.escolha !== null; }).length;
+        } else {
+          acoUi.screen = 'resultados';
+        }
+      }
+    }
+
+    document.getElementById('aco-cliente-nome').textContent = acoClienteNome || 'Cliente';
+    goTo('analise-cromatica-online');
+    acoRender();
+  });
+
+  // ---- Barra de progresso (Contraste / Temperatura / Profundidade / Intensidade / Resultado) ----
+
+  function acoRenderProgresso(){
+    const el = document.getElementById('aco-progress');
+    if(!el) return;
+    const etapas = [
+      { id: 'foto', label: 'Foto' },
+      { id: 'contraste', label: 'Contraste' },
+      { id: 'temperature', label: 'Temperatura' },
+      { id: 'depth', label: 'Profundidade' },
+      { id: 'chroma', label: 'Intensidade' },
+      { id: 'resultados', label: 'Resultado' }
+    ];
+    const atual = acoUi.screen === 'bateria' ? acoUi.bateria : acoUi.screen;
+    const ordemIds = etapas.map(function(x){ return x.id; });
+    const idxAtual = ordemIds.indexOf(atual);
+    el.innerHTML = etapas.map(function(et, i){
+      const cls = i < idxAtual ? 'done' : (i === idxAtual ? 'current' : '');
+      return '<div class="aco-progress-step ' + cls + '">' + escapeHtml(et.label) + '</div>';
+    }).join('');
+  }
+
+  function acoRender(){
+    acoRenderProgresso();
+    const root = document.getElementById('aco-root');
+    if(!root) return;
+    if(acoUi.screen === 'foto') root.innerHTML = acoHtmlFoto();
+    else if(acoUi.screen === 'contraste') root.innerHTML = acoHtmlContraste();
+    else if(acoUi.screen === 'bateria') root.innerHTML = acoHtmlBateria();
+    else if(acoUi.screen === 'resultados') root.innerHTML = acoHtmlResultados();
+  }
+
+  // ---- Componente centralizado do "palco" da fotografia (Fase 2) ----
+  // Usado pelas 3 telas com foto (foto, contraste, bateria) para que o
+  // enquadramento/zoom/guia nunca divirjam entre elas. Alternar A/B, P&B,
+  // zoom e guia NUNCA recriam o <img> — só mudam estilo/classe do nó já
+  // existente (funções acoAplicar*Dom), para a foto nunca piscar/recarregar.
+
+  function acoStageTransformValor(){
+    const z = acoUi.zoom;
+    return 'translate(' + z.x + 'px, ' + z.y + 'px) scale(' + z.scale + ')';
+  }
+
+  function acoStageTransformStyle(){
+    return 'transform: ' + acoStageTransformValor() + ';';
+  }
+
+  function acoStageSingleHtml(corDrape){
+    return '<div class="aco-stage">' +
+      '<img class="aco-foto' + (acoUi.pbAtivo ? ' pb' : '') + '" style="' + acoStageTransformStyle() + '" src="' + escapeHtml(acoDados.fotoUrl) + '" alt="Foto para análise">' +
+      (corDrape ? '<div class="aco-drape" style="background:' + escapeHtml(corDrape) + ';"></div>' : '') +
+      (acoUi.guia ? '<div class="aco-guia"></div>' : '') +
+      '</div>';
+  }
+
+  function acoStageLadoALadoHtml(corA, corB){
+    const t = acoStageTransformStyle();
+    function meia(cor, rotulo){
+      return '<div class="aco-stage">' +
+        '<div class="aco-stage-label">' + escapeHtml(rotulo) + '</div>' +
+        '<img class="aco-foto' + (acoUi.pbAtivo ? ' pb' : '') + '" style="' + t + '" src="' + escapeHtml(acoDados.fotoUrl) + '" alt="Foto para análise">' +
+        '<div class="aco-drape" style="background:' + escapeHtml(cor) + ';"></div>' +
+        (acoUi.guia ? '<div class="aco-guia"></div>' : '') +
+        '</div>';
+    }
+    return '<div class="aco-stage-row">' + meia(corA, 'A') + meia(corB, 'B') + '</div>';
+  }
+
+  function acoZoomControlsHtml(){
+    return '<div class="aco-zoom-row">' +
+      '<button class="aco-zoom-btn" data-aco-zoom="out">−</button>' +
+      '<button class="aco-zoom-btn" data-aco-zoom="in">+</button>' +
+      '<button class="aco-zoom-btn" data-aco-pan="up">↑</button>' +
+      '<button class="aco-zoom-btn" data-aco-pan="down">↓</button>' +
+      '<button class="aco-zoom-btn" data-aco-pan="left">←</button>' +
+      '<button class="aco-zoom-btn" data-aco-pan="right">→</button>' +
+      '<button class="aco-zoom-btn" data-aco-zoom="reset">Redefinir</button>' +
+      '<button class="aco-zoom-btn" data-aco-guia-toggle>' + (acoUi.guia ? 'Ocultar Guia' : 'Mostrar Guia') + '</button>' +
+      '</div>';
+  }
+
+  // ---- Atualizações diretas no DOM (sem re-render), para transições instantâneas ----
+
+  function acoAplicarDrapeDom(){
+    const teste = acoUi.bateria ? COLOR_ANALYSIS_TESTS_V1[acoUi.bateria][acoUi.indice] : null;
+    if(!teste) return;
+    const cor = acoUi.ladoAtivo === 'A' ? teste.corA : teste.corB;
+    document.querySelectorAll('#aco-root .aco-drape').forEach(function(el){
+      // No modo lado a lado cada metade tem sua própria cor fixa (A/B); só
+      // atualizamos o drape quando a página está no modo Alternância (uma
+      // única .aco-stage fora de .aco-stage-row).
+      if(!el.closest('.aco-stage-row')) el.style.background = cor;
+    });
+    document.querySelectorAll('#aco-root .aco-ab-btn').forEach(function(el){
+      el.classList.toggle('active', el.getAttribute('data-aco-lado') === acoUi.ladoAtivo);
+    });
+  }
+
+  function acoAplicarTransformDom(){
+    const valor = acoStageTransformValor();
+    document.querySelectorAll('#aco-root .aco-foto').forEach(function(img){ img.style.transform = valor; });
+  }
+
+  function acoAplicarGuiaDom(){
+    document.querySelectorAll('#aco-root .aco-stage').forEach(function(stage){
+      let g = stage.querySelector('.aco-guia');
+      if(acoUi.guia && !g){ g = document.createElement('div'); g.className = 'aco-guia'; stage.appendChild(g); }
+      else if(!acoUi.guia && g){ g.remove(); }
+    });
+    const guiaBtn = document.querySelector('[data-aco-guia-toggle]');
+    if(guiaBtn) guiaBtn.textContent = acoUi.guia ? 'Ocultar Guia' : 'Mostrar Guia';
+  }
+
+  document.addEventListener('click', function(e){
+    const zoomBtn = e.target.closest('[data-aco-zoom]');
+    if(zoomBtn){
+      const acao = zoomBtn.getAttribute('data-aco-zoom');
+      if(acao === 'in') acoUi.zoom.scale = Math.min(2.2, Math.round((acoUi.zoom.scale + 0.1) * 10) / 10);
+      else if(acao === 'out') acoUi.zoom.scale = Math.max(1, Math.round((acoUi.zoom.scale - 0.1) * 10) / 10);
+      else if(acao === 'reset') acoUi.zoom = { scale: 1, x: 0, y: 0 };
+      acoAplicarTransformDom();
+      return;
+    }
+    const panBtn = e.target.closest('[data-aco-pan]');
+    if(panBtn){
+      const dir = panBtn.getAttribute('data-aco-pan');
+      const passo = 12;
+      if(dir === 'up') acoUi.zoom.y -= passo;
+      else if(dir === 'down') acoUi.zoom.y += passo;
+      else if(dir === 'left') acoUi.zoom.x -= passo;
+      else if(dir === 'right') acoUi.zoom.x += passo;
+      acoAplicarTransformDom();
+      return;
+    }
+    const guiaBtn = e.target.closest('[data-aco-guia-toggle]');
+    if(guiaBtn){
+      acoUi.guia = !acoUi.guia;
+      acoAplicarGuiaDom();
+      return;
+    }
+    const ajustarBtn = e.target.closest('[data-aco-ajustar-toggle]');
+    if(ajustarBtn){
+      acoUi.ajustarEnquadramento = !acoUi.ajustarEnquadramento;
+      acoRender();
+      return;
+    }
+    const modoBtn = e.target.closest('[data-aco-modo]');
+    if(modoBtn){
+      acoUi.modoComparacao = modoBtn.getAttribute('data-aco-modo');
+      acoRender();
+      return;
+    }
+  });
+
+  // ---- Debounce genérico + autosave das observações em texto livre ----
+  // Evita perder texto digitado ao navegar sem clicar em um botão de avanço,
+  // e evita uma gravação no Firestore a cada tecla digitada.
+
+  function acoDebounce(fn, espera){
+    let timer;
+    return function(){
+      clearTimeout(timer);
+      timer = setTimeout(fn, espera);
+    };
+  }
+
+  const acoSalvarObsDebounced = acoDebounce(function(){
+    if(!acoUid) return;
+    acoSalvar({});
+  }, 800);
+
+  document.addEventListener('input', function(e){
+    const obsContraste = e.target.closest('#aco-contraste-obs');
+    if(obsContraste){ acoDados.contraste.observacoes = obsContraste.value; acoSalvarObsDebounced(); return; }
+    const obsResultado = e.target.closest('#aco-resultado-obs');
+    if(obsResultado){ acoDados.observacoesResultado = obsResultado.value; acoSalvarObsDebounced(); }
+  });
+
+  // ---- Etapa 1: seleção e validação da fotografia ----
+
+  const ACO_CHECKLIST_FOTO = [
+    'Iluminação adequada',
+    'Sem maquiagem',
+    'Sem filtro',
+    'Cabelo afastado do rosto',
+    'Rosto frontal',
+    'Sem acessórios interferindo'
+  ];
+
+  function acoHtmlFoto(){
+    if(!acoDados.fotoUrl){
+      const tiles = acoUi.fotosCandidatas.length
+        ? '<div class="pill-row" style="flex-wrap:wrap; gap:10px; margin-bottom:16px;">' + acoUi.fotosCandidatas.map(function(c){
+            return '<div class="aco-photo-pick-tile" data-aco-pick-foto="' + escapeHtml(c.slotId) + '"><img src="' + escapeHtml(c.url) + '" alt=""></div>';
+          }).join('') + '</div>'
+        : '';
+      return '<div class="stat-card">' +
+        '<div class="stat-label" style="margin-bottom:10px;">Nenhuma foto de Direcionamento Cromático encontrada</div>' +
+        '<div class="page-sub" style="margin-bottom:14px;">Envie ou selecione uma foto na aba <b>Fotos</b> da ficha (categoria Direcionamento Cromático) e volte aqui em seguida.</div>' +
+        tiles +
+        '</div>';
+    }
+
+    return acoStageSingleHtml(null) +
+      acoZoomControlsHtml() +
+      (acoUi.fotosCandidatas.length > 1
+        ? '<div class="pill-row" style="flex-wrap:wrap; gap:10px; margin-bottom:16px;">' + acoUi.fotosCandidatas.map(function(c){
+            return '<div class="aco-photo-pick-tile' + (c.slotId === acoDados.fotoSlotId ? ' sel' : '') + '" data-aco-pick-foto="' + escapeHtml(c.slotId) + '"><img src="' + escapeHtml(c.url) + '" alt=""></div>';
+          }).join('') + '</div>'
+        : '') +
+      '<div class="stat-card">' +
+      '<div class="stat-label" style="margin-bottom:6px;">Checklist antes de iniciar</div>' +
+      ACO_CHECKLIST_FOTO.map(function(item, i){
+        return '<label class="aco-checklist-item"><input type="checkbox" data-aco-check="' + i + '"><span>' + escapeHtml(item) + '</span></label>';
+      }).join('') +
+      '</div>' +
+      '<div class="aco-nav-row" style="margin-top:14px;">' +
+      '<button class="btn-secondary" id="aco-foto-nova-btn">Solicitar Nova Foto</button>' +
+      '<button class="btn-primary" id="aco-foto-ok-btn" disabled>Foto Adequada</button>' +
+      '</div>';
+  }
+
+  document.addEventListener('click', function(e){
+    const tile = e.target.closest('[data-aco-pick-foto]');
+    if(tile && acoUid){
+      const slotId = tile.getAttribute('data-aco-pick-foto');
+      const entry = acoUi.fotosCandidatas.filter(function(c){ return c.slotId === slotId; })[0];
+      if(entry){
+        acoDados.fotoSlotId = entry.slotId;
+        acoDados.fotoUrl = entry.url;
+        acoDados.fotoValidada = false;
+        acoRender();
+      }
+      return;
+    }
+
+    if(e.target.closest('#aco-foto-nova-btn')){
+      alert('Envie a nova fotografia na aba Fotos (Direcionamento Cromático) e volte a esta análise em seguida.');
+      return;
+    }
+
+    if(e.target.closest('#aco-foto-ok-btn') && acoUid){
+      acoSalvar({ fotoValidada: true, fotoSlotId: acoDados.fotoSlotId, fotoUrl: acoDados.fotoUrl }).then(function(){
+        acoUi.screen = 'contraste';
+        acoRender();
+      });
+    }
+  });
+
+  document.addEventListener('change', function(e){
+    const chk = e.target.closest('[data-aco-check]');
+    if(!chk) return;
+    const todas = document.querySelectorAll('[data-aco-check]');
+    const marcadas = document.querySelectorAll('[data-aco-check]:checked');
+    const okBtn = document.getElementById('aco-foto-ok-btn');
+    if(okBtn) okBtn.disabled = !(todas.length && marcadas.length === todas.length);
+  });
+
+  // ---- Etapa 2: Contraste pessoal (Original / Preto e Branco) ----
+
+  function acoHtmlContraste(){
+    const c = acoDados.contraste;
+    return acoStageSingleHtml(null) +
+      acoZoomControlsHtml() +
+      '<div class="aco-mini-toggle-row">' +
+      '<div class="aco-mini-toggle' + (!acoUi.pbAtivo ? ' sel' : '') + '" data-aco-pb="0">Original</div>' +
+      '<div class="aco-mini-toggle' + (acoUi.pbAtivo ? ' sel' : '') + '" data-aco-pb="1">Preto e Branco</div>' +
+      '</div>' +
+      '<div class="aco-pergunta">Qual o contraste pessoal?</div>' +
+      '<div class="aco-opcoes-row">' +
+      ['Baixo', 'Médio', 'Alto', 'Inconclusivo'].map(function(op){
+        return '<div class="aco-opcao-btn' + (c.classificacao === op ? ' sel' : '') + '" data-aco-contraste="' + escapeHtml(op) + '">' + escapeHtml(op) + '</div>';
+      }).join('') +
+      '</div>' +
+      '<label class="form-label">Observações (opcional)</label>' +
+      '<textarea class="input-field textarea" id="aco-contraste-obs" placeholder="Escreva livremente...">' + escapeHtml(c.observacoes || '') + '</textarea>' +
+      '<div class="aco-nav-row" style="margin-top:14px;">' +
+      '<button class="btn-secondary" data-aco-nav="voltar-foto">Anterior</button>' +
+      '<button class="btn-primary" id="aco-contraste-proximo-btn"' + (c.classificacao ? '' : ' disabled') + '>Próximo</button>' +
+      '</div>';
+  }
+
+  document.addEventListener('click', function(e){
+    const pb = e.target.closest('[data-aco-pb]');
+    if(pb){
+      acoUi.pbAtivo = pb.getAttribute('data-aco-pb') === '1';
+      document.querySelectorAll('.aco-mini-toggle[data-aco-pb]').forEach(function(el){
+        el.classList.toggle('sel', el.getAttribute('data-aco-pb') === (acoUi.pbAtivo ? '1' : '0'));
+      });
+      document.querySelectorAll('#aco-root .aco-foto').forEach(function(img){ img.classList.toggle('pb', acoUi.pbAtivo); });
+      return;
+    }
+
+    const cbtn = e.target.closest('[data-aco-contraste]');
+    if(cbtn){
+      acoDados.contraste.classificacao = cbtn.getAttribute('data-aco-contraste');
+      acoRender();
+      return;
+    }
+
+    if(e.target.closest('#aco-contraste-proximo-btn') && !e.target.closest('#aco-contraste-proximo-btn').disabled){
+      const obsEl = document.getElementById('aco-contraste-obs');
+      acoDados.contraste.observacoes = obsEl ? obsEl.value : '';
+      acoSalvar({ contraste: acoDados.contraste }).then(function(){
+        acoUi.screen = 'bateria';
+        acoUi.bateria = 'temperature';
+        acoUi.indice = 0;
+        acoUi.ladoAtivo = 'A';
+        acoRender();
+      });
+      return;
+    }
+
+    if(e.target.closest('[data-aco-nav="voltar-foto"]')){
+      acoUi.screen = 'foto';
+      acoRender();
+    }
+  });
+
+  // ---- Etapas 3, 4, 5: motor de drapes (Temperatura / Profundidade / Intensidade) ----
+  // Componente único e reutilizável — a mesma lógica atende às 3 baterias,
+  // trocando apenas qual biblioteca de testes está ativa.
+
+  function acoHtmlBateria(){
+    const testes = COLOR_ANALYSIS_TESTS_V1[acoUi.bateria];
+    const teste = testes[acoUi.indice];
+    const chave = ACO_CHAVE_POR_CATEGORIA[acoUi.bateria];
+    const resposta = acoDados[chave].respostas[acoUi.indice];
+    const corAtiva = acoUi.ladoAtivo === 'A' ? teste.corA : teste.corB;
+    const ladoALado = acoUi.modoComparacao === 'lado-a-lado';
+
+    let html = '<div class="page-sub" style="text-align:center; margin-bottom:8px;">' + escapeHtml(ACO_BATERIA_LABEL[acoUi.bateria]) + ' — Teste ' + (acoUi.indice + 1) + ' de ' + testes.length + '</div>';
+
+    html += '<div class="aco-mini-toggle-row">' +
+      '<div class="aco-mini-toggle' + (!ladoALado ? ' sel' : '') + '" data-aco-modo="alternancia">Alternância</div>' +
+      '<div class="aco-mini-toggle' + (ladoALado ? ' sel' : '') + '" data-aco-modo="lado-a-lado">Lado a Lado</div>' +
+      '</div>';
+
+    html += ladoALado ? acoStageLadoALadoHtml(teste.corA, teste.corB) : acoStageSingleHtml(corAtiva);
+
+    html += '<button class="btn-secondary" data-aco-ajustar-toggle style="margin-bottom:14px;">' + (acoUi.ajustarEnquadramento ? 'Bloquear Enquadramento' : 'Ajustar Enquadramento') + '</button>';
+    if(acoUi.ajustarEnquadramento) html += acoZoomControlsHtml();
+
+    if(!ladoALado){
+      html += '<div class="aco-ab-row">' +
+        '<div class="aco-ab-btn' + (acoUi.ladoAtivo === 'A' ? ' active' : '') + '" data-aco-lado="A">A</div>' +
+        '<button class="aco-trocar-btn" data-aco-trocar>Trocar Cor</button>' +
+        '<div class="aco-ab-btn' + (acoUi.ladoAtivo === 'B' ? ' active' : '') + '" data-aco-lado="B">B</div>' +
+        '</div>';
+    }
+
+    html += '<div class="aco-pergunta">Qual apresentou melhor harmonia?</div>' +
+      '<div class="aco-opcoes-row">' +
+      '<div class="aco-opcao-btn' + (resposta.escolha === 'A' ? ' sel' : '') + '" data-aco-resposta="A">A</div>' +
+      '<div class="aco-opcao-btn' + (resposta.escolha === 'B' ? ' sel' : '') + '" data-aco-resposta="B">B</div>' +
+      '</div>' +
+      '<div class="aco-opcao-btn' + (resposta.escolha === 'empate' ? ' sel' : '') + '" data-aco-resposta="empate" style="text-align:center; margin-bottom:16px;">Empate / Inconclusivo</div>' +
+      '<div class="aco-nav-row">' +
+      '<button class="btn-secondary" data-aco-bateria-nav="anterior">Anterior</button>' +
+      '<button class="btn-primary" data-aco-bateria-nav="proximo"' + (resposta.escolha ? '' : ' disabled') + '>Próximo</button>' +
+      '</div>';
+
+    return html;
+  }
+
+  document.addEventListener('click', function(e){
+    const ladoBtn = e.target.closest('[data-aco-lado]');
+    if(ladoBtn && acoUi.screen === 'bateria'){
+      acoUi.ladoAtivo = ladoBtn.getAttribute('data-aco-lado');
+      acoAplicarDrapeDom();
+      return;
+    }
+
+    const trocarBtn = e.target.closest('[data-aco-trocar]');
+    if(trocarBtn && acoUi.screen === 'bateria'){
+      acoUi.ladoAtivo = acoUi.ladoAtivo === 'A' ? 'B' : 'A';
+      acoAplicarDrapeDom();
+      return;
+    }
+
+    const respBtn = e.target.closest('[data-aco-resposta]');
+    if(respBtn && acoUi.screen === 'bateria'){
+      const chave = ACO_CHAVE_POR_CATEGORIA[acoUi.bateria];
+      acoDados[chave].respostas[acoUi.indice].escolha = respBtn.getAttribute('data-aco-resposta');
+      acoSalvar({}).then(acoRender); // acoSalvar já persiste acoDados inteiro (merge:true)
+      return;
+    }
+
+    const navBtn = e.target.closest('[data-aco-bateria-nav]');
+    if(navBtn && acoUi.screen === 'bateria' && !navBtn.disabled){
+      const dir = navBtn.getAttribute('data-aco-bateria-nav');
+      const testes = COLOR_ANALYSIS_TESTS_V1[acoUi.bateria];
+      acoUi.ladoAtivo = 'A';
+
+      if(dir === 'proximo'){
+        if(acoUi.indice < testes.length - 1){
+          acoUi.indice++;
+        } else {
+          const idxBateria = ACO_BATERIA_ORDEM.indexOf(acoUi.bateria);
+          if(idxBateria < ACO_BATERIA_ORDEM.length - 1){
+            acoUi.bateria = ACO_BATERIA_ORDEM[idxBateria + 1];
+            acoUi.indice = 0;
+          } else {
+            acoUi.screen = 'resultados';
+          }
+        }
+      } else { // anterior
+        if(acoUi.indice > 0){
+          acoUi.indice--;
+        } else {
+          const idxBateria = ACO_BATERIA_ORDEM.indexOf(acoUi.bateria);
+          if(idxBateria > 0){
+            acoUi.bateria = ACO_BATERIA_ORDEM[idxBateria - 1];
+            acoUi.indice = COLOR_ANALYSIS_TESTS_V1[acoUi.bateria].length - 1;
+          } else {
+            acoUi.screen = 'contraste';
+          }
+        }
+      }
+      acoRender();
+    }
+  });
+
+  // ---- Etapa 6: painel de resultados primários ----
+
+  function acoContagem(categoria){
+    const chave = ACO_CHAVE_POR_CATEGORIA[categoria];
+    const respostas = acoDados[chave].respostas;
+    const testes = COLOR_ANALYSIS_TESTS_V1[categoria];
+    const contagem = {};
+    testes.forEach(function(t){ contagem[t.significadoA] = contagem[t.significadoA] || 0; contagem[t.significadoB] = contagem[t.significadoB] || 0; });
+    let empates = 0;
+    respostas.forEach(function(r, i){
+      if(r.escolha === 'A') contagem[testes[i].significadoA]++;
+      else if(r.escolha === 'B') contagem[testes[i].significadoB]++;
+      else if(r.escolha === 'empate') empates++;
+    });
+    return { contagem: contagem, empates: empates };
+  }
+
+  function acoHtmlResultados(){
+    let html = '<div class="stat-card">' +
+      '<div class="aco-resultado-linha"><span>Contraste</span><b>' + escapeHtml(acoDados.contraste.classificacao || '—') + '</b></div>' +
+      '</div>';
+
+    ACO_BATERIA_ORDEM.forEach(function(categoria){
+      const chave = ACO_CHAVE_POR_CATEGORIA[categoria];
+      const r = acoContagem(categoria);
+      const chaves = Object.keys(r.contagem);
+      html += '<div class="stat-card">' +
+        '<div class="stat-label" style="margin-bottom:10px;">' + escapeHtml(ACO_BATERIA_LABEL[categoria]) + '</div>' +
+        chaves.map(function(k){ return '<div class="aco-resultado-linha"><span>' + escapeHtml(k.charAt(0).toUpperCase() + k.slice(1)) + '</span><b>' + r.contagem[k] + '</b></div>'; }).join('') +
+        '<div class="aco-resultado-linha"><span>Empate / Inconclusivo</span><b>' + r.empates + '</b></div>' +
+        '<label class="form-label">Classificação profissional</label>' +
+        '<div class="aco-opcoes-row">' +
+        ACO_CLASSIFICACOES_PROFISSIONAIS[categoria].map(function(op){
+          return '<div class="aco-opcao-btn' + (acoDados[chave].classificacaoProfissional === op ? ' sel' : '') + '" data-aco-classif="' + categoria + '" data-aco-classif-valor="' + escapeHtml(op) + '">' + escapeHtml(op) + '</div>';
+        }).join('') +
+        '</div></div>';
+    });
+
+    html += '<div class="stat-card">' +
+      '<label class="form-label">Observações da profissional</label>' +
+      '<textarea class="input-field textarea" id="aco-resultado-obs" style="min-height:110px;" placeholder="Escreva livremente...">' + escapeHtml(acoDados.observacoesResultado || '') + '</textarea>' +
+      '</div>' +
+      '<div class="aco-nav-row">' +
+      '<button class="btn-secondary" data-aco-nav="voltar-bateria">Anterior</button>' +
+      '<button class="btn-primary" id="aco-finalizar-btn">' + (acoDados.status === 'finalizada' ? 'Reabrir e Salvar Alterações' : 'Concluir Análise') + '</button>' +
+      '</div>';
+
+    return html;
+  }
+
+  document.addEventListener('click', function(e){
+    const classifBtn = e.target.closest('[data-aco-classif]');
+    if(classifBtn && acoUi.screen === 'resultados'){
+      const categoria = classifBtn.getAttribute('data-aco-classif');
+      const chave = ACO_CHAVE_POR_CATEGORIA[categoria];
+      acoDados[chave].classificacaoProfissional = classifBtn.getAttribute('data-aco-classif-valor');
+      acoRender();
+      return;
+    }
+
+    if(e.target.closest('[data-aco-nav="voltar-bateria"]') && acoUi.screen === 'resultados'){
+      acoUi.screen = 'bateria';
+      acoUi.bateria = 'chroma';
+      acoUi.indice = COLOR_ANALYSIS_TESTS_V1.chroma.length - 1;
+      acoRender();
+      return;
+    }
+
+    if(e.target.closest('#aco-finalizar-btn') && acoUid){
+      const obsEl = document.getElementById('aco-resultado-obs');
+      const patch = {
+        observacoesResultado: obsEl ? obsEl.value : '',
+        temperatura: acoDados.temperatura,
+        profundidade: acoDados.profundidade,
+        intensidade: acoDados.intensidade,
+        status: 'finalizada'
+      };
+      Object.assign(acoDados, patch);
+      setDoc(acoDocRef(acoUid), Object.assign({}, acoDados, { updatedAt: new Date().toISOString() }), { merge: true })
+        .then(function(){ return acoAtualizarStatusEntrada(acoUid); })
+        .then(function(){ goTo('ficha-cliente', 'back'); })
+        .catch(function(err){ console.error('GD: erro ao concluir análise cromática online', err); });
+    }
+  });
 
   // ---- Salvar Observações Internas ----
 
