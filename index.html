@@ -23271,13 +23271,13 @@
     const base = cartelaInfo && cartelaInfo.base;
     if(!base || !Array.isArray(base.metais) || !base.metais.length) return null;
 
-    const urlArte = DM_METAIS_IMG_BASE + (base.id || '') + '.jpg';
-
     // Fase 6C.27 — a arte externa (uma por estação, já com título, os metais
     // recomendados, fotos e descrições prontos) substitui os círculos em
     // degradê. Se a arte daquela estação ainda não tiver sido publicada no
     // GitHub, o onerror troca automaticamente para os círculos (comportamento
     // anterior) — nunca quebra o dossiê nem aparece um ícone de imagem quebrada.
+    // Corrigido: a arte de Metais vive em metais/{id}.jpg (mesma pasta-por-estação
+    // das outras 5 seções), não na raiz do repositório como antes.
     const fallbackHtml = '<div class="dossie-mestre-metal-linha" style="display:none;">' + base.metais.map(function(m){
       const corFallback = escapeHtml(m.hex || '#ccc');
       return '<div class="dossie-mestre-metal-item">' +
@@ -23287,7 +23287,7 @@
     }).join('') + '</div>';
 
     let html = '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Metais <em>Recomendados</em></div><div class="dm-linha-curta"></div>';
-    html += '<img src="' + escapeHtml(urlArte) + '" alt="Metais recomendados — ' + escapeHtml(base.nome || '') + '" style="width:100%; height:auto; display:block; margin-bottom:14px; border-radius:4px;" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">';
+    html += '<img src="' + escapeHtml(DM_METAIS_IMG_BASE + 'metais/' + (base.id || '') + '.jpg') + '" alt="Metais recomendados — ' + escapeHtml(base.nome || '') + '" style="width:100%; height:auto; display:block; margin-bottom:14px; border-radius:4px;" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">';
     html += fallbackHtml;
 
     if(dados.crom.metaisRecomendados && dados.crom.metaisRecomendados.trim()){
