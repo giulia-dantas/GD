@@ -2959,8 +2959,11 @@
 .aco-stage{ position:relative; width:100%; aspect-ratio:3/4; max-height:60vh; border-radius:var(--radius); overflow:hidden; background:#e8e4dc; margin-bottom:16px; }
 .aco-stage img.aco-foto{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; transition:none; }
 .aco-stage img.aco-foto.pb{ filter:grayscale(100%); }
-.aco-guia{ position:absolute; inset:8% 22% 30% 22%; border:1.5px dashed rgba(255,255,255,0.85); border-radius:50%; pointer-events:none; }
 .aco-face-drape{ position:absolute; inset:0; width:100%; height:100%; display:block; pointer-events:none; }
+
+.aco-olhos-overlay{ position:fixed; inset:0; z-index:400; background:rgba(20,18,16,0.92); display:flex; align-items:center; justify-content:center; padding:env(safe-area-inset-top,16px) 16px env(safe-area-inset-bottom,16px); box-sizing:border-box; }
+.aco-olhos-img{ max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; object-position:center center; display:block; }
+.aco-olhos-fechar-btn{ position:fixed; top:calc(env(safe-area-inset-top,0px) + 14px); right:16px; z-index:401; width:40px; height:40px; border-radius:50%; border:none; background:rgba(0,0,0,0.6); color:#fff; font-size:18px; line-height:40px; text-align:center; padding:0; cursor:pointer; }
 
 .aco-ab-row{ display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:14px; }
 .aco-ab-btn{ width:52px; height:52px; border-radius:50%; border:1.5px solid rgba(200,164,106,0.5); background:var(--card); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond', serif; font-size:20px; font-weight:600; color:var(--graphite); }
@@ -20435,12 +20438,12 @@
 
   function acoUiPadrao(){
     return { screen: 'foto', bateria: null, indice: 0, ladoAtivo: 'A', fotosCandidatas: [],
-      zoom: { scale: 1, x: 0, y: 0 }, guia: false, pbAtivo: false,
+      zoom: { scale: 1, x: 0, y: 0 }, pbAtivo: false,
       modoComparacao: 'alternancia', ajustarEnquadramento: false,
       svSeasonA: 'primavera_clara', svSeasonB: 'primavera_quente', svLado: 'A', svModo: 'alternancia',
       estModo: 'livre', estAtiva: 'primavera_clara',
       estFamiliaLivre: 'primavera', estFamiliaA: 'primavera', estFamiliaB: 'primavera',
-      estCompararEscolha: null };
+      estCompararEscolha: null, trocarFotoAberto: false, olhosModalAberto: false };
   }
 
   let acoUid = null;
@@ -20670,7 +20673,6 @@
     return '<div class="aco-stage">' +
       '<img class="aco-foto' + (acoUi.pbAtivo ? ' pb' : '') + '" style="' + acoStageTransformStyle() + '" src="' + escapeHtml(acoDados.fotoUrl) + '" alt="Foto para análise">' +
       (corDrape ? acoGerarDrapeSolidoSvg(corDrape) : '') +
-      (acoUi.guia ? '<div class="aco-guia"></div>' : '') +
       '</div>';
   }
 
@@ -20681,13 +20683,12 @@
         '<div class="aco-stage-label">' + escapeHtml(rotulo) + '</div>' +
         '<img class="aco-foto' + (acoUi.pbAtivo ? ' pb' : '') + '" style="' + t + '" src="' + escapeHtml(acoDados.fotoUrl) + '" alt="Foto para análise">' +
         acoGerarDrapeSolidoSvg(cor) +
-        (acoUi.guia ? '<div class="aco-guia"></div>' : '') +
         '</div>';
     }
     return '<div class="aco-stage-row">' + meia(corA, 'A') + meia(corB, 'B') + '</div>';
   }
 
-  // ---- Palco para a etapa Estações (12 estações) — mesma foto/zoom/guia,
+  // ---- Palco para a etapa Estações (12 estações) — mesma foto/zoom,
   // trocando apenas o overlay: em vez de 1 cor sólida, usa o SVG radial de
   // 24 cores da estação escolhida (mesma máscara/abertura compartilhada). ----
 
@@ -20695,7 +20696,6 @@
     return '<div class="aco-stage">' +
       '<img class="aco-foto' + (acoUi.pbAtivo ? ' pb' : '') + '" style="' + acoStageTransformStyle() + '" src="' + escapeHtml(acoDados.fotoUrl) + '" alt="Foto para análise">' +
       acoGerarSvgEstacaoSazonal(seasonId) +
-      (acoUi.guia ? '<div class="aco-guia"></div>' : '') +
       '</div>';
   }
 
@@ -20706,7 +20706,6 @@
         '<div class="aco-stage-label">' + escapeHtml(rotulo) + '</div>' +
         '<img class="aco-foto' + (acoUi.pbAtivo ? ' pb' : '') + '" style="' + t + '" src="' + escapeHtml(acoDados.fotoUrl) + '" alt="Foto para análise">' +
         acoGerarSvgEstacaoSazonal(seasonId) +
-        (acoUi.guia ? '<div class="aco-guia"></div>' : '') +
         '</div>';
     }
     return '<div class="aco-stage-row">' + meia(seasonA, 'A') + meia(seasonB, 'B') + '</div>';
@@ -20781,9 +20780,47 @@
       '<button class="aco-zoom-btn" data-aco-pan="left">←</button>' +
       '<button class="aco-zoom-btn" data-aco-pan="right">→</button>' +
       '<button class="aco-zoom-btn" data-aco-zoom="reset">Redefinir</button>' +
-      '<button class="aco-zoom-btn" data-aco-guia-toggle>' + (acoUi.guia ? 'Ocultar Guia' : 'Mostrar Guia') + '</button>' +
       '</div>';
   }
+
+  // ---- Trocar Foto durante a análise (Contraste / Baterias / Estações) ----
+  // Mesmo conjunto de candidatas já usado na etapa Foto, mas acessível a
+  // qualquer momento sem precisar voltar e sem exigir novo checklist —
+  // são todas fotos já aprovadas na categoria Direcionamento Cromático.
+  function acoTrocarFotoHtml(){
+    if(!acoUi.fotosCandidatas || acoUi.fotosCandidatas.length <= 1) return '';
+    let html = '<button class="btn-secondary" data-aco-trocar-foto-toggle style="margin-bottom:14px;">' + (acoUi.trocarFotoAberto ? 'Fechar Seleção de Foto' : 'Trocar Foto') + '</button>';
+    if(acoUi.trocarFotoAberto){
+      html += '<div class="pill-row" style="flex-wrap:wrap; gap:10px; margin-bottom:16px;">' + acoUi.fotosCandidatas.map(function(c){
+        return '<div class="aco-photo-pick-tile' + (c.slotId === acoDados.fotoSlotId ? ' sel' : '') + '" data-aco-trocar-foto="' + escapeHtml(c.slotId) + '"><img src="' + escapeHtml(c.url) + '" alt=""></div>';
+      }).join('') + '</div>';
+    }
+    return html;
+  }
+
+  document.addEventListener('click', function(e){
+    const trocarFotoToggleBtn = e.target.closest('[data-aco-trocar-foto-toggle]');
+    if(trocarFotoToggleBtn){
+      acoUi.trocarFotoAberto = !acoUi.trocarFotoAberto;
+      acoRender();
+      return;
+    }
+    const trocarFotoTile = e.target.closest('[data-aco-trocar-foto]');
+    if(trocarFotoTile && acoUid){
+      const slotId = trocarFotoTile.getAttribute('data-aco-trocar-foto');
+      const entry = acoUi.fotosCandidatas.filter(function(c){ return c.slotId === slotId; })[0];
+      if(entry && entry.slotId !== acoDados.fotoSlotId){
+        acoDados.fotoSlotId = entry.slotId;
+        acoDados.fotoUrl = entry.url;
+        acoUi.zoom = { scale: 1, x: 0, y: 0 };
+        acoUi.pbAtivo = false;
+        acoSalvar({ fotoSlotId: acoDados.fotoSlotId, fotoUrl: acoDados.fotoUrl });
+      }
+      acoUi.trocarFotoAberto = false;
+      acoRender();
+      return;
+    }
+  });
 
   // ---- Atualizações diretas no DOM (sem re-render), para transições instantâneas ----
 
@@ -20812,22 +20849,12 @@
     document.querySelectorAll('#aco-root .aco-foto').forEach(function(img){ img.style.transform = valor; });
   }
 
-  function acoAplicarGuiaDom(){
-    document.querySelectorAll('#aco-root .aco-stage').forEach(function(stage){
-      let g = stage.querySelector('.aco-guia');
-      if(acoUi.guia && !g){ g = document.createElement('div'); g.className = 'aco-guia'; stage.appendChild(g); }
-      else if(!acoUi.guia && g){ g.remove(); }
-    });
-    const guiaBtn = document.querySelector('[data-aco-guia-toggle]');
-    if(guiaBtn) guiaBtn.textContent = acoUi.guia ? 'Ocultar Guia' : 'Mostrar Guia';
-  }
-
   document.addEventListener('click', function(e){
     const zoomBtn = e.target.closest('[data-aco-zoom]');
     if(zoomBtn){
       const acao = zoomBtn.getAttribute('data-aco-zoom');
-      if(acao === 'in') acoUi.zoom.scale = Math.min(2.2, Math.round((acoUi.zoom.scale + 0.1) * 10) / 10);
-      else if(acao === 'out') acoUi.zoom.scale = Math.max(1, Math.round((acoUi.zoom.scale - 0.1) * 10) / 10);
+      if(acao === 'in') acoUi.zoom.scale = Math.min(2.2, Math.round((acoUi.zoom.scale + 0.05) * 100) / 100);
+      else if(acao === 'out') acoUi.zoom.scale = Math.max(1, Math.round((acoUi.zoom.scale - 0.05) * 100) / 100);
       else if(acao === 'reset') acoUi.zoom = { scale: 1, x: 0, y: 0 };
       acoAplicarTransformDom();
       return;
@@ -20835,18 +20862,12 @@
     const panBtn = e.target.closest('[data-aco-pan]');
     if(panBtn){
       const dir = panBtn.getAttribute('data-aco-pan');
-      const passo = 12;
+      const passo = 5;
       if(dir === 'up') acoUi.zoom.y -= passo;
       else if(dir === 'down') acoUi.zoom.y += passo;
       else if(dir === 'left') acoUi.zoom.x -= passo;
       else if(dir === 'right') acoUi.zoom.x += passo;
       acoAplicarTransformDom();
-      return;
-    }
-    const guiaBtn = e.target.closest('[data-aco-guia-toggle]');
-    if(guiaBtn){
-      acoUi.guia = !acoUi.guia;
-      acoAplicarGuiaDom();
       return;
     }
     const ajustarBtn = e.target.closest('[data-aco-ajustar-toggle]');
@@ -20941,7 +20962,6 @@
         acoDados.fotoUrl = entry.url;
         acoDados.fotoValidada = false;
         acoUi.zoom = { scale: 1, x: 0, y: 0 };
-        acoUi.guia = false;
         acoUi.pbAtivo = false;
         acoRender();
       }
@@ -20973,10 +20993,54 @@
 
   // ---- Etapa 2: Contraste pessoal (Original / Preto e Branco) ----
 
+  // Localiza a URL de "Olhos (aproximação)" (slot cromatico-olhos) dentro do
+  // MESMO conjunto de candidatas já carregado para a análise — não faz nenhuma
+  // busca nova ao Firestore e não duplica a imagem. Se a cliente nunca enviou
+  // essa foto específica, retorna null (nunca bloqueia a análise).
+  function acoObterUrlOlhos(){
+    const entry = (acoUi.fotosCandidatas || []).filter(function(c){ return c.slotId === 'cromatico-olhos'; })[0];
+    return entry ? entry.url : null;
+  }
+
+  // Controle discreto "Ver Olhos" + lightbox de imagem inteira (sem crop, sem
+  // zoom automático, sem filtro) — material exclusivamente de observação da
+  // profissional durante o Contraste. Não é uma etapa, não persiste nada.
+  function acoVerOlhosHtml(){
+    const url = acoObterUrlOlhos();
+    if(!url){
+      return '<div class="page-sub" style="margin-bottom:14px;">Foto dos olhos não enviada.</div>';
+    }
+    return '<button class="btn-secondary" data-aco-olhos-abrir style="margin-bottom:14px;">Ver Olhos</button>' +
+      (acoUi.olhosModalAberto ? acoOlhosModalHtml(url) : '');
+  }
+
+  function acoOlhosModalHtml(url){
+    return '<div class="aco-olhos-overlay" data-aco-olhos-fechar>' +
+      '<button class="aco-olhos-fechar-btn" data-aco-olhos-fechar>✕</button>' +
+      '<img class="aco-olhos-img" src="' + escapeHtml(url) + '" alt="Olhos (aproximação)">' +
+      '</div>';
+  }
+
+  document.addEventListener('click', function(e){
+    if(e.target.closest('.aco-olhos-img')) return; // toque na própria imagem não fecha o modal
+    if(e.target.closest('[data-aco-olhos-abrir]')){
+      acoUi.olhosModalAberto = true;
+      acoRender();
+      return;
+    }
+    if(e.target.closest('[data-aco-olhos-fechar]')){
+      acoUi.olhosModalAberto = false;
+      acoRender();
+      return;
+    }
+  });
+
   function acoHtmlContraste(){
     const c = acoDados.contraste;
     return acoStageSingleHtml(null) +
       acoZoomControlsHtml() +
+      acoTrocarFotoHtml() +
+      acoVerOlhosHtml() +
       '<div class="aco-mini-toggle-row">' +
       '<div class="aco-mini-toggle' + (!acoUi.pbAtivo ? ' sel' : '') + '" data-aco-pb="0">Original</div>' +
       '<div class="aco-mini-toggle' + (acoUi.pbAtivo ? ' sel' : '') + '" data-aco-pb="1">Preto e Branco</div>' +
@@ -21056,6 +21120,7 @@
 
     html += '<button class="btn-secondary" data-aco-ajustar-toggle style="margin-bottom:14px;">' + (acoUi.ajustarEnquadramento ? 'Bloquear Enquadramento' : 'Ajustar Enquadramento') + '</button>';
     if(acoUi.ajustarEnquadramento) html += acoZoomControlsHtml();
+    html += acoTrocarFotoHtml();
 
     if(!ladoALado){
       html += '<div class="aco-ab-row">' +
@@ -21203,6 +21268,7 @@
     html += acoStageSazonalSingleHtml(acoUi.estAtiva);
     html += '<button class="btn-secondary" data-aco-ajustar-toggle style="margin-bottom:14px;">' + (acoUi.ajustarEnquadramento ? 'Bloquear Enquadramento' : 'Ajustar Enquadramento') + '</button>';
     if(acoUi.ajustarEnquadramento) html += acoZoomControlsHtml();
+    html += acoTrocarFotoHtml();
 
     html += acoSeletorEstacaoHtml('estFamiliaLivre', acoUi.estFamiliaLivre, 'estAtiva', acoUi.estAtiva);
 
@@ -21231,6 +21297,7 @@
 
     html += '<button class="btn-secondary" data-aco-ajustar-toggle style="margin-bottom:14px;">' + (acoUi.ajustarEnquadramento ? 'Bloquear Enquadramento' : 'Ajustar Enquadramento') + '</button>';
     if(acoUi.ajustarEnquadramento) html += acoZoomControlsHtml();
+    html += acoTrocarFotoHtml();
 
     if(!ladoALado){
       html += '<div class="aco-ab-row">' +
