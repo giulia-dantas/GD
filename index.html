@@ -2961,6 +2961,7 @@
 .aco-stage img.aco-foto.pb{ filter:grayscale(100%); }
 .aco-drape{ position:absolute; left:0; right:0; bottom:0; height:38%; border-top-left-radius:60% 30%; border-top-right-radius:60% 30%; box-shadow:0 -6px 18px rgba(0,0,0,0.18) inset; }
 .aco-guia{ position:absolute; inset:8% 22% 30% 22%; border:1.5px dashed rgba(255,255,255,0.85); border-radius:50%; pointer-events:none; }
+.aco-season-drape{ position:absolute; inset:0; width:100%; height:100%; display:block; pointer-events:none; }
 
 .aco-ab-row{ display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:14px; }
 .aco-ab-btn{ width:52px; height:52px; border-radius:50%; border:1.5px solid rgba(200,164,106,0.5); background:var(--card); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond', serif; font-size:20px; font-weight:600; color:var(--graphite); }
@@ -20343,10 +20344,78 @@
 
   const ACO_CHAVE_POR_CATEGORIA = { temperature: 'temperatura', depth: 'profundidade', chroma: 'intensidade' };
 
+  // ======= DRAPES SAZONAIS RADIAIS — 12 ESTAÇÕES (camada de VALIDAÇÃO SAZONAL) =======
+  // Componente visual novo e independente do motor simples de drapes (usado nas
+  // baterias de Temperatura/Profundidade/Intensidade, que continua 100% intacto).
+  // Um único SVG programático por estação: 24 cunhas radiais retas (fill="#HEX"
+  // direto, sem opacity/filter/gradient) + abertura oval central REALMENTE
+  // transparente via <mask>. As 12 estações compartilham a MESMA geometria —
+  // só os 24 HEX e o rótulo discreto mudam ao trocar de estação.
+  // Fonte cromática única e oficial: os arrays abaixo. As artes de referência
+  // (imagens já criadas) NUNCA são usadas para extrair cor — servem só de
+  // referência de composição/geometria.
+  const SEASON_DRAPE_GEOMETRY = { viewW: 3000, viewH: 4000, cx: 1500, cy: 1950, rx: 850, ry: 1150, rFar: 3200 };
+
+  const SEASON_DRAPES = {
+    primavera_clara:     { label: 'Primavera Clara',     short: 'PC', colors: ['#F9F3E7','#D3CAC1','#DD792B','#FEF3D3','#FDDD86','#FEEE8E','#FDCFA5','#FDB47A','#FE9B57','#F96247','#F84332','#FA5043','#F58E9B','#FD7CAB','#D5E69D','#A2B355','#328642','#D0EEF8','#9CC5E3','#45C0CF','#1F71BD','#E0D3DD','#BE7BC3','#956DBC'] },
+    primavera_quente:    { label: 'Primavera Quente',    short: 'PQ', colors: ['#FCF0DA','#F2D8B7','#CB6D23','#FDCC54','#FCC23D','#F2A022','#FEAD7D','#FEA45A','#FE7B2D','#FE745A','#FE563B','#EA453F','#FEB8A1','#F48483','#BED585','#A8B75A','#44B074','#D1E8F8','#769FB6','#4B95A4','#398BA3','#D3BFDB','#C48AD4','#86599A'] },
+    primavera_brilhante: { label: 'Primavera Brilhante', short: 'PB', colors: ['#FEFDFB','#101010','#D56E1F','#FED813','#FED217','#FCEB57','#FFA364','#FD7424','#F75222','#FE3B1F','#F52D2F','#A60C16','#FC7C9F','#F5427A','#C4DF5C','#37BE95','#1E8871','#D1EFF7','#0754B0','#34BEC8','#18A3CC','#CDB3D8','#8D60BD','#572972'] },
+    verao_claro:         { label: 'Verão Claro',         short: 'VC', colors: ['#FEFEFE','#C4C3C9','#C59C80','#FEF0D6','#FDBD94','#FE4F53','#DD3F58','#F5CDCE','#F1B4CF','#FE8CBC','#F564A5','#ABDACA','#9CB39F','#448067','#CDDDF5','#CDE7F7','#A5C3EA','#8BAED8','#4BB7C4','#3A6DC1','#CCC2DD','#DED4ED','#B699CF','#A280B4'] },
+    verao_frio:          { label: 'Verão Frio',          short: 'VF', colors: ['#FDFBFE','#BFBCC3','#BC8869','#FFF5DA','#FDB28E','#E52B36','#D82D3C','#F5C7C9','#EE9EB1','#FB7FAD','#F668A0','#B0D4C6','#8EA08C','#637C69','#CCE3F2','#5577A6','#8EAAD1','#5FB1C0','#3657AB','#3C4F77','#CDBDDD','#9D84C4','#764B81','#6E3168'] },
+    verao_suave:         { label: 'Verão Suave',         short: 'VS', colors: ['#FFFFFF','#86858B','#BF9079','#FEF3D3','#FBB18E','#FD5354','#D4333B','#ECAFB6','#E890A0','#FC78AE','#F9C5D1','#B5D0C4','#ACB99B','#59937A','#A1B0C7','#CEE5F3','#A6BDDD','#6C8AA5','#4EA4AE','#314375','#CDB2D5','#C8A3CF','#8C6899','#6D3A76'] },
+    outono_suave:        { label: 'Outono Suave',        short: 'OS', colors: ['#C1AA98','#DCC6B1','#CE9C7B','#B57444','#5F3922','#E09E2D','#D69326','#E6956A','#F48558','#D7511C','#FA4D46','#C92926','#AA2723','#E79C9B','#DD7D88','#B6BE8F','#9AAA85','#8D9472','#3B6766','#61919A','#6D8BA7','#2B6694','#D3C4D7','#78527A'] },
+    outono_quente:       { label: 'Outono Quente',       short: 'OQ', colors: ['#E8D2BA','#B7A495','#6A3516','#C47A31','#985125','#F1A825','#F5B538','#D66833','#C9541F','#FE8446','#F5231A','#D12322','#C9251B','#FABAA1','#F18D97','#A3A75F','#A5A951','#778458','#318666','#3F6B7B','#8DA6C4','#233F4B','#C594C1','#815789'] },
+    outono_escuro:       { label: 'Outono Escuro',       short: 'OE', colors: ['#F5ECDD','#6A655F','#582209','#763E19','#BF5911','#DE9D27','#EFA61B','#BF5C2E','#B63F15','#CC4E18','#7C1715','#A02515','#D02B1F','#E29283','#D46B65','#76794F','#6A704A','#285844','#3C6D5C','#3E6165','#566B80','#213336','#9E74A5','#856596'] },
+    inverno_brilhante:   { label: 'Inverno Brilhante',   short: 'IB', colors: ['#FEFEFE','#111111','#94532D','#EEB63D','#F3724B','#F3110F','#F23755','#951C23','#DC3376','#F9728E','#F64680','#EE5995','#148C73','#BFD25E','#869E84','#2E4EC2','#36A1B9','#1881A6','#2D42AD','#182850','#C5B6D3','#9753AE','#4B235C','#421762'] },
+    inverno_frio:        { label: 'Inverno Frio',        short: 'IF', colors: ['#FEFEFE','#0C0C0E','#995828','#FCEBBF','#F89B72','#CA0336','#C20C1D','#9E161A','#E9919D','#DE8297','#D83477','#E0548D','#B1D2C1','#8D9564','#24503F','#DEE8F2','#7A8EB1','#5EB5CE','#3152B2','#142B50','#B89FCC','#8F5AAC','#461243','#2C0E58'] },
+    inverno_escuro:      { label: 'Inverno Escuro',      short: 'IE', colors: ['#FEFEFE','#0D0D0F','#AE5019','#FDE5AD','#FC8B5E','#7A0219','#D80916','#B40A2F','#D16260','#FD4181','#FC2E7A','#F7A5A4','#0A5B4A','#7C854E','#415943','#0B1B68','#A5BBE3','#2C5474','#107090','#152C96','#78499F','#6D4699','#42113E','#A982BF'] }
+  };
+  const SEASON_DRAPE_ORDEM = ['primavera_clara','primavera_quente','primavera_brilhante','verao_claro','verao_frio','verao_suave','outono_suave','outono_quente','outono_escuro','inverno_brilhante','inverno_frio','inverno_escuro'];
+
+  // Gera o SVG completo de UMA estação: 24 cunhas retas partindo do centro
+  // (região sempre coberta pela máscara, então a geometria da cunha em si nunca
+  // precisa "conhecer" a elipse) + máscara (retângulo branco = visível, elipse
+  // preta = abertura oculta/transparente) + selo discreto no canto.
+  // Ordem 1→24 obrigatória, sentido horário a partir do topo (12h).
+  function acoGerarSvgEstacaoSazonal(seasonId){
+    const dados = SEASON_DRAPES[seasonId];
+    if(!dados || !Array.isArray(dados.colors) || dados.colors.length !== 24) return '<svg class="aco-season-drape"></svg>';
+    const g = SEASON_DRAPE_GEOMETRY;
+    const maskId = 'aco-sv-mask-' + seasonId + '-' + Math.random().toString(36).slice(2, 8);
+    const passo = 360 / 24;
+    let cunhas = '';
+    for(let i = 0; i < 24; i++){
+      const a0 = (i * passo) * Math.PI / 180;
+      const a1 = ((i + 1) * passo) * Math.PI / 180;
+      const x0 = (g.cx + g.rFar * Math.sin(a0)).toFixed(1);
+      const y0 = (g.cy - g.rFar * Math.cos(a0)).toFixed(1);
+      const x1 = (g.cx + g.rFar * Math.sin(a1)).toFixed(1);
+      const y1 = (g.cy - g.rFar * Math.cos(a1)).toFixed(1);
+      cunhas += '<path d="M' + g.cx + ',' + g.cy + ' L' + x0 + ',' + y0 + ' L' + x1 + ',' + y1 + ' Z" fill="' + dados.colors[i] + '"/>';
+    }
+    return (
+      '<svg class="aco-season-drape" viewBox="0 0 ' + g.viewW + ' ' + g.viewH + '" data-season="' + seasonId + '">' +
+        '<defs>' +
+          '<mask id="' + maskId + '">' +
+            '<rect x="0" y="0" width="' + g.viewW + '" height="' + g.viewH + '" fill="#fff"/>' +
+            '<ellipse cx="' + g.cx + '" cy="' + g.cy + '" rx="' + g.rx + '" ry="' + g.ry + '" fill="#000"/>' +
+          '</mask>' +
+        '</defs>' +
+        '<g mask="url(#' + maskId + ')">' + cunhas + '</g>' +
+        '<g>' +
+          '<rect x="' + (g.viewW - 720) + '" y="' + (g.viewH - 190) + '" width="680" height="140" rx="14" fill="rgba(20,20,20,0.55)"/>' +
+          '<text x="' + (g.viewW - 668) + '" y="' + (g.viewH - 96) + '" font-size="72" fill="#fff" font-family="Georgia, serif" font-weight="700">' + escapeHtml(dados.short) + '</text>' +
+          '<text x="' + (g.viewW - 500) + '" y="' + (g.viewH - 96) + '" font-size="50" fill="#f2e9df" font-family="Georgia, serif" font-style="italic">· ' + escapeHtml(dados.label) + '</text>' +
+        '</g>' +
+      '</svg>'
+    );
+  }
+
   function acoUiPadrao(){
     return { screen: 'foto', bateria: null, indice: 0, ladoAtivo: 'A', fotosCandidatas: [],
       zoom: { scale: 1, x: 0, y: 0 }, guia: false, pbAtivo: false,
-      modoComparacao: 'alternancia', ajustarEnquadramento: false };
+      modoComparacao: 'alternancia', ajustarEnquadramento: false,
+      svSeasonA: 'primavera_clara', svSeasonB: 'primavera_quente', svLado: 'A', svModo: 'alternancia' };
   }
 
   let acoUid = null;
@@ -20553,6 +20622,7 @@
     else if(acoUi.screen === 'contraste') root.innerHTML = acoHtmlContraste();
     else if(acoUi.screen === 'bateria') root.innerHTML = acoHtmlBateria();
     else if(acoUi.screen === 'resultados') root.innerHTML = acoHtmlResultados();
+    else if(acoUi.screen === 'validacaoSazonal') root.innerHTML = acoHtmlValidacaoSazonal();
   }
 
   // ---- Componente centralizado do "palco" da fotografia (Fase 2) ----
@@ -20589,6 +20659,69 @@
         '</div>';
     }
     return '<div class="aco-stage-row">' + meia(corA, 'A') + meia(corB, 'B') + '</div>';
+  }
+
+  // ---- Palco para a Validação Sazonal (12 estações) — mesma foto/zoom/guia,
+  // trocando apenas o overlay: em vez de .aco-drape (cor sólida), usa o SVG
+  // radial de 24 cores da estação escolhida. ----
+
+  function acoStageSazonalSingleHtml(seasonId){
+    return '<div class="aco-stage">' +
+      '<img class="aco-foto' + (acoUi.pbAtivo ? ' pb' : '') + '" style="' + acoStageTransformStyle() + '" src="' + escapeHtml(acoDados.fotoUrl) + '" alt="Foto para análise">' +
+      acoGerarSvgEstacaoSazonal(seasonId) +
+      (acoUi.guia ? '<div class="aco-guia"></div>' : '') +
+      '</div>';
+  }
+
+  function acoStageSazonalLadoALadoHtml(seasonA, seasonB){
+    const t = acoStageTransformStyle();
+    function meia(seasonId, rotulo){
+      return '<div class="aco-stage">' +
+        '<div class="aco-stage-label">' + escapeHtml(rotulo) + '</div>' +
+        '<img class="aco-foto' + (acoUi.pbAtivo ? ' pb' : '') + '" style="' + t + '" src="' + escapeHtml(acoDados.fotoUrl) + '" alt="Foto para análise">' +
+        acoGerarSvgEstacaoSazonal(seasonId) +
+        (acoUi.guia ? '<div class="aco-guia"></div>' : '') +
+        '</div>';
+    }
+    return '<div class="aco-stage-row">' + meia(seasonA, 'A') + meia(seasonB, 'B') + '</div>';
+  }
+
+  // Troca instantânea de estação: substitui só o <svg> de cada palco, nunca o
+  // <img> — a foto (fonte, zoom, posição) nunca é tocada nem recarregada.
+  function acoAplicarSazonalDom(){
+    document.querySelectorAll('#aco-root .aco-stage').forEach(function(stage){
+      const svg = stage.querySelector('.aco-season-drape');
+      if(!svg) return;
+      let seasonId;
+      if(stage.parentElement && stage.parentElement.classList.contains('aco-stage-row')){
+        seasonId = (stage === stage.parentElement.firstElementChild) ? acoUi.svSeasonA : acoUi.svSeasonB;
+      } else {
+        seasonId = acoUi.svLado === 'A' ? acoUi.svSeasonA : acoUi.svSeasonB;
+      }
+      svg.outerHTML = acoGerarSvgEstacaoSazonal(seasonId);
+    });
+    document.querySelectorAll('#aco-root .aco-ab-btn[data-aco-sv-lado]').forEach(function(el){
+      el.classList.toggle('active', el.getAttribute('data-aco-sv-lado') === acoUi.svLado);
+    });
+  }
+
+  // Atualiza só o destaque visual dos seletores de estação (pills), sem
+  // re-renderizar o palco — usado junto com acoAplicarSazonalDom().
+  function acoAtualizarPillsSazonal(){
+    document.querySelectorAll('[data-aco-sv-selecionar]').forEach(function(el){
+      const campo = el.getAttribute('data-aco-sv-selecionar');
+      const id = el.getAttribute('data-aco-sv-id');
+      el.classList.toggle('sel', acoUi[campo] === id);
+    });
+  }
+
+  function acoSeletorEstacoesHtml(campo, valorAtual){
+    return '<div class="pill-row" style="flex-wrap:wrap; gap:8px; margin-bottom:14px;">' +
+      SEASON_DRAPE_ORDEM.map(function(id){
+        const d = SEASON_DRAPES[id];
+        return '<div class="aco-opcao-btn' + (valorAtual === id ? ' sel' : '') + '" data-aco-sv-selecionar="' + campo + '" data-aco-sv-id="' + id + '" style="font-size:11px; padding:6px 10px;" title="' + escapeHtml(d.label) + '">' + escapeHtml(d.short) + '</div>';
+      }).join('') +
+      '</div>';
   }
 
   function acoZoomControlsHtml(){
@@ -20990,6 +21123,10 @@
     });
 
     html += '<div class="stat-card">' +
+      '<button class="btn-secondary" id="aco-abrir-sazonal-btn" style="width:100%;">Validação Sazonal (12 Estações)</button>' +
+      '</div>';
+
+    html += '<div class="stat-card">' +
       '<label class="form-label">Observações da profissional</label>' +
       '<textarea class="input-field textarea" id="aco-resultado-obs" style="min-height:110px;" placeholder="Escreva livremente...">' + escapeHtml(acoDados.observacoesResultado || '') + '</textarea>' +
       '</div>' +
@@ -21000,6 +21137,91 @@
 
     return html;
   }
+
+  // ---- Validação Sazonal (12 estações) — ferramenta de apoio à decisão final,
+  // acessível a partir de Resultados. Usa o mesmo motor de foto/zoom/guia; o
+  // drape aqui é a máscara radial de 24 cores em vez de uma cor sólida. ----
+
+  function acoHtmlValidacaoSazonal(){
+    const ladoALado = acoUi.svModo === 'lado-a-lado';
+    const seasonAtual = acoUi.svLado === 'A' ? acoUi.svSeasonA : acoUi.svSeasonB;
+
+    let html = '<div class="page-sub" style="text-align:center; margin-bottom:8px;">Validação Sazonal — 12 Estações</div>';
+
+    html += '<div class="aco-mini-toggle-row">' +
+      '<div class="aco-mini-toggle' + (!ladoALado ? ' sel' : '') + '" data-aco-sv-modo="alternancia">Alternância</div>' +
+      '<div class="aco-mini-toggle' + (ladoALado ? ' sel' : '') + '" data-aco-sv-modo="lado-a-lado">Lado a Lado</div>' +
+      '</div>';
+
+    html += ladoALado ? acoStageSazonalLadoALadoHtml(acoUi.svSeasonA, acoUi.svSeasonB) : acoStageSazonalSingleHtml(seasonAtual);
+
+    html += '<button class="btn-secondary" data-aco-ajustar-toggle style="margin-bottom:14px;">' + (acoUi.ajustarEnquadramento ? 'Bloquear Enquadramento' : 'Ajustar Enquadramento') + '</button>';
+    if(acoUi.ajustarEnquadramento) html += acoZoomControlsHtml();
+
+    if(!ladoALado){
+      html += '<div class="aco-ab-row">' +
+        '<div class="aco-ab-btn' + (acoUi.svLado === 'A' ? ' active' : '') + '" data-aco-sv-lado="A">A</div>' +
+        '<button class="aco-trocar-btn" data-aco-sv-trocar>Trocar Estação</button>' +
+        '<div class="aco-ab-btn' + (acoUi.svLado === 'B' ? ' active' : '') + '" data-aco-sv-lado="B">B</div>' +
+        '</div>';
+    }
+
+    html += '<label class="form-label">Estação A</label>' + acoSeletorEstacoesHtml('svSeasonA', acoUi.svSeasonA);
+    html += '<label class="form-label">Estação B</label>' + acoSeletorEstacoesHtml('svSeasonB', acoUi.svSeasonB);
+
+    html += '<div class="aco-nav-row" style="margin-top:14px;">' +
+      '<button class="btn-secondary" data-aco-nav="voltar-resultados-de-sazonal">Voltar aos Resultados</button>' +
+      '</div>';
+
+    return html;
+  }
+
+  document.addEventListener('click', function(e){
+    if(e.target.closest('#aco-abrir-sazonal-btn')){
+      acoUi.screen = 'validacaoSazonal';
+      acoRender();
+      return;
+    }
+
+    if(e.target.closest('[data-aco-nav="voltar-resultados-de-sazonal"]')){
+      acoUi.screen = 'resultados';
+      acoRender();
+      return;
+    }
+
+    const modoSvBtn = e.target.closest('[data-aco-sv-modo]');
+    if(modoSvBtn && acoUi.screen === 'validacaoSazonal'){
+      acoUi.svModo = modoSvBtn.getAttribute('data-aco-sv-modo');
+      acoRender();
+      return;
+    }
+
+    const ladoSvBtn = e.target.closest('[data-aco-sv-lado]');
+    if(ladoSvBtn && acoUi.screen === 'validacaoSazonal'){
+      acoUi.svLado = ladoSvBtn.getAttribute('data-aco-sv-lado');
+      acoAplicarSazonalDom();
+      return;
+    }
+
+    const trocarSvBtn = e.target.closest('[data-aco-sv-trocar]');
+    if(trocarSvBtn && acoUi.screen === 'validacaoSazonal'){
+      acoUi.svLado = acoUi.svLado === 'A' ? 'B' : 'A';
+      acoAplicarSazonalDom();
+      return;
+    }
+
+    const selecionarSvBtn = e.target.closest('[data-aco-sv-selecionar]');
+    if(selecionarSvBtn && acoUi.screen === 'validacaoSazonal'){
+      const campo = selecionarSvBtn.getAttribute('data-aco-sv-selecionar');
+      const id = selecionarSvBtn.getAttribute('data-aco-sv-id');
+      acoUi[campo] = id;
+      // Atualização direta (sem acoRender): troca só o SVG e o destaque das
+      // pills — a foto/zoom nunca é recriada ao trocar de estação.
+      acoAtualizarPillsSazonal();
+      acoAplicarSazonalDom();
+      return;
+    }
+  });
 
   document.addEventListener('click', function(e){
     const classifBtn = e.target.closest('[data-aco-classif]');
