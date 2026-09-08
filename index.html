@@ -145,6 +145,55 @@
     border-radius:0;
     border:none;
     box-shadow:none;
+    padding-top:44px;
+  }
+
+  body.gd-toolbar-hidden .app-gallery.app-mode .phone{
+    padding-top:0;
+  }
+
+  .gd-global-toolbar{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:44px;
+    padding:0 14px;
+    background:var(--off-white);
+    border-bottom:var(--hairline);
+  }
+
+  body.gd-toolbar-hidden .gd-global-toolbar{
+    display:none;
+  }
+
+  .gd-toolbar-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    color:var(--graphite-soft);
+    cursor:pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background .2s ease, color .2s ease, opacity .2s ease;
+  }
+  .gd-toolbar-btn:active{
+    background:var(--champagne-light);
+    color:var(--vinho);
+  }
+  .gd-toolbar-btn svg{
+    width:19px;
+    height:19px;
+  }
+  .gd-toolbar-btn.gd-toolbar-disabled{
+    opacity:0.28;
+    pointer-events:none;
   }
 
   .phone{
@@ -2998,9 +3047,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 </head>
-<body>
+<body class="gd-toolbar-hidden">
 
 <div class="app-gallery app-mode" id="app-root">
+
+  <div class="gd-global-toolbar" id="gd-global-toolbar">
+    <div class="gd-toolbar-btn" id="gd-toolbar-back" title="Voltar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
+    </div>
+    <div class="gd-toolbar-btn" id="gd-toolbar-home" title="Menu Principal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4.5l8 7"/><path d="M6 10.5V19a1 1 0 001 1h3.5v-5h3v5H17a1 1 0 001-1v-8.5"/><circle cx="12" cy="14.2" r="0.6" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="gd-toolbar-btn" id="gd-toolbar-logout" data-action="logout" title="Sair">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4.5h2.5A2 2 0 0119.5 6.5v11A2 2 0 0117.5 19.5H15"/><path d="M10.5 8L15 12l-4.5 4"/><path d="M15 12H4.5"/></svg>
+    </div>
+  </div>
 
   <!-- ================= PAINEL ================= -->
   <div class="screen-wrap" id="screen-painel">
@@ -5502,7 +5563,7 @@
         <div class="login-error" id="editar-cliente-error"></div>
 
         <button class="btn-primary" id="editar-cliente-salvar-btn">Salvar Alterações</button>
-        <button class="btn-secondary" id="editar-cliente-reenviar-btn">Resetar Senha (123)</button>
+        <button class="btn-secondary" id="editar-cliente-reenviar-btn">Resetar Senha (123456)</button>
         <button class="btn-secondary" data-goto="materiais">Cancelar</button>
 
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
@@ -5574,12 +5635,45 @@
   var DEFAULT_SCREEN = 'brand';
   var TRANSITION_MS = 600;
   var transitioning = false;
+  var screenHistory = [];
+  var TOOLBAR_EXCLUDED_SCREENS = ['brand', 'login', 'trocar-senha', 'welcome'];
 
   var ANIM_CLASSES = ['enter-fwd','enter-back','leave-fwd','leave-back'];
 
   function clearAnim(el){
     ANIM_CLASSES.forEach(function(c){ el.classList.remove(c); });
   }
+
+  function updateGlobalToolbar(screenId){
+    var hide = TOOLBAR_EXCLUDED_SCREENS.indexOf(screenId) !== -1;
+    document.body.classList.toggle('gd-toolbar-hidden', hide);
+
+    var backBtn = document.getElementById('gd-toolbar-back');
+    if(backBtn){
+      backBtn.classList.toggle('gd-toolbar-disabled', screenHistory.length === 0);
+    }
+  }
+
+  function goBackOneScreen(){
+    if(screenHistory.length === 0) return;
+    var prev = screenHistory.pop();
+    if(window.__gdGoTo) window.__gdGoTo(prev, 'back');
+  }
+
+  function goToMainMenu(){
+    screenHistory = [];
+    var role = window.__gdRole || 'cliente';
+    var target = role === 'consultora' ? 'painel' : 'cliente-inicio';
+    if(window.__gdGoTo) window.__gdGoTo(target, 'back');
+  }
+
+  function resetScreenHistory(){
+    screenHistory = [];
+  }
+
+  window.__gdGoBack = goBackOneScreen;
+  window.__gdGoToMainMenu = goToMainMenu;
+  window.__gdResetHistory = resetScreenHistory;
 
   function goTo(screenId, direction){
     if(transitioning) return;
@@ -5588,6 +5682,16 @@
 
     var current = document.querySelector('.screen-wrap.active');
     direction = direction || 'fwd';
+
+    // Track visited screens for the global "voltar" button, skipping
+    // pre-login/transitional screens so back navigation never lands there.
+    if(current && current !== target){
+      var currentId = current.id.replace(/^screen-/, '');
+      if(TOOLBAR_EXCLUDED_SCREENS.indexOf(currentId) === -1){
+        screenHistory.push(currentId);
+      }
+    }
+    updateGlobalToolbar(screenId);
 
     // Update bottom nav active state on incoming screen
     target.querySelectorAll('.navitem[data-goto]').forEach(function(nav){
@@ -5643,6 +5747,15 @@
 
   // Click handling (delegated)
   document.addEventListener('click', function(e){
+    if(e.target.closest('#gd-toolbar-back')){
+      goBackOneScreen();
+      return;
+    }
+    if(e.target.closest('#gd-toolbar-home')){
+      goToMainMenu();
+      return;
+    }
+
     var el = e.target.closest('[data-goto]');
     if(el){
       e.preventDefault();
@@ -6065,6 +6178,7 @@
   // ---- Navigate to the correct home screen for a role, updating names ----
 
   function goToHomeForRole(role, nome){
+    window.__gdRole = role;
     if(welcomeNameEl) welcomeNameEl.textContent = 'Olá, ' + firstName(nome);
     if(role === 'consultora' && painelNameEl) painelNameEl.textContent = 'Olá, ' + firstName(nome);
     if(role === 'cliente' && clienteNameEl) clienteNameEl.textContent = 'Olá, ' + firstName(nome);
@@ -6525,6 +6639,8 @@
       if(emailInput) emailInput.value = '';
       if(passwordInput) passwordInput.value = '';
       clearError();
+      window.__gdRole = null;
+      if(window.__gdResetHistory) window.__gdResetHistory();
       if(window.__gdGoTo) window.__gdGoTo('login', 'back');
     });
   });
@@ -20418,7 +20534,7 @@
     ]
   };
 
-  const ACO_BATERIA_ORDEM = ['temperature', 'depth', 'chroma'];
+  const ACO_BATERIA_ORDEM = ['depth', 'chroma', 'temperature'];
   const ACO_BATERIA_LABEL = { temperature: 'Temperatura', depth: 'Profundidade', chroma: 'Intensidade' };
   const ACO_CLASSIFICACOES_PROFISSIONAIS = {
     temperature: ['Quente', 'Neutra', 'Fria', 'Inconclusiva'],
@@ -20702,7 +20818,7 @@
     }
   });
 
-  // ---- Barra de progresso (Contraste / Temperatura / Profundidade / Intensidade / Resultado) ----
+  // ---- Barra de progresso (Contraste / Profundidade / Intensidade / Temperatura / Resultado) ----
 
   function acoRenderProgresso(){
     const el = document.getElementById('aco-progress');
@@ -20710,9 +20826,9 @@
     const etapas = [
       { id: 'foto', label: 'Foto' },
       { id: 'contraste', label: 'Contraste' },
-      { id: 'temperature', label: 'Temperatura' },
       { id: 'depth', label: 'Profundidade' },
       { id: 'chroma', label: 'Intensidade' },
+      { id: 'temperature', label: 'Temperatura' },
       { id: 'estacoes', label: 'Estações' },
       { id: 'resultados', label: 'Resultado' }
     ];
@@ -21183,7 +21299,7 @@
       acoSalvar({ contraste: acoDados.contraste }).then(function(sucesso){
         if(!sucesso) return; // acoSalvar já avisou o problema
         acoUi.screen = 'bateria';
-        acoUi.bateria = 'temperature';
+        acoUi.bateria = 'depth';
         acoUi.indice = 0;
         acoUi.ladoAtivo = 'A';
         acoRender();
@@ -21430,8 +21546,8 @@
   document.addEventListener('click', function(e){
     if(e.target.closest('[data-aco-nav="estacoes-anterior"]')){
       acoUi.screen = 'bateria';
-      acoUi.bateria = 'chroma';
-      acoUi.indice = COLOR_ANALYSIS_TESTS_V1.chroma.length - 1;
+      acoUi.bateria = 'temperature';
+      acoUi.indice = COLOR_ANALYSIS_TESTS_V1.temperature.length - 1;
       acoRender();
       return;
     }
@@ -21524,8 +21640,8 @@
 
     if(e.target.closest('[data-aco-nav="voltar-bateria"]') && acoUi.screen === 'resultados'){
       acoUi.screen = 'bateria';
-      acoUi.bateria = 'chroma';
-      acoUi.indice = COLOR_ANALYSIS_TESTS_V1.chroma.length - 1;
+      acoUi.bateria = 'temperature';
+      acoUi.indice = COLOR_ANALYSIS_TESTS_V1.temperature.length - 1;
       acoRender();
       return;
     }
@@ -25307,7 +25423,7 @@
       const data = result.data || {};
 
       btn.classList.remove('is-loading');
-      btn.textContent = 'Resetar Senha (123)';
+      btn.textContent = 'Resetar Senha (123456)';
 
       if(navigator.clipboard && data.senhaTemporaria){
         navigator.clipboard.writeText(data.senhaTemporaria).catch(function(){});
@@ -25318,7 +25434,7 @@
     } catch(err){
       console.error('GD: erro ao resetar senha', err);
       btn.classList.remove('is-loading');
-      btn.textContent = 'Resetar Senha (123)';
+      btn.textContent = 'Resetar Senha (123456)';
       errorBox4.classList.remove('success');
 
       let msg = 'Erro ao resetar a senha.';
