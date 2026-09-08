@@ -3338,7 +3338,7 @@
       <div class="content">
         <div class="eyebrow">Nova Cliente</div>
         <div class="page-title">Cadastrar Cliente</div>
-        <div class="page-sub">A cliente receberá um e-mail para definir a senha</div>
+        <div class="page-sub">A cliente entra com o e-mail e a senha temporária</div>
 
         <div class="form-section" id="cadastrar-cliente-form">
           <label class="form-label">Nome completo</label>
@@ -3359,10 +3359,10 @@
         <div class="stat-card" id="cadastrar-sucesso-card" hidden>
           <div class="stat-label" style="margin-bottom:8px;">Cliente cadastrada com sucesso</div>
           <p style="font-family:'Cormorant Garamond', serif; font-size:15px; color:var(--graphite); line-height:1.6;">
-            Envie o link abaixo para <strong id="cadastrar-sucesso-nome"></strong> definir a senha dela:
+            Informe a <strong id="cadastrar-sucesso-nome"></strong> o e-mail cadastrado e a senha temporária abaixo. No primeiro acesso, o app vai pedir que ela crie uma senha nova:
           </p>
-          <p id="cadastrar-sucesso-link" style="font-family:'Manrope', sans-serif; font-size:12px; color:var(--champagne); word-break:break-all; padding:10px; background:var(--champagne-light); border-radius:8px;"></p>
-          <button class="btn-secondary" id="cadastrar-copiar-link-btn" style="margin-top:10px; margin-bottom:0;">Copiar Link</button>
+          <p id="cadastrar-sucesso-link" style="font-family:'Manrope', sans-serif; font-size:20px; font-weight:600; letter-spacing:1px; color:var(--champagne); text-align:center; padding:10px; background:var(--champagne-light); border-radius:8px;"></p>
+          <button class="btn-secondary" id="cadastrar-copiar-link-btn" style="margin-top:10px; margin-bottom:0;">Copiar Senha</button>
         </div>
 
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
@@ -4018,6 +4018,26 @@
         <div class="login-error" id="login-error"></div>
         <div class="forgot" id="forgot-password">Esqueci minha senha</div>
         <button class="btn-primary" id="login-btn" style="margin-bottom:0;">Entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TROCAR SENHA (primeiro acesso) ================= -->
+  <div class="screen-wrap" id="screen-trocar-senha">
+    <div class="screen-label">Criar Senha</div>
+    <div class="phone">
+      <div class="splash-content">
+        <img class="splash-logo" src="https://giulia-dantas.github.io/GD/logo-gd.png" alt="Giulia Dantas">
+        <div class="splash-tag">Crie sua senha para continuar</div>
+
+        <p style="font-family:'Cormorant Garamond', serif; font-size:15px; color:var(--graphite); line-height:1.6; text-align:center; margin-bottom:14px;">
+          Este é seu primeiro acesso. Defina uma senha nova, só sua, para proteger sua conta.
+        </p>
+
+        <input class="input-field" type="password" id="trocar-senha-nova" placeholder="Nova senha (mínimo 6 caracteres)" autocomplete="new-password">
+        <input class="input-field" type="password" id="trocar-senha-confirmar" placeholder="Confirme a nova senha" autocomplete="new-password">
+        <div class="login-error" id="trocar-senha-error"></div>
+        <button class="btn-primary" id="trocar-senha-btn" style="margin-bottom:0;">Salvar Senha</button>
       </div>
     </div>
   </div>
@@ -5473,7 +5493,7 @@
 
           <label class="form-label">E-mail (login)</label>
           <input class="input-field" type="email" id="editar-cliente-email" disabled style="opacity:0.6;">
-          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-8px; margin-bottom:14px;">O e-mail de login não pode ser alterado aqui. Para isso, use "Reenviar Link de Senha" com o novo e-mail desejado, ou contate o suporte do Firebase.</p>
+          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-8px; margin-bottom:14px;">O e-mail de login não pode ser alterado aqui. Para isso, contate o suporte do Firebase.</p>
 
           <label class="form-label">Telefone</label>
           <input class="input-field" type="tel" id="editar-cliente-telefone" placeholder="(11) 99999-9999">
@@ -5482,7 +5502,7 @@
         <div class="login-error" id="editar-cliente-error"></div>
 
         <button class="btn-primary" id="editar-cliente-salvar-btn">Salvar Alterações</button>
-        <button class="btn-secondary" id="editar-cliente-reenviar-btn">Reenviar Link de Senha</button>
+        <button class="btn-secondary" id="editar-cliente-reenviar-btn">Resetar Senha (123)</button>
         <button class="btn-secondary" data-goto="materiais">Cancelar</button>
 
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
@@ -5781,13 +5801,15 @@
     onAuthStateChanged,
     signInWithEmailAndPassword,
     signOut,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    updatePassword
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
   import {
     getFirestore,
     doc,
     getDoc,
     setDoc,
+    updateDoc,
     deleteDoc,
     addDoc,
     collection,
@@ -5906,12 +5928,16 @@
 
       const role = profile.role || 'cliente';
       const nome = profile.nome || (role === 'consultora' ? 'Giulia Dantas' : 'Cliente');
-      goToHomeForRole(role, nome);
 
       loginBtn.classList.remove('is-loading');
       loginBtn.textContent = 'Entrar';
 
-      window.__gdGoTo('welcome', 'fwd');
+      if(role === 'cliente' && profile.senhaTemporaria === true){
+        window.__gdGoTo('trocar-senha', 'fwd');
+      } else {
+        goToHomeForRole(role, nome);
+        window.__gdGoTo('welcome', 'fwd');
+      }
 
     } catch(err){
       console.error(err);
@@ -5928,6 +5954,76 @@
     });
   } else {
     console.error('GD: login-btn not found in DOM');
+  }
+
+  // ---- Trocar senha (primeiro acesso, senha temporária) ----
+
+  const trocarSenhaBtn = document.getElementById('trocar-senha-btn');
+  const trocarSenhaNovaInput = document.getElementById('trocar-senha-nova');
+  const trocarSenhaConfirmarInput = document.getElementById('trocar-senha-confirmar');
+  const trocarSenhaErrorEl = document.getElementById('trocar-senha-error');
+
+  async function handleTrocarSenha(){
+    if(!trocarSenhaErrorEl) return;
+    trocarSenhaErrorEl.textContent = '';
+    trocarSenhaErrorEl.classList.remove('success');
+
+    const novaSenha = trocarSenhaNovaInput.value || '';
+    const confirmarSenha = trocarSenhaConfirmarInput.value || '';
+
+    if(novaSenha.length < 6){
+      trocarSenhaErrorEl.textContent = 'A senha precisa ter pelo menos 6 caracteres.';
+      return;
+    }
+    if(novaSenha !== confirmarSenha){
+      trocarSenhaErrorEl.textContent = 'As senhas não coincidem.';
+      return;
+    }
+    if(!auth.currentUser){
+      trocarSenhaErrorEl.textContent = 'Sessão expirada. Faça login novamente.';
+      return;
+    }
+
+    trocarSenhaBtn.classList.add('is-loading');
+    trocarSenhaBtn.textContent = 'Salvando…';
+
+    try{
+      await updatePassword(auth.currentUser, novaSenha);
+
+      const userRef = doc(db, 'users', auth.currentUser.uid);
+      await updateDoc(userRef, { senhaTemporaria: false });
+
+      const profile = await loadUserProfile(auth.currentUser);
+      const role = (profile && profile.role) || 'cliente';
+      const nome = (profile && profile.nome) || 'Cliente';
+
+      trocarSenhaBtn.classList.remove('is-loading');
+      trocarSenhaBtn.textContent = 'Salvar Senha';
+      trocarSenhaNovaInput.value = '';
+      trocarSenhaConfirmarInput.value = '';
+
+      goToHomeForRole(role, nome);
+      window.__gdGoTo('welcome', 'fwd');
+    } catch(err){
+      console.error('GD: erro ao trocar senha', err);
+      trocarSenhaBtn.classList.remove('is-loading');
+      trocarSenhaBtn.textContent = 'Salvar Senha';
+
+      if(err.code === 'auth/requires-recent-login'){
+        trocarSenhaErrorEl.textContent = 'Por segurança, faça login novamente antes de trocar a senha.';
+      } else if(err.code === 'auth/weak-password'){
+        trocarSenhaErrorEl.textContent = 'Senha muito fraca. Use pelo menos 6 caracteres.';
+      } else {
+        trocarSenhaErrorEl.textContent = 'Não foi possível salvar a senha. Tente novamente.';
+      }
+    }
+  }
+
+  if(trocarSenhaBtn){
+    trocarSenhaBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      handleTrocarSenha();
+    });
   }
 
   if(forgotLink){
@@ -5992,11 +6088,15 @@
           if(profile){
             const role = profile.role || 'cliente';
             const nome = profile.nome || (role === 'consultora' ? 'Giulia Dantas' : 'Cliente');
-            const target = goToHomeForRole(role, nome);
 
-            // Skip splash and welcome animation; go straight to the app
-            if(window.__gdGoTo){
-              window.__gdGoTo(target, 'fwd');
+            if(role === 'cliente' && profile.senhaTemporaria === true){
+              if(window.__gdGoTo) window.__gdGoTo('trocar-senha', 'fwd');
+            } else {
+              const target = goToHomeForRole(role, nome);
+              // Skip splash and welcome animation; go straight to the app
+              if(window.__gdGoTo){
+                window.__gdGoTo(target, 'fwd');
+              }
             }
           }
         } catch(err){
@@ -6994,7 +7094,7 @@
       btn.hidden = true;
       if(sucessoCard) sucessoCard.hidden = false;
       if(sucessoNome) sucessoNome.textContent = nome;
-      if(sucessoLink) sucessoLink.textContent = data.resetLink || '';
+      if(sucessoLink) sucessoLink.textContent = data.senhaTemporaria || '';
 
       cachedClientes = null; // force refresh of client list
     } catch(err){
@@ -7023,8 +7123,8 @@
 
     if(navigator.clipboard && link){
       navigator.clipboard.writeText(link).then(function(){
-        btn.textContent = 'Link copiado!';
-        setTimeout(function(){ btn.textContent = 'Copiar Link'; }, 2000);
+        btn.textContent = 'Senha copiada!';
+        setTimeout(function(){ btn.textContent = 'Copiar Senha'; }, 2000);
       }).catch(function(){
         btn.textContent = 'Erro ao copiar';
       });
@@ -25200,32 +25300,32 @@
     }
 
     btn.classList.add('is-loading');
-    btn.textContent = 'Enviando…';
+    btn.textContent = 'Resetando…';
 
     try{
       const result = await reenviarLinkSenhaFn({ email: email });
       const data = result.data || {};
 
       btn.classList.remove('is-loading');
-      btn.textContent = 'Reenviar Link de Senha';
+      btn.textContent = 'Resetar Senha (123)';
 
-      if(navigator.clipboard && data.resetLink){
-        navigator.clipboard.writeText(data.resetLink).catch(function(){});
+      if(navigator.clipboard && data.senhaTemporaria){
+        navigator.clipboard.writeText(data.senhaTemporaria).catch(function(){});
       }
 
       errorBox4.classList.add('success');
-      errorBox4.textContent = 'Link gerado e copiado: ' + (data.resetLink || '');
+      errorBox4.textContent = 'Senha resetada para "' + (data.senhaTemporaria || '') + '" e copiada. A cliente vai criar uma senha nova no próximo login.';
     } catch(err){
-      console.error('GD: erro ao reenviar link', err);
+      console.error('GD: erro ao resetar senha', err);
       btn.classList.remove('is-loading');
-      btn.textContent = 'Reenviar Link de Senha';
+      btn.textContent = 'Resetar Senha (123)';
       errorBox4.classList.remove('success');
 
-      let msg = 'Erro ao gerar o link.';
+      let msg = 'Erro ao resetar a senha.';
       if(err.code === 'functions/not-found'){
         msg = 'Nenhuma conta encontrada com esse e-mail.';
       } else if(err.code){
-        msg = 'Erro ao gerar o link. (' + err.code + ')';
+        msg = 'Erro ao resetar a senha. (' + err.code + ')';
       }
       errorBox4.textContent = msg;
     }
