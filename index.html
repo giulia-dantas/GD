@@ -74,7 +74,7 @@
   /* In app mode: hide labels, animate screens, fill viewport */
   .app-gallery.app-mode{
     padding:0;
-    max-width:none;
+    max-width:430px;
     position:relative;
     overflow-x:hidden;
   }
@@ -155,8 +155,10 @@
   .gd-global-toolbar{
     position:fixed;
     top:0;
-    left:0;
-    right:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:430px;
     z-index:9999;
     display:flex;
     align-items:center;
@@ -948,6 +950,10 @@
   @media (max-width:420px){
     .phone{ width:100%; min-height:auto; }
     .app-gallery{ padding:20px 12px; }
+  }
+
+  @media (min-width:640px){
+    body{ background:#EDE6D9; }
   }
 
   /* ===== Logo / Login ===== */
