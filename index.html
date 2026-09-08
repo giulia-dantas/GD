@@ -155,8 +155,10 @@
   .gd-global-toolbar{
     position:fixed;
     top:0;
-    left:0;
-    right:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:430px;
     z-index:9999;
     display:flex;
     align-items:center;
@@ -948,6 +950,36 @@
   @media (max-width:420px){
     .phone{ width:100%; min-height:auto; }
     .app-gallery{ padding:20px 12px; }
+  }
+
+  /* ===== Desktop: show the app as a centered "card" instead of full-bleed ===== */
+  @media (min-width:640px){
+    body{
+      background:radial-gradient(circle at 50% 0%, #F3ECE0 0%, #E9E2D6 55%, #E2DACB 100%);
+      align-items:center;
+      min-height:100vh;
+    }
+
+    .app-gallery.app-mode{
+      margin:24px 0;
+    }
+
+    .app-gallery.app-mode .phone{
+      min-height:min(860px, 90vh);
+      max-height:90vh;
+      border-radius:32px;
+      border:var(--hairline);
+      box-shadow:0 24px 70px rgba(47,47,47,0.22);
+    }
+
+    .gd-global-toolbar{
+      position:absolute;
+      left:0;
+      right:0;
+      transform:none;
+      max-width:none;
+      border-radius:32px 32px 0 0;
+    }
   }
 
   /* ===== Logo / Login ===== */
