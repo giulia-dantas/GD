@@ -3049,6 +3049,13 @@
 .aco-zoom-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
 .aco-zoom-btn{ flex:1; min-width:44px; padding:8px 4px; border-radius:8px; border:1px solid rgba(200,164,106,0.35); background:var(--card); font-size:13px; font-weight:600; color:var(--graphite); }
 .aco-zoom-btn:disabled{ opacity:0.4; }
+
+  /* ===== Perfil da consultoria — variantes de conteúdo por perfil =====
+     Cada .screen-wrap carrega data-perfil (padrão "feminino"). Elementos marcados
+     com data-perfil-only só aparecem no perfil correspondente. Ocultar NÃO apaga:
+     o dado continua salvo e volta a aparecer quando o perfil voltar. */
+  [data-perfil="masculino"] [data-perfil-only="feminino"],
+  [data-perfil="feminino"] [data-perfil-only="masculino"]{ display:none !important; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -3070,7 +3077,7 @@
   </div>
 
   <!-- ================= PAINEL ================= -->
-  <div class="screen-wrap" id="screen-painel">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-painel">
     <div class="screen-label">Painel da Consultora</div>
     <div class="phone">
       <div class="topbar">
@@ -3090,7 +3097,7 @@
           <div class="welcome-deco2"></div>
           <div class="eyebrow">Bem-vinda de volta</div>
           <h2 id="painel-welcome-name">Olá, Giulia</h2>
-          <p id="painel-resumo">Acompanhe suas clientes e materiais recebidos</p>
+          <p id="painel-resumo">Acompanhe clientes e materiais recebidos</p>
         </div>
 
         <div class="grid-2">
@@ -3139,7 +3146,7 @@
   </div>
 
   <!-- ================= CONFIGURAÇÕES ================= -->
-  <div class="screen-wrap" id="screen-configuracoes">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-configuracoes">
     <div class="screen-label">Configurações</div>
     <div class="phone">
       <div class="topbar">
@@ -3193,7 +3200,7 @@
   </div>
 
   <!-- ================= DASHBOARD ================= -->
-  <div class="screen-wrap" id="screen-dashboard">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-dashboard">
     <div class="screen-label">Dashboard</div>
     <div class="phone">
       <div class="topbar">
@@ -3206,7 +3213,7 @@
       <div class="content">
         <div class="eyebrow">Desempenho</div>
         <div class="page-title">Visão Geral</div>
-        <div class="page-sub">Acompanhe suas clientes e materiais recebidos</div>
+        <div class="page-sub">Acompanhe clientes e materiais recebidos</div>
 
         <div class="grid-2">
           <div class="stat-card" style="margin-bottom:0;">
@@ -3251,7 +3258,7 @@
   </div>
 
   <!-- ================= AGENDA ================= -->
-  <div class="screen-wrap" id="screen-agenda">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-agenda">
     <div class="screen-label">Agenda</div>
     <div class="phone">
       <div class="topbar">
@@ -3288,7 +3295,7 @@
   </div>
 
   <!-- ================= NOVO AGENDAMENTO ================= -->
-  <div class="screen-wrap" id="screen-novo-agendamento">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-novo-agendamento">
     <div class="screen-label">Novo Agendamento</div>
     <div class="phone">
       <div class="topbar">
@@ -3309,10 +3316,10 @@
 
           <label class="form-label">Cliente</label>
           <select class="input-field" id="agendamento-cliente-select">
-            <option value="">Selecione uma cliente cadastrada...</option>
+            <option value="">Selecionar cliente...</option>
             <option value="__outro__">Outra (digitar nome)</option>
           </select>
-          <input class="input-field" type="text" id="agendamento-cliente-nome-livre" placeholder="Nome da cliente" hidden>
+          <input class="input-field" type="text" id="agendamento-cliente-nome-livre" placeholder="Nome completo" hidden>
 
           <label class="form-label">Data</label>
           <input class="input-field" type="date" id="agendamento-data">
@@ -3341,8 +3348,8 @@
   </div>
 
   <!-- ================= CLIENTES ================= -->
-  <div class="screen-wrap" id="screen-clientes">
-    <div class="screen-label">Minhas Clientes</div>
+  <div class="screen-wrap" data-perfil="feminino" id="screen-clientes">
+    <div class="screen-label">Clientes</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
@@ -3353,7 +3360,7 @@
       </div>
       <div class="content">
         <div class="eyebrow">Relacionamento</div>
-        <div class="page-title">Minhas Clientes</div>
+        <div class="page-title">Clientes</div>
         <div class="page-sub">Sua base e histórico de atendimentos</div>
 
         <div class="stat-trio">
@@ -3371,7 +3378,7 @@
           </div>
         </div>
 
-        <button class="btn-primary" data-goto="cadastrar-cliente">+ Cadastrar Nova Cliente</button>
+        <button class="btn-primary" data-goto="cadastrar-cliente">+ Cadastrar Cliente</button>
 
         <div class="stat-card">
           <div class="stat-label" style="margin-bottom:0;">Lista de Clientes</div>
@@ -3392,8 +3399,8 @@
   </div>
 
   <!-- ================= CADASTRAR NOVA CLIENTE ================= -->
-  <div class="screen-wrap" id="screen-cadastrar-cliente">
-    <div class="screen-label">Cadastrar Nova Cliente</div>
+  <div class="screen-wrap" data-perfil="feminino" id="screen-cadastrar-cliente">
+    <div class="screen-label">Cadastrar Cliente</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
@@ -3403,9 +3410,9 @@
         
       </div>
       <div class="content">
-        <div class="eyebrow">Nova Cliente</div>
+        <div class="eyebrow">Novo Cadastro</div>
         <div class="page-title">Cadastrar Cliente</div>
-        <div class="page-sub">A cliente entra com o e-mail e a senha temporária</div>
+        <div class="page-sub">O acesso é feito com o e-mail e a senha temporária</div>
 
         <div class="form-section" id="cadastrar-cliente-form">
           <label class="form-label">Nome completo</label>
@@ -3416,6 +3423,12 @@
 
           <label class="form-label">Telefone (opcional)</label>
           <input class="input-field" type="tel" id="cadastrar-telefone" placeholder="(11) 99999-9999">
+
+          <label class="form-label">Perfil da consultoria</label>
+          <div class="radio-row" id="cadastrar-perfil-radio">
+            <div class="radio-opt" data-perfil-valor="feminino"><div class="dot-circle"></div>Feminino</div>
+            <div class="radio-opt" data-perfil-valor="masculino"><div class="dot-circle"></div>Masculino</div>
+          </div>
         </div>
 
         <div class="login-error" id="cadastrar-error"></div>
@@ -3424,9 +3437,9 @@
         <button class="btn-secondary" data-goto="clientes">Cancelar</button>
 
         <div class="stat-card" id="cadastrar-sucesso-card" hidden>
-          <div class="stat-label" style="margin-bottom:8px;">Cliente cadastrada com sucesso</div>
+          <div class="stat-label" style="margin-bottom:8px;" id="cadastrar-sucesso-titulo">Cliente cadastrada com sucesso</div>
           <p style="font-family:'Cormorant Garamond', serif; font-size:15px; color:var(--graphite); line-height:1.6;">
-            Informe a <strong id="cadastrar-sucesso-nome"></strong> o e-mail cadastrado e a senha temporária abaixo. No primeiro acesso, o app vai pedir que ela crie uma senha nova:
+            Informe <span id="cadastrar-sucesso-artigo">a</span> <strong id="cadastrar-sucesso-nome"></strong> o e-mail cadastrado e a senha temporária abaixo. No primeiro acesso, o app vai pedir que <span id="cadastrar-sucesso-pronome">ela</span> crie uma senha nova:
           </p>
           <p id="cadastrar-sucesso-link" style="font-family:'Manrope', sans-serif; font-size:20px; font-weight:600; letter-spacing:1px; color:var(--champagne); text-align:center; padding:10px; background:var(--champagne-light); border-radius:8px;"></p>
           <button class="btn-secondary" id="cadastrar-copiar-link-btn" style="margin-top:10px; margin-bottom:0;">Copiar Senha</button>
@@ -3438,7 +3451,7 @@
   </div>
 
   <!-- ================= DOSSIÊS ================= -->
-  <div class="screen-wrap" id="screen-dossies">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-dossies">
     <div class="screen-label">Dossiês</div>
     <div class="phone">
       <div class="topbar">
@@ -3451,7 +3464,7 @@
       <div class="content">
         <div class="eyebrow">Central de Dossiês</div>
         <div class="page-title">Dossiês</div>
-        <div class="page-sub">Materiais personalizados para suas clientes</div>
+        <div class="page-sub">Materiais personalizados por cliente</div>
 
         <div class="stat-grid-4">
           <div class="stat-small"><div class="num" id="dossies-stat-total">0</div><div class="lab">Clientes cadastradas</div></div>
@@ -3463,7 +3476,7 @@
         <button class="btn-primary" data-goto="novo-dossie">+ Novo Dossiê</button>
 
         <div class="stat-card">
-          <div class="stat-label" style="margin-bottom:0;">Dossiês das Clientes</div>
+          <div class="stat-label" style="margin-bottom:0;">Dossiês de Clientes</div>
           <div id="dossies-list">
             <p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Carregando...</p>
           </div>
@@ -3481,7 +3494,7 @@
   </div>
 
   <!-- ================= NOVO DOSSIÊ ================= -->
-  <div class="screen-wrap" id="screen-novo-dossie">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-novo-dossie">
     <div class="screen-label">Novo Dossiê</div>
     <div class="phone">
       <div class="topbar">
@@ -3494,7 +3507,7 @@
       <div class="content">
         <div class="eyebrow">Novo Dossiê</div>
         <div class="page-title">Criar Dossiê</div>
-        <div class="page-sub">Selecione a cliente e o tipo de material</div>
+        <div class="page-sub">Selecionar cliente e tipo de material</div>
 
         <div class="stat-card">
           <div class="stat-label" style="margin-bottom:10px;">Etapa 1 — Selecionar Cliente</div>
@@ -3516,7 +3529,7 @@
           <div class="stat-label" style="margin-bottom:4px;">Etapa 3 — Dados Disponíveis</div>
           <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:10px; line-height:1.5;">Não é necessário ter tudo pronto para criar o dossiê.</p>
           <div id="novo-dossie-checklist">
-            <p style="font-family:'Cormorant Garamond', serif; font-size:14px; font-style:italic; color:var(--graphite-soft); padding:6px 0;">Selecione uma cliente na Etapa 1.</p>
+            <p style="font-family:'Cormorant Garamond', serif; font-size:14px; font-style:italic; color:var(--graphite-soft); padding:6px 0;">Selecionar cliente na Etapa 1.</p>
           </div>
         </div>
 
@@ -3529,8 +3542,8 @@
   </div>
 
   <!-- ================= DOSSIÊ INDIVIDUAL ================= -->
-  <div class="screen-wrap" id="screen-dossie-individual">
-    <div class="screen-label">Dossiê da Cliente</div>
+  <div class="screen-wrap" data-perfil="feminino" id="screen-dossie-individual">
+    <div class="screen-label">Dossiê Individual</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
@@ -3563,7 +3576,7 @@
         </div>
 
         <div class="stat-card">
-          <div class="stat-label" style="margin-bottom:4px;">Fotos da Cliente</div>
+          <div class="stat-label" style="margin-bottom:4px;">Fotos d<span data-perfil-only="feminino">a Cliente</span><span data-perfil-only="masculino">o Cliente</span></div>
           <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:14px; line-height:1.5;">Toque na estrela para marcar a Foto Principal do Dossiê.</p>
           <div class="ficha-photo-category">
             <div class="ficha-photo-category-title">Consultoria de Imagem</div>
@@ -3588,7 +3601,7 @@
             <div class="radio-opt"><div class="dot-circle"></div>Em revisão</div>
             <div class="radio-opt"><div class="dot-circle"></div>Finalizado</div>
           </div>
-          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:12px; line-height:1.5;">Quando o dossiê é liberado para a cliente, o status passa a ser "Liberado para cliente" automaticamente.</p>
+          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:12px; line-height:1.5;">Quando o dossiê é liberado para <span data-perfil-only="feminino">a cliente</span><span data-perfil-only="masculino">o cliente</span>, o status passa a ser "Liberado para cliente" automaticamente.</p>
           <button class="btn-secondary" id="dossie-salvar-status-btn" style="margin-bottom:0;">Salvar Status</button>
         </div>
 
@@ -3617,7 +3630,7 @@
 
         <div class="stat-card">
           <div class="stat-label" style="margin-bottom:4px;">Resultado da Análise</div>
-          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:12px; line-height:1.5;">Libera a prévia da consultoria (resultados e, se houver, direcionamento cromático) para a cliente — independente do PDF final já existir ou não.</p>
+          <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:12px; line-height:1.5;">Libera a prévia da consultoria (resultados e, se houver, direcionamento cromático) para <span data-perfil-only="feminino">a cliente</span><span data-perfil-only="masculino">o cliente</span> — independente do PDF final já existir ou não.</p>
           <div class="radio-row" id="dossie-liberar-radio">
             <div class="radio-opt"><div class="dot-circle"></div>Desligado</div>
             <div class="radio-opt"><div class="dot-circle"></div>Ligado</div>
@@ -3642,7 +3655,7 @@
   </div>
 
   <!-- ================= DADOS PARA O DOSSIÊ ================= -->
-  <div class="screen-wrap" id="screen-dados-dossie">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-dados-dossie">
     <div class="screen-label">Dados para o Dossiê</div>
     <div class="phone">
       <div class="topbar">
@@ -3674,7 +3687,7 @@
   </div>
 
   <!-- ================= EDITOR DO DOSSIÊ (ADMIN) — Fase 6B ================= -->
-  <div class="screen-wrap" id="screen-editor-dossie">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-editor-dossie">
     <div class="screen-label">Editor do Dossiê</div>
     <div class="phone">
       <div class="topbar">
@@ -3708,7 +3721,7 @@
         <div class="login-error" id="editor-previa-aviso" hidden style="text-align:left;"></div>
         <button class="btn-primary" id="editor-gerar-previa-btn">Gerar Prévia</button>
 
-        <p id="editor-sem-capitulos" hidden style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Nenhum capítulo de imagem se aplica a esta cliente com os serviços atuais. Ajuste em Serviços da Cliente, na Ficha da Cliente, se necessário.</p>
+        <p id="editor-sem-capitulos" hidden style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Nenhum capítulo de imagem se aplica a este cadastro com os serviços atuais. Ajuste em Serviços, na Ficha de Cadastro, se necessário.</p>
 
         <!-- ---- PERFIL DE IMAGEM ---- -->
         <div class="stat-card" id="editor-cap-perfil" hidden>
@@ -3801,8 +3814,8 @@
             <label class="form-label">Partes inferiores</label>
             <textarea class="input-field textarea" data-editor-field="partesInferiores" placeholder="Escreva livremente..."></textarea>
 
-            <label class="form-label">Vestidos / Macacões</label>
-            <textarea class="input-field textarea" data-editor-field="vestidosMacacoes" placeholder="Escreva livremente..."></textarea>
+            <label class="form-label" data-perfil-only="feminino">Vestidos / Macacões</label>
+            <textarea class="input-field textarea" data-editor-field="vestidosMacacoes" data-perfil-only="feminino" placeholder="Escreva livremente..."></textarea>
 
             <label class="form-label">Terceira peça</label>
             <textarea class="input-field textarea" data-editor-field="terceiraPeca" placeholder="Escreva livremente..."></textarea>
@@ -3836,7 +3849,7 @@
             <label class="form-label">Cintos</label>
             <textarea class="input-field textarea" data-editor-field="acessoriosCintos" placeholder="Escreva livremente..."></textarea>
 
-            <label class="form-label">Joias e Bijuterias</label>
+            <label class="form-label">Joias<span data-perfil-only="feminino"> e Bijuterias</span></label>
             <textarea class="input-field textarea" data-editor-field="acessoriosJoias" placeholder="Escreva livremente..."></textarea>
 
             <label class="form-label">Óculos</label>
@@ -3863,9 +3876,9 @@
             <div class="arrow" id="editor-arrow-aplicacao">＋</div>
           </div>
           <div id="editor-body-aplicacao" hidden>
-            <div class="ficha-status-row"><div class="label">Guarda-roupa hoje (relato da cliente)</div><div class="ficha-info-value" id="editor-ref-guardaRoupaRepresenta">—</div></div>
-            <div class="ficha-status-row"><div class="label">Peças mais utilizadas (relato da cliente)</div><div class="ficha-info-value" id="editor-ref-pecasMaisUtilizadas">—</div></div>
-            <div class="ficha-status-row"><div class="label">Preferência de compra (relato da cliente)</div><div class="ficha-info-value" id="editor-ref-preferenciaCompra">—</div></div>
+            <div class="ficha-status-row"><div class="label">Guarda-roupa hoje (relato <span data-perfil-only="feminino">da cliente</span><span data-perfil-only="masculino">do cliente</span>)</div><div class="ficha-info-value" id="editor-ref-guardaRoupaRepresenta">—</div></div>
+            <div class="ficha-status-row"><div class="label">Peças mais utilizadas (relato <span data-perfil-only="feminino">da cliente</span><span data-perfil-only="masculino">do cliente</span>)</div><div class="ficha-info-value" id="editor-ref-pecasMaisUtilizadas">—</div></div>
+            <div class="ficha-status-row"><div class="label">Preferência de compra (relato <span data-perfil-only="feminino">da cliente</span><span data-perfil-only="masculino">do cliente</span>)</div><div class="ficha-info-value" id="editor-ref-preferenciaCompra">—</div></div>
 
             <label class="form-label">Armário estratégico (texto geral)</label>
             <textarea class="input-field textarea" data-editor-field="armarioEstrategico" placeholder="Escreva livremente..."></textarea>
@@ -3881,8 +3894,8 @@
             <label class="form-label">Terceiras peças (armário)</label>
             <textarea class="input-field textarea" data-editor-field="armarioTerceirasPecas" placeholder="Escreva livremente..."></textarea>
 
-            <label class="form-label">Vestidos / Macacões (armário)</label>
-            <textarea class="input-field textarea" data-editor-field="armarioVestidosMacacoes" placeholder="Escreva livremente..."></textarea>
+            <label class="form-label" data-perfil-only="feminino">Vestidos / Macacões (armário)</label>
+            <textarea class="input-field textarea" data-editor-field="armarioVestidosMacacoes" data-perfil-only="feminino" placeholder="Escreva livremente..."></textarea>
 
             <label class="form-label">Calçados (armário)</label>
             <textarea class="input-field textarea" data-editor-field="armarioCalcados" placeholder="Escreva livremente..."></textarea>
@@ -3927,7 +3940,7 @@
           <div id="editor-body-artes" hidden>
             <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:14px; line-height:1.5;">Imagens complementares (até 3 por categoria) que aparecem automaticamente na seção correspondente do Dossiê Mestre. Nenhuma é obrigatória.</p>
 
-            <div class="editor-artes-categoria" data-artes-categoria="armario">
+            <div class="editor-artes-categoria" data-artes-categoria="armario" data-perfil-only="feminino">
               <div class="editor-artes-categoria-titulo">Armário / Peças-Chave</div>
               <div class="editor-artes-grid" data-artes-grid="armario"></div>
               <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="armario" style="margin-bottom:0;">+ Adicionar imagem</button>
@@ -3935,7 +3948,15 @@
               <div class="login-error" data-artes-msg="armario"></div>
             </div>
 
-            <div class="editor-artes-categoria" data-artes-categoria="looks">
+            <div class="editor-artes-categoria" data-artes-categoria="armarioMasculino" data-perfil-only="masculino">
+              <div class="editor-artes-categoria-titulo">Armário / Peças-Chave</div>
+              <div class="editor-artes-grid" data-artes-grid="armarioMasculino"></div>
+              <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="armarioMasculino" style="margin-bottom:0;">+ Adicionar imagem</button>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="armarioMasculino" style="display:none;">
+              <div class="login-error" data-artes-msg="armarioMasculino"></div>
+            </div>
+
+            <div class="editor-artes-categoria" data-artes-categoria="looks" data-perfil-only="feminino">
               <div class="editor-artes-categoria-titulo">Looks / Coordenações</div>
               <div class="editor-artes-grid" data-artes-grid="looks"></div>
               <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="looks" style="margin-bottom:0;">+ Adicionar imagem</button>
@@ -3943,7 +3964,15 @@
               <div class="login-error" data-artes-msg="looks"></div>
             </div>
 
-            <div class="editor-artes-categoria" data-artes-categoria="modelagens">
+            <div class="editor-artes-categoria" data-artes-categoria="looksMasculino" data-perfil-only="masculino">
+              <div class="editor-artes-categoria-titulo">Looks / Coordenações</div>
+              <div class="editor-artes-grid" data-artes-grid="looksMasculino"></div>
+              <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="looksMasculino" style="margin-bottom:0;">+ Adicionar imagem</button>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="looksMasculino" style="display:none;">
+              <div class="login-error" data-artes-msg="looksMasculino"></div>
+            </div>
+
+            <div class="editor-artes-categoria" data-artes-categoria="modelagens" data-perfil-only="feminino">
               <div class="editor-artes-categoria-titulo">Modelagens Recomendadas</div>
               <div class="editor-artes-grid" data-artes-grid="modelagens"></div>
               <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="modelagens" style="margin-bottom:0;">+ Adicionar imagem</button>
@@ -3951,7 +3980,15 @@
               <div class="login-error" data-artes-msg="modelagens"></div>
             </div>
 
-            <div class="editor-artes-categoria" data-artes-categoria="acessorios">
+            <div class="editor-artes-categoria" data-artes-categoria="modelagensMasculino" data-perfil-only="masculino">
+              <div class="editor-artes-categoria-titulo">Modelagens Recomendadas</div>
+              <div class="editor-artes-grid" data-artes-grid="modelagensMasculino"></div>
+              <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="modelagensMasculino" style="margin-bottom:0;">+ Adicionar imagem</button>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="modelagensMasculino" style="display:none;">
+              <div class="login-error" data-artes-msg="modelagensMasculino"></div>
+            </div>
+
+            <div class="editor-artes-categoria" data-artes-categoria="acessorios" data-perfil-only="feminino">
               <div class="editor-artes-categoria-titulo">Acessórios</div>
               <div class="editor-artes-grid" data-artes-grid="acessorios"></div>
               <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="acessorios" style="margin-bottom:0;">+ Adicionar imagem</button>
@@ -3959,7 +3996,15 @@
               <div class="login-error" data-artes-msg="acessorios"></div>
             </div>
 
-            <div class="editor-artes-categoria" data-artes-categoria="cabelo">
+            <div class="editor-artes-categoria" data-artes-categoria="acessoriosMasculino" data-perfil-only="masculino">
+              <div class="editor-artes-categoria-titulo">Acessórios</div>
+              <div class="editor-artes-grid" data-artes-grid="acessoriosMasculino"></div>
+              <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="acessoriosMasculino" style="margin-bottom:0;">+ Adicionar imagem</button>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="acessoriosMasculino" style="display:none;">
+              <div class="login-error" data-artes-msg="acessoriosMasculino"></div>
+            </div>
+
+            <div class="editor-artes-categoria" data-artes-categoria="cabelo" data-perfil-only="feminino">
               <div class="editor-artes-categoria-titulo">Cabelo</div>
               <div class="editor-artes-grid" data-artes-grid="cabelo"></div>
               <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="cabelo" style="margin-bottom:0;">+ Adicionar imagem</button>
@@ -3967,7 +4012,15 @@
               <div class="login-error" data-artes-msg="cabelo"></div>
             </div>
 
-            <div class="editor-artes-categoria" data-artes-categoria="maquiagem">
+            <div class="editor-artes-categoria" data-artes-categoria="cabeloMasculino" data-perfil-only="masculino">
+              <div class="editor-artes-categoria-titulo">Cabelo &amp; Barba</div>
+              <div class="editor-artes-grid" data-artes-grid="cabeloMasculino"></div>
+              <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="cabeloMasculino" style="margin-bottom:0;">+ Adicionar imagem</button>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" data-artes-input="cabeloMasculino" style="display:none;">
+              <div class="login-error" data-artes-msg="cabeloMasculino"></div>
+            </div>
+
+            <div class="editor-artes-categoria" data-artes-categoria="maquiagem" data-perfil-only="feminino">
               <div class="editor-artes-categoria-titulo">Maquiagem</div>
               <div class="editor-artes-grid" data-artes-grid="maquiagem"></div>
               <button type="button" class="btn-secondary editor-artes-add-btn" data-artes-add="maquiagem" style="margin-bottom:0;">+ Adicionar imagem</button>
@@ -4029,7 +4082,7 @@
 
   <!-- ================= PRÉVIA DO DOSSIÊ MESTRE (ADMIN) — Fase 6C ================= -->
   <!-- Documento editorial isolado: não reutiliza cards/inputs administrativos. -->
-  <div class="screen-wrap" id="screen-dossie-mestre-previa">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-dossie-mestre-previa">
     <div class="screen-label no-print">Prévia do Dossiê Mestre</div>
     <div class="phone">
       <div class="topbar no-print">
@@ -4042,7 +4095,7 @@
       <div class="content" style="padding:0;">
         <div class="dossie-mestre-admin-faixa no-print">
           <span>← Voltar ao Editor</span>
-          <span class="dossie-mestre-admin-faixa-tag">Prévia administrativa — a cliente não vê esta tela</span>
+          <span class="dossie-mestre-admin-faixa-tag">Prévia administrativa — <span data-perfil-only="feminino">a cliente</span><span data-perfil-only="masculino">o cliente</span> não vê esta tela</span>
         </div>
         <div id="dossie-mestre-aviso-incompleto" class="dossie-mestre-admin-aviso no-print" hidden></div>
         <div class="dossie-mestre-gerar-pdf-wrap no-print" style="gap:10px; flex-wrap:wrap;">
@@ -4058,7 +4111,7 @@
   </div>
 
   <!-- ================= BRAND SPLASH ================= -->
-  <div class="screen-wrap" id="screen-brand">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-brand">
     <div class="screen-label">Splash</div>
     <div class="phone">
       <div class="brand-splash">
@@ -4068,7 +4121,7 @@
   </div>
 
   <!-- ================= LOGIN / SPLASH ================= -->
-  <div class="screen-wrap" id="screen-login">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-login">
     <div class="screen-label">Acesso</div>
     <div class="phone">
       <div class="splash-content">
@@ -4090,7 +4143,7 @@
   </div>
 
   <!-- ================= TROCAR SENHA (primeiro acesso) ================= -->
-  <div class="screen-wrap" id="screen-trocar-senha">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-trocar-senha">
     <div class="screen-label">Criar Senha</div>
     <div class="phone">
       <div class="splash-content">
@@ -4110,12 +4163,12 @@
   </div>
 
   <!-- ================= TELA DE BEM-VINDA ================= -->
-  <div class="screen-wrap" id="screen-welcome">
-    <div class="screen-label">Bem-vinda</div>
+  <div class="screen-wrap" data-perfil="feminino" id="screen-welcome">
+    <div class="screen-label">Bem-vind<span data-perfil-only="feminino">a</span><span data-perfil-only="masculino">o</span></div>
     <div class="phone">
       <div class="welcome-splash">
         <div class="welcome-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
-        <div class="welcome-eyebrow">Bem-vinda de volta</div>
+        <div class="welcome-eyebrow">Bem-vind<span data-perfil-only="feminino">a</span><span data-perfil-only="masculino">o</span> de volta</div>
         <h1 class="welcome-name" id="welcome-name">Olá, Marina</h1>
         <div class="welcome-sub">Preparando sua experiência personalizada…</div>
       </div>
@@ -4123,8 +4176,8 @@
   </div>
 
   <!-- ================= ÁREA DO CLIENTE - INÍCIO ================= -->
-  <div class="screen-wrap" id="screen-cliente-inicio">
-    <div class="screen-label">Área da Cliente — Início</div>
+  <div class="screen-wrap" data-perfil="feminino" id="screen-cliente-inicio">
+    <div class="screen-label">Área d<span data-perfil-only="feminino">a Cliente</span><span data-perfil-only="masculino">o Cliente</span> — Início</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
@@ -4138,7 +4191,7 @@
         <div class="welcome-card">
           <div class="welcome-deco"></div>
           <div class="welcome-deco2"></div>
-          <div class="eyebrow">Bem-vinda</div>
+          <div class="eyebrow">Bem-vind<span data-perfil-only="feminino">a</span><span data-perfil-only="masculino">o</span></div>
           <h2 id="cliente-welcome-name">Olá, Marina</h2>
           <p>Vamos preparar seu dossiê de estilo personalizado</p>
         </div>
@@ -4189,7 +4242,7 @@
   </div>
 
   <!-- ================= ANAMNESE - DADOS PESSOAIS ================= -->
-  <div class="screen-wrap" id="screen-anamnese-1">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-anamnese-1">
     <div class="screen-label">Anamnese — Dados Pessoais</div>
     <div class="phone">
       <div class="topbar">
@@ -4236,7 +4289,7 @@
   </div>
 
   <!-- ================= ANAMNESE - OBJETIVO DA CONSULTORIA ================= -->
-  <div class="screen-wrap" id="screen-anamnese-2">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-anamnese-2">
     <div class="screen-label">Anamnese — Objetivo da Consultoria</div>
     <div class="phone">
       <div class="topbar">
@@ -4288,7 +4341,7 @@
   </div>
 
   <!-- ================= ANAMNESE - ROTINA ================= -->
-  <div class="screen-wrap" id="screen-anamnese-3">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-anamnese-3">
     <div class="screen-label">Anamnese — Rotina</div>
     <div class="phone">
       <div class="topbar">
@@ -4310,10 +4363,13 @@
             <div class="chip">Trabalho presencial</div>
             <div class="chip">Trabalho híbrido</div>
             <div class="chip">Trabalho remoto</div>
-            <div class="chip">Empresária</div>
+            <div class="chip" data-perfil-only="feminino">Empresária</div>
+            <div class="chip" data-perfil-only="masculino">Empresário</div>
             <div class="chip">Estudante</div>
-            <div class="chip">Mãe em tempo integral</div>
-            <div class="chip">Aposentada</div>
+            <div class="chip" data-perfil-only="feminino">Mãe em tempo integral</div>
+            <div class="chip" data-perfil-only="masculino">Pai em tempo integral</div>
+            <div class="chip" data-perfil-only="feminino">Aposentada</div>
+            <div class="chip" data-perfil-only="masculino">Aposentado</div>
             <div class="chip">Outro</div>
           </div>
           <input class="input-field outro-input" type="text" data-field="rotinaOutro" id="outro-rotina" placeholder="Como é sua rotina? Descreva..." style="display:none; margin-top:-6px;">
@@ -4350,7 +4406,7 @@
   </div>
 
   <!-- ================= ANAMNESE - ESTILO PESSOAL ================= -->
-  <div class="screen-wrap" id="screen-anamnese-4">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-anamnese-4">
     <div class="screen-label">Anamnese — Estilo Pessoal</div>
     <div class="phone">
       <div class="topbar">
@@ -4384,23 +4440,29 @@
             <div class="chip">Exótico</div>
           </div>
 
-          <label class="form-label">Como você gostaria de ser percebida pelas pessoas?</label>
+          <label class="form-label">Como você gostaria de ser percebid<span data-perfil-only="feminino">a</span><span data-perfil-only="masculino">o</span> pelas pessoas?</label>
           <div class="chip-row" data-field="percepcaoDesejada">
             <div class="chip">Elegante</div>
-            <div class="chip">Feminina</div>
-            <div class="chip">Sofisticada</div>
-            <div class="chip">Moderna</div>
+            <div class="chip" data-perfil-only="feminino">Feminina</div>
+            <div class="chip" data-perfil-only="feminino">Sofisticada</div>
+            <div class="chip" data-perfil-only="masculino">Sofisticado</div>
+            <div class="chip" data-perfil-only="feminino">Moderna</div>
+            <div class="chip" data-perfil-only="masculino">Moderno</div>
             <div class="chip">Profissional</div>
-            <div class="chip">Autoritária</div>
-            <div class="chip">Delicada</div>
+            <div class="chip" data-perfil-only="feminino">Autoritária</div>
+            <div class="chip" data-perfil-only="masculino">Autoritário</div>
+            <div class="chip" data-perfil-only="feminino">Delicada</div>
+            <div class="chip" data-perfil-only="masculino">Delicado</div>
             <div class="chip">Confiante</div>
             <div class="chip">Acessível</div>
-            <div class="chip">Autêntica</div>
-            <div class="chip">Criativa</div>
+            <div class="chip" data-perfil-only="feminino">Autêntica</div>
+            <div class="chip" data-perfil-only="masculino">Autêntico</div>
+            <div class="chip" data-perfil-only="feminino">Criativa</div>
+            <div class="chip" data-perfil-only="masculino">Criativo</div>
             <div class="chip">Marcante</div>
             <div class="chip">Outro</div>
           </div>
-          <input class="input-field outro-input" type="text" data-field="percepcaoDesejadaOutro" id="outro-percepcaoDesejada" placeholder="Como mais você gostaria de ser percebida?" style="display:none; margin-top:-6px;">
+          <input class="input-field outro-input" type="text" data-field="percepcaoDesejadaOutro" id="outro-percepcaoDesejada" placeholder="Como mais você gostaria de ser percebida?" data-placeholder-masculino="Como mais você gostaria de ser percebido?" style="display:none; margin-top:-6px;">
 
           <label class="form-label">Existe alguma pessoa cuja imagem ou estilo você admira?</label>
           <textarea class="input-field textarea" data-field="pessoaAdmirada" placeholder="Escreva livremente..."></textarea>
@@ -4423,7 +4485,7 @@
   </div>
 
   <!-- ================= ANAMNESE - GUARDA-ROUPA ================= -->
-  <div class="screen-wrap" id="screen-anamnese-5">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-anamnese-5">
     <div class="screen-label">Anamnese — Guarda-Roupa</div>
     <div class="phone">
       <div class="topbar">
@@ -4482,7 +4544,7 @@
   </div>
 
   <!-- ================= ANAMNESE - CORES ================= -->
-  <div class="screen-wrap" id="screen-anamnese-6">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-anamnese-6">
     <div class="screen-label">Anamnese — Cores</div>
     <div class="phone">
       <div class="topbar">
@@ -4532,7 +4594,7 @@
   </div>
 
   <!-- ================= ANAMNESE - BIOTIPO & CORPO ================= -->
-  <div class="screen-wrap" id="screen-anamnese-7">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-anamnese-7">
     <div class="screen-label">Anamnese — Biotipo & Corpo</div>
     <div class="phone">
       <div class="topbar">
@@ -4553,7 +4615,7 @@
           <textarea class="input-field textarea" data-field="sentimentoCorpo" placeholder="Escreva livremente..."></textarea>
 
           <label class="form-label">Quais regiões do seu corpo você mais gosta de valorizar?</label>
-          <input class="input-field" type="text" data-field="regioesValorizar" placeholder="Ex: Cintura, colo...">
+          <input class="input-field" type="text" data-field="regioesValorizar" placeholder="Ex: Cintura, colo..." data-placeholder-masculino="Ex: Ombros, braços...">
 
           <label class="form-label">Existe alguma região que você prefere não destacar?</label>
           <input class="input-field" type="text" data-field="regioesNaoDestacar" placeholder="Ex: Braços, abdômen...">
@@ -4579,7 +4641,7 @@
   </div>
 
   <!-- ================= ANAMNESE - COMPRAS & EXPECTATIVAS ================= -->
-  <div class="screen-wrap" id="screen-anamnese-8">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-anamnese-8">
     <div class="screen-label">Anamnese — Compras & Expectativas</div>
     <div class="phone">
       <div class="topbar">
@@ -4646,7 +4708,7 @@
   </div>
 
   <!-- ================= ANAMNESE — ETAPA 9 (DIRECIONAMENTO CROMÁTICO) ================= -->
-  <div class="screen-wrap" id="screen-anamnese-9">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-anamnese-9">
     <div class="screen-label">Anamnese — Direcionamento Cromático</div>
     <div class="phone">
       <div class="topbar">
@@ -4665,7 +4727,7 @@
         <div class="photo-tips-card" style="background:rgba(200,164,106,0.07); border-color:rgba(200,164,106,0.3); margin-bottom:20px;">
           <div class="photo-tips-title" style="color:var(--champagne); margin-bottom:12px;">Ciência sobre o Direcionamento Cromático Online</div>
           <p style="font-family:'Manrope', sans-serif; font-size:13px; color:var(--graphite); line-height:1.7; margin-bottom:14px;">
-            O Direcionamento Cromático Online é realizado a partir das fotos e informações fornecidas durante a análise. Para maior precisão do resultado, é fundamental seguir corretamente as orientações de iluminação, posicionamento, ausência de maquiagem, filtros e demais etapas indicadas no aplicativo.
+            O Direcionamento Cromático Online é realizado a partir das fotos e informações fornecidas durante a análise. Para maior precisão do resultado, é fundamental seguir corretamente as orientações de iluminação, posicionamento, ausência de <span data-perfil-only="feminino">maquiagem, </span>filtros e demais etapas indicadas no aplicativo.
           </p>
           <p style="font-family:'Manrope', sans-serif; font-size:13px; color:var(--graphite); line-height:1.7; margin-bottom:20px;">
             Por se tratar de uma avaliação realizada por meio digital, fatores como iluminação, configurações da câmera e reprodução de cores na tela podem influenciar a percepção das tonalidades. Por isso, o direcionamento obtido pode apresentar diferenças em relação à análise de coloração pessoal realizada presencialmente.
@@ -4717,20 +4779,20 @@
           <div class="radio-row" data-field="objetivoAnaliseCores">
             <div class="radio-opt"><div class="dot-circle"></div>Mais elegância</div>
             <div class="radio-opt"><div class="dot-circle"></div>Mais naturalidade</div>
-            <div class="radio-opt"><div class="dot-circle"></div>Mais feminilidade</div>
+            <div class="radio-opt" data-perfil-only="feminino"><div class="dot-circle"></div>Mais feminilidade</div>
             <div class="radio-opt"><div class="dot-circle"></div>Mais profissionalismo</div>
             <div class="radio-opt"><div class="dot-circle"></div>Mais presença e impacto visual</div>
             <div class="radio-opt"><div class="dot-circle"></div>Outro</div>
           </div>
           <input class="input-field outro-input" type="text" data-field="objetivoAnaliseCoresOutro" id="outro-objetivoAnaliseCores" placeholder="Qual é o seu objetivo? Descreva..." style="display:none; margin-top:-6px;">
 
-          <label class="form-label">Você costuma utilizar maquiagem?</label>
-          <div class="radio-row" data-field="usaMaquiagem">
+          <label class="form-label" data-perfil-only="feminino">Você costuma utilizar maquiagem?</label>
+          <div class="radio-row" data-field="usaMaquiagem" data-perfil-only="feminino">
             <div class="radio-opt"><div class="dot-circle"></div>Sim</div>
             <div class="radio-opt"><div class="dot-circle"></div>Não</div>
           </div>
-          <label class="form-label">Se sim, existe alguma cor de maquiagem que você prefere ou sente que combina mais com você?</label>
-          <textarea class="input-field textarea" data-field="corMaquiagemPreferida" placeholder="Escreva livremente..."></textarea>
+          <label class="form-label" data-perfil-only="feminino">Se sim, existe alguma cor de maquiagem que você prefere ou sente que combina mais com você?</label>
+          <textarea class="input-field textarea" data-field="corMaquiagemPreferida" data-perfil-only="feminino" placeholder="Escreva livremente..."></textarea>
 
           <label class="form-label">Como você descreveria o tom natural dos seus cabelos?</label>
           <div class="radio-row" data-field="tomNaturalCabelo">
@@ -4771,7 +4833,7 @@
 
 
   <!-- ================= ENVIO DE FOTOS ================= -->
-  <div class="screen-wrap" id="screen-fotos">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-fotos">
     <div class="screen-label">Envio de Fotos</div>
     <div class="phone">
       <div class="topbar">
@@ -4883,7 +4945,7 @@
           </div>
           <div>
             <div class="category-title">Direcionamento Cromático Online</div>
-            <div class="category-desc">Essas fotos ajudam na identificação das cores que mais harmonizam com suas características naturais, contribuindo para escolhas mais estratégicas em roupas, acessórios e maquiagem.</div>
+            <div class="category-desc">Essas fotos ajudam na identificação das cores que mais harmonizam com suas características naturais, contribuindo para escolhas mais estratégicas em roupas<span data-perfil-only="feminino">, acessórios e maquiagem</span><span data-perfil-only="masculino"> e acessórios</span>.</div>
           </div>
         </div>
 
@@ -4892,7 +4954,7 @@
           <ul class="photo-tips-list">
             <li>Utilize luz natural sempre que possível</li>
             <li>Não utilize filtros</li>
-            <li>Não utilize maquiagem</li>
+            <li data-perfil-only="feminino">Não utilize maquiagem</li>
             <li>Evite o modo retrato</li>
             <li>Mantenha o rosto totalmente visível</li>
             <li>Utilize fotos atuais</li>
@@ -4901,12 +4963,12 @@
 
         <div class="form-section">
           <div class="form-section-title"><span class="num">5</span>Rosto e características naturais</div>
-          <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Sem maquiagem, com boa iluminação natural</p>
+          <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;"><span data-perfil-only="feminino">Sem maquiagem, com boa iluminação natural</span><span data-perfil-only="masculino">Com boa iluminação natural</span></p>
           <div class="upload-grid">
 <div class="upload-box" data-photo-slot="cromatico-rosto">
               <input type="file" accept="image/*" class="upload-input" data-photo-slot="cromatico-rosto" hidden>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
-              <div class="label">Rosto sem maquiagem</div>
+              <div class="label"><span data-perfil-only="feminino">Rosto sem maquiagem</span><span data-perfil-only="masculino">Rosto natural</span></div>
             </div>
 <div class="upload-box" data-photo-slot="cromatico-olhos">
               <input type="file" accept="image/*" class="upload-input" data-photo-slot="cromatico-olhos" hidden>
@@ -4922,28 +4984,28 @@
         </div>
 
         <div class="form-section">
-          <div class="form-section-title"><span class="num">6</span>Blusas para contraste de cor</div>
-          <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Fotografe-se com cada blusa, mesma pose e iluminação</p>
+          <div class="form-section-title"><span class="num">6</span><span data-perfil-only="feminino">Blusas para contraste de cor</span><span data-perfil-only="masculino">Camisetas para contraste de cor</span></div>
+          <p style="font-size:12px; color:var(--graphite-soft); margin-top:4px;">Fotografe-se com cada <span data-perfil-only="feminino">blusa</span><span data-perfil-only="masculino">camiseta</span>, mesma pose e iluminação</p>
           <div class="upload-grid">
 <div class="upload-box" data-photo-slot="cromatico-blusa-branca">
               <input type="file" accept="image/*" class="upload-input" data-photo-slot="cromatico-blusa-branca" hidden>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
-              <div class="label">Blusa branca</div>
+              <div class="label"><span data-perfil-only="feminino">Blusa</span><span data-perfil-only="masculino">Camiseta</span> branca</div>
             </div>
 <div class="upload-box" data-photo-slot="cromatico-blusa-preta">
               <input type="file" accept="image/*" class="upload-input" data-photo-slot="cromatico-blusa-preta" hidden>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
-              <div class="label">Blusa preta</div>
+              <div class="label"><span data-perfil-only="feminino">Blusa</span><span data-perfil-only="masculino">Camiseta</span> preta</div>
             </div>
 <div class="upload-box" data-photo-slot="cromatico-blusa-cinza">
               <input type="file" accept="image/*" class="upload-input" data-photo-slot="cromatico-blusa-cinza" hidden>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
-              <div class="label">Blusa cinza</div>
+              <div class="label"><span data-perfil-only="feminino">Blusa</span><span data-perfil-only="masculino">Camiseta</span> cinza</div>
             </div>
 <div class="upload-box" data-photo-slot="cromatico-blusa-bege">
               <input type="file" accept="image/*" class="upload-input" data-photo-slot="cromatico-blusa-bege" hidden>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M8.5 6l1.2-1.8h4.6L15.5 6"/><circle cx="12" cy="12.3" r="3"/><path d="M12 4v2.3M12 20v-2.3"/></svg>
-              <div class="label">Blusa bege ou off-white</div>
+              <div class="label"><span data-perfil-only="feminino">Blusa</span><span data-perfil-only="masculino">Camiseta</span> bege ou off-white</div>
             </div>
           </div>
         </div>
@@ -4998,7 +5060,7 @@
   </div>
 
   <!-- ================= MEU DOSSIÊ (CLIENTE) ================= -->
-  <div class="screen-wrap" id="screen-cliente-dossie">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-cliente-dossie">
     <div class="screen-label">Meu Dossiê</div>
     <div class="phone">
       <div class="topbar">
@@ -5090,7 +5152,7 @@
   </div>
 
   <!-- ================= MINHA CARTELA (CLIENTE) ================= -->
-  <div class="screen-wrap" id="screen-cartela-digital">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-cartela-digital">
     <div class="screen-label">Minha Cartela</div>
     <div class="phone">
       <div class="topbar">
@@ -5132,7 +5194,7 @@
   </div>
 
   <!-- ================= PAINEL DA CONSULTORA - MATERIAIS RECEBIDOS ================= -->
-  <div class="screen-wrap" id="screen-materiais">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-materiais">
     <div class="screen-label">Painel — Materiais Recebidos</div>
     <div class="phone">
       <div class="topbar">
@@ -5143,9 +5205,9 @@
         
       </div>
       <div class="content">
-        <div class="eyebrow">Cliente selecionada</div>
-        <div class="page-title" id="materiais-cliente-nome">Selecione uma cliente</div>
-        <div class="page-sub">Anamnese e fotos enviadas pela cliente</div>
+        <div class="eyebrow"><span data-perfil-only="feminino">Cliente selecionada</span><span data-perfil-only="masculino">Cliente selecionado</span></div>
+        <div class="page-title" id="materiais-cliente-nome">Selecionar cliente</div>
+        <div class="page-sub">Anamnese e fotos enviadas pel<span data-perfil-only="feminino">a cliente</span><span data-perfil-only="masculino">o cliente</span></div>
 
         <div class="submission-card">
           <div class="submission-head">
@@ -5181,7 +5243,7 @@
           <div class="submission-photos" id="materiais-fotos-grid"></div>
         </div>
 
-        <button class="btn-secondary" data-goto="editar-cliente">Editar Dados da Cliente</button>
+        <button class="btn-secondary" data-goto="editar-cliente">Editar Dados de Cadastro</button>
         <button class="download-btn exportar-pdf-btn">⬇ Baixar Dossiê em PDF</button>
         <div class="gd-footer-mark"><img src="https://giulia-dantas.github.io/GD/logo-gd-circle.png" alt="GD"></div>
       </div>
@@ -5196,8 +5258,8 @@
   </div>
 
   <!-- ================= FICHA COMPLETA DA CLIENTE (ADMIN) ================= -->
-  <div class="screen-wrap" id="screen-ficha-cliente">
-    <div class="screen-label">Painel — Ficha da Cliente</div>
+  <div class="screen-wrap" data-perfil="feminino" id="screen-ficha-cliente">
+    <div class="screen-label">Painel — Ficha de Cadastro</div>
     <div class="phone">
       <div class="topbar">
         <div class="brand brand-centered">
@@ -5207,8 +5269,8 @@
         
       </div>
       <div class="content">
-        <div class="eyebrow">Ficha da Cliente</div>
-        <div class="page-title" id="ficha-cliente-nome">Selecione uma cliente</div>
+        <div class="eyebrow" id="ficha-cliente-eyebrow">Ficha de Cadastro</div>
+        <div class="page-title" id="ficha-cliente-nome">Selecionar cliente</div>
         <div class="page-sub">Visão geral, anamnese e fotos</div>
 
         <div class="pill-row ficha-tabs-scroll" style="margin-bottom:20px;">
@@ -5249,6 +5311,10 @@
                 <div class="ficha-info-value" id="ficha-instagram">—</div>
               </div>
               <div class="ficha-info-item">
+                <div class="ficha-info-label">Perfil da consultoria</div>
+                <div class="ficha-info-value" id="ficha-perfil-consultoria">—</div>
+              </div>
+              <div class="ficha-info-item">
                 <div class="ficha-info-label">Data de cadastro</div>
                 <div class="ficha-info-value" id="ficha-data-cadastro">—</div>
               </div>
@@ -5280,8 +5346,8 @@
           </div>
 
           <div class="stat-card">
-            <div class="stat-label" style="margin-bottom:4px;">Serviços da Cliente</div>
-            <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:14px; line-height:1.5;">Define quais módulos pertencem a esta cliente — usado pelo Editor do Dossiê e por futuras entregas.</p>
+            <div class="stat-label" style="margin-bottom:4px;" id="ficha-servicos-titulo">Serviços do Cadastro</div>
+            <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-2px; margin-bottom:14px; line-height:1.5;" id="ficha-servicos-desc">Define quais módulos pertencem a este cadastro — usado pelo Editor do Dossiê e por futuras entregas.</p>
             <div class="login-error" id="ficha-servicos-sugestao-msg"></div>
 
             <label class="form-label" style="margin-top:0;">Consultoria de Imagem</label>
@@ -5296,13 +5362,15 @@
               <div class="radio-opt"><div class="dot-circle"></div>Ligado</div>
             </div>
 
+            <div id="servico-maquiagem-bloco">
             <label class="form-label">Maquiagem</label>
             <div class="radio-row" data-field="maquiagem" id="servico-maquiagem-radio">
               <div class="radio-opt"><div class="dot-circle"></div>Desligado</div>
               <div class="radio-opt"><div class="dot-circle"></div>Ligado</div>
             </div>
+            </div>
 
-            <label class="form-label">Cabelo</label>
+            <label class="form-label" id="servico-cabelo-label">Cabelo</label>
             <div class="radio-row" data-field="cabelo" id="servico-cabelo-radio">
               <div class="radio-opt"><div class="dot-circle"></div>Desligado</div>
               <div class="radio-opt"><div class="dot-circle"></div>Ligado</div>
@@ -5314,8 +5382,8 @@
 
           <div class="stat-card">
             <div class="stat-label">Observações Internas</div>
-            <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-4px; margin-bottom:12px; line-height:1.5;">Visível apenas para você. A cliente nunca tem acesso a este campo.</p>
-            <textarea class="input-field textarea" id="ficha-observacoes-internas" placeholder="Anotações particulares sobre esta cliente..." style="min-height:110px;"></textarea>
+            <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-4px; margin-bottom:12px; line-height:1.5;">Visível apenas para você. <span data-perfil-only="feminino">A cliente</span><span data-perfil-only="masculino">O cliente</span> nunca tem acesso a este campo.</p>
+            <textarea class="input-field textarea" id="ficha-observacoes-internas" placeholder="Anotações particulares sobre este cadastro..." style="min-height:110px;"></textarea>
             <button class="btn-secondary" id="ficha-salvar-observacoes-btn" style="margin-top:10px; margin-bottom:0;">Salvar Observações</button>
             <div class="login-error" id="ficha-observacoes-msg"></div>
           </div>
@@ -5414,7 +5482,7 @@
             <label class="form-label">Pontos a valorizar</label>
             <textarea class="input-field textarea" data-field="pontosValorizar" placeholder="Escreva livremente..."></textarea>
 
-            <label class="form-label">Pontos que a cliente prefere não destacar</label>
+            <label class="form-label">Pontos que <span data-perfil-only="feminino">a cliente</span><span data-perfil-only="masculino">o cliente</span> prefere não destacar</label>
             <textarea class="input-field textarea" data-field="pontosNaoDestacar" placeholder="Escreva livremente..."></textarea>
 
             <label class="form-label">Recomendações de modelagem</label>
@@ -5503,11 +5571,15 @@
               <label class="form-label">Metais recomendados</label>
               <textarea class="input-field textarea" data-field="metaisRecomendados" placeholder="Escreva livremente..."></textarea>
 
-              <label class="form-label">Direcionamento de maquiagem</label>
-              <textarea class="input-field textarea" data-field="direcionamentoMaquiagem" placeholder="Escreva livremente..."></textarea>
+              <label class="form-label" data-perfil-only="feminino">Direcionamento de maquiagem</label>
+              <textarea class="input-field textarea" data-field="direcionamentoMaquiagem" data-perfil-only="feminino" placeholder="Escreva livremente..."></textarea>
 
               <label class="form-label">Direcionamento de cabelo</label>
               <textarea class="input-field textarea" data-field="direcionamentoCabelo" placeholder="Escreva livremente..."></textarea>
+
+              <!-- Cabelo & Barba (perfil masculino): campo de barba PREPARADO — o conteúdo profissional é definido pela Giulia. -->
+              <label class="form-label" data-perfil-only="masculino">Direcionamento de barba</label>
+              <textarea class="input-field textarea" data-field="direcionamentoBarba" data-perfil-only="masculino" placeholder="Escreva livremente..."></textarea>
 
               <label class="form-label">Observações cromáticas</label>
               <textarea class="input-field textarea" data-field="observacoesCromaticas" placeholder="Escreva livremente..." style="min-height:110px;"></textarea>
@@ -5539,7 +5611,7 @@
   </div>
 
   <!-- ================= EDITAR CLIENTE ================= -->
-  <div class="screen-wrap" id="screen-editar-cliente">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-editar-cliente">
     <div class="screen-label">Editar Cliente</div>
     <div class="phone">
       <div class="topbar">
@@ -5552,7 +5624,7 @@
       <div class="content">
         <div class="eyebrow">Cliente</div>
         <div class="page-title" id="editar-cliente-titulo">Editar Dados</div>
-        <div class="page-sub">Atualize as informações desta cliente</div>
+        <div class="page-sub" id="editar-cliente-sub">Atualize as informações do cadastro</div>
 
         <div class="form-section" id="editar-cliente-form">
           <label class="form-label">Nome completo</label>
@@ -5564,6 +5636,13 @@
 
           <label class="form-label">Telefone</label>
           <input class="input-field" type="tel" id="editar-cliente-telefone" placeholder="(11) 99999-9999">
+
+          <label class="form-label">Perfil da consultoria</label>
+          <div class="radio-row" id="editar-cliente-perfil-radio">
+            <div class="radio-opt" data-perfil-valor="feminino"><div class="dot-circle"></div>Feminino</div>
+            <div class="radio-opt" data-perfil-valor="masculino"><div class="dot-circle"></div>Masculino</div>
+          </div>
+          <p id="editar-cliente-perfil-hint" style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-4px; margin-bottom:14px; line-height:1.5;">Alterar o perfil muda apenas o que é exibido no app. Nenhuma informação já cadastrada é apagada.</p>
         </div>
 
         <div class="login-error" id="editar-cliente-error"></div>
@@ -5578,7 +5657,7 @@
   </div>
 
   <!-- ================= PAINEL DA CONSULTORA - ANAMNESE COMPLETA ================= -->
-  <div class="screen-wrap" id="screen-anamnese-completa">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-anamnese-completa">
     <div class="screen-label">Painel — Anamnese Completa</div>
     <div class="phone">
       <div class="topbar">
@@ -5611,7 +5690,7 @@
   <!-- ================= ANÁLISE CROMÁTICA ONLINE (ACO) — Fase 7.1, Prompt 1/4 ================= -->
   <!-- Sem IA. Toda percepção visual é da profissional. O sistema só automatiza a
        apresentação dos drapes, registra escolhas e organiza resultados. -->
-  <div class="screen-wrap" id="screen-analise-cromatica-online">
+  <div class="screen-wrap" data-perfil="feminino" id="screen-analise-cromatica-online">
     <div class="screen-label">Painel — Análise Cromática Online</div>
     <div class="phone">
       <div class="topbar">
@@ -5966,6 +6045,127 @@
   const storage = getStorage(app);
   const functions = getFunctions(app, 'us-central1');
 
+  // ===================================================================
+  // PERFIL DA CONSULTORIA (feminino | masculino) — Fase 2
+  // Propriedade persistente em users/{uid}.perfilConsultoria. Controla APENAS
+  // a experiência/renderização — nunca exclui nem reescreve dados existentes.
+  // Retrocompatibilidade: ausente (ou qualquer valor diferente de "masculino")
+  // = FEMININO, que é a implementação atual do app. Não há migração em massa.
+  // Ponto único de decisão: nenhum outro trecho do app deve comparar a string
+  // "masculino"/"feminino" diretamente — use os helpers abaixo.
+  // ===================================================================
+  const PERFIL_FEMININO = 'feminino';
+  const PERFIL_MASCULINO = 'masculino';
+
+  // Aceita o objeto do documento (users/{uid}), o próprio valor salvo ou nada.
+  function getPerfilConsultoria(fonte){
+    const bruto = (fonte && typeof fonte === 'object') ? fonte.perfilConsultoria : fonte;
+    return bruto === PERFIL_MASCULINO ? PERFIL_MASCULINO : PERFIL_FEMININO;
+  }
+  function isPerfilFeminino(fonte){ return getPerfilConsultoria(fonte) === PERFIL_FEMININO; }
+  function isPerfilMasculino(fonte){ return getPerfilConsultoria(fonte) === PERFIL_MASCULINO; }
+
+  // true somente quando o valor SALVO é explícito (distingue "definido" de "padrão").
+  function perfilConsultoriaDefinido(fonte){
+    const bruto = (fonte && typeof fonte === 'object') ? fonte.perfilConsultoria : fonte;
+    return bruto === PERFIL_FEMININO || bruto === PERFIL_MASCULINO;
+  }
+
+  // Configuração central por perfil. Chaves internas (ex.: "cabelo") NÃO mudam —
+  // só o rótulo apresentado. Módulos exclusivos de um perfil são declarados aqui
+  // e consultados via perfilTemModulo(), em vez de espalhar comparações pelo código.
+  const PERFIL_CONFIG = {
+    feminino:  { rotulo: 'Feminino',  rotuloCabelo: 'Cabelo',         modulos: { maquiagem: true  } },
+    masculino: { rotulo: 'Masculino', rotuloCabelo: 'Cabelo & Barba', modulos: { maquiagem: false } }
+  };
+  function perfilRotulo(fonte){ return PERFIL_CONFIG[getPerfilConsultoria(fonte)].rotulo; }
+  function perfilRotuloCabelo(fonte){ return PERFIL_CONFIG[getPerfilConsultoria(fonte)].rotuloCabelo; }
+  function perfilTemModulo(fonte, modulo){ return !!PERFIL_CONFIG[getPerfilConsultoria(fonte)].modulos[modulo]; }
+
+  // Texto com concordância de gênero: perfilTexto(perfil, 'cadastrada', 'cadastrado').
+  function perfilTexto(fonte, textoFeminino, textoMasculino){
+    return isPerfilMasculino(fonte) ? textoMasculino : textoFeminino;
+  }
+
+  // ---- Perfil por tela e por cliente ----
+  // Sessão do CLIENTE: todas as telas recebem o perfil do próprio cliente no login.
+  // Sessão da CONSULTORA: as telas de um cliente recebem o perfil do cliente selecionado
+  // (definido no render de cada tela). Padrão estático no HTML: "feminino".
+  const perfilPorUid = {};
+  function definirPerfilCliente(uid, fonte){ if(uid) perfilPorUid[uid] = getPerfilConsultoria(fonte); }
+  function perfilCliente(uid){ return (uid && perfilPorUid[uid]) || PERFIL_FEMININO; }
+  function perfilDoSelecionado(){ return perfilCliente(selectedClienteUid); }
+  async function obterPerfilCliente(uid, forcar){
+    if(!uid) return PERFIL_FEMININO;
+    if(!forcar && perfilPorUid[uid]) return perfilPorUid[uid];
+    try{
+      const snap = await getDoc(doc(db, 'users', uid));
+      const perfil = getPerfilConsultoria(snap.exists() ? snap.data() : null);
+      perfilPorUid[uid] = perfil;
+      return perfil;
+    } catch(err){
+      console.error('GD: erro ao ler perfilConsultoria', err);
+      return perfilCliente(uid);
+    }
+  }
+  function aplicarPlaceholdersPerfil(raiz, perfil){
+    raiz.querySelectorAll('[data-placeholder-masculino]').forEach(function(el){
+      if(!el.hasAttribute('data-placeholder-feminino')) el.setAttribute('data-placeholder-feminino', el.getAttribute('placeholder') || '');
+      el.setAttribute('placeholder', isPerfilMasculino(perfil) ? el.getAttribute('data-placeholder-masculino') : el.getAttribute('data-placeholder-feminino'));
+    });
+  }
+  function definirPerfilTela(idTela, fonte){
+    const el = document.getElementById('screen-' + idTela);
+    if(!el) return;
+    const perfil = getPerfilConsultoria(fonte);
+    el.setAttribute('data-perfil', perfil);
+    aplicarPlaceholdersPerfil(el, perfil);
+  }
+  async function aplicarPerfilNaTela(idTela){
+    // forcar=true: sempre lê o perfil atual (a Giulia pode tê-lo alterado em outro aparelho).
+    const perfil = selectedClienteUid ? await obterPerfilCliente(selectedClienteUid, true) : PERFIL_FEMININO;
+    definirPerfilTela(idTela, perfil);
+    return perfil;
+  }
+  function definirPerfilTodasAsTelas(fonte){
+    const perfil = getPerfilConsultoria(fonte);
+    document.querySelectorAll('.screen-wrap').forEach(function(el){
+      el.setAttribute('data-perfil', perfil);
+      aplicarPlaceholdersPerfil(el, perfil);
+    });
+  }
+
+  // Campo ocultado pelo perfil da tela: NUNCA entra em gravações (merge preserva o valor salvo).
+  function campoOcultoPorPerfil(el){
+    const marca = el.closest('[data-perfil-only]');
+    if(!marca) return false;
+    const tela = el.closest('[data-perfil]');
+    const perfilTela = tela ? tela.getAttribute('data-perfil') : PERFIL_FEMININO;
+    return marca.getAttribute('data-perfil-only') !== perfilTela;
+  }
+
+  // Textos OFICIAIS por estação (dados fixos) escritos no feminino/para mulheres. No perfil
+  // feminino o texto passa intacto; no masculino aplica só concordância e remove "saias" —
+  // os dados oficiais em si nunca são editados.
+  function textoOficialParaPerfil(texto, fonte){
+    if(typeof texto !== 'string' || !isPerfilMasculino(fonte)) return texto;
+    return texto
+      .replace(/\bda cliente\b/g, 'do cliente')
+      .replace(/\bcalças, saias(,| e )/g, 'calças$1');
+  }
+
+  // Radio de perfil (cadastro e edição) — lê/define pelo atributo data-perfil-valor.
+  function perfilRadioLer(rowId){
+    const sel = document.querySelector('#' + rowId + ' .radio-opt.sel');
+    const v = sel ? sel.getAttribute('data-perfil-valor') : null;
+    return (v === PERFIL_FEMININO || v === PERFIL_MASCULINO) ? v : null;
+  }
+  function perfilRadioDefinir(rowId, valor){
+    document.querySelectorAll('#' + rowId + ' .radio-opt').forEach(function(el){
+      el.classList.toggle('sel', !!valor && el.getAttribute('data-perfil-valor') === valor);
+    });
+  }
+
   const loginBtn = document.getElementById('login-btn');
   const emailInput = document.getElementById('login-email');
   const passwordInput = document.getElementById('login-password');
@@ -6054,7 +6254,7 @@
       if(role === 'cliente' && profile.senhaTemporaria === true){
         window.__gdGoTo('trocar-senha', 'fwd');
       } else {
-        goToHomeForRole(role, nome);
+        goToHomeForRole(role, nome, profile);
         window.__gdGoTo('welcome', 'fwd');
       }
 
@@ -6121,7 +6321,7 @@
       trocarSenhaNovaInput.value = '';
       trocarSenhaConfirmarInput.value = '';
 
-      goToHomeForRole(role, nome);
+      goToHomeForRole(role, nome, profile);
       window.__gdGoTo('welcome', 'fwd');
     } catch(err){
       console.error('GD: erro ao trocar senha', err);
@@ -6183,8 +6383,11 @@
 
   // ---- Navigate to the correct home screen for a role, updating names ----
 
-  function goToHomeForRole(role, nome){
+  function goToHomeForRole(role, nome, profile){
     window.__gdRole = role;
+    // Cliente: todas as telas seguem o perfil dele. Consultora: padrão (as telas de cada
+    // cliente recebem o perfil do cliente selecionado no próprio render).
+    definirPerfilTodasAsTelas(role === 'cliente' ? getPerfilConsultoria(profile) : PERFIL_FEMININO);
     if(welcomeNameEl) welcomeNameEl.textContent = 'Olá, ' + firstName(nome);
     if(role === 'consultora' && painelNameEl) painelNameEl.textContent = 'Olá, ' + firstName(nome);
     if(role === 'cliente' && clienteNameEl) clienteNameEl.textContent = 'Olá, ' + firstName(nome);
@@ -6212,7 +6415,7 @@
             if(role === 'cliente' && profile.senhaTemporaria === true){
               if(window.__gdGoTo) window.__gdGoTo('trocar-senha', 'fwd');
             } else {
-              const target = goToHomeForRole(role, nome);
+              const target = goToHomeForRole(role, nome, profile);
               // Skip splash and welcome animation; go straight to the app
               if(window.__gdGoTo){
                 window.__gdGoTo(target, 'fwd');
@@ -6646,6 +6849,8 @@
       if(passwordInput) passwordInput.value = '';
       clearError();
       window.__gdRole = null;
+      definirPerfilTodasAsTelas(PERFIL_FEMININO);
+      Object.keys(perfilPorUid).forEach(function(k){ delete perfilPorUid[k]; });
       if(window.__gdResetHistory) window.__gdResetHistory();
       if(window.__gdGoTo) window.__gdGoTo('login', 'back');
     });
@@ -6714,6 +6919,9 @@
     const data = {};
     forms.forEach(function(form){
       form.querySelectorAll('[data-field]').forEach(function(el){
+        // Campo que não pertence ao perfil do cliente fica de fora do payload: o merge
+        // preserva a resposta já salva (nunca sobrescreve com vazio).
+        if(campoOcultoPorPerfil(el)) return;
         const field = el.getAttribute('data-field');
         data[field] = getFieldValue(form, field);
       });
@@ -7163,6 +7371,7 @@
     if(nomeInput) nomeInput.value = '';
     if(emailInput2) emailInput2.value = '';
     if(telefoneInput) telefoneInput.value = '';
+    perfilRadioDefinir('cadastrar-perfil-radio', null);
     if(errorBox2) errorBox2.textContent = '';
     if(sucessoCard) sucessoCard.hidden = true;
     if(form) form.hidden = false;
@@ -7196,12 +7405,47 @@
       return;
     }
 
+    // Perfil da consultoria é obrigatório para NOVOS clientes.
+    const perfilEscolhido = perfilRadioLer('cadastrar-perfil-radio');
+    if(!perfilEscolhido){
+      errorBox2.textContent = 'Selecione o perfil da consultoria (Feminino ou Masculino).';
+      return;
+    }
+
     btn.classList.add('is-loading');
     btn.textContent = 'Cadastrando…';
 
     try{
-      const result = await criarClienteFn({ nome, email, telefone });
+      // O perfil vai junto na chamada. O Function novo grava o perfil na criação e o
+      // confirma no retorno; um Function antigo ignora o campo extra (segue funcionando).
+      const result = await criarClienteFn({ nome, email, telefone, perfilConsultoria: perfilEscolhido });
       const data = result.data || {};
+
+      // Só se o Function NÃO confirmou o perfil (versão antiga ainda implantada), grava
+      // depois da criação, com merge (nunca sobrescreve o documento). O uid vem do
+      // retorno do Function; se faltar, é localizado pelo e-mail entre os usuários
+      // role === 'cliente'. Só escreve se o documento já existir — nunca cria users/{uid} parcial.
+      let perfilGravado = (data.perfilConsultoria === perfilEscolhido);
+      if(!perfilGravado){ try{
+        let uidNovo = data.uid || data.clienteUid || data.id || null;
+        if(!uidNovo){
+          const emailBusca = email.toLowerCase();
+          const snapUsuarios = await getDocs(query(collection(db, 'users'), where('role', '==', 'cliente')));
+          snapUsuarios.forEach(function(d){
+            if(((d.data().email || '') + '').toLowerCase() === emailBusca) uidNovo = d.id;
+          });
+        }
+        if(uidNovo){
+          const userRefNovo = doc(db, 'users', uidNovo);
+          const userSnapNovo = await getDoc(userRefNovo);
+          if(userSnapNovo.exists()){
+            await setDoc(userRefNovo, { perfilConsultoria: perfilEscolhido }, { merge: true });
+            perfilGravado = true;
+          }
+        }
+      } catch(errPerfil){
+        console.error('GD: erro ao gravar perfilConsultoria do novo cliente', errPerfil);
+      } }
 
       btn.classList.remove('is-loading');
       btn.textContent = 'Cadastrar Cliente';
@@ -7216,6 +7460,16 @@
       btn.hidden = true;
       if(sucessoCard) sucessoCard.hidden = false;
       if(sucessoNome) sucessoNome.textContent = nome;
+
+      const sucessoTitulo = document.getElementById('cadastrar-sucesso-titulo');
+      const sucessoArtigo = document.getElementById('cadastrar-sucesso-artigo');
+      const sucessoPronome = document.getElementById('cadastrar-sucesso-pronome');
+      if(sucessoTitulo) sucessoTitulo.textContent = perfilTexto(perfilEscolhido, 'Cliente cadastrada com sucesso', 'Cliente cadastrado com sucesso');
+      if(sucessoArtigo) sucessoArtigo.textContent = perfilTexto(perfilEscolhido, 'a', 'o');
+      if(sucessoPronome) sucessoPronome.textContent = perfilTexto(perfilEscolhido, 'ela', 'ele');
+      if(!perfilGravado){
+        errorBox2.textContent = 'Cadastro criado, mas o perfil da consultoria não pôde ser salvo. Abra "Editar Dados" deste cliente e defina o perfil antes de continuar.';
+      }
       if(sucessoLink) sucessoLink.textContent = data.senhaTemporaria || '';
 
       cachedClientes = null; // force refresh of client list
@@ -7224,7 +7478,7 @@
       btn.textContent = 'Cadastrar Cliente';
       console.error('GD: erro ao cadastrar cliente', err);
 
-      let msg = 'Não foi possível cadastrar a cliente. (' + (err.code || 'erro desconhecido') + ')';
+      let msg = 'Não foi possível cadastrar o cliente. (' + (err.code || 'erro desconhecido') + ')';
       if(err.code === 'functions/already-exists'){
         msg = 'Já existe uma conta com esse e-mail.';
       } else if(err.code === 'functions/invalid-argument'){
@@ -7290,7 +7544,7 @@
       title: 'Estilo Pessoal', step: 4,
       fields: [
         { field: 'estiloAtual', label: 'Estilo atual', type: 'tags' },
-        { field: 'percepcaoDesejada', label: 'Como gostaria de ser percebida', type: 'tags' },
+        { field: 'percepcaoDesejada', label: 'Como gostaria de ser percebida', labelMasculino: 'Como gostaria de ser percebido', type: 'tags' },
         { field: 'percepcaoDesejadaOutro', label: 'Outra percepção desejada' },
         { field: 'pessoaAdmirada', label: 'Pessoa cujo estilo admira' }
       ]
@@ -7344,14 +7598,18 @@
         { field: 'corQueEvitaCromatico', label: 'Cor que evita ou não combina' },
         { field: 'objetivoAnaliseCores', label: 'Objetivo da análise de cores' },
         { field: 'objetivoAnaliseCoresOutro', label: 'Outro objetivo (análise de cores)' },
-        { field: 'usaMaquiagem', label: 'Usa maquiagem?' },
-        { field: 'corMaquiagemPreferida', label: 'Cor de maquiagem preferida' },
+        { field: 'usaMaquiagem', label: 'Usa maquiagem?', perfil: 'feminino' },
+        { field: 'corMaquiagemPreferida', label: 'Cor de maquiagem preferida', perfil: 'feminino' },
         { field: 'tomNaturalCabelo', label: 'Tom natural do cabelo' },
         { field: 'corOlhos', label: 'Cor dos olhos' },
         { field: 'corOlhosOutro', label: 'Outra cor de olhos' }
       ]
     }
   ];
+
+  // Campo da anamnese exibido só quando pertence ao perfil (perfil ausente = universal).
+  function anamneseCampoAplicavel(f, perfil){ return !f.perfil || f.perfil === getPerfilConsultoria(perfil); }
+  function anamneseRotulo(f, perfil){ return (isPerfilMasculino(perfil) && f.labelMasculino) ? f.labelMasculino : f.label; }
 
   function escapeHtml(str){
     if(str === undefined || str === null) return '';
@@ -7404,7 +7662,8 @@
           }
         } catch(err){ /* ignore */ }
 
-        result.push({ uid, nome, anamneseDone, anamneseFinished, fotosCount });
+        definirPerfilCliente(uid, data);
+        result.push({ uid, nome, anamneseDone, anamneseFinished, fotosCount, perfil: getPerfilConsultoria(data) });
       }
     } catch(err){
       console.error('GD: erro ao buscar clientes', err);
@@ -7414,7 +7673,7 @@
     return result;
   }
 
-  // ---- Render the "Minhas Clientes" list ----
+  // ---- Render the "Clientes" list ----
 
   async function renderClientesList(){
     const listEl = document.getElementById('clientes-list');
@@ -7432,7 +7691,7 @@
     if(fotosEl) fotosEl.textContent = clientes.filter(function(c){ return c.fotosCount > 0; }).length;
 
     if(clientes.length === 0){
-      listEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Nenhuma cliente cadastrada ainda.</p>`;
+      listEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Ainda não há clientes cadastrados.</p>`;
       return;
     }
 
@@ -7501,10 +7760,11 @@
     const fotosGrid = document.getElementById('materiais-fotos-grid');
 
     if(!selectedClienteUid){
-      if(nomeEl) nomeEl.textContent = 'Selecione uma cliente';
+      if(nomeEl) nomeEl.textContent = 'Selecionar cliente';
       return;
     }
 
+    aplicarPerfilNaTela('materiais');
     if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
 
     // Anamnese progress
@@ -7608,9 +7868,9 @@
   // Used by both the standalone "Anamnese Completa" screen and the "Anamnese" tab inside the Ficha da Cliente.
   // Never mixes in professional/admin analysis data — client answers only.
 
-  function buildAnamneseHtml(stepsData){
+  function buildAnamneseHtml(stepsData, perfil){
     if(!stepsData || Object.keys(stepsData).length === 0){
-      return `<div class="stat-card" style="text-align:center;"><p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">Esta cliente ainda não preencheu a anamnese.</p></div>`;
+      return `<div class="stat-card" style="text-align:center;"><p style="font-family:'Cormorant Garamond', serif; font-size:16px; font-style:italic; color:var(--graphite-soft); padding:8px 0;">${perfilTexto(perfil, 'Esta cliente ainda não preencheu a anamnese.', 'Este cliente ainda não preencheu a anamnese.')}</p></div>`;
     }
 
     let html = '';
@@ -7622,15 +7882,16 @@
       let hasContent = false;
 
       section.fields.forEach(function(f){
+        if(!anamneseCampoAplicavel(f, perfil)) return;
         const value = data[f.field];
         if(value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) return;
 
         hasContent = true;
         if(f.type === 'tags' && Array.isArray(value)){
-          sectionHtml += '<div class="anamnese-field"><div class="anamnese-field-label">' + escapeHtml(f.label) + '</div>' +
+          sectionHtml += '<div class="anamnese-field"><div class="anamnese-field-label">' + escapeHtml(anamneseRotulo(f, perfil)) + '</div>' +
             '<div class="anamnese-tag-row">' + value.map(function(v){ return '<div class="anamnese-tag">' + escapeHtml(v) + '</div>'; }).join('') + '</div></div>';
         } else {
-          sectionHtml += '<div class="anamnese-field"><div class="anamnese-field-label">' + escapeHtml(f.label) + '</div>' +
+          sectionHtml += '<div class="anamnese-field"><div class="anamnese-field-label">' + escapeHtml(anamneseRotulo(f, perfil)) + '</div>' +
             '<div class="anamnese-field-value">' + escapeHtml(value) + '</div></div>';
         }
       });
@@ -7653,13 +7914,14 @@
 
     if(!selectedClienteUid){
       if(nomeEl) nomeEl.textContent = 'Cliente';
-      if(statusEl) statusEl.textContent = 'Selecione uma cliente em "Minhas Clientes"';
+      if(statusEl) statusEl.textContent = 'Selecionar cliente em "Clientes"';
       contentEl.innerHTML = '';
       return;
     }
 
     if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
     if(statusEl) statusEl.textContent = 'Carregando respostas...';
+    const perfilAnamnese = await aplicarPerfilNaTela('anamnese-completa');
 
     const stepsData = await fetchAnamneseStepsData(selectedClienteUid);
 
@@ -7670,9 +7932,9 @@
       if(progressSnap.exists()) anamneseFinished = !!progressSnap.data().finished;
     } catch(err){ console.error(err); }
 
-    if(statusEl) statusEl.textContent = anamneseFinished ? 'Respostas concluídas pela cliente' : 'Respostas parciais (em andamento)';
+    if(statusEl) statusEl.textContent = anamneseFinished ? perfilTexto(perfilAnamnese, 'Respostas concluídas pela cliente', 'Respostas concluídas pelo cliente') : 'Respostas parciais (em andamento)';
 
-    contentEl.innerHTML = buildAnamneseHtml(stepsData);
+    contentEl.innerHTML = buildAnamneseHtml(stepsData, perfilAnamnese);
   }
 
   // ===================================================================
@@ -20026,6 +20288,7 @@
     const data = {};
     if(!container) return data;
     container.querySelectorAll('[data-field]').forEach(function(el){
+      if(campoOcultoPorPerfil(el)) return;   // campo de outro perfil: nunca entra na gravação
       const field = el.getAttribute('data-field');
       if(data.hasOwnProperty(field)) return;
       data[field] = getFieldValue(container, field);
@@ -20327,7 +20590,7 @@
     restaurarServicoRadio('cabelo', false);
 
     if((sugestaoConsultoria || sugestaoColoracao) && sugestaoMsgEl){
-      sugestaoMsgEl.textContent = 'Sugestão baseada nos dados existentes desta cliente — revise e clique em Salvar Serviços.';
+      sugestaoMsgEl.textContent = perfilTexto(perfilCliente(uid), 'Sugestão baseada nos dados existentes desta cliente — revise e clique em Salvar Serviços.', 'Sugestão baseada nos dados existentes deste cliente — revise e clique em Salvar Serviços.');
     }
   }
 
@@ -20362,11 +20625,36 @@
     }
   });
 
+  // Aplica o perfil na Ficha: rótulos com concordância, perfil exibido e módulos que
+  // não existem no perfil. Ocultar ≠ apagar: os radios ocultos mantêm o valor salvo
+  // (restaurarServicoRadio continua preenchendo-os), então "Salvar Serviços" nunca
+  // zera um serviço que apenas não é exibido para o perfil.
+  function aplicarPerfilNaFicha(userData){
+    const perfil = getPerfilConsultoria(userData);
+    definirPerfilCliente(selectedClienteUid, perfil);
+    definirPerfilTela('ficha-cliente', perfil);
+    const eyebrowEl = document.getElementById('ficha-cliente-eyebrow');
+    if(eyebrowEl) eyebrowEl.textContent = perfilTexto(perfil, 'Ficha da Cliente', 'Ficha do Cliente');
+
+    const perfilEl = document.getElementById('ficha-perfil-consultoria');
+    if(perfilEl) perfilEl.textContent = perfilConsultoriaDefinido(userData) ? perfilRotulo(perfil) : 'Feminino (padrão)';
+
+    const tituloServ = document.getElementById('ficha-servicos-titulo');
+    if(tituloServ) tituloServ.textContent = perfilTexto(perfil, 'Serviços da Cliente', 'Serviços do Cliente');
+    const descServ = document.getElementById('ficha-servicos-desc');
+    if(descServ) descServ.textContent = perfilTexto(perfil, 'Define quais módulos pertencem a esta cliente', 'Define quais módulos pertencem a este cliente') + ' — usado pelo Editor do Dossiê e por futuras entregas.';
+
+    const blocoMaq = document.getElementById('servico-maquiagem-bloco');
+    if(blocoMaq) blocoMaq.hidden = !perfilTemModulo(perfil, 'maquiagem');
+    const cabeloLabel = document.getElementById('servico-cabelo-label');
+    if(cabeloLabel) cabeloLabel.textContent = perfilRotuloCabelo(perfil);
+  }
+
   async function renderFichaCliente(){
     const nomeEl = document.getElementById('ficha-cliente-nome');
 
     if(!selectedClienteUid){
-      if(nomeEl) nomeEl.textContent = 'Selecione uma cliente';
+      if(nomeEl) nomeEl.textContent = 'Selecionar cliente';
       return;
     }
 
@@ -20387,6 +20675,8 @@
       const userSnap = await getDoc(userRef);
       if(userSnap.exists()) userData = userSnap.data();
     } catch(err){ console.error(err); }
+
+    aplicarPerfilNaFicha(userData);
 
     const stepsData = await fetchAnamneseStepsData(selectedClienteUid);
     const step1 = stepsData[1] || {};
@@ -20482,11 +20772,11 @@
     const anamneseStatusEl = document.getElementById('ficha-anamnese-status');
     if(anamneseStatusEl){
       anamneseStatusEl.textContent = anamneseFinished
-        ? 'Respostas concluídas pela cliente'
-        : (anamneseDone > 0 ? 'Respostas parciais (em andamento)' : 'Esta cliente ainda não iniciou a anamnese');
+        ? perfilTexto(userData, 'Respostas concluídas pela cliente', 'Respostas concluídas pelo cliente')
+        : (anamneseDone > 0 ? 'Respostas parciais (em andamento)' : perfilTexto(userData, 'Esta cliente ainda não iniciou a anamnese', 'Este cliente ainda não iniciou a anamnese'));
     }
     const anamneseContentEl = document.getElementById('ficha-anamnese-content');
-    if(anamneseContentEl) anamneseContentEl.innerHTML = buildAnamneseHtml(stepsData);
+    if(anamneseContentEl) anamneseContentEl.innerHTML = buildAnamneseHtml(stepsData, userData);
 
     // ---- Aba Fotos ----
     await renderFichaFotosTab(selectedClienteUid);
@@ -20777,7 +21067,7 @@
     const btn = e.target.closest('#aco-entry-btn');
     if(!btn) return;
     if(!selectedClienteUid){
-      alert('Nenhuma cliente selecionada. Volte para "Minhas Clientes" e abra a ficha novamente antes de tocar neste botão.');
+      alert('Nenhum cadastro selecionado. Volte para "Clientes" e abra a ficha novamente antes de tocar neste botão.');
       return;
     }
 
@@ -21892,7 +22182,7 @@
 
     listEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Carregando...</p>`;
 
-    cachedClientes = null; // force refresh, same as "Minhas Clientes"
+    cachedClientes = null; // force refresh, same as "Clientes"
     const clientes = await fetchAllClientes();
 
     const linhas = [];
@@ -21933,7 +22223,7 @@
     if(liberadosEl) liberadosEl.textContent = liberados;
 
     if(linhas.length === 0){
-      listEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Nenhuma cliente cadastrada ainda.</p>`;
+      listEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Ainda não há clientes cadastrados.</p>`;
       return;
     }
 
@@ -22004,7 +22294,7 @@
     const clientes = await fetchAllClientes();
 
     if(clientes.length === 0){
-      listEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Nenhuma cliente cadastrada ainda.</p>`;
+      listEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:15px; font-style:italic; color:var(--graphite-soft); text-align:center; padding:16px 0;">Ainda não há clientes cadastrados.</p>`;
       return;
     }
 
@@ -22025,7 +22315,7 @@
       const checklist = await computeChecklist(novoDossieSelectedUid);
       renderChecklistInto(checklistEl, checklist);
     } else if(checklistEl){
-      checklistEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:14px; font-style:italic; color:var(--graphite-soft); padding:6px 0;">Selecione uma cliente na Etapa 1.</p>`;
+      checklistEl.innerHTML = `<p style="font-family:'Cormorant Garamond', serif; font-size:14px; font-style:italic; color:var(--graphite-soft); padding:6px 0;">Selecionar cliente na Etapa 1.</p>`;
     }
   }
 
@@ -22052,7 +22342,7 @@
     if(msgEl){ msgEl.textContent = ''; msgEl.classList.remove('success'); }
 
     if(!novoDossieSelectedUid){
-      if(msgEl) msgEl.textContent = 'Selecione uma cliente na Etapa 1.';
+      if(msgEl) msgEl.textContent = 'Selecionar cliente na Etapa 1.';
       return;
     }
 
@@ -22116,10 +22406,11 @@
   async function renderDossieIndividual(){
     const nomeEl = document.getElementById('dossie-individual-cliente-nome');
     if(!selectedClienteUid){
-      if(nomeEl) nomeEl.textContent = 'Selecione uma cliente em "Dossiês"';
+      if(nomeEl) nomeEl.textContent = 'Selecionar cliente em "Dossiês"';
       return;
     }
     if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
+    await aplicarPerfilNaTela('dossie-individual');
 
     const liberarMsgElReset = document.getElementById('dossie-liberar-msg');
     if(liberarMsgElReset){ liberarMsgElReset.textContent = ''; liberarMsgElReset.classList.remove('success'); }
@@ -22538,7 +22829,12 @@
   // Upload segue exatamente o mesmo mecanismo já usado para fotos (uploadBytes +
   // getDownloadURL), apenas em clientes/{uid}/artesDossie/{categoria}/ em vez de
   // clientes/{uid}/fotos/ — reaproveita a infraestrutura, não cria uma nova.
-  const ARTES_DOSSIE_CATEGORIAS = ['armario', 'looks', 'modelagens', 'acessorios', 'cabelo', 'maquiagem', 'posicionamentoCromatico', 'paletaOficial'];
+  // Categorias com sufixo "Masculino" são as galerias do perfil masculino (chaves NOVAS):
+  // as femininas originais (armario, looks, modelagens, acessorios, cabelo, maquiagem)
+  // não são tocadas, então nada vaza de um perfil para o outro ao trocar o perfil.
+  // posicionamentoCromatico e paletaOficial são universais.
+  const ARTES_DOSSIE_CATEGORIAS = ['armario', 'looks', 'modelagens', 'acessorios', 'cabelo', 'maquiagem', 'posicionamentoCromatico', 'paletaOficial',
+    'armarioMasculino', 'looksMasculino', 'modelagensMasculino', 'acessoriosMasculino', 'cabeloMasculino'];
   const ARTES_DOSSIE_MAX = 3;
   // "posicionamentoCromatico" é a única categoria de imagem ÚNICA (máx. 1) — as
   // 6 categorias originais continuam usando ARTES_DOSSIE_MAX (3) normalmente,
@@ -22547,7 +22843,8 @@
   function editorArtesMaxDaCategoria(cat){
     return ARTES_DOSSIE_MAX_POR_CATEGORIA[cat] || ARTES_DOSSIE_MAX;
   }
-  let editorArtesData = { armario: [], looks: [], modelagens: [], acessorios: [], cabelo: [], maquiagem: [], posicionamentoCromatico: [], paletaOficial: [] };
+  let editorArtesData = { armario: [], looks: [], modelagens: [], acessorios: [], cabelo: [], maquiagem: [], posicionamentoCromatico: [], paletaOficial: [],
+    armarioMasculino: [], looksMasculino: [], modelagensMasculino: [], acessoriosMasculino: [], cabeloMasculino: [] };
 
   // Clientes antigos sem "artesDossie" (ou com alguma categoria ausente/malformada)
   // são tratados como arrays vazios — nunca um erro, nunca migração manual.
@@ -22760,10 +23057,11 @@
   async function renderEditorDossie(){
     const nomeEl = document.getElementById('editor-dossie-cliente-nome');
     if(!selectedClienteUid){
-      if(nomeEl) nomeEl.textContent = 'Selecione uma cliente em "Dossiês"';
+      if(nomeEl) nomeEl.textContent = 'Selecionar cliente em "Dossiês"';
       return;
     }
     if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
+    await aplicarPerfilNaTela('editor-dossie');
 
     // Recolhe todos os capítulos e limpa mensagens ao reabrir a tela ("artes" não
     // está em EDITOR_CAPITULOS — é tratado à parte, mesmo padrão de recolhimento).
@@ -22969,6 +23267,18 @@
     'Metais, acessórios e maquiagem completam a leitura de cor do look: usar os metais recomendados para você reforça a harmonia construída pela sua cartela.'
   ];
 
+  // Versão masculina do texto padrão de "Como Usar Sua Cartela": derivada do texto feminino
+  // apenas por REMOÇÃO de referências a maquiagem e saias — nada novo é inventado.
+  function dm_comoUsarCartelaPadrao(dados){
+    if(!isPerfilMasculino(dados.perfil)) return DOSSIE_MESTRE_COMO_USAR_CARTELA;
+    return DOSSIE_MESTRE_COMO_USAR_CARTELA.map(function(t){
+      return t
+        .replace('na gola, nos acessórios ou na maquiagem', 'na gola ou nos acessórios')
+        .replace('calças, saias e sapatos', 'calças e sapatos')
+        .replace('Metais, acessórios e maquiagem', 'Metais e acessórios');
+    });
+  }
+
   const DOSSIE_MESTRE_CHECKLIST_PROVADOR = [
     'Isso conversa com o meu estilo?',
     'Funciona para a minha rotina?',
@@ -22986,6 +23296,9 @@
 
     try{ const s = await getDoc(doc(db, 'users', uid)); dados.usuario = s.exists() ? s.data() : {}; }
     catch(err){ console.error(err); dados.usuario = {}; }
+    // Perfil da consultoria: decide os módulos, artes e textos do dossiê (ausente = feminino).
+    dados.perfil = getPerfilConsultoria(dados.usuario);
+    definirPerfilCliente(uid, dados.perfil);
 
     try{ dados.anamnese = await fetchAnamneseStepsData(uid); }
     catch(err){ console.error(err); dados.anamnese = {}; }
@@ -23276,10 +23589,10 @@
   function dm_buildAbertura(dados){
     const texto = (dados.editorial.boasVindasPersonalizada && dados.editorial.boasVindasPersonalizada.trim())
       ? dados.editorial.boasVindasPersonalizada
-      : DOSSIE_MESTRE_BOAS_VINDAS_PADRAO;
+      : (isPerfilMasculino(dados.perfil) ? DOSSIE_MESTRE_BOAS_VINDAS_PADRAO.replace('juntas', 'juntos') : DOSSIE_MESTRE_BOAS_VINDAS_PADRAO);
     return [dm_pagina(
       '<div style="margin-top:8%; flex:1; display:flex; flex-direction:column; justify-content:center;">' +
-        '<div class="dm-eyebrow">Bem-vinda</div>' +
+        '<div class="dm-eyebrow">' + escapeHtml(perfilTexto(dados.perfil, 'Bem-vinda', 'Bem-vindo')) + '</div>' +
         '<div class="dm-titulo-editorial" style="font-size:34px;">Seu Dossiê <em>Personalizado</em></div>' +
         '<div class="dm-linha-curta"></div>' +
         '<div class="dm-box-destaque" style="max-width:88%;">' +
@@ -23410,13 +23723,13 @@
       { titulo: 'Recomendações de Tecidos', valor: dados.prof.recomendacoesTecidos },
       { titulo: 'Partes Superiores', valor: dados.editorial.partesSuperiores },
       { titulo: 'Partes Inferiores', valor: dados.editorial.partesInferiores },
-      { titulo: 'Vestidos / Macacões', valor: dados.editorial.vestidosMacacoes },
+      { titulo: 'Vestidos / Macacões', valor: isPerfilMasculino(dados.perfil) ? '' : dados.editorial.vestidosMacacoes },
       { titulo: 'Terceira Peça', valor: dados.editorial.terceiraPeca },
       { titulo: 'Estampas', valor: dados.editorial.estampas }
     ]);
     // Artes do Dossiê — "Modelagens Recomendadas" ilustra esta seção; aparece
     // mesmo se nenhum campo de texto acima estiver preenchido.
-    const galeriaModelagens = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.modelagens);
+    const galeriaModelagens = dm_galeriaArtes(dados, 'modelagens');
     if(!blocos.length && !galeriaModelagens) return null;
     return dm_paginarBlocos('Consultoria de Imagem', 'Seu', 'Vestuário', blocos, 4, ['cabide', 'tesoura', 'cabide', 'cabide', 'cabide', 'cabide', 'estrela'], galeriaModelagens);
   }
@@ -23428,14 +23741,14 @@
       { titulo: 'Bolsas', valor: dados.editorial.acessoriosBolsas },
       { titulo: 'Calçados', valor: dados.editorial.acessoriosCalcados },
       { titulo: 'Cintos', valor: dados.editorial.acessoriosCintos },
-      { titulo: 'Joias e Bijuterias', valor: dados.editorial.acessoriosJoias },
+      { titulo: perfilTexto(dados.perfil, 'Joias e Bijuterias', 'Joias'), valor: dados.editorial.acessoriosJoias },
       { titulo: 'Óculos', valor: dados.editorial.acessoriosOculos },
       { titulo: 'Relógios', valor: dados.editorial.acessoriosRelogios },
       { titulo: 'Outras Observações', valor: dados.editorial.acessoriosOutros }
     ]);
     // Artes do Dossiê — "Acessórios" ilustra esta seção; aparece mesmo se nenhum
     // campo de texto acima estiver preenchido.
-    const galeriaAcessorios = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.acessorios);
+    const galeriaAcessorios = dm_galeriaArtes(dados, 'acessorios');
     if(!blocos.length && !galeriaAcessorios) return null;
     return dm_paginarBlocos('Consultoria de Imagem', 'Seus', 'Acessórios', blocos, 4, ['estrela', 'bolsa', 'cabide', 'cabide', 'estrela', 'estrela', 'estrela', 'estrela'], galeriaAcessorios);
   }
@@ -23531,7 +23844,7 @@
       { rotulo: 'Metais e Acessórios', chave: 'acessorios' }
     ].map(function(s, i){
       const textoOficial = aplicacaoOficial[s.chave];
-      return { rotulo: s.rotulo, texto: (textoOficial && textoOficial.trim()) ? textoOficial : DOSSIE_MESTRE_COMO_USAR_CARTELA[i] };
+      return { rotulo: s.rotulo, texto: (textoOficial && textoOficial.trim()) ? textoOficialParaPerfil(textoOficial, dados.perfil) : dm_comoUsarCartelaPadrao(dados)[i] };
     });
 
     // Hierarquia editorial: "Próximo ao Rosto" (o critério mais importante da cartela)
@@ -23892,6 +24205,21 @@
   // onerror apenas oculta a tag <img> (display:none) — nunca aparece ícone de
   // imagem quebrada, e o resto do card (dados estruturados + galeria manual)
   // continua funcionando normalmente.
+  // ---- Perfil no Dossiê Mestre: artes por perfil (sem fallback feminino no masculino) ----
+  // Galerias manuais: no masculino usa a chave com sufixo "Masculino" (nunca a feminina).
+  // Artes automáticas por estação: no masculino usa {pasta}/masculino/{cartelaId}.jpg; se o
+  // arquivo ainda não existe, o onerror já existente apenas esconde a imagem — jamais mostra
+  // a arte feminina. Paleta e Combinações são universais (mesma arte nos dois perfis).
+  const DM_ARTES_COM_VERSAO_MASCULINA = ['armario', 'looks', 'modelagens', 'acessorios', 'cabelo'];
+  const DM_PASTAS_COM_VERSAO_MASCULINA = ['metais', 'looks', 'cabelo'];
+  function dm_galeriaArtes(dados, cat){
+    const chave = (isPerfilMasculino(dados.perfil) && DM_ARTES_COM_VERSAO_MASCULINA.indexOf(cat) !== -1) ? cat + 'Masculino' : cat;
+    return dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie[chave]);
+  }
+  function dm_pastaArte(dados, pasta){
+    return (isPerfilMasculino(dados.perfil) && DM_PASTAS_COM_VERSAO_MASCULINA.indexOf(pasta) !== -1) ? pasta + '/masculino' : pasta;
+  }
+
   function dm_renderArteEstacaoOnline(pasta, cartelaId, altLabel){
     if(!cartelaId) return '';
     const url = DM_METAIS_IMG_BASE + pasta + '/' + cartelaId + '.jpg';
@@ -23920,7 +24248,7 @@
     }).join('') + '</div>';
 
     let html = '<div class="dm-eyebrow">Coloração Pessoal</div><div class="dm-titulo-editorial">Metais <em>Recomendados</em></div><div class="dm-linha-curta"></div>';
-    html += '<img src="' + escapeHtml(DM_METAIS_IMG_BASE + 'metais/' + (base.id || '') + '.jpg') + '" alt="Metais recomendados — ' + escapeHtml(base.nome || '') + '" style="width:100%; height:auto; display:block; margin-bottom:14px; border-radius:4px;" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">';
+    html += '<img src="' + escapeHtml(DM_METAIS_IMG_BASE + dm_pastaArte(dados, 'metais') + '/' + (base.id || '') + '.jpg') + '" alt="Metais recomendados — ' + escapeHtml(base.nome || '') + '" style="width:100%; height:auto; display:block; margin-bottom:14px; border-radius:4px;" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">';
     html += fallbackHtml;
 
     if(dados.crom.metaisRecomendados && dados.crom.metaisRecomendados.trim()){
@@ -23961,6 +24289,9 @@
   // MODELO — Maquiagem: fonte única APLICACAO_CROMATICA_BASE[cartelaId].beleza
   // (sem fallback para CARTELAS_BASE — essa estrutura foi removida de lá na Fase 6C.3.1).
   function dm_buildMaquiagem(dados){
+    // Maquiagem é exclusiva do perfil feminino: no masculino a seção simplesmente não existe
+    // (sem "não aplicável"). Os dados salvos continuam intactos.
+    if(!perfilTemModulo(dados.perfil, 'maquiagem')) return null;
     if(!dados.servicos.maquiagem) return null;
 
     const cartelaInfo = dm_resolverCartela(dados);
@@ -24015,20 +24346,25 @@
       .map(function(it){ return dm_normalizarItemAplicado(it, cartelaId); })
       .filter(Boolean);
 
-    const observacoesBase = cabeloAplicado.observacoes;
+    const observacoesBase = textoOficialParaPerfil(cabeloAplicado.observacoes, dados.perfil);
     const temObservacoesBase = !!(observacoesBase && observacoesBase.trim());
 
     const direcionamento = dados.crom.direcionamentoCabelo;
+    // Cabelo + Barba = UMA família (chave interna continua "cabelo"). Barba é conteúdo da
+    // Giulia (direcionamentoBarba); sem preenchimento simplesmente não aparece.
+    const barba = isPerfilMasculino(dados.perfil) ? dados.crom.direcionamentoBarba : '';
+    const temBarba = !!(barba && barba.trim());
     const temDirecionamento = !!(direcionamento && direcionamento.trim());
 
     // Artes do Dossiê — "Cabelo" ilustra esta seção; aparece mesmo se não houver
     // dados cromáticos de cabelo preenchidos para esta cartela.
-    const galeriaCabelo = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.cabelo);
-    const arteEstacaoCabelo = dm_renderArteEstacaoOnline('cabelo', cartelaId, 'Cabelo — ' + (cartelaInfo && cartelaInfo.nome || ''));
+    const galeriaCabelo = dm_galeriaArtes(dados, 'cabelo');
+    const arteEstacaoCabelo = dm_renderArteEstacaoOnline(dm_pastaArte(dados, 'cabelo'), cartelaId, 'Cabelo — ' + (cartelaInfo && cartelaInfo.nome || ''));
 
-    if(!tonalidades.length && !temObservacoesBase && !temDirecionamento && !galeriaCabelo) return null;
+    if(!tonalidades.length && !temObservacoesBase && !temDirecionamento && !galeriaCabelo && !temBarba) return null;
 
-    let html = '<div class="dm-eyebrow">Beleza</div><div class="dm-titulo-editorial">Cabelo</div><div class="dm-linha-curta"></div>';
+    const secaoCabelo = isPerfilMasculino(dados.perfil) ? 'Imagem' : 'Beleza';
+    let html = '<div class="dm-eyebrow">' + secaoCabelo + '</div><div class="dm-titulo-editorial">' + escapeHtml(perfilRotuloCabelo(dados.perfil)) + '</div><div class="dm-linha-curta"></div>';
     if(tonalidades.length){
       html += '<div class="dossie-mestre-bloco"><div class="dossie-mestre-bloco-titulo">Tonalidades Harmônicas à Sua Cartela</div>' + dm_renderMiniPaleta(tonalidades) + '</div>';
     }
@@ -24038,11 +24374,14 @@
     if(temDirecionamento){
       html += dm_itemIcone('tesoura', 'Direcionamento Profissional', direcionamento);
     }
+    if(temBarba){
+      html += dm_itemIcone('tesoura', 'Barba', barba);
+    }
     html += arteEstacaoCabelo;
     html += galeriaCabelo;
     html += dm_rodapeFaixa('Coloração capilar', 'Tonalidades pensadas para valorizar seu subtom de pele e olhos.');
 
-    return [dm_pagina(html, { numero: true, secao: 'Beleza' })];
+    return [dm_pagina(html, { numero: true, secao: secaoCabelo })];
   }
 
 
@@ -24058,14 +24397,14 @@
       { titulo: 'Partes Superiores', valor: dados.editorial.armarioSuperiores },
       { titulo: 'Partes Inferiores', valor: dados.editorial.armarioInferiores },
       { titulo: 'Terceiras Peças', valor: dados.editorial.armarioTerceirasPecas },
-      { titulo: 'Vestidos / Macacões', valor: dados.editorial.armarioVestidosMacacoes },
+      { titulo: 'Vestidos / Macacões', valor: isPerfilMasculino(dados.perfil) ? '' : dados.editorial.armarioVestidosMacacoes },
       { titulo: 'Calçados', valor: dados.editorial.armarioCalcados },
       { titulo: 'Bolsas', valor: dados.editorial.armarioBolsas },
       { titulo: 'Acessórios', valor: dados.editorial.armarioAcessorios }
     ]);
     // Artes do Dossiê — "Armário / Peças-Chave" ilustra esta seção; garante que
     // "Peças-Chave" apareça mesmo sem nenhum campo de texto preenchido.
-    const galeriaArmario = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.armario);
+    const galeriaArmario = dm_galeriaArtes(dados, 'armario');
 
     if(categoriasArmario.length || (dados.editorial.armarioEstrategico && dados.editorial.armarioEstrategico.trim()) || galeriaArmario){
       temConteudo = true;
@@ -24102,13 +24441,13 @@
     // ---- Looks Propostos: numerados quando houver múltiplas linhas ----
     // Artes do Dossiê — "Looks / Coordenações" ilustra esta seção; garante que
     // "Looks Propostos" apareça mesmo sem o campo de texto preenchido.
-    const galeriaLooks = dm_renderGaleriaArtes(dados.editorial.artesDossie && dados.editorial.artesDossie.looks);
+    const galeriaLooks = dm_galeriaArtes(dados, 'looks');
     // Imagem automática por estação (pasta looks/) — só faz sentido quando a
     // cliente tem Coloração Pessoal ativa, mesma condição já usada acima para o
     // apoio visual da cartela em Peças-Chave. Se não houver cartela, retorna vazio.
     const cartelaInfoLooks = dados.servicos.coloracaoPessoal ? dm_resolverCartela(dados) : null;
     const cartelaIdLooks = cartelaInfoLooks && cartelaInfoLooks.base && cartelaInfoLooks.base.id;
-    const arteEstacaoLooks = dm_renderArteEstacaoOnline('looks', cartelaIdLooks, 'Looks — ' + (cartelaInfoLooks && cartelaInfoLooks.nome || ''));
+    const arteEstacaoLooks = dm_renderArteEstacaoOnline(dm_pastaArte(dados, 'looks'), cartelaIdLooks, 'Looks — ' + (cartelaInfoLooks && cartelaInfoLooks.nome || ''));
     const temTextoLooks = !!(dados.editorial.looksPropostos && dados.editorial.looksPropostos.trim());
     if(temTextoLooks || galeriaLooks || arteEstacaoLooks){
       temConteudo = true;
@@ -24241,7 +24580,7 @@
   function dm_calcularAvisosAdministrativos(dados){
     const avisos = [];
 
-    if(dados.servicos.maquiagem){
+    if(dados.servicos.maquiagem && perfilTemModulo(dados.perfil, 'maquiagem')){
       const cartelaInfo = dm_resolverCartela(dados);
       const cartelaId = cartelaInfo && cartelaInfo.base && cartelaInfo.base.id;
       const beleza = (cartelaId && APLICACAO_CROMATICA_BASE[cartelaId] && APLICACAO_CROMATICA_BASE[cartelaId].beleza) || {};
@@ -24295,6 +24634,7 @@
     try{
       const dados = await coletarDadosDossieMestre(selectedClienteUid);
       dados.nomeCompleto = (dados.anamnese[1] && dados.anamnese[1].nomeCompleto) || dados.usuario.nome || selectedClienteNome || 'Cliente';
+      definirPerfilTela('dossie-mestre-previa', dados.perfil);
 
       // Fase 6C.15 — a CAPA continua isolada, exatamente como antes (composição
       // fechada aprovada). Tudo depois dela entra no FLUXO CONTÍNUO: os
@@ -24386,26 +24726,28 @@
     { field: 'melhoresNeutros', label: 'Melhores neutros' },
     { field: 'coresDestaque', label: 'Cores de destaque' },
     { field: 'metaisRecomendados', label: 'Metais recomendados' },
-    { field: 'direcionamentoMaquiagem', label: 'Direcionamento de maquiagem' },
+    { field: 'direcionamentoMaquiagem', label: 'Direcionamento de maquiagem', perfil: 'feminino' },
     { field: 'direcionamentoCabelo', label: 'Direcionamento de cabelo' },
+    { field: 'direcionamentoBarba', label: 'Direcionamento de barba', perfil: 'masculino' },
     { field: 'observacoesCromaticas', label: 'Observações cromáticas' }
   ];
 
   // Builds one section's HTML + plain-text form from a label list + data object.
   // Returns null when there is no content, so empty sections are simply skipped.
 
-  function buildDadosDossieSection(title, fieldsArr, dataObj){
+  function buildDadosDossieSection(title, fieldsArr, dataObj, perfil){
     let html = '', text = title + '\n';
     let hasContent = false;
 
     fieldsArr.forEach(function(f){
+      if(!anamneseCampoAplicavel(f, perfil)) return;
       const value = dataObj[f.field];
       if(value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) return;
       hasContent = true;
       const displayVal = Array.isArray(value) ? value.join(', ') : value;
-      html += '<div class="anamnese-field"><div class="anamnese-field-label">' + escapeHtml(f.label) + '</div>' +
+      html += '<div class="anamnese-field"><div class="anamnese-field-label">' + escapeHtml(anamneseRotulo(f, perfil)) + '</div>' +
         '<div class="anamnese-field-value">' + escapeHtml(displayVal) + '</div></div>';
-      text += '- ' + f.label + ': ' + displayVal + '\n';
+      text += '- ' + anamneseRotulo(f, perfil) + ': ' + displayVal + '\n';
     });
 
     if(!hasContent) return null;
@@ -24429,6 +24771,7 @@
     }
     if(nomeEl) nomeEl.textContent = selectedClienteNome || 'Cliente';
 
+    const perfilDados = await aplicarPerfilNaTela('dados-dossie');
     const stepsData = await fetchAnamneseStepsData(selectedClienteUid);
 
     let profData = {}, cromData = {};
@@ -24493,9 +24836,9 @@
       { title: 'Rotina', step: 3 },
       { title: 'Preferências de Estilo', step: 4 },
       { title: 'Guarda-Roupa', step: 5 },
-      { title: 'Cores (preferências da cliente)', step: 6 },
-      { title: 'Biotipo & Corpo (relato da cliente)', step: 7 },
-      { title: 'Direcionamento Cromático (respostas da cliente)', step: 9 }
+      { title: perfilTexto(perfilDados, 'Cores (preferências da cliente)', 'Cores (preferências do cliente)'), step: 6 },
+      { title: perfilTexto(perfilDados, 'Biotipo & Corpo (relato da cliente)', 'Biotipo & Corpo (relato do cliente)'), step: 7 },
+      { title: perfilTexto(perfilDados, 'Direcionamento Cromático (respostas da cliente)', 'Direcionamento Cromático (respostas do cliente)'), step: 9 }
     ];
 
     let html = '', text = 'DADOS PARA O DOSSIÊ — ' + (selectedClienteNome || 'Cliente') + '\n\n';
@@ -24504,14 +24847,14 @@
       const stepDef = ANAMNESE_SECTIONS.find(function(s){ return s.step === sec.step; });
       const data = stepsData[sec.step];
       if(!stepDef || !data) return;
-      const result = buildDadosDossieSection(sec.title, stepDef.fields, data);
+      const result = buildDadosDossieSection(sec.title, stepDef.fields, data, perfilDados);
       if(result){ html += result.html; text += result.text; }
     });
 
-    const profResult = buildDadosDossieSection('Análise Profissional (Giulia)', PROF_DATA_FIELDS, profData);
+    const profResult = buildDadosDossieSection('Análise Profissional (Giulia)', PROF_DATA_FIELDS, profData, perfilDados);
     if(profResult){ html += profResult.html; text += profResult.text; }
 
-    const cromResult = buildDadosDossieSection('Resultado Cromático (Giulia)', CROM_DATA_FIELDS, cromData);
+    const cromResult = buildDadosDossieSection('Resultado Cromático (Giulia)', CROM_DATA_FIELDS, cromData, perfilDados);
     if(cromResult){ html += cromResult.html; text += cromResult.text; }
 
     // Só contagens e disponibilidade no texto copiado — nunca URLs técnicas do Storage.
@@ -24897,7 +25240,7 @@
     const comFotos = clientes.filter(function(c){ return c.fotosCount > 0; }).length;
     const andamento = clientes.filter(function(c){ return !c.anamneseFinished && c.anamneseDone > 0; }).length;
 
-    if(painelResumo) painelResumo.textContent = total + (total === 1 ? ' cliente cadastrada' : ' clientes cadastradas');
+    if(painelResumo) painelResumo.textContent = total + (total === 1 ? ' cliente' : ' clientes');
     if(dashTotal) dashTotal.textContent = total;
     if(dashAnamneseCompletas) dashAnamneseCompletas.textContent = completas;
     if(dashFotos) dashFotos.textContent = comFotos + (comFotos === 1 ? ' cliente enviou fotos' : ' clientes enviaram fotos');
@@ -25298,7 +25641,7 @@
     e.stopPropagation();
 
     const uid = delBtn.getAttribute('data-cliente-delete');
-    const nome = delBtn.getAttribute('data-cliente-delete-nome') || 'esta cliente';
+    const nome = delBtn.getAttribute('data-cliente-delete-nome') || 'este cadastro';
 
     if(!confirm('Excluir ' + nome + '? Isso remove a conta de login e todos os dados (anamnese e fotos) permanentemente. Esta ação não pode ser desfeita.')) return;
 
@@ -25330,6 +25673,10 @@
 
   const reenviarLinkSenhaFn = httpsCallable(functions, 'reenviarLinkSenha');
 
+  // Perfil salvo (ou null se ainda indefinido) do cliente aberto em "Editar Dados" —
+  // usado só para avisar quando o perfil for alterado.
+  let editarClientePerfilSalvo = null;
+
   async function loadEditarClienteScreen(){
     const titulo = document.getElementById('editar-cliente-titulo');
     const nomeInput = document.getElementById('editar-cliente-nome');
@@ -25340,19 +25687,37 @@
     if(errorBox4){ errorBox4.textContent = ''; errorBox4.classList.remove('success'); }
 
     if(!selectedClienteUid){
-      if(titulo) titulo.textContent = 'Nenhuma cliente selecionada';
+      if(titulo) titulo.textContent = 'Selecionar cliente';
       return;
     }
 
     if(titulo) titulo.textContent = 'Editar ' + (selectedClienteNome || 'Cliente');
+    perfilRadioDefinir('editar-cliente-perfil-radio', null);
 
     try{
       const userSnap = await getDoc(doc(db, 'users', selectedClienteUid));
       if(userSnap.exists()){
         const data = userSnap.data();
+        definirPerfilCliente(selectedClienteUid, data);
+        definirPerfilTela('editar-cliente', data);
         if(nomeInput) nomeInput.value = data.nome || '';
         if(emailInput3) emailInput3.value = data.email || '';
         if(telefoneInput2) telefoneInput2.value = data.telefone || '';
+
+        // Cliente antigo sem perfilConsultoria: nenhuma opção marcada (é tratado como
+        // Feminino, mas só passa a ter o campo salvo se a Giulia escolher e salvar).
+        const subEl = document.getElementById('editar-cliente-sub');
+        if(subEl) subEl.textContent = perfilTexto(data, 'Atualize as informações desta cliente', 'Atualize as informações deste cliente');
+        if(perfilConsultoriaDefinido(data)){
+          perfilRadioDefinir('editar-cliente-perfil-radio', getPerfilConsultoria(data));
+        }
+        const hintEl = document.getElementById('editar-cliente-perfil-hint');
+        if(hintEl){
+          hintEl.textContent = perfilConsultoriaDefinido(data)
+            ? 'Alterar o perfil muda apenas o que é exibido no app. Nenhuma informação já cadastrada é apagada.'
+            : 'Perfil ainda não definido — este cliente é tratado como Feminino. Alterar o perfil muda apenas o que é exibido no app; nenhuma informação já cadastrada é apagada.';
+        }
+        editarClientePerfilSalvo = perfilConsultoriaDefinido(data) ? getPerfilConsultoria(data) : null;
       }
     } catch(err){
       console.error('GD: erro ao carregar dados da cliente', err);
@@ -25375,6 +25740,7 @@
 
     const nome = (nomeInput.value || '').trim();
     const telefone = (telefoneInput2.value || '').trim();
+    const perfilSelecionado = perfilRadioLer('editar-cliente-perfil-radio');
 
     errorBox4.textContent = '';
     errorBox4.classList.remove('success');
@@ -25388,10 +25754,22 @@
     btn.textContent = 'Salvando…';
 
     try{
-      await setDoc(doc(db, 'users', selectedClienteUid), {
+      const payloadCliente = {
         nome: nome,
         telefone: telefone
-      }, { merge: true });
+      };
+      // Só inclui o perfil quando houver escolha explícita — cliente antigo sem
+      // escolha continua sem o campo (tratado como Feminino), nada é escrito por padrão.
+      if(perfilSelecionado) payloadCliente.perfilConsultoria = perfilSelecionado;
+
+      await setDoc(doc(db, 'users', selectedClienteUid), payloadCliente, { merge: true });
+
+      const perfilAlterado = !!perfilSelecionado && editarClientePerfilSalvo !== null && perfilSelecionado !== editarClientePerfilSalvo;
+      if(perfilSelecionado){
+        editarClientePerfilSalvo = perfilSelecionado;
+        definirPerfilCliente(selectedClienteUid, perfilSelecionado);
+        definirPerfilTela('editar-cliente', perfilSelecionado);
+      }
 
       selectedClienteNome = nome;
       cachedClientes = null;
@@ -25399,7 +25777,9 @@
       btn.classList.remove('is-loading');
       btn.textContent = 'Salvar Alterações';
       errorBox4.classList.add('success');
-      errorBox4.textContent = 'Dados atualizados com sucesso.';
+      errorBox4.textContent = perfilAlterado
+        ? 'Dados atualizados. Perfil alterado para ' + perfilRotulo(perfilSelecionado) + ' — nenhuma informação foi apagada.'
+        : 'Dados atualizados com sucesso.';
     } catch(err){
       console.error('GD: erro ao salvar dados da cliente', err);
       btn.classList.remove('is-loading');
@@ -25417,7 +25797,7 @@
     const email = emailInput3.value;
 
     if(!email){
-      errorBox4.textContent = 'E-mail não encontrado para esta cliente.';
+      errorBox4.textContent = 'E-mail não encontrado para este cadastro.';
       return;
     }
 
@@ -25436,7 +25816,7 @@
       }
 
       errorBox4.classList.add('success');
-      errorBox4.textContent = 'Senha resetada para "' + (data.senhaTemporaria || '') + '" e copiada. A cliente vai criar uma senha nova no próximo login.';
+      errorBox4.textContent = 'Senha resetada para "' + (data.senhaTemporaria || '') + '" e copiada. ' + perfilTexto(perfilDoSelecionado(), 'A cliente', 'O cliente') + ' vai criar uma senha nova no próximo login.';
     } catch(err){
       console.error('GD: erro ao resetar senha', err);
       btn.classList.remove('is-loading');
@@ -25639,7 +26019,7 @@
 
   async function gerarDossierPDF(){
     if(!selectedClienteUid){
-      alert('Selecione uma cliente primeiro.');
+      alert('Selecionar cliente primeiro.');
       return;
     }
 
@@ -25727,9 +26107,10 @@
     // Document title
     ctext('Dossie de Estilo', 112, 22, 'bold', GRAPHITE);
 
+    const perfilPdf = await obterPerfilCliente(selectedClienteUid);
     // Client name
     const clienteNomePDF = selectedClienteNome ||
-      (document.getElementById('materiais-cliente-nome') && document.getElementById('materiais-cliente-nome').textContent !== 'Selecione uma cliente'
+      (document.getElementById('materiais-cliente-nome') && document.getElementById('materiais-cliente-nome').textContent !== 'Selecionar cliente'
         ? document.getElementById('materiais-cliente-nome').textContent
         : 'Cliente');
     ctext(clienteNomePDF, 122, 14, 'normal', SOFT);
@@ -25763,12 +26144,13 @@
       const rows = [];
       for(const f of section.fields){
         if(!data) continue;
+        if(!anamneseCampoAplicavel(f, perfilPdf)) continue;
         const value = data[f.field];
         if(value === undefined || value === null || value === '') continue;
         if(Array.isArray(value) && value.length === 0) continue;
 
         const displayValue = Array.isArray(value) ? value.join(', ') : String(value);
-        rows.push([f.label, displayValue]);
+        rows.push([anamneseRotulo(f, perfilPdf), displayValue]);
       }
 
       if(rows.length === 0) continue;
