@@ -3743,6 +3743,11 @@
             <label class="form-label">Parecer profissional</label>
             <textarea class="input-field textarea" data-editor-field="parecerProfissional" placeholder="Escreva livremente..." style="min-height:110px;"></textarea>
 
+            <label class="ciencia-label" style="margin-bottom:12px;">
+              <input type="checkbox" data-editor-field="parecerProfissionalAprovado">
+              <span>Aprovo este texto para aparecer no dossiê d<span data-perfil-only="feminino">a cliente</span><span data-perfil-only="masculino">o cliente</span> (sem marcar, fica salvo como rascunho e não é exibido)</span>
+            </label>
+
             <button class="btn-secondary" data-editor-save="perfil" style="margin-bottom:0;">Salvar Perfil de Imagem</button>
             <div class="login-error" id="editor-msg-perfil"></div>
           </div>
@@ -4065,10 +4070,18 @@
             <label class="form-label">Boas-vindas personalizada (opcional)</label>
             <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-6px; margin-bottom:10px; line-height:1.5;">Se deixar em branco, o futuro PDF usará o texto institucional padrão.</p>
             <textarea class="input-field textarea" data-editor-field="boasVindasPersonalizada" placeholder="Escreva livremente..."></textarea>
+            <label class="ciencia-label" style="margin-bottom:12px;">
+              <input type="checkbox" data-editor-field="boasVindasPersonalizadaAprovada">
+              <span>Aprovo este texto personalizado na capa (sem marcar, o dossiê usa o texto institucional padrão)</span>
+            </label>
 
             <label class="form-label">Mensagem final (opcional)</label>
             <p style="font-family:'Manrope', sans-serif; font-size:11px; color:var(--graphite-soft); margin-top:-6px; margin-bottom:10px; line-height:1.5;">Se deixar em branco, o futuro PDF usará uma mensagem institucional padrão.</p>
             <textarea class="input-field textarea" data-editor-field="mensagemFinal" placeholder="Escreva livremente..."></textarea>
+            <label class="ciencia-label" style="margin-bottom:12px;">
+              <input type="checkbox" data-editor-field="mensagemFinalAprovada">
+              <span>Aprovo esta mensagem personalizada no encerramento (sem marcar, o dossiê usa a mensagem institucional padrão)</span>
+            </label>
 
             <button class="btn-secondary" data-editor-save="finalizacao" style="margin-bottom:0;">Salvar Finalização</button>
             <div class="login-error" id="editor-msg-finalizacao"></div>
@@ -22809,12 +22822,16 @@
 
   function editorLerCampo(nomeCampo){
     const el = document.querySelector('[data-editor-field="' + nomeCampo + '"]');
-    return el ? (el.value || '') : '';
+    if(!el) return '';
+    if(el.type === 'checkbox') return el.checked;
+    return el.value || '';
   }
 
   function editorSetarCampo(nomeCampo, valor){
     const el = document.querySelector('[data-editor-field="' + nomeCampo + '"]');
-    if(el) el.value = valor || '';
+    if(!el) return;
+    if(el.type === 'checkbox'){ el.checked = !!valor; return; }
+    el.value = valor || '';
   }
 
   function editorSetarReferencia(idSufixo, valor){
@@ -23140,6 +23157,15 @@
       });
       editorAtualizarChecklistCapitulo(cap);
     });
+    // Aprovação de exibição do Parecer Profissional: campo à parte, fora de
+    // EDITOR_CAPITULOS.perfil de propósito — não deve contar para a completude
+    // do capítulo (ela reflete se HÁ conteúdo escrito, não se foi aprovado).
+    editorSetarCampo('parecerProfissionalAprovado', !!editorDossieData.parecerProfissionalAprovado);
+    // Mesmo princípio para as duas citações assinadas "Giulia Dantas" (capa e
+    // encerramento) — texto de rascunho nunca substitui o padrão institucional
+    // sozinho, só depois de aprovado explicitamente.
+    editorSetarCampo('boasVindasPersonalizadaAprovada', !!editorDossieData.boasVindasPersonalizadaAprovada);
+    editorSetarCampo('mensagemFinalAprovada', !!editorDossieData.mensagemFinalAprovada);
 
     // ---- Artes do Dossiê (imagens por categoria) — clientes antigos sem o campo
     // caem no normalizador, que devolve arrays vazios para todas as categorias.
@@ -23184,6 +23210,23 @@
         payload[campo] = editorLerCampo(campo);
         editorDossieData[campo] = payload[campo];
       });
+      // Aprovação de exibição do Parecer Profissional (ver nota no carregamento) —
+      // salva junto do capítulo "perfil", mas fora da lista que define completude.
+      if(capitulo === 'perfil'){
+        const aprovado = editorLerCampo('parecerProfissionalAprovado');
+        payload.parecerProfissionalAprovado = aprovado;
+        editorDossieData.parecerProfissionalAprovado = aprovado;
+      }
+      // Mesmo princípio para as duas citações assinadas (capa e encerramento),
+      // salvas junto do capítulo "finalizacao".
+      if(capitulo === 'finalizacao'){
+        const boasVindasAprovada = editorLerCampo('boasVindasPersonalizadaAprovada');
+        payload.boasVindasPersonalizadaAprovada = boasVindasAprovada;
+        editorDossieData.boasVindasPersonalizadaAprovada = boasVindasAprovada;
+        const mensagemFinalAprovada = editorLerCampo('mensagemFinalAprovada');
+        payload.mensagemFinalAprovada = mensagemFinalAprovada;
+        editorDossieData.mensagemFinalAprovada = mensagemFinalAprovada;
+      }
 
       await setDoc(doc(db, 'clientes', selectedClienteUid, 'interno', 'dossieEditorial'), payload, { merge: true });
 
@@ -23587,7 +23630,7 @@
 
   // MODELO — abertura assimétrica com box de boas-vindas.
   function dm_buildAbertura(dados){
-    const texto = (dados.editorial.boasVindasPersonalizada && dados.editorial.boasVindasPersonalizada.trim())
+    const texto = (dados.editorial.boasVindasPersonalizada && dados.editorial.boasVindasPersonalizada.trim() && dados.editorial.boasVindasPersonalizadaAprovada === true)
       ? dados.editorial.boasVindasPersonalizada
       : (isPerfilMasculino(dados.perfil) ? DOSSIE_MESTRE_BOAS_VINDAS_PADRAO.replace('juntas', 'juntos') : DOSSIE_MESTRE_BOAS_VINDAS_PADRAO);
     return [dm_pagina(
@@ -23622,7 +23665,9 @@
     ]);
 
     const parecer = dados.editorial.parecerProfissional;
-    const temParecer = !!(parecer && parecer.trim());
+    // Existir texto não basta: só aparece no dossiê da cliente/cliente se a Giulia
+    // marcou explicitamente a aprovação no Editor. Rascunho fica salvo, mas oculto.
+    const temParecer = !!(parecer && parecer.trim() && dados.editorial.parecerProfissionalAprovado === true);
 
     if(!itens.length && !temParecer) return null;
 
@@ -24556,7 +24601,7 @@
 
   // MODELO — encerramento com espaço negativo generoso e assinatura discreta.
   function dm_buildEncerramento(dados){
-    const texto = (dados.editorial.mensagemFinal && dados.editorial.mensagemFinal.trim()) ? dados.editorial.mensagemFinal : DOSSIE_MESTRE_MENSAGEM_FINAL_PADRAO;
+    const texto = (dados.editorial.mensagemFinal && dados.editorial.mensagemFinal.trim() && dados.editorial.mensagemFinalAprovada === true) ? dados.editorial.mensagemFinal : DOSSIE_MESTRE_MENSAGEM_FINAL_PADRAO;
     // Fase 6C.15 — documento contínuo: o encerramento não simula mais uma página
     // vazia (não existe mais "página" nem espaço a preencher). O bloco (texto +
     // linha + monograma + marca + sub) é uma composição única, com respiro fixo
