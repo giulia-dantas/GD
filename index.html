@@ -5997,8 +5997,26 @@
   // Register service worker for PWA installability
   if('serviceWorker' in navigator){
     window.addEventListener('load', function(){
-      navigator.serviceWorker.register('./sw.js').catch(function(err){
+      navigator.serviceWorker.register('./sw.js').then(function(reg){
+        // Verifica se há uma versão nova assim que o app abre...
+        reg.update().catch(function(){});
+        // ...e de novo sempre que o app volta a ficar em primeiro plano
+        // (comum em PWA que fica minimizado no celular por dias).
+        document.addEventListener('visibilitychange', function(){
+          if(document.visibilityState === 'visible') reg.update().catch(function(){});
+        });
+      }).catch(function(err){
         console.error('GD: erro ao registrar service worker', err);
+      });
+
+      // Assim que uma versão nova assume o controle (self.clients.claim() no
+      // sw.js), recarrega a página automaticamente — a pessoa nunca precisa
+      // limpar cache ou reinstalar nada na mão.
+      let gdSwRecarregando = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function(){
+        if(gdSwRecarregando) return;
+        gdSwRecarregando = true;
+        window.location.reload();
       });
     });
   }
